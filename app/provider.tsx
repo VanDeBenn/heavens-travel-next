@@ -3,6 +3,7 @@
 import React, {useEffect} from "react";
 import {ConfigProvider} from "antd";
 import {TokenUtil} from "#/utils/token";
+import { AliasToken } from "antd/es/theme/interface/alias";
 
 TokenUtil.loadToken();
 export const Provider = ({children}: any) => {
@@ -15,7 +16,7 @@ export const Provider = ({children}: any) => {
     theme={{
       token: {
         colorPrimary: '#00b96b',
-      },
+      } as Partial<AliasToken>,
     }}
   >
     {children}
