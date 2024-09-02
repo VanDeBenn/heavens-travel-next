@@ -1,8 +1,10 @@
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { RiNewspaperLine, RiFireLine } from "react-icons/ri";
+import { RiNewspaperLine } from "react-icons/ri";
+import PopularNews from "../../components/user/popularNews";
 
 export default function News() {
   return (
@@ -12,12 +14,16 @@ export default function News() {
         <div className="lg:col-span-4">
           <div className="flex items-center mb-4">
             <RiNewspaperLine size={26} color="#4F28D9" className="mr-2" />
-            <span className="text-2xl font-semibold">News</span>
+            <span className="text-xl font-semibold">News</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mt-4">
             {cardData.slice(0, 8).map((card, index) => (
-              <Link key={index} href={`/news/${index}`}>
-                {/* Tambahkan Link di sekitar card */}
+              <Link
+                key={index}
+                href={card.link}
+                //yang bener buat abang beckend
+                // href={`/news/popular/${index}`}
+              >
                 <div className="relative bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md transition-transform duration-300">
                   <div className="relative w-full h-[400px]">
                     <Image
@@ -38,55 +44,22 @@ export default function News() {
               </Link>
             ))}
           </div>
+
+          {/* See More Button Section */}
+          <div className="flex justify-center mt-6">
+            <Link
+              href={"/blog/list"}
+              className="bg-[#ffffff] text-[#4F28D9] px-11 py-3 no-underline font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:bg-[#4F28D9] hover:text-white shadow-lg"
+            >
+              See more
+            </Link>
+          </div>
         </div>
 
         {/* Popular News Section */}
         <div className="lg:col-span-1">
-          <div className="flex items-center mb-4">
-            <RiFireLine size={26} color="#4F28D9" className="mr-2" />
-            <span className="text-xl font-semibold">Popular</span>
-          </div>
-          <div className="space-y-2 bg-white rounded-xl">
-            {popularNewsData.slice(0, 3).map((news, index) => (
-              <Link
-                key={index}
-                href={`/news/popular/${index}`}
-                className="no-underline"
-              >
-                {/* Tambahkan Link di sekitar news card */}
-                <div className="relative overflow-hidden group p-3">
-                  <div className="relative w-full h-[170px] xl:h-[190px] overflow-hidden rounded-lg">
-                    <Image
-                      src={news.imageSrc}
-                      alt={news.title}
-                      layout="fill"
-                      objectFit="cover"
-                      className="absolute inset-0 transition-transform duration-300 transform"
-                    />
-                  </div>
-                  <div className="pt-3">
-                    <h2 className="text-lg font-semibold mb-1 leading-5 text-black">
-                      {news.title}
-                    </h2>
-                    <span className="text-sm text-gray-600 font-medium">
-                      {news.date}
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <PopularNews />
         </div>
-      </div>
-
-      {/* See More Button Section */}
-      <div className="flex justify-center mt-6">
-        <Link
-          href={"/"}
-          className="bg-[#ffffff] text-[#4F28D9] px-11 py-3 no-underline font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:bg-[#4F28D9] hover:text-white shadow-lg"
-        >
-          See more
-        </Link>
       </div>
     </div>
   );
@@ -94,122 +67,138 @@ export default function News() {
 
 export const cardData = [
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 1",
-    date: "August 27, 2024",
+    title: "Discover the Hidden Waterfalls of Hawaii",
+    date: "August 25, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Unveil the secrets of Hawaii's hidden waterfalls, tucked away in lush jungles and accessible only to those willing to explore.",
+    link: "/blog/list/detail",
   },
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 2",
-    date: "August 26, 2024",
+    title: "Hawaii’s Volcanic Landscapes: A Photographer’s Dream",
+    date: "August 24, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Capture the dramatic beauty of Hawaii’s volcanic landscapes with tips from top photographers.",
+    link: "/blog/list/detail",
   },
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 1",
-    date: "August 27, 2024",
+    title: "Hawaii's Marine Life: Dive into a Blue Wonderland",
+    date: "August 23, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Explore Hawaii’s vibrant underwater world, home to a rich array of marine life and colorful coral reefs.",
+    link: "/blog/list/detail",
   },
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 2",
-    date: "August 26, 2024",
+    title: "A Journey Through Hawaii's Cultural Heritage",
+    date: "August 22, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Learn about Hawaii's rich cultural heritage, from ancient traditions to modern-day practices that define the islands.",
+    link: "/blog/list/detail",
   },
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 1",
-    date: "August 27, 2024",
+    title: "The Best Hiking Trails in Hawaii for Adventure Seekers",
+    date: "August 21, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Find the best hiking trails in Hawaii for adventure seekers looking to experience the islands' rugged terrain and stunning views.",
+    link: "/blog/list/detail",
   },
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 2",
-    date: "August 26, 2024",
+    title: "Experience Hawaii's Unique Local Cuisine",
+    date: "August 20, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Taste the unique flavors of Hawaiian cuisine, blending traditional ingredients with influences from around the world.",
+    link: "/blog/list/detail",
   },
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 1",
-    date: "August 27, 2024",
+    title: "The Ultimate Guide to Island Hopping in Hawaii",
+    date: "August 19, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Plan the perfect island-hopping adventure in Hawaii, from transportation tips to must-see destinations on each island.",
+    link: "/blog/list/detail",
   },
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 2",
-    date: "August 26, 2024",
+    title: "Hawaii's Nightlife: From Luaus to Beach Parties",
+    date: "August 18, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Discover the best of Hawaii's nightlife, from traditional luaus to vibrant beach parties that keep the islands lively after dark.",
+    link: "/blog/list/detail",
   },
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 1",
-    date: "August 27, 2024",
+    title: "Sustainable Tourism in Hawaii: Protecting Paradise",
+    date: "August 17, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Learn how to enjoy Hawaii's natural beauty while supporting sustainable tourism efforts to protect the islands for future generations.",
+    link: "/blog/list/detail",
   },
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 2",
-    date: "August 26, 2024",
+    title: "Hawaii’s Top Luxury Resorts for a Dream Vacation",
+    date: "August 16, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Indulge in the ultimate luxury experience at Hawaii's top resorts, offering world-class amenities and breathtaking views.",
+    link: "/blog/list/detail",
   },
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 1",
-    date: "August 27, 2024",
+    title: "Family Fun in Hawaii: Activities for All Ages",
+    date: "August 15, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Find the best family-friendly activities in Hawaii, from beach outings to cultural experiences that everyone will enjoy.",
+    link: "/blog/list/detail",
   },
   {
-    title: "Tropical Paradise: Hawaii’s Most Stunning Natural Wonders 2",
-    date: "August 26, 2024",
+    title: "Why Hawaii is the Best Destination for Solo Travelers",
+    date: "August 14, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
-      "Explore the breathtaking beauty of Hawaii with stunning beaches, lush forests, and active volcanoes. A perfect blend of relaxation and adventure awaits you.",
+      "Discover why Hawaii is a top destination for solo travelers seeking adventure, relaxation, and a welcoming community.",
+    link: "/blog/list/detail",
   },
-  // ... other card data
 ];
 
 export const popularNewsData = [
   {
-    title: "Top 10 Beaches in Hawaii",
-    date: "August 18, 2024",
+    title: "Hawaii’s Top Surfing Spots You Must Visit",
+    date: "August 13, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
+    link: "/blog/list/detail",
   },
   {
-    title: "Top 10 Beaches in Hawaii",
-    date: "August 18, 2024",
+    title: "Exploring Hawaii’s National Parks: A Visitor’s Guide",
+    date: "August 12, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
+    link: "/blog/list/detail",
   },
   {
-    title: "Top 10 Beaches in Hawaii",
-    date: "August 18, 2024",
+    title: "The History and Legends of Hawaii’s Volcanoes",
+    date: "August 11, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
+    link: "/blog/list/detail",
   },
   {
-    title: "Top 10 Beaches in Hawaii",
-    date: "August 18, 2024",
+    title: "Hawaii’s Best Spots for Snorkeling and Diving",
+    date: "August 10, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
+    link: "/blog/list/detail",
   },
   {
-    title: "Top 10 Beaches in Hawaii",
-    date: "August 18, 2024",
+    title: "Experience Hawaii’s Unique Wildlife Up Close",
+    date: "August 9, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
+    link: "/blog/list/detail",
   },
   {
-    title: "Top 10 Beaches in Hawaii",
-    date: "August 18, 2024",
+    title: "Hawaii’s Cultural Festivals You Don’t Want to Miss",
+    date: "August 8, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
+    link: "/blog/list/detail",
   },
-  // ... other popular news data
 ];

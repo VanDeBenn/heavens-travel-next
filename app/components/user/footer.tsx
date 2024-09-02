@@ -55,7 +55,7 @@ const Footer = () => {
                 <span className="font-semibold text-xl">Social media</span>
                 <div className="flex flex-col gap-3 text-black pt-5">
                   <Link href={"/"} className="text-gray-500 no-underline">
-                    Twitter/X
+                    Twitter / X
                   </Link>
                   <Link href={"/"} className="text-gray-500 no-underline">
                     Instagram
