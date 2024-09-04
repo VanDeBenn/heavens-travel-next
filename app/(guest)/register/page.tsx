@@ -12,8 +12,9 @@ import { useRouter } from "next/navigation";
 
 const { Text, Link } = Typography;
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const router = useRouter();
+  const [form] = Form.useForm(); // Inisialisasi Form instance
 
   const onFinish = (values: any) => {
     console.log("Success:", values);
@@ -23,8 +24,8 @@ const Login: React.FC = () => {
     console.log("Failed:", errorInfo);
   };
 
-  const handleForgotPassword = () => {
-    router.push("/forgot-password");
+  const handleLoginRedirect = () => {
+    router.push("/login");
   };
 
   return (
@@ -32,8 +33,8 @@ const Login: React.FC = () => {
       <div className="md:w-1/2 w-full flex items-center justify-center">
         <div className="relative w-full h-64 md:h-full">
           <Image
-            src="/images/illustration/login-hd.png"
-            alt="Login Illustration"
+            src="/images/illustration/tourist-presenting-something.png" // Update path if needed
+            alt="Sign Up Illustration"
             layout="fill"
             objectFit="contain"
             priority
@@ -41,52 +42,61 @@ const Login: React.FC = () => {
         </div>
       </div>
       <div className="md:w-1/2 w-full flex items-center justify-center p-4">
-        <Card className="w-full bg-white">
+        <Card
+          className="w-full rounded-xl bg-white shadow-lg"
+          style={{ maxHeight: "calc(100vh - 4rem)" }} // Pendekkan card
+        >
           <div className="text-center mb-4">
             <Typography.Title level={3} className="m-0">
-              Log in
+              Create new account
             </Typography.Title>
             <Text type="secondary">
-              Welcome back! Please enter your account!
+              Already a member?{" "}
+              <Link href="/login" style={{ color: "#4F28D9" }}>
+                Log in
+              </Link>
             </Text>
           </div>
           <Form
-            name="login"
+            form={form}
+            name="register"
             layout="vertical"
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              label="Email or Number"
-              name="identifier" // Menggunakan nama generik untuk menangani kedua input
+              label="Full Name"
+              name="fullName"
               rules={[
+                { required: true, message: "Please input your full name!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: "Please input your email!" },
                 {
-                  required: true,
-                  message: "Please input your Email or Number!",
+                  type: "email",
+                  message: "Please enter a valid email address!",
                 },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Number"
+              name="number"
+              rules={[
+                { required: true, message: "Please input your number!" },
                 {
-                  validator: (_, value) => {
-                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    const phonePattern = /^[0-9]{10,15}$/;
-
-                    if (!value) {
-                      return Promise.reject(
-                        "Please input your Email or Number!"
-                      );
-                    }
-
-                    if (
-                      !emailPattern.test(value) &&
-                      !phonePattern.test(value)
-                    ) {
-                      return Promise.reject(
-                        "Please enter a valid Email or Number!"
-                      );
-                    }
-
-                    return Promise.resolve();
-                  },
+                  pattern: /^[0-9]{10,15}$/,
+                  message: "Please enter a valid number!",
                 },
               ]}
             >
@@ -103,19 +113,27 @@ const Login: React.FC = () => {
               <Input.Password />
             </Form.Item>
 
-            <Form.Item>
-              <Button
-                type="link"
-                onClick={handleForgotPassword}
-                className="p-0"
-              >
-                Forgot password?
-              </Button>
+            <Form.Item
+              label="Confirm Password"
+              name="confirmPassword"
+              rules={[
+                { required: true, message: "Please confirm your password!" },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject("Passwords don't match!");
+                  },
+                }),
+              ]}
+            >
+              <Input.Password />
             </Form.Item>
 
             <Form.Item>
               <Button type="primary" htmlType="submit" className="w-full">
-                Login
+                Register
               </Button>
             </Form.Item>
           </Form>
@@ -126,16 +144,10 @@ const Login: React.FC = () => {
             <Button icon={<FacebookOutlined />} shape="circle" />
             <Button icon={<AppleOutlined />} shape="circle" />
           </Space>
-          <div className="text-center mt-4">
-            <Text type="secondary">Don’t have an account? </Text>
-            <Link href="/register" style={{ color: "#4F28D9" }}>
-              Sign up
-            </Link>
-          </div>
         </Card>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;

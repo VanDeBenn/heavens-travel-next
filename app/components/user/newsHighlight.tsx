@@ -29,10 +29,11 @@ rounded-l-xl"
             </Link>
 
             <div className="w-full md:w-7/12 p-4 flex flex-col">
-              <Link href={card.link} className="no-underline">
-                <span className="text-2xl font-semibold mb-2 leading-7 text-black">
-                  {card.title}
-                </span>
+              <Link
+                href={card.link}
+                className="text-black hover:text-[#4F28D9] transition-all duration-300 no-underline text-2xl font-semibold mb-2 leading-7"
+              >
+                {card.title}
               </Link>
 
               <span className="text-sm text-gray-600 pb-3">{card.date}</span>
@@ -46,68 +47,45 @@ rounded-l-xl"
         ))}
       </div>
 
-      {/* Highlight utama */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {cardData.slice(0, 1).map((card, index) => (
-          <Link
-            key={index}
-            href={card.link}
-            className="flex flex-col md:flex-row bg-white rounded-xl overflow-hidden shadow-lg no-underline"
-          >
-            <div className="w-full md:w-8/12">
-              <Image
-                src={card.imageSrc}
-                alt={card.title}
-                width={800}  // Ukuran gambar lebih besar
-                height={400} // Ukuran gambar lebih besar
-                objectFit="cover"
-                className="w-full"
-              />
-            </div>
-            <div className="w-full md:w-4/12 p-4 flex flex-col">
-              <span className="text-2xl font-semibold mb-2 leading-7 text-black">
-                {card.title}
-              </span>
-              <span className="text-sm text-gray-600 pb-3">
-                {card.date}
-              </span>
-              <span className="text-base text-gray-800">
-                {card.description}
-              </span>
-            </div>
-          </Link>
-        ))}
-      </div> */}
-
       {/* Card News */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mt-4">
-        {cardData.slice(0, 4).map((card, index) => (
-          <Link
-            key={index}
-            href={card.link}
-            //yang bener buat abang beckend
-            // href={`/news/popular/${index}`}
-          >
-            <div className="relative bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md transition-transform duration-300">
-              <div className="relative w-full h-[400px]">
-                <Image
-                  src={card.imageSrc}
-                  alt={card.title}
-                  layout="fill"
-                  objectFit="cover"
-                  className="absolute inset-0"
-                />
+            {cardData.slice(0, 4).map((card, index) => (
+              <div
+                key={index}
+                // href={card.link}
+                //yang bener buat abang beckend
+                // href={`/news/popular/${index}`}
+              >
+                <div className="relative bg-white border border-gray-200 rounded-xl  ">
+                  <Link href={card.link}>
+                    <div className="relative w-full h-[400px]">
+                      <Image
+                        src={card.imageSrc}
+                        alt={card.title}
+                        // width={300}
+                        // height={300}
+                        layout="fill"
+                        objectFit="cover"
+                        className="absolute inset-0  rounded-xl "
+                      />
+                    </div>
+                  </Link>
+
+                  <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md shadow-md">
+                    <div className="flex flex-col">
+                      <Link
+                        href={card.link}
+                        className="text-base font-semibold mb-1 leading-4 text-black hover:text-[#4F28D9] transition-all duration-300 no-underline"
+                      >
+                        {card.title}
+                      </Link>
+                      <span className="text-xs text-gray-600">{card.date}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md shadow-md">
-                <h2 className="text-base font-semibold mb-1 leading-4 text-black">
-                  {card.title}
-                </h2>
-                <span className="text-xs text-gray-600">{card.date}</span>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+            ))}
+          </div>
 
       {/* Button See More */}
       <div className="flex justify-center mt-6">

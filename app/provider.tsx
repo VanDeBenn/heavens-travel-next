@@ -15,7 +15,7 @@ export const Provider = ({children}: any) => {
   return <ConfigProvider
     theme={{
       token: {
-        colorPrimary: '#00b96b',
+        colorPrimary: '#4F28D9',
       } as Partial<AliasToken>,
     }}
   >

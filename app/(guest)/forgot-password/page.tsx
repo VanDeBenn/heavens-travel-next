@@ -12,19 +12,16 @@ import { useRouter } from "next/navigation";
 
 const { Text, Link } = Typography;
 
-const Login: React.FC = () => {
+const ForgotPassword: React.FC = () => {
   const router = useRouter();
 
   const onFinish = (values: any) => {
     console.log("Success:", values);
+    router.push("/authenticator"); // Navigate to the authenticator page after successful form submission
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
-  };
-
-  const handleForgotPassword = () => {
-    router.push("/forgot-password");
   };
 
   return (
@@ -32,8 +29,8 @@ const Login: React.FC = () => {
       <div className="md:w-1/2 w-full flex items-center justify-center">
         <div className="relative w-full h-64 md:h-full">
           <Image
-            src="/images/illustration/login-hd.png"
-            alt="Login Illustration"
+            src="/images/illustration/tourist-dancing-with-suitcase.png"
+            alt="Forgot Password Illustration"
             layout="fill"
             objectFit="contain"
             priority
@@ -41,25 +38,28 @@ const Login: React.FC = () => {
         </div>
       </div>
       <div className="md:w-1/2 w-full flex items-center justify-center p-4">
-        <Card className="w-full bg-white">
+        <Card
+          className="w-full bg-white shadow-lg"
+          style={{ maxWidth: "600px" }}
+        >
           <div className="text-center mb-4">
             <Typography.Title level={3} className="m-0">
-              Log in
+              Forgot Password?
             </Typography.Title>
             <Text type="secondary">
-              Welcome back! Please enter your account!
+              Enter the email address associated with an account.
             </Text>
           </div>
           <Form
-            name="login"
+            name="forgot-password"
             layout="vertical"
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              label="Email or Number"
-              name="identifier" // Menggunakan nama generik untuk menangani kedua input
+              label={<span>Please enter Email or Number </span>}
+              name="identifier"
               rules={[
                 {
                   required: true,
@@ -92,50 +92,34 @@ const Login: React.FC = () => {
             >
               <Input />
             </Form.Item>
-
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                { required: true, message: "Please input your password!" },
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
-
-            <Form.Item>
-              <Button
-                type="link"
-                onClick={handleForgotPassword}
-                className="p-0"
-              >
-                Forgot password?
-              </Button>
-            </Form.Item>
-
+            <div className="text-center my-5">
+              <Text type="secondary">
+                Back to
+                <Link
+                  href="/login"
+                  style={{ color: "#4F28D9" }}
+                  className="ml-1"
+                >
+                  Sign in
+                </Link>
+              </Text>
+            </div>
             <Form.Item>
               <Button type="primary" htmlType="submit" className="w-full">
-                Login
+                Next
               </Button>
             </Form.Item>
           </Form>
-          <Divider>Or continue with</Divider>{" "}
-          {/* Divider dengan teks di tengah */}
+          <Divider>Or continue with</Divider>
           <Space size="large" className="flex justify-center my-4">
             <Button icon={<GoogleOutlined />} shape="circle" />
             <Button icon={<FacebookOutlined />} shape="circle" />
             <Button icon={<AppleOutlined />} shape="circle" />
           </Space>
-          <div className="text-center mt-4">
-            <Text type="secondary">Don’t have an account? </Text>
-            <Link href="/register" style={{ color: "#4F28D9" }}>
-              Sign up
-            </Link>
-          </div>
         </Card>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default ForgotPassword;

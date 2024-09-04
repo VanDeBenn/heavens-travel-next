@@ -35,26 +35,30 @@ rounded-xl"
                 />
               </Link>
               <div className="w-full flex flex-col">
-                <Link href={card.link} className="no-underline">
-                  <span className="text-xl font-semibold mb-2 leading-7 text-black">
-                    {card.title}
-                  </span>
+                <Link
+                  href={card.link}
+                  className="text-black hover:text-[#4F28D9] transition-all duration-300 no-underline text-xl font-semibold leading-6"
+                >
+                  {card.title}
                 </Link>
 
-                <span className="text-sm text-gray-600 pb-3">{card.date}</span>
+                <span className="text-sm text-gray-600 my-1">{card.date}</span>
+                <span className="text-sm text-gray-600">
+                  {card.description}
+                </span>
               </div>
             </div>
           ))}
         </div>
       </div>
       <div className="flex justify-center mt-6">
-            <Link
-              href={"/blog/list"}
-              className="bg-[#ffffff] text-[#4F28D9] px-11 py-3 no-underline font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:bg-[#4F28D9] hover:text-white shadow-lg"
-            >
-              See more
-            </Link>
-          </div>
+        <Link
+          href={"/blog/list"}
+          className="bg-[#ffffff] text-[#4F28D9] px-11 py-3 no-underline font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:bg-[#4F28D9] hover:text-white shadow-lg"
+        >
+          Load more
+        </Link>
+      </div>
     </div>
   );
 }

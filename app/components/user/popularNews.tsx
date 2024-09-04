@@ -12,37 +12,42 @@ export default function popularNews() {
         <RiFireLine size={26} color="#4F28D9" className="mr-2" />
         <span className="text-xl font-semibold">Popular</span>
       </div>
-      <div className="space-y-2 bg-white rounded-xl">
-        {popularNewsData.slice(0, 3).map((news, index) => (
-          <Link
+      <div className=" bg-white rounded-xl">
+        {popularNewsData.slice(0, 4).map((news, index) => (
+          <div
             key={index}
-            //eample
-            href={news.link}
-            //yang bener buat abang beckend
-            // href={`/news/popular/${index}`}
             className="no-underline"
           >
             {/* Tambahkan Link di sekitar news card */}
-            <div className="relative overflow-hidden group p-3">
-              <div className="relative w-full h-[170px] xl:h-[190px] overflow-hidden rounded-lg">
+            <div className="p-3">
+              <Link
+                href={news.link}
+                className="rounded-lg h-60"
+              >
                 <Image
                   src={news.imageSrc}
                   alt={news.title}
-                  layout="fill"
-                  objectFit="cover"
-                  className="absolute inset-0 transition-transform duration-300 transform"
+                  width={300}
+                  height={300}
+                  className="w-full h-28 rounded-lg"
                 />
-              </div>
-              <div className="pt-3">
-                <h2 className="text-base font-semibold mb-1 leading-5 text-black">
+              </Link>
+
+              <div className="pt-3 flex flex-col ">
+                <Link
+                  href={news.link}
+                  //yang bener buat abang beckend
+                  // href={`/news/popular/${index}`}
+                  className="text-base font-semibold mb-1 leading-5 text-black hover:text-[#4F28D9] transition-all duration-300 no-underline"
+                >
                   {news.title}
-                </h2>
+                </Link>
                 <span className="text-sm text-gray-600 font-medium">
                   {news.date}
                 </span>
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>

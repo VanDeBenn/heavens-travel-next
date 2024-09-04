@@ -18,30 +18,40 @@ export default function News() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mt-4">
             {cardData.slice(0, 8).map((card, index) => (
-              <Link
+              <div
                 key={index}
-                href={card.link}
+                // href={card.link}
                 //yang bener buat abang beckend
                 // href={`/news/popular/${index}`}
               >
-                <div className="relative bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md transition-transform duration-300">
-                  <div className="relative w-full h-[400px]">
-                    <Image
-                      src={card.imageSrc}
-                      alt={card.title}
-                      layout="fill"
-                      objectFit="cover"
-                      className="absolute inset-0"
-                    />
-                  </div>
+                <div className="relative bg-white border border-gray-200 rounded-xl  ">
+                  <Link href={card.link}>
+                    <div className="relative w-full h-[400px]">
+                      <Image
+                        src={card.imageSrc}
+                        alt={card.title}
+                        // width={300}
+                        // height={300}
+                        layout="fill"
+                        objectFit="cover"
+                        className="absolute inset-0  rounded-xl "
+                      />
+                    </div>
+                  </Link>
+
                   <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md shadow-md">
-                    <h2 className="text-base font-semibold mb-1 leading-4 text-black">
-                      {card.title}
-                    </h2>
-                    <span className="text-xs text-gray-600">{card.date}</span>
+                    <div className="flex flex-col">
+                      <Link
+                        href={card.link}
+                        className="text-base font-semibold mb-1 leading-4 text-black hover:text-[#4F28D9] transition-all duration-300 no-underline"
+                      >
+                        {card.title}
+                      </Link>
+                      <span className="text-xs text-gray-600">{card.date}</span>
+                    </div>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
 
@@ -67,7 +77,7 @@ export default function News() {
 
 export const cardData = [
   {
-    title: "Discover the Hidden Waterfalls of Hawaii",
+    title: "The Ultimate Guide to Experiencing Hawaii’s Natural Beauty and Adventure",
     date: "August 25, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:
