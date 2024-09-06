@@ -9,6 +9,7 @@ import {
   InfoCircleOutlined,
   NotificationOutlined,
 } from "@ant-design/icons";
+import Image from "next/image";
 
 const { Header } = Layout;
 
@@ -34,14 +35,18 @@ const HeaderComponent: React.FC = () => {
   const activeMenuKey = getMenuKey();
 
   return (
-    <Header className="bg-white shadow-md fixed top-0 left-0 w-full z-10">
+    <Header className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
       <div className="flex items-center justify-between container mx-auto">
         {/* Logo or App Name */}
-        <div className="text-2xl font-semibold">
-          <Link href="/">
-            <span className="text-[#4F28D9]">LOGO</span>
-          </Link>
-        </div>
+        <Link href={"/"} className=" w-32">
+              <Image
+                src="/images/icon/icon-lanscape-black.png"
+                alt="logo"
+                width={100}
+                height={80}
+                className="w-full h-9"
+          />
+        </Link>
         {/* Menu Items */}
         <Menu
           mode="horizontal"

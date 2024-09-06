@@ -1,9 +1,9 @@
 import React from "react";
-import Footer from "../../components/user/footer";
-import Header from "../../components/user/header";
-import DestinasitionHighlights from "../../components/user/destinasitionHighlights";
-import HotelHighlights from "../../components/user/hotelHighlights";
-import MoreNews from "../../components/user/moreNews";
+import Footer from "#/app/components/user/footer";
+import Header from "#/app/components/user/header";
+import DestinasitionHighlights from "#/app/components/user/destinasitionHighlights";
+import HotelHighlights from "#/app/components/user/hotelHighlights";
+import MoreNews from "#/app/components/user/moreNews";
 
 function page() {
   return (

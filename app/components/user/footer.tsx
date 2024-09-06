@@ -12,21 +12,19 @@ const Footer = () => {
   return (
     <footer className="w-full sticky z-50 bottom-0 lg:relative bg-white px-16 overflow-hidden text-black">
       <div className="pt-16">
-        <div className="flex flex-col lg:flex-row gap-2">
+        <div className="flex flex-col lg:flex-row gap-12">
           {/* Logo and Description Section */}
           <div className="flex flex-col lg:w-1/5 ">
-            <div className="flex pb-4">
-              {/* <Image
-                src="/images/Logo.png"
+            <Link href={"/"} className=" w-36">
+              <Image
+                src="/images/icon/icon-lanscape-black.png"
                 alt="logo"
                 width={100}
-                height={100}
-              /> */}
-              <h1 className="text-lg md:text-xl uppercase font-semibold text-black">
-                Logo
-              </h1>
-            </div>
-            <span className="text-sm sm:text-base text-gray-500 ">
+                height={80}
+                className="w-full h-12"
+              />
+            </Link>
+            <span className="text-sm sm:text-base text-gray-500 pt-4">
               We are ready to assist you in your travel and hospitality needs.
             </span>
           </div>

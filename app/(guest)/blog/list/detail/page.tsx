@@ -1,7 +1,7 @@
 import React from "react";
-import Footer from "../../../components/user/footer";
-import Header from "../../../components/user/header";
-import BlogDetail from "../../../components/user/blogDetail";
+import Footer from "#/app/components/user/footer";
+import Header from "#/app/components/user/header";
+import BlogDetail from "#/app/components/user/blogDetail";
 import RelatedArticles from "#/app/components/user/RelatedArticles";
 
 export default function page() {
