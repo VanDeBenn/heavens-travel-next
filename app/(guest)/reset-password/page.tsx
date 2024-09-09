@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { SyntheticEvent, useState } from "react";
 import Image from "next/image";
 import { Form, Input, Button, Card, Typography, Divider, Space } from "antd";
 import { useRouter } from "next/navigation";
@@ -11,9 +11,53 @@ const ResetPassword: React.FC = () => {
   const router = useRouter();
   const [form] = Form.useForm();
 
+  const refreshToken = localStorage.getItem("refresh-token");
+  type reset = {
+    newPassword: string;
+    confirmNewPassword: string;
+  };
+
+  const initialState = {
+    newPassword: "",
+    confirmNewPassword: "",
+  };
+  const [state, setState] = useState<reset>(initialState);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  async function handleSubmit(e: SyntheticEvent) {
+    e.preventDefault();
+    try {
+      const { confirmNewPassword, ...reset } = state;
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ ...reset, refreshToken }),
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (res.ok) {
+        router.push("/login");
+      } else {
+        console.error("");
+      }
+    } catch (error) {
+      console.error("Request failed", error);
+    }
+  }
+
   const onFinish = (values: any) => {
-    console.log("Success:", values);
-    // Handle password change logic here
+    handleSubmit(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -65,7 +109,10 @@ const ResetPassword: React.FC = () => {
                 { required: true, message: "Please input your new password!" },
               ]}
             >
-              <Input.Password />
+              <Input.Password
+                value={state.newPassword}
+                onChange={handleChange}
+              />
             </Form.Item>
             <div className="text-left pb-2">
               <span>Password strength:</span>
@@ -105,11 +152,19 @@ const ResetPassword: React.FC = () => {
                 }),
               ]}
             >
-              <Input.Password />
+              <Input.Password
+                value={state.confirmNewPassword}
+                onChange={handleChange}
+              />
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" className="w-full">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="w-full"
+                onClick={handleSubmit}
+              >
                 Change Password
               </Button>
             </Form.Item>
