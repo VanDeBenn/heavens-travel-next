@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { SyntheticEvent, useState } from "react";
 import Image from "next/image";
 import { Form, Input, Button, Card, Typography, Divider, Space } from "antd";
 import {
@@ -15,9 +15,50 @@ const { Text, Link } = Typography;
 const ForgotPassword: React.FC = () => {
   const router = useRouter();
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-    router.push("/authenticator"); // Navigate to the authenticator page after successful form submission
+  type userForgotPassword = {
+    email: string;
+  };
+
+  const initialState = {
+    email: "",
+  };
+
+  const [state, setState] = useState<userForgotPassword>(initialState);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  async function handleSubmit() {
+    try {
+      const forgotPassword = state;
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/forgot-password`,
+        {
+          method: "POST",
+          body: JSON.stringify(forgotPassword),
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (res.ok) {
+        const json = await res.json();
+
+        localStorage.setItem("reset-token", json.data.token.resetToken);
+        router.push("/authenticator");
+      }
+    } catch (error) {
+      console.error("Request failed", error);
+    }
+  }
+
+  const onFinish = () => {
+    handleSubmit();
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -59,7 +100,7 @@ const ForgotPassword: React.FC = () => {
           >
             <Form.Item
               label={<span>Please enter Email or Number </span>}
-              name="identifier"
+              name="email"
               rules={[
                 {
                   required: true,
@@ -90,7 +131,7 @@ const ForgotPassword: React.FC = () => {
                 },
               ]}
             >
-              <Input />
+              <Input value={state.email} name="email" onChange={handleChange} />
             </Form.Item>
             <div className="text-center my-5">
               <Text type="secondary">

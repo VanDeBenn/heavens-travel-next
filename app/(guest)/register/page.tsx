@@ -22,6 +22,7 @@ const Register = () => {
     phoneNumber: string;
     password: string;
     confirmPassword: string;
+    roleId: string;
   };
 
   const initialState = {
@@ -30,16 +31,16 @@ const Register = () => {
     phoneNumber: "",
     password: "",
     confirmPassword: "",
+    roleId: "73176062-1eda-44ca-9112-57f775f9affd",
   };
 
   const [state, setState] = useState<userRegister>(initialState);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
   }
 
   async function handleSubmit() {
@@ -67,7 +68,7 @@ const Register = () => {
     }
   }
 
-  const onFinish = (values: any) => {
+  const onFinish = () => {
     handleSubmit();
   };
 
@@ -188,6 +189,10 @@ const Register = () => {
               ]}
             >
               <Input.Password name="confirmPassword" onChange={handleChange} />
+            </Form.Item>
+
+            <Form.Item name="roleId" initialValue={state.roleId} hidden>
+              <Input name="roleId" value={state.roleId} />
             </Form.Item>
 
             <Form.Item>
