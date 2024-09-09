@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { SyntheticEvent, useState } from "react";
 import Image from "next/image";
 import { Form, Input, Button, Card, Typography, Divider, Space } from "antd";
 import {
@@ -12,11 +12,59 @@ import { useRouter } from "next/navigation";
 
 const { Text, Link } = Typography;
 
-const Login: React.FC = () => {
+const Login = () => {
   const router = useRouter();
 
+  type userLogin = {
+    email: string;
+    password: string;
+  };
+
+  const initialState = {
+    email: "",
+    password: "",
+  };
+
+  const [state, setState] = useState<userLogin>(initialState);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+
+  async function handleSubmit(e: SyntheticEvent) {
+    e.preventDefault();
+    try {
+      const loginData = state;
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        method: "POST",
+        body: JSON.stringify(loginData),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+
+        localStorage.setItem("access-token", json.data.token.accessToken);
+        localStorage.setItem("refresh-token", json.data.token.refreshToken);
+
+        router.push("/");
+      } else {
+        alert("Bad credentials");
+      }
+    } catch (error) {
+      console.error("Request failed", error);
+    }
+  }
+
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    handleSubmit(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -59,7 +107,7 @@ const Login: React.FC = () => {
           >
             <Form.Item
               label="Email or Number"
-              name="identifier" // Menggunakan nama generik untuk menangani kedua input
+              name="email"
               rules={[
                 {
                   required: true,
@@ -90,7 +138,7 @@ const Login: React.FC = () => {
                 },
               ]}
             >
-              <Input />
+              <Input value={state.email} onChange={handleChange} name="email" />
             </Form.Item>
 
             <Form.Item
@@ -100,7 +148,11 @@ const Login: React.FC = () => {
                 { required: true, message: "Please input your password!" },
               ]}
             >
-              <Input.Password />
+              <Input.Password
+                value={state.password}
+                onChange={handleChange}
+                name="password"
+              />
             </Form.Item>
 
             <Form.Item>
@@ -114,13 +166,17 @@ const Login: React.FC = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" className="w-full">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="w-full"
+                onClick={handleSubmit}
+              >
                 Login
               </Button>
             </Form.Item>
           </Form>
-          <Divider>Or continue with</Divider>{" "}
-          {/* Divider dengan teks di tengah */}
+          <Divider>Or continue with</Divider>
           <Space size="large" className="flex justify-center my-4">
             <Button icon={<GoogleOutlined />} shape="circle" />
             <Button icon={<FacebookOutlined />} shape="circle" />

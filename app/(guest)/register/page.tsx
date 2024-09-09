@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import Image from "next/image";
 import { Form, Input, Button, Card, Typography, Divider, Space } from "antd";
 import {
@@ -12,19 +12,29 @@ import { useRouter } from "next/navigation";
 
 const { Text, Link } = Typography;
 
-const Register: React.FC = () => {
+const Register = () => {
   const router = useRouter();
   const [form] = Form.useForm(); // Inisialisasi Form instance
 
-  const [state, setState] = useState({
+  type userRegister = {
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    password: string;
+    confirmPassword: string;
+  };
+
+  const initialState = {
     fullName: "",
     email: "",
     phoneNumber: "",
     password: "",
     confirmPassword: "",
-  });
+  };
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const [state, setState] = useState<userRegister>(initialState);
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setState((prevState) => ({
       ...prevState,
@@ -49,15 +59,11 @@ const Register: React.FC = () => {
       if (!res.ok) {
         const errorData = await res.json();
         console.log("Error response:", errorData);
-        alert(`Error: ${errorData.message}`);
         return;
       }
-
-      alert("User registered successfully");
       router.push("/login");
     } catch (error) {
       console.error("Request failed:", error);
-      alert("An error occurred during registration");
     }
   }
 
