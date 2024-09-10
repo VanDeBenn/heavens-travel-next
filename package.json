@@ -15,6 +15,7 @@
     "@types/superagent": "^4.1.18",
     "add": "^2.0.6",
     "antd": "^5.7.0",
+    "country-region-selector": "^1.0.0",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
     "keen-slider": "^6.8.6",

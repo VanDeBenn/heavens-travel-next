@@ -1,10 +1,16 @@
 import React from "react";
 import Coba from "../components/user/coba";
+import Wishlist from "../components/user/wishlist";
+import InformationPersonal from "../components/user/informationPersonal";
+import ChangePassword from "../components/user/changePassword";
 
 export default function page() {
   return (
-    <div>
-      <Coba />
+    <div className="bg-[#F8F8FF] p-9 flex flex-col gap-9">
+      <InformationPersonal />
+      <ChangePassword />
+      {/* <Wishlist /> */}
+      {/* <Coba /> */}
     </div>
   );
 }

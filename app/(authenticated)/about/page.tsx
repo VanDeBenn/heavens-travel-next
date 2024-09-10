@@ -6,10 +6,10 @@ import {store} from "#/store";
 
 const Page = () => {
     return <div>
-        about: {store.ui.title}
+        {/* about: {store.ui.title}
         <Button onClick={() => {
             store.ui.changeTitle("from about")
-        }}>change title</Button>
+        }}>change title</Button> */}
     </div>;
 };
 
