@@ -11,7 +11,8 @@ const ResetPassword: React.FC = () => {
   const router = useRouter();
   const [form] = Form.useForm();
 
-  const refreshToken = localStorage.getItem("refresh-token");
+  const resetToken = localStorage.getItem("reset-token");
+
   type reset = {
     newPassword: string;
     confirmNewPassword: string;
@@ -21,6 +22,7 @@ const ResetPassword: React.FC = () => {
     newPassword: "",
     confirmNewPassword: "",
   };
+
   const [state, setState] = useState<reset>(initialState);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -30,15 +32,16 @@ const ResetPassword: React.FC = () => {
     });
   }
 
-  async function handleSubmit(e: SyntheticEvent) {
-    e.preventDefault();
+  async function handleSubmit() {
     try {
-      const { confirmNewPassword, ...reset } = state;
+      const { newPassword } = state;
+      const reset = { newPassword, resetToken };
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password`,
         {
           method: "PUT",
-          body: JSON.stringify({ ...reset, refreshToken }),
+          body: JSON.stringify(reset),
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
@@ -48,16 +51,19 @@ const ResetPassword: React.FC = () => {
 
       if (res.ok) {
         router.push("/login");
+        localStorage.removeItem("access-token");
+        localStorage.removeItem("refresh-token");
+        localStorage.removeItem("reset-token");
       } else {
-        console.error("");
+        console.error("Failed to reset password");
       }
     } catch (error) {
       console.error("Request failed", error);
     }
   }
 
-  const onFinish = (values: any) => {
-    handleSubmit(values);
+  const onFinish = () => {
+    handleSubmit();
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -112,6 +118,7 @@ const ResetPassword: React.FC = () => {
               <Input.Password
                 value={state.newPassword}
                 onChange={handleChange}
+                name="newPassword"
               />
             </Form.Item>
             <div className="text-left pb-2">
@@ -153,7 +160,7 @@ const ResetPassword: React.FC = () => {
               ]}
             >
               <Input.Password
-                value={state.confirmNewPassword}
+                name="confirmNewPassword"
                 onChange={handleChange}
               />
             </Form.Item>

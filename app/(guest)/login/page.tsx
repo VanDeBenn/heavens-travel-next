@@ -50,11 +50,10 @@ const Login = () => {
 
       if (res.ok) {
         const json = await res.json();
-
         localStorage.setItem("access-token", json.data.token.accessToken);
         localStorage.setItem("refresh-token", json.data.token.refreshToken);
 
-        router.push("/");
+        router.push("/profile");
       } else {
         alert("Bad credentials");
       }

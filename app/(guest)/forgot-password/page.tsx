@@ -49,7 +49,7 @@ const ForgotPassword: React.FC = () => {
       if (res.ok) {
         const json = await res.json();
 
-        localStorage.setItem("reset-token", json.data.token.resetToken);
+        localStorage.setItem("reset-token", json.data.token);
         router.push("/authenticator");
       }
     } catch (error) {
