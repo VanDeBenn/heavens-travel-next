@@ -12,7 +12,7 @@ export default function page() {
       <div className="">
         <Hotels />
       </div>
-      <div className=" px-16 pb-8 pt-24">
+      <div className=" px-16 pb-8 pt-24 flex flex-col gap-10">
         <PromoteSlider />
         <PopularHotelsIn />
       </div>

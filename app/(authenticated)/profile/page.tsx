@@ -1,5 +1,6 @@
 import ChangePassword from "#/app/components/user/changePassword";
 import InformationPersonal from "#/app/components/user/informationPersonal";
+import MyBooking from "#/app/components/user/myBooking";
 import NavProfile from "#/app/components/user/navProfile";
 import Wishlist from "#/app/components/user/wishlist";
 import React from "react";
@@ -12,6 +13,7 @@ export default function page() {
         <InformationPersonal />
         <ChangePassword />
         <Wishlist />
+        <MyBooking />
       </div>
     </div>
   );
