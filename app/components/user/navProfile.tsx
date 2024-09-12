@@ -20,6 +20,12 @@ const NavProfile: React.FC = () => {
   const [selectedKey, setSelectedKey] = useState<string>("profile");
   const router = useRouter();
 
+  function logout() {
+    localStorage.removeItem("access-token");
+    localStorage.removeItem("refresh-token");
+    router.push("/login");
+  }
+
   const handleMenuClick = (key: string) => {
     if (key === "logout") {
       // Logika untuk logout
@@ -59,7 +65,7 @@ const NavProfile: React.FC = () => {
 
         <div
           className="flex justify-center items-center gap-2 cursor-pointer mt-auto text-[#DC143C]"
-          onClick={() => handleMenuClick("logout")}
+          onClick={logout}
         >
           <LogoutOutlined style={{ color: "#DC143C", fontSize: 26 }} />
           <span className="text-base">Log out</span>
