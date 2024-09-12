@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { RiMapPin2Line, RiHome3Line, RiBookmarkFill } from "react-icons/ri";
+import { RiGlassesLine, RiHome3Line, RiBookmarkFill } from "react-icons/ri";
 import { Rate, Modal, Button } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -95,11 +95,11 @@ export default function Wishlist() {
           >
             <div className="flex justify-between items-center">
               {/* title and icon */}
-              <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-2 px-4 w-max flex items-center gap-1 2xl:gap-2">
+              <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
                 {item.category === "Hotel" ? (
                   <RiHome3Line size={18} color="#ffff" />
                 ) : (
-                  <RiMapPin2Line size={18} color="#ffff" />
+                  <RiGlassesLine size={18} color="#ffff" />
                 )}
                 <span className="text-xs font-semibold text-white">
                   {item.category}
@@ -142,7 +142,7 @@ export default function Wishlist() {
                   />
                 </div>
                 <div className="flex items-center gap-1">
-                  <RiMapPin2Line size={16} color="#6b7280 " />
+                  <RiGlassesLine size={16} color="#6b7280 " />
                   <span className="text-xs text-gray-500">{item.location}</span>
                 </div>
 

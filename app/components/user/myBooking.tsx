@@ -26,90 +26,13 @@ const smallMontserrat = Montserrat({
   weight: ["400"],
 });
 
-// Interface for BookingItem
-interface BookingItem {
-  category: "Hotel" | "Destination";
-  name: string;
-  schedule: string;
-  description: string;
-  image: string;
-  rating: number;
-  link: string;
-  guests: string;
-  HotelRoomType?: string;
-  HotelPricePerAdult?: number;
-  DestinationPriceAdults?: number;
-  DestinationPriceChildren?: number;
-  status?: "Done" | "waiting for payment"; // Tambahkan properti status brokk
-}
-
-// Data array booking ama destination
-const initialBookingItems: BookingItem[] = [
-  {
-    category: "Hotel",
-    name: "Atlasong Hotel",
-    schedule: "12 Oct 2024 - 15 Oct 2024",
-    description:
-      "Luxury stay with stunning ocean views, offering top-notch service and unforgettable.",
-    image: "/images/illustration/rainbow-appearing-sky.jpg",
-    rating: 5,
-    link: "/",
-    guests: "2 adults, 3 children",
-    HotelRoomType: "Deluxe Double Room F",
-    HotelPricePerAdult: 500999,
-    status: "waiting for payment", // Contoh status
-  },
-  {
-    category: "Destination",
-    name: "Ubud Palace",
-    schedule: "20 Oct 2024",
-    description:
-      "Explore Ubud Palace, a historical and cultural landmark showcasing Bali’s traditional architecture and rich heritage.",
-    image: "/images/illustration/rainbow-appearing-sky.jpg",
-    rating: 4,
-    link: "/",
-    guests: "1 adult, 2 children",
-    DestinationPriceAdults: 200000,
-    DestinationPriceChildren: 100000,
-    status: "Done",
-  },
-  {
-    category: "Hotel",
-    name: "Mandarin Oriental",
-    schedule: "5 Nov 2024 - 8 Nov 2024",
-    description:
-      "Modern luxury and comfort with excellent service at Mandarin Oriental Jakarta.",
-    image: "/images/illustration/rainbow-appearing-sky.jpg",
-    rating: 3,
-    link: "/",
-    guests: "2 adults",
-    HotelRoomType: "Deluxe King Room",
-    HotelPricePerAdult: 600999,
-    status: "Done",
-  },
-  {
-    category: "Hotel",
-    name: "Sansoeong Hotel",
-    schedule: "12 Oct 2024 - 15 Oct 2024",
-    description:
-      "Luxury stay with stunning ocean views, offering top-notch service and unforgettable.",
-    image: "/images/illustration/rainbow-appearing-sky.jpg",
-    rating: 5,
-    link: "/",
-    guests: "3 adults",
-    HotelRoomType: "Deluxe Double Room F",
-    HotelPricePerAdult: 500999,
-    status: "waiting for payment", // Contoh status
-  },
-];
-
 export default function MyBooking() {
   const [bookingItems, setBookingItems] =
     useState<BookingItem[]>(initialBookingItems);
 
   const formatCurrency = (amount: number) => `Rp${amount.toLocaleString()}`;
 
-  // Dropdown menu cuk
+  // Dropdown menu
   const menu = (
     <Menu
       items={[
@@ -129,7 +52,7 @@ export default function MyBooking() {
   );
 
   return (
-    <div className={` bg-white rounded-xl font-sans`}>
+    <div className={`bg-white rounded-xl`}>
       {/* title */}
       <p className="text-xl font-semibold my-6 mx-9">My Booking</p>
       <div className="h-px bg-gray-300"></div>
@@ -208,7 +131,7 @@ export default function MyBooking() {
                   />
                 </Link>
                 <div
-                  className={`${mediumMontserrat.className} flex flex-col gap-1 w-full `}
+                  className={`${mediumMontserrat.className} flex flex-col gap-1 w-full`}
                 >
                   <Link
                     href={item.link}
@@ -219,21 +142,25 @@ export default function MyBooking() {
                   <div className="flex items-center gap-1">
                     <RiCalendarLine size={16} color="#6b7280 " />
                     <span className="text-xs text-gray-500">
-                      {item.schedule}
+                      {item.category === "Hotel"
+                        ? item.HotelSchedule
+                        : item.category === "Destination"
+                        ? item.DestinationSchedule
+                        : "No Schedule"}
                     </span>
                   </div>
 
                   <div
-                    className={`${mediumMontserrat.className} flex justify-between `}
+                    className={`${mediumMontserrat.className} flex justify-between`}
                   >
-                    <div className="flex  gap-1">
+                    <div className="flex gap-1">
                       <RiTeamLine size={16} color="#6b7280" />
                       <span className="text-xs text-gray-500">
                         Guests: {item.guests}
                       </span>
                     </div>
 
-                    <div className={`flex flex-col items-center gap-1 `}>
+                    <div className={`flex flex-col items-center gap-1`}>
                       {item.DestinationPriceAdults && adultsCount > 0 && (
                         <span className="text-sm text-gray-500">
                           {adultsCount} x{" "}
@@ -267,7 +194,7 @@ export default function MyBooking() {
                   </div>
                 </div>
               </div>
-              <div className="h-px bg-gray-300 "></div>
+              <div className="h-px bg-gray-300"></div>
               <div className="pt-5 pb-3 flex justify-end w-full gap-2">
                 <Link
                   href={"/"}
@@ -277,7 +204,7 @@ export default function MyBooking() {
                 </Link>
                 {item.status !== "waiting for payment" && (
                   <Link
-                    href={"/"}
+                    href={"/profile/review"}
                     className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-white no-underline font-semibold"
                   >
                     Review
@@ -291,3 +218,109 @@ export default function MyBooking() {
     </div>
   );
 }
+
+// Interface for BookingItem
+export interface BookingItem {
+  category: "Hotel" | "Destination";
+  name: string;
+  HotelSchedule?: string; // Opsional
+  DestinationSchedule?: string; // Opsional
+  description: string;
+  image: string;
+  rating: number;
+  link: string;
+  guests: string;
+  HotelRoomType?: string;
+  HotelPricePerAdult?: number;
+  DestinationPriceAdults?: number;
+  DestinationPriceChildren?: number;
+  HotelTotalReviews?: number;
+  DestinationTotalReviews?: number;
+  HotelLocation?: string; // Lokasi hotel
+  DestinationLocation?: string; // Lokasi destinasi
+  status?: "Done" | "waiting for payment";
+}
+
+// Data array booking dan destination
+export const initialBookingItems: BookingItem[] = [
+  {
+    category: "Hotel",
+    name: "Mandarin Oriental",
+    HotelSchedule: "5 Nov 2024 - 8 Nov 2024", // Properti HotelSchedule untuk kategori Hotel
+    description:
+      "Modern luxury and comfort with excellent service at Mandarin Oriental Jakarta.",
+    image: "/images/illustration/rainbow-appearing-sky.jpg",
+    rating: 3,
+    link: "/",
+    guests: "2 adults",
+    HotelRoomType: "Deluxe King Room",
+    HotelPricePerAdult: 600999,
+    HotelTotalReviews: 120,
+    HotelLocation: "Jakarta, Indonesia", // Lokasi hotel
+    status: "Done",
+  },
+  {
+    category: "Destination",
+    name: "Ubud Palace",
+    DestinationSchedule: "1 Oct 2024 - 2 Oct 2024", // Properti DestinationSchedule untuk kategori Destination
+    description:
+      "Explore Ubud Palace, a historical and cultural landmark showcasing Bali’s traditional architecture and rich heritage.",
+    image: "/images/illustration/rainbow-appearing-sky.jpg",
+    rating: 4,
+    link: "/",
+    guests: "1 adult, 2 children",
+    DestinationPriceAdults: 200000,
+    DestinationPriceChildren: 100000,
+    DestinationTotalReviews: 85,
+    DestinationLocation: "Bali, Indonesia", // Lokasi destinasi
+    status: "Done",
+  },
+  {
+    category: "Hotel",
+    name: "Atlasong Hotel",
+    HotelSchedule: "12 Oct 2024 - 15 Oct 2024", // Properti HotelSchedule untuk kategori Hotel
+    description:
+      "Luxury stay with stunning ocean views, offering top-notch service and unforgettable.",
+    image: "/images/illustration/rainbow-appearing-sky.jpg",
+    rating: 5,
+    link: "/",
+    guests: "2 adults, 3 children",
+    HotelRoomType: "Deluxe Double Room F",
+    HotelPricePerAdult: 500999,
+    HotelTotalReviews: 95,
+    HotelLocation: "Bali, Indonesia", // Lokasi hotel
+    status: "waiting for payment",
+  },
+  {
+    category: "Hotel",
+    name: "Sansoeong Hotel",
+    HotelSchedule: "12 Oct 2024 - 15 Oct 2024", // Properti HotelSchedule untuk kategori Hotel
+    description:
+      "Luxury stay with stunning ocean views, offering top-notch service and unforgettable.",
+    image: "/images/illustration/rainbow-appearing-sky.jpg",
+    rating: 5,
+    link: "/",
+    guests: "3 adults",
+    HotelRoomType: "Deluxe Double Room F",
+    HotelPricePerAdult: 500999,
+    HotelTotalReviews: 77,
+    HotelLocation: "Surabaya, Indonesia", // Lokasi hotel
+    status: "waiting for payment",
+  },
+  {
+    category: "Hotel",
+    name: "Jiungo Tyuning Hotel",
+    HotelSchedule: "5 Nov 2024 - 8 Nov 2024", // Properti HotelSchedule untuk kategori Hotel
+    description:
+      "Modern luxury and comfort with excellent service at Mandarin Oriental Jakarta.",
+    image: "/images/illustration/rainbow-appearing-sky.jpg",
+    rating: 3,
+    link: "/",
+    guests: "2 adults, 3 children",
+    HotelRoomType: "Deluxe King Room",
+    HotelPricePerAdult: 600999,
+    HotelTotalReviews: 120,
+    HotelLocation: "Jakarta, Indonesia", // Lokasi hotel
+    status: "Done",
+  },
+];
