@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 
@@ -8,23 +8,114 @@ const { Option } = Select;
 
 export default function InformationPersonal() {
   const [form] = useForm();
+  const [id, setId] = useState("");
 
   // Nilai awal untuk form
   const initialValues = {
-    fullName: "James Duower Pawngestu",
-    email: "ucusgoldenboyjalananjelek@example.com",
-    phoneNumber: "1234567890",
-    gender: "male",
-    day: "19",
-    month: "08",
-    year: "1995",
-    country: "Indonesia",
-    province: "Jawa Barat",
-    city: "Bandung",
-    district: "Cicendo",
-    streetAddress:
-      "Jl. Kebon Jeruk No. 123, RT 02 RW 03, Kelurahan Kebon Melati, Kecamatan Tanah Abang, Jakarta Pusat, DKI Jakarta 10230",
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    gender: "",
+    day: "",
+    month: "",
+    year: "",
+    country: "",
+    province: "",
+    city: "",
+    district: "",
+    streetAddress: "",
   };
+
+  const [initialState, setInitialState] = useState(initialValues);
+
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/profile`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+
+      const json = await res.json();
+      const userId = json.sub;
+      setId(userId);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
+
+  const fetchProfileData = async (userId: string) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+
+      const profileData = await res.json();
+
+      setInitialState({
+        fullName: profileData.data.fullName,
+        email: profileData.data.email,
+        phoneNumber: profileData.data.phoneNumber,
+        gender: profileData.data.gender,
+        day: profileData.data.birthDate ? profileData.data.birthDate.day : "",
+        month: profileData.data.birthDate
+          ? profileData.data.birthDate.month
+          : "",
+        year: profileData.data.birthDate ? profileData.data.birthDate.year : "",
+        country: profileData.data.country,
+        province: profileData.data.province,
+        city: profileData.data.city,
+        district: profileData.data.district,
+        streetAddress: profileData.data.address,
+      });
+
+      form.setFieldsValue({
+        fullName: profileData.data.fullName,
+        email: profileData.data.email,
+        phoneNumber: profileData.data.phoneNumber,
+        gender: profileData.data.gender,
+        day: profileData.data.birthDate ? profileData.data.birthDate.day : "",
+        month: profileData.data.birthDate
+          ? profileData.data.birthDate.month
+          : "",
+        year: profileData.data.birthDate ? profileData.data.birthDate.year : "",
+        country: profileData.data.country,
+        province: profileData.data.province,
+        city: profileData.data.city,
+        district: profileData.data.district,
+        streetAddress: profileData.data.address,
+      });
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    if (id) {
+      fetchProfileData(id);
+    }
+  }, [id]);
 
   const onFinish = (values: any) => {
     console.log("Success:", values);
