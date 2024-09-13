@@ -15,13 +15,13 @@ const Footer = () => {
         <div className="flex flex-col lg:flex-row gap-12">
           {/* Logo and Description Section */}
           <div className="flex flex-col lg:w-1/5 ">
-            <Link href={"/"} className=" w-36">
+            <Link href={"/"} className=" w-32">
               <Image
                 src="/images/icon/icon-lanscape-black.png"
                 alt="logo"
                 width={100}
                 height={80}
-                className="w-full h-12"
+                className="w-full h-9"
               />
             </Link>
             <span className="text-sm sm:text-base text-gray-500 pt-4">

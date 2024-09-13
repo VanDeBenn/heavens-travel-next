@@ -14,26 +14,39 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { BookingItem, initialBookingItems } from "./myBooking";
-
-import { Rate, Input, Upload, message } from "antd"; // Import Upload dari Ant Design
+import { Montserrat } from "next/font/google";
+import { Rate, Input, Upload, message } from "antd";
 
 // Mengimpor font Montserrat dari Google Fonts
-import {
-  largeMontserrat,
-  mediumMontserrat,
-  smallMontserrat,
-} from "./myBooking";
+const largeMontserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["600"],
+});
+const mediumMontserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["500"],
+});
+const smallMontserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["400"],
+});
 
-export default function Review() {
+export default function HeavensCare() {
   // State untuk menyimpan data booking
   const [bookingItems, setBookingItems] =
     useState<BookingItem[]>(initialBookingItems);
 
+  // State untuk menyimpan judul user
+  const [userTitle, setUserTitle] = useState<string>("");
+
   // State untuk menyimpan rating user
   const [userRating, setUserRating] = useState<number>(5);
 
+  // State untuk menyimpan email user
+  const [userEmail, setUserEmail] = useState<string>("");
+
   // State untuk menyimpan komentar user
-  const [userComment, setUserComment] = useState<string>("");
+  const [userDescription, setUserDescription] = useState<string>("");
 
   // State untuk menyimpan file yang diupload dan URL-nya
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -67,29 +80,20 @@ export default function Review() {
 
   return (
     <div className="bg-white rounded-xl">
-      {/* Header section dengan judul 'Review' */}
+      {/* Header section dengan judul 'Heavens Care' */}
       <div className="py-6 px-9">
-        <span className="text-xl font-semibold">Review</span>
+        <span className="text-xl font-semibold">
+          Heavens <span className="text-[#4F28D9]">Care</span>
+        </span>
       </div>
 
       {/* Garis pemisah */}
       <div className="h-px bg-gray-300"></div>
 
       <div className="py-6 px-9 flex flex-col gap-6">
-        <div>
-          <h1 className="text-xl font-semibold">Rate your experience</h1>
-
-          {/* Komponen rating menggunakan Ant Design */}
-          <Rate
-            allowHalf
-            defaultValue={5}
-            onChange={(value) => setUserRating(value)}
-            value={userRating}
-            className="text-yellow-500"
-          />
-        </div>
+        <h1 className="text-xl font-semibold">Related Issue</h1>
         {/* Bagian review item */}
-        <div className=" grid grid-cols-1">
+        <div className="grid grid-cols-1">
           {bookingItems.slice(0, 1).map((item, index) => {
             return (
               <div
@@ -225,19 +229,29 @@ export default function Review() {
             );
           })}
         </div>
+        {/* Form Title */}
+        <div className="">
+          <h1 className="text-lg font-semibold">Title</h1>
+          <Input
+            placeholder="Enter your title..."
+            value={userTitle}
+            onChange={(e) => setUserTitle(e.target.value)}
+            className="w-full mt-2"
+          />
+        </div>
         {/* Form komentar user */}
         <div className="">
-          <h1 className="text-lg font-semibold">Your comment</h1>
+          <h1 className="text-lg font-semibold">Description</h1>
           <Input.TextArea
             rows={4}
-            placeholder="Write your comment here..."
-            value={userComment}
-            onChange={(e) => setUserComment(e.target.value)}
+            placeholder="Write your Description here..."
+            value={userDescription}
+            onChange={(e) => setUserDescription(e.target.value)}
             className="w-full mt-2"
           />
         </div>
         {/* Bagian upload foto/video */}
-        <div className="">
+        <div className=" ">
           <h1 className="text-lg font-semibold">Add Photo/Video (Optional)</h1>
           <div className="flex items-center gap-4">
             <Upload
@@ -253,24 +267,38 @@ export default function Review() {
               "
                 >
                   <CiCamera className="text-gray-500" size={32} />
-                  <p className="text-gray-500">Add photo/video</p>
+                  <p className="text-gray-500 text-sm">Click to upload</p>
                 </div>
               </div>
             </Upload>
-            <div className="flex gap-4">
-              {previewImages.map((image, index) => (
-                <div key={index} className="w-64 h-64 relative">
-                  <Image
-                    src={image}
-                    alt={`Preview ${index}`}
-                    layout="fill"
-                    className="object-cover rounded-xl"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>{" "}
-        </div>{" "}
+
+            {/* Tampilkan preview gambar/video yang sudah diupload */}
+            {previewImages.length > 0 && (
+              <div className="grid grid-cols-3 gap-4">
+                {previewImages.map((image, index) => (
+                  <div key={index}>
+                    <Image
+                      src={image}
+                      alt={`Uploaded file ${index + 1}`}
+                      width={100}
+                      height={100}
+                      className="rounded-lg object-cover w-64 h-64"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="">
+          <h1 className="text-lg font-semibold">Email</h1>
+          <Input
+            placeholder="Enter your email..."
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}
+            className="w-full mt-1"
+          />
+        </div>
         <div className="pt-12 flex justify-between w-full">
           <Link
             href={"/profile"}
@@ -283,7 +311,7 @@ export default function Review() {
             href={"/"}
             className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-white no-underline font-semibold"
           >
-            Submit your review
+            Submit your report
           </Link>
         </div>
       </div>

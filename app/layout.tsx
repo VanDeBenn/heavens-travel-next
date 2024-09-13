@@ -1,16 +1,23 @@
-import './globals.css';
-import 'antd/dist/reset.css';
-import {Provider} from "./provider";
-import Script from 'next/script';
+import "./globals.css";
+import "antd/dist/reset.css";
+import { Provider } from "./provider";
+import Script from "next/script";
+
+export const metadata = {
+  title: "Heavens Travel",
+  icons: {
+    icon: "/image/icon/logo-circle.png",
+  },
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-    {/* ugh */}
+    <html lang="en" className="scroll-smooth">
+      {/* ugh */}
       {/*
         <head /> will contain the components returned by the nearest parent
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
@@ -22,5 +29,5 @@ export default function RootLayout({
         <Provider>{children}</Provider>
       </body>
     </html>
-  )
+  );
 }

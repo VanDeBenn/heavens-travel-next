@@ -13,15 +13,16 @@ import Link from "next/link";
 
 import { Montserrat } from "next/font/google";
 
-const largeMontserrat = Montserrat({
+export const largeMontserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["600"],
+  weight: "600",
 });
-const mediumMontserrat = Montserrat({
+
+export const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
-const smallMontserrat = Montserrat({
+export const smallMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["400"],
 });
