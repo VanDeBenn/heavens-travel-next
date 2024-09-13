@@ -9,6 +9,7 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation"; // Untuk navigasi
+import { useCookies } from "next-client-cookies";
 
 const menuItems = [
   { key: "profile", icon: <UserOutlined />, label: "Profile" },
@@ -19,10 +20,12 @@ const menuItems = [
 const NavProfile: React.FC = () => {
   const [selectedKey, setSelectedKey] = useState<string>("profile");
   const router = useRouter();
+  const cookie = useCookies();
 
   function logout() {
     localStorage.removeItem("access-token");
     localStorage.removeItem("refresh-token");
+    cookie.remove("refresh-token");
     router.push("/login");
   }
 

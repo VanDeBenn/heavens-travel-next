@@ -9,6 +9,7 @@ import {
   AppleOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import { cookies } from "next/headers";
 
 const { Text, Link } = Typography;
 
@@ -50,10 +51,16 @@ const Login = () => {
 
       if (res.ok) {
         const json = await res.json();
+        document.cookie = `refresh-token=${json.data.token.refreshToken}; `;
+        // expires=Thu, 01 Jan 1970 00:00:00 GMT;
         localStorage.setItem("access-token", json.data.token.accessToken);
         localStorage.setItem("refresh-token", json.data.token.refreshToken);
 
-        router.push("/profile");
+        if (!document.cookie) {
+          router.push("/register");
+        } else {
+          router.push("/profile");
+        }
       } else {
         alert("Bad credentials");
       }

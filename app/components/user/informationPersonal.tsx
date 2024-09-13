@@ -3,10 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
+import { redirect, useRouter } from "next/navigation";
 
 const { Option } = Select;
 
 export default function InformationPersonal() {
+  const router = useRouter();
   const [form] = useForm();
   const [id, setId] = useState("");
 
@@ -49,6 +51,7 @@ export default function InformationPersonal() {
       setId(userId);
     } catch (error) {
       console.error("Error fetching profile:", error);
+      router.push("/login");
     }
   };
 
