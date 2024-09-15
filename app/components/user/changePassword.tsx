@@ -1,20 +1,48 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { useRouter } from 'next/navigation'; // Mengimpor useRouter dari Next.js
+import { useRouter } from "next/navigation";
+import { authRepository } from "#/repository/auth";
 
-export default function ChangePassword() {
+interface ComponentsProps {
+  id: string;
+  data: any;
+}
+
+export default function ChangePassword({ id, data }: ComponentsProps) {
   const [form] = useForm();
   const [showPassword, setShowPassword] = useState({
     newPassword: false,
     confirmNewPassword: false,
   });
-  const router = useRouter(); // Menginisialisasi useRouter
+  const [email, setEmail] = useState<string>("");
+  const router = useRouter();
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  useEffect(() => {
+    if (data && data.email) {
+      setEmail(data.email);
+    }
+  }, [data]);
+
+  const onFinish = async (values: any) => {
+    try {
+      const { confirmNewPassword, ...dataToSend } = {
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
+        confirmNewPassword: values.confirmNewPassword,
+      };
+      const req = await authRepository.api.changePassword(id, {
+        ...dataToSend,
+        email,
+      });
+      if (req.ok) {
+        router.push("/login");
+      }
+    } catch (error) {
+      console.error("Error changing password:", error);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -28,7 +56,7 @@ export default function ChangePassword() {
   };
 
   const handleForgetPasswordClick = () => {
-    router.push('/forgot-password'); // Navigasi ke halaman /forgot-password
+    router.push("/forgot-password");
   };
 
   return (
@@ -51,7 +79,12 @@ export default function ChangePassword() {
               <Form.Item
                 label="Current Password"
                 name="currentPassword"
-                rules={[{ required: true, message: "Please enter your current password!" }]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter your current password!",
+                  },
+                ]}
                 className="col-span-1"
               >
                 <Input.Password
@@ -65,13 +98,27 @@ export default function ChangePassword() {
                 <Form.Item
                   label="New Password"
                   name="newPassword"
-                  rules={[{ required: true, message: "Please enter your new password!" }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter your new password!",
+                    },
+                  ]}
                   className="col-span-1"
                 >
                   <Input.Password
                     placeholder="Enter your new password"
                     size="large"
                     type={showPassword.newPassword ? "text" : "password"}
+                    suffix={
+                      <Button
+                        icon={
+                          showPassword.newPassword ? "eye" : "eye-invisible"
+                        }
+                        onClick={() => togglePasswordVisibility("newPassword")}
+                        type="text"
+                      />
+                    }
                   />
                 </Form.Item>
 
@@ -79,13 +126,18 @@ export default function ChangePassword() {
                   label="Confirm New Password"
                   name="confirmNewPassword"
                   rules={[
-                    { required: true, message: "Please confirm your new password!" },
+                    {
+                      required: true,
+                      message: "Please confirm your new password!",
+                    },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (!value || getFieldValue("newPassword") === value) {
                           return Promise.resolve();
                         }
-                        return Promise.reject(new Error("The two passwords do not match!"));
+                        return Promise.reject(
+                          new Error("The two passwords do not match!")
+                        );
                       },
                     }),
                   ]}
@@ -95,6 +147,19 @@ export default function ChangePassword() {
                     placeholder="Confirm your new password"
                     size="large"
                     type={showPassword.confirmNewPassword ? "text" : "password"}
+                    suffix={
+                      <Button
+                        icon={
+                          showPassword.confirmNewPassword
+                            ? "eye"
+                            : "eye-invisible"
+                        }
+                        onClick={() =>
+                          togglePasswordVisibility("confirmNewPassword")
+                        }
+                        type="text"
+                      />
+                    }
                   />
                 </Form.Item>
               </div>
@@ -103,7 +168,7 @@ export default function ChangePassword() {
               <div className="flex justify-end gap-3">
                 <Form.Item>
                   <Button
-                    onClick={handleForgetPasswordClick} // Event handler untuk navigasi
+                    onClick={handleForgetPasswordClick}
                     className="w-max mt-6 bg-white text-[#4F28D9] border border-[#4F28D9] border-solid"
                   >
                     Forget Password

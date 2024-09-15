@@ -9,56 +9,31 @@ import {
   AppleOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import { authRepository } from "#/repository/auth";
+import { TokenUtil } from "#/utils/token";
 
 const { Text, Link } = Typography;
 
 const ForgotPassword: React.FC = () => {
   const router = useRouter();
 
-  type userForgotPassword = {
+  type forgotPasswordForm = {
     email: string;
   };
 
-  const initialState = {
-    email: "",
-  };
-
-  const [state, setState] = useState<userForgotPassword>(initialState);
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value,
-    });
-  }
-
-  async function handleSubmit() {
+  const onFinish = async (values: forgotPasswordForm) => {
     try {
-      const forgotPassword = state;
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/forgot-password`,
-        {
-          method: "POST",
-          body: JSON.stringify(forgotPassword),
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (res.ok) {
-        const json = await res.json();
+      const data = {
+        email: values.email,
+      };
+      const req = await authRepository.api.forgotPassword(data);
+      if (req.ok) {
+        TokenUtil.setResetToken(req.body.data.token);
+        TokenUtil.persistToken();
 
-        localStorage.setItem("reset-token", json.data.token);
         router.push("/authenticator");
       }
-    } catch (error) {
-      console.error("Request failed", error);
-    }
-  }
-
-  const onFinish = () => {
-    handleSubmit();
+    } catch (error) {}
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -131,7 +106,7 @@ const ForgotPassword: React.FC = () => {
                 },
               ]}
             >
-              <Input value={state.email} name="email" onChange={handleChange} />
+              <Input />
             </Form.Item>
             <div className="text-center my-5">
               <Text type="secondary">

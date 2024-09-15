@@ -3,125 +3,55 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { authRepository } from "#/repository/auth";
+import { usersRepository } from "#/repository/users";
 
 const { Option } = Select;
+interface ComponentsProps {
+  id: string;
+  data: any;
+}
 
-export default function InformationPersonal() {
+export default function InformationPersonal({ id, data }: ComponentsProps) {
   const router = useRouter();
   const [form] = useForm();
-  const [id, setId] = useState("");
+  const [userId, setUserId] = useState<string>("");
 
-  // Nilai awal untuk form
-  const initialValues = {
-    fullName: "",
-    email: "",
-    phoneNumber: "",
-    gender: "",
-    day: "",
-    month: "",
-    year: "",
-    country: "",
-    province: "",
-    city: "",
-    district: "",
-    streetAddress: "",
+  type InitialValues = {
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    gender: string;
+    day: string;
+    month: string;
+    year: string;
+    country: string;
+    province: string;
+    city: string;
+    district: string;
+    streetAddress: string;
   };
 
-  const [initialState, setInitialState] = useState(initialValues);
-
-  const fetchProfile = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/profile`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-          },
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-
-      const json = await res.json();
-      const userId = json.sub;
-      setId(userId);
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-      router.push("/login");
-    }
-  };
-
-  const fetchProfileData = async (userId: string) => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-
-      const profileData = await res.json();
-
-      setInitialState({
-        fullName: profileData.data.fullName,
-        email: profileData.data.email,
-        phoneNumber: profileData.data.phoneNumber,
-        gender: profileData.data.gender,
-        day: profileData.data.birthDate ? profileData.data.birthDate.day : "",
-        month: profileData.data.birthDate
-          ? profileData.data.birthDate.month
-          : "",
-        year: profileData.data.birthDate ? profileData.data.birthDate.year : "",
-        country: profileData.data.country,
-        province: profileData.data.province,
-        city: profileData.data.city,
-        district: profileData.data.district,
-        streetAddress: profileData.data.address,
-      });
-
+  useEffect(() => {
+    if (data) {
       form.setFieldsValue({
-        fullName: profileData.data.fullName,
-        email: profileData.data.email,
-        phoneNumber: profileData.data.phoneNumber,
-        gender: profileData.data.gender,
-        day: profileData.data.birthDate ? profileData.data.birthDate.day : "",
-        month: profileData.data.birthDate
-          ? profileData.data.birthDate.month
-          : "",
-        year: profileData.data.birthDate ? profileData.data.birthDate.year : "",
-        country: profileData.data.country,
-        province: profileData.data.province,
-        city: profileData.data.city,
-        district: profileData.data.district,
-        streetAddress: profileData.data.address,
+        fullName: data.fullName,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        gender: data.gender,
+        birthdate: data.birtDate,
+        country: data.country,
+        province: data.province,
+        city: data.city,
+        district: data.district,
+        streetAddress: data.address,
       });
-    } catch (error) {
-      console.error("Error fetching user data:", error);
     }
-  };
+  }, [data, form]);
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  useEffect(() => {
-    if (id) {
-      fetchProfileData(id);
-    }
-  }, [id]);
-
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  const onFinish = async (values: InitialValues) => {
+    console.log("Form submitted with values:", values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -146,7 +76,7 @@ export default function InformationPersonal() {
   ];
   const years = Array.from({ length: 100 }, (_, i) => 2024 - i);
 
-  // Contoh daftar provinsi, kota, dan distrik
+  // Example province, city, and district lists
   const provinces = ["Jawa Barat", "DKI Jakarta", "Banten"];
   const cities = ["Bandung", "Jakarta", "Tangerang"];
   const districts = ["Cicendo", "Kebayoran", "Serpong"];
@@ -165,7 +95,6 @@ export default function InformationPersonal() {
           <Form
             form={form}
             name="personal_info"
-            initialValues={initialValues}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             layout="vertical"
@@ -209,10 +138,6 @@ export default function InformationPersonal() {
                   {
                     required: true,
                     message: "Please enter your phone number!",
-                  },
-                  {
-                    pattern: /^[0-9]+$/,
-                    message: "Phone number must only contain digits!",
                   },
                 ]}
               >
@@ -306,16 +231,7 @@ export default function InformationPersonal() {
                   { required: true, message: "Please select your country!" },
                 ]}
               >
-                <Select
-                  showSearch
-                  placeholder="Select your country"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    (option?.children as unknown as string)
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
-                >
+                <Select placeholder="Select your country">
                   <Option value="Indonesia">Indonesia</Option>
                   <Option value="United States">United States</Option>
                   <Option value="Canada">Canada</Option>
@@ -331,16 +247,7 @@ export default function InformationPersonal() {
                   { required: true, message: "Please select your province!" },
                 ]}
               >
-                <Select
-                  showSearch
-                  placeholder="Select your province"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    (option?.children as unknown as string)
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
-                >
+                <Select placeholder="Select your province">
                   {provinces.map((province) => (
                     <Option key={province} value={province}>
                       {province}
@@ -357,16 +264,7 @@ export default function InformationPersonal() {
                   { required: true, message: "Please select your city!" },
                 ]}
               >
-                <Select
-                  showSearch
-                  placeholder="Select your city"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    (option?.children as unknown as string)
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
-                >
+                <Select placeholder="Select your city">
                   {cities.map((city) => (
                     <Option key={city} value={city}>
                       {city}
@@ -383,16 +281,7 @@ export default function InformationPersonal() {
                   { required: true, message: "Please select your district!" },
                 ]}
               >
-                <Select
-                  showSearch
-                  placeholder="Select your district"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    (option?.children as unknown as string)
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
-                >
+                <Select placeholder="Select your district">
                   {districts.map((district) => (
                     <Option key={district} value={district}>
                       {district}
@@ -401,7 +290,7 @@ export default function InformationPersonal() {
                 </Select>
               </Form.Item>
 
-              {/* Street Address (Full Width) */}
+              {/* Street Address */}
               <Form.Item
                 label="Street Address"
                 name="streetAddress"

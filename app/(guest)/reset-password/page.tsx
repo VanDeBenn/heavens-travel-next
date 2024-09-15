@@ -4,6 +4,8 @@ import React, { SyntheticEvent, useState } from "react";
 import Image from "next/image";
 import { Form, Input, Button, Card, Typography, Divider, Space } from "antd";
 import { useRouter } from "next/navigation";
+import { TokenUtil } from "#/utils/token";
+import { authRepository } from "#/repository/auth";
 
 const { Text } = Typography;
 
@@ -11,59 +13,25 @@ const ResetPassword: React.FC = () => {
   const router = useRouter();
   const [form] = Form.useForm();
 
-  const resetToken = localStorage.getItem("reset-token");
-
-  type reset = {
+  type resetForm = {
     newPassword: string;
     confirmNewPassword: string;
   };
 
-  const initialState = {
-    newPassword: "",
-    confirmNewPassword: "",
-  };
-
-  const [state, setState] = useState<reset>(initialState);
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value,
-    });
-  }
-
-  async function handleSubmit() {
+  const onFinish = async (values: resetForm) => {
     try {
-      const { newPassword } = state;
-      const reset = { newPassword, resetToken };
-
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password`,
-        {
-          method: "PUT",
-          body: JSON.stringify(reset),
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (res.ok) {
+      const data = {
+        newPassword: values.newPassword,
+        resetToken: TokenUtil.resetToken,
+      };
+      const req = await authRepository.api.resetPassword(data);
+      if (req.ok) {
+        TokenUtil.clearAccessToken;
+        TokenUtil.clearRefreshToken;
+        TokenUtil.clearResetToken;
         router.push("/login");
-        localStorage.removeItem("access-token");
-        localStorage.removeItem("refresh-token");
-        localStorage.removeItem("reset-token");
-      } else {
-        console.error("Failed to reset password");
       }
-    } catch (error) {
-      console.error("Request failed", error);
-    }
-  }
-
-  const onFinish = () => {
-    handleSubmit();
+    } catch (error) {}
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -115,11 +83,7 @@ const ResetPassword: React.FC = () => {
                 { required: true, message: "Please input your new password!" },
               ]}
             >
-              <Input.Password
-                value={state.newPassword}
-                onChange={handleChange}
-                name="newPassword"
-              />
+              <Input.Password />
             </Form.Item>
             <div className="text-left pb-2">
               <span>Password strength:</span>
@@ -159,19 +123,11 @@ const ResetPassword: React.FC = () => {
                 }),
               ]}
             >
-              <Input.Password
-                name="confirmNewPassword"
-                onChange={handleChange}
-              />
+              <Input.Password />
             </Form.Item>
 
             <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="w-full"
-                onClick={handleSubmit}
-              >
+              <Button type="primary" htmlType="submit" className="w-full">
                 Change Password
               </Button>
             </Form.Item>

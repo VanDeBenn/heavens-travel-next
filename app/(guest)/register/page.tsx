@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { Form, Input, Button, Card, Typography, Divider, Space } from "antd";
 import {
@@ -9,14 +9,15 @@ import {
   AppleOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import { authRepository } from "#/repository/auth";
 
 const { Text, Link } = Typography;
 
 const Register = () => {
   const router = useRouter();
-  const [form] = Form.useForm(); // Inisialisasi Form instance
+  const [form] = Form.useForm();
 
-  type userRegister = {
+  type RegisterForm = {
     fullName: string;
     email: string;
     phoneNumber: string;
@@ -25,51 +26,16 @@ const Register = () => {
     roleId: string;
   };
 
-  const initialState = {
-    fullName: "",
-    email: "",
-    phoneNumber: "",
-    password: "",
-    confirmPassword: "",
-    roleId: "73176062-1eda-44ca-9112-57f775f9affd",
-  };
-
-  const [state, setState] = useState<userRegister>(initialState);
-
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value,
-    });
-  }
-
-  async function handleSubmit() {
+  const onFinish = async (values: RegisterForm) => {
     try {
-      const { confirmPassword, ...signupData } = state;
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
-        {
-          method: "POST",
-          body: JSON.stringify(signupData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const { confirmPassword, ...data } = values;
+      data.roleId = "73176062-1eda-44ca-9112-57f775f9affd";
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        console.log("Error response:", errorData);
-        return;
-      }
+      await authRepository.api.register(data);
       router.push("/login");
     } catch (error) {
-      console.error("Request failed:", error);
+      console.error("Registration failed:", error);
     }
-  }
-
-  const onFinish = () => {
-    handleSubmit();
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -81,7 +47,7 @@ const Register = () => {
       <div className="md:w-1/2 w-full flex items-center justify-center">
         <div className="relative w-full h-64 md:h-full">
           <Image
-            src="/images/illustration/tourist-presenting-something.png" // Update path if needed
+            src="/images/illustration/tourist-presenting-something.png"
             alt="Sign Up Illustration"
             layout="fill"
             objectFit="contain"
@@ -109,7 +75,7 @@ const Register = () => {
             form={form}
             name="register"
             layout="vertical"
-            initialValues={{ remember: true }}
+            initialValues={{ roleId: "73176062-1eda-44ca-9112-57f775f9affd" }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
           >
@@ -120,11 +86,7 @@ const Register = () => {
                 { required: true, message: "Please input your full name!" },
               ]}
             >
-              <Input
-                value={state.fullName}
-                onChange={handleChange}
-                name="fullName"
-              />
+              <Input />
             </Form.Item>
 
             <Form.Item
@@ -138,7 +100,7 @@ const Register = () => {
                 },
               ]}
             >
-              <Input value={state.email} onChange={handleChange} name="email" />
+              <Input />
             </Form.Item>
 
             <Form.Item
@@ -152,11 +114,7 @@ const Register = () => {
                 },
               ]}
             >
-              <Input
-                value={state.phoneNumber}
-                onChange={handleChange}
-                name="phoneNumber"
-              />
+              <Input />
             </Form.Item>
 
             <Form.Item
@@ -166,11 +124,7 @@ const Register = () => {
                 { required: true, message: "Please input your password!" },
               ]}
             >
-              <Input.Password
-                value={state.password}
-                onChange={handleChange}
-                name="password"
-              />
+              <Input.Password />
             </Form.Item>
 
             <Form.Item
@@ -188,20 +142,15 @@ const Register = () => {
                 }),
               ]}
             >
-              <Input.Password name="confirmPassword" onChange={handleChange} />
+              <Input.Password />
             </Form.Item>
 
-            <Form.Item name="roleId" initialValue={state.roleId} hidden>
-              <Input name="roleId" value={state.roleId} />
+            <Form.Item name="roleId" hidden>
+              <Input />
             </Form.Item>
 
             <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="w-full"
-                onClick={handleSubmit}
-              >
+              <Button type="primary" htmlType="submit" className="w-full">
                 Register
               </Button>
             </Form.Item>

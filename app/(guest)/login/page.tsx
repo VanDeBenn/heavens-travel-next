@@ -1,76 +1,58 @@
 "use client";
 
-import React, { SyntheticEvent, useState } from "react";
+import React from "react";
 import Image from "next/image";
-import { Form, Input, Button, Card, Typography, Divider, Space } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Card,
+  Typography,
+  Divider,
+  Space,
+  message,
+} from "antd";
 import {
   GoogleOutlined,
   FacebookOutlined,
   AppleOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
-import { cookies } from "next/headers";
+import { authRepository } from "#/repository/auth";
+import { TokenUtil } from "#/utils/token";
 
 const { Text, Link } = Typography;
 
 const Login = () => {
   const router = useRouter();
-
-  type userLogin = {
+  type loginForm = {
     email: string;
     password: string;
   };
 
-  const initialState = {
-    email: "",
-    password: "",
-  };
-
-  const [state, setState] = useState<userLogin>(initialState);
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }
-
-  async function handleSubmit(e: SyntheticEvent) {
-    e.preventDefault();
+  const onFinish = async (values: loginForm) => {
     try {
-      const loginData = state;
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-        method: "POST",
-        body: JSON.stringify(loginData),
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const data = {
+        email: values.email,
+        password: values.password,
+      };
+      const req = await authRepository.api.login(data);
 
-      if (res.ok) {
-        const json = await res.json();
-        document.cookie = `refresh-token=${json.data.token.refreshToken}; `;
-        // expires=Thu, 01 Jan 1970 00:00:00 GMT;
-        localStorage.setItem("access-token", json.data.token.accessToken);
-        localStorage.setItem("refresh-token", json.data.token.refreshToken);
+      if (req.ok) {
+        TokenUtil.setAccessToken(req.body.data.token.accessToken);
+        TokenUtil.setRefreshToken(req.body.data.token.refreshToken);
 
-        if (!document.cookie) {
-          router.push("/register");
-        } else {
-          router.push("/profile");
-        }
+        TokenUtil.persistToken();
+
+        const dataUser = await authRepository.api.getUser();
+        router.push("/profile");
       } else {
-        alert("Bad credentials");
+        throw new Error("Login failed");
       }
-    } catch (error) {
-      console.error("Request failed", error);
+    } catch (error: any) {
+      const errorMessage = error.response?.body?.error || "Login failed";
+      message.error(errorMessage);
     }
-  }
-
-  const onFinish = (values: any) => {
-    handleSubmit(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -144,7 +126,7 @@ const Login = () => {
                 },
               ]}
             >
-              <Input value={state.email} onChange={handleChange} name="email" />
+              <Input />
             </Form.Item>
 
             <Form.Item
@@ -154,11 +136,7 @@ const Login = () => {
                 { required: true, message: "Please input your password!" },
               ]}
             >
-              <Input.Password
-                value={state.password}
-                onChange={handleChange}
-                name="password"
-              />
+              <Input.Password />
             </Form.Item>
 
             <Form.Item>
@@ -172,12 +150,7 @@ const Login = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="w-full"
-                onClick={handleSubmit}
-              >
+              <Button type="primary" htmlType="submit" className="w-full">
                 Login
               </Button>
             </Form.Item>
