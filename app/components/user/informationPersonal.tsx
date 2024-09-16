@@ -1,10 +1,7 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useRouter } from "next/navigation";
-import { authRepository } from "#/repository/auth";
 import { usersRepository } from "#/repository/users";
 
 const { Option } = Select;
@@ -16,49 +13,58 @@ interface ComponentsProps {
 export default function InformationPersonal({ id, data }: ComponentsProps) {
   const router = useRouter();
   const [form] = useForm();
-  const [userId, setUserId] = useState<string>("");
-
-  type InitialValues = {
-    fullName: string;
-    email: string;
-    phoneNumber: string;
-    gender: string;
-    day: string;
-    month: string;
-    year: string;
-    country: string;
-    province: string;
-    city: string;
-    district: string;
-    streetAddress: string;
-  };
 
   useEffect(() => {
     if (data) {
+      const [year, month, day] = data.birthDate.split("-");
       form.setFieldsValue({
         fullName: data.fullName,
         email: data.email,
         phoneNumber: data.phoneNumber,
         gender: data.gender,
-        birthdate: data.birtDate,
+        day: day,
+        month: month,
+        year: year,
         country: data.country,
         province: data.province,
         city: data.city,
         district: data.district,
-        streetAddress: data.address,
+        address: data.address,
       });
     }
   }, [data, form]);
 
-  const onFinish = async (values: InitialValues) => {
-    console.log("Form submitted with values:", values);
+  const onFinish = async (values: any) => {
+    try {
+      if (!values.year || !values.month || !values.day) {
+        throw new Error("Invalid birthdate");
+      }
+
+      const birthDate = `${values.year}-${values.month.padStart(
+        2,
+        "0"
+      )}-${values.day.padStart(2, "0")}`;
+
+      const dataUpdateUser = {
+        fullName: values.fullName,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        gender: values.gender,
+        birthDate: birthDate,
+        address: values.address,
+      };
+
+      const response = await usersRepository.api.putUser(id, dataUpdateUser);
+      console.log("Profile updated successfully", response);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
-  // Generate options for days, months, and years
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const months = [
     "January",
@@ -76,7 +82,6 @@ export default function InformationPersonal({ id, data }: ComponentsProps) {
   ];
   const years = Array.from({ length: 100 }, (_, i) => 2024 - i);
 
-  // Example province, city, and district lists
   const provinces = ["Jawa Barat", "DKI Jakarta", "Banten"];
   const cities = ["Bandung", "Jakarta", "Tangerang"];
   const districts = ["Cicendo", "Kebayoran", "Serpong"];
@@ -293,7 +298,7 @@ export default function InformationPersonal({ id, data }: ComponentsProps) {
               {/* Street Address */}
               <Form.Item
                 label="Street Address"
-                name="streetAddress"
+                name="address"
                 className="col-span-1 md:col-span-3"
                 rules={[
                   {

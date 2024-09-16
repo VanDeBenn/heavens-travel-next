@@ -10,12 +10,19 @@ import {
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { authRepository } from "#/repository/auth";
+import { TokenUtil } from "#/utils/token";
 
 const { Text, Link } = Typography;
 
 const Register = () => {
   const router = useRouter();
   const [form] = Form.useForm();
+
+  if (TokenUtil.accessToken && TokenUtil.refreshToken) {
+    router.push("/profile");
+  } else {
+    router.push("/register");
+  }
 
   type RegisterForm = {
     fullName: string;
@@ -28,8 +35,15 @@ const Register = () => {
 
   const onFinish = async (values: RegisterForm) => {
     try {
-      const { confirmPassword, ...data } = values;
-      data.roleId = "73176062-1eda-44ca-9112-57f775f9affd";
+      const dataRegister = {
+        fullName: values.fullName,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        roleId: "73176062-1eda-44ca-9112-57f775f9affd",
+      };
+      const { confirmPassword, ...data } = dataRegister;
 
       await authRepository.api.register(data);
       router.push("/login");

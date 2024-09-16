@@ -39,6 +39,9 @@ const api = {
   getUser(id: string) {
     return http.get(url.userId(id));
   },
+  putUser(id: string, data: any) {
+    return http.put(url.userId(id)).send(data);
+  },
 };
 
 export const usersRepository = {

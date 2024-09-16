@@ -25,6 +25,14 @@ const { Text, Link } = Typography;
 
 const Login = () => {
   const router = useRouter();
+  try {
+    if (TokenUtil.accessToken && TokenUtil.refreshToken) {
+      router.push("/profile");
+    } else {
+      router.push("/login");
+    }
+  } catch (error) {}
+
   type loginForm = {
     email: string;
     password: string;
