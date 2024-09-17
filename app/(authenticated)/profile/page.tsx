@@ -30,7 +30,7 @@ export default function Page({ id, data }: PageProps) {
       setUserId(res.sub);
     } catch (error) {
       console.error("Error fetching profile:", error);
-      router.push("/login");
+      // router.push("/login");
     }
   };
 

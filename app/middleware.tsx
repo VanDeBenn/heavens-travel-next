@@ -17,7 +17,7 @@ export default async function middleware(req: NextRequest) {
   const refreshToken = cookie.get("refresh-token");
 
   if (isProtectedRoute && !refreshToken) {
-    router.push("/login");
+    // router.push("/login");
   }
 
   if (

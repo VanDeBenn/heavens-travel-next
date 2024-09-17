@@ -1,6 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import { RiGlassesLine, RiHome3Line, RiBookmarkFill } from "react-icons/ri";
+import {
+  RiGlassesLine,
+  RiHome3Line,
+  RiBookmarkFill,
+  RiMapPinLine,
+} from "react-icons/ri";
 import { Rate, Modal, Button } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -142,7 +147,7 @@ export default function Wishlist() {
                   />
                 </div>
                 <div className="flex items-center gap-1">
-                  <RiGlassesLine size={16} color="#6b7280 " />
+                  <RiMapPinLine size={16} color="#6b7280 " />
                   <span className="text-xs text-gray-500">{item.location}</span>
                 </div>
 
