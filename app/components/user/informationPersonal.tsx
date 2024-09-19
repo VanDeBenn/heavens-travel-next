@@ -16,15 +16,19 @@ export default function InformationPersonal({ id, data }: ComponentsProps) {
 
   useEffect(() => {
     if (data) {
-      const [year, month, day] = data.birthDate.split("-");
+      const birthDate = data.birthDate
+        ? data.birthDate.split("-")
+        : [null, null, null];
+      const [year, month, day] = birthDate;
+
       form.setFieldsValue({
         fullName: data.fullName,
         email: data.email,
         phoneNumber: data.phoneNumber,
         gender: data.gender,
-        day: day,
-        month: month,
-        year: year,
+        day: day || "day",
+        month: month || "month",
+        year: year || "year",
         country: data.country,
         province: data.province,
         city: data.city,
@@ -55,7 +59,6 @@ export default function InformationPersonal({ id, data }: ComponentsProps) {
       };
 
       const response = await usersRepository.api.putUser(id, dataUpdateUser);
-      console.log("Profile updated successfully", response);
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -127,7 +130,7 @@ export default function InformationPersonal({ id, data }: ComponentsProps) {
                     message: "Please enter a valid email address!",
                   },
                   {
-                    pattern: /^[a-zA-Z0-9._%+-]+@example\.com$/,
+                    pattern: /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
                     message: "Email must be in the format name@example.com",
                   },
                 ]}

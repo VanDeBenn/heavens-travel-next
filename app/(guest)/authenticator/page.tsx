@@ -12,6 +12,7 @@ import {
   Space,
   Row,
   Col,
+  message,
 } from "antd";
 import {
   GoogleOutlined,
@@ -19,6 +20,8 @@ import {
   AppleOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import { TokenUtil } from "#/utils/token";
+import { authRepository } from "#/repository/auth";
 
 const { Text, Link } = Typography;
 
@@ -40,14 +43,29 @@ const Authenticator: React.FC = () => {
     return () => clearInterval(interval);
   }, [timer]);
 
-  const handleResendCode = () => {
-    // Logic to resend the code
-    setTimer(60); // Reset timer after resending code
+  const handleResendCode = async () => {
+    try {
+      const email = localStorage.getItem("email");
+      await authRepository.api.sendOtp(email);
+      setTimer(60);
+    } catch (error) {}
   };
-
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-    router.push('/reset-password'); // Navigate to reset-password page
+  const onFinish = async (values: any) => {
+    try {
+      const otp = values.code.split("").join("");
+      const data = {
+        token: TokenUtil.resetToken,
+        otp,
+      };
+      const req = await authRepository.api.verifyOtp(data);
+      if (req.ok) {
+        router.push("/reset-password");
+      }
+      // } else {
+      //   router.push("/authenticator");
+      // }
+      console.log(req);
+    } catch (error) {}
   };
 
   const onFinishFailed = (errorInfo: any) => {

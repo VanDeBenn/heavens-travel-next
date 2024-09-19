@@ -27,6 +27,8 @@ const url = {
   users: () => "/auth/profile",
   changePassword: (id: string) => `/auth/change-password/${id}`,
   forgotPassword: () => "/auth/forgot-password",
+  resend: () => "/auth/send-otp",
+  verifyOtp: () => "/auth/verify-otp",
   resetPassword: () => "/auth/reset-password",
 };
 
@@ -54,6 +56,12 @@ const api = {
   },
   forgotPassword(data: any) {
     return http.post(url.forgotPassword()).send(data);
+  },
+  sendOtp(email: any) {
+    return http.post(url.resend()).send(email);
+  },
+  verifyOtp(data: any) {
+    return http.post(url.verifyOtp()).send(data);
   },
   resetPassword(data: any) {
     return http.put(url.resetPassword()).send(data);

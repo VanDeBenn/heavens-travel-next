@@ -27,9 +27,11 @@ const ForgotPassword: React.FC = () => {
         email: values.email,
       };
       const req = await authRepository.api.forgotPassword(data);
+      console.log(req);
       if (req.ok) {
-        TokenUtil.setResetToken(req.body.data.token);
+        TokenUtil.setResetToken(req.body.data.resetToken);
         TokenUtil.persistToken();
+        localStorage.setItem("email", values.email);
 
         router.push("/authenticator");
       }
