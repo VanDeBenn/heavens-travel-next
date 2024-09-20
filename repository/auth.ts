@@ -23,6 +23,7 @@ interface SuperagentError {
 
 const url = {
   register: () => "/auth/signup",
+  loginWithGoogle: () => "/auth/google/callback",
   login: () => "/auth/login",
   users: () => "/auth/profile",
   changePassword: (id: string) => `/auth/change-password/${id}`,
@@ -44,6 +45,9 @@ const hooks = {
 const api = {
   register(data: any) {
     return http.post(url.register()).send(data);
+  },
+  loginWithGoogle() {
+    return http.get(url.loginWithGoogle());
   },
   login(data: any) {
     return http.post(url.login()).send(data);

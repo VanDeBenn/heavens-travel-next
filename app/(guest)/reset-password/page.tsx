@@ -11,9 +11,9 @@ const { Text } = Typography;
 
 const ResetPassword: React.FC = () => {
   const router = useRouter();
-  // if (!TokenUtil.resetToken) {
-  //   router.push("/forgot-password");
-  // }
+  if (!TokenUtil.resetToken) {
+    router.push("/forgot-password");
+  }
 
   const [form] = Form.useForm();
 

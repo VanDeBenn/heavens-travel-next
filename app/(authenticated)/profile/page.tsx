@@ -22,7 +22,9 @@ export default function Page({ id, data }: PageProps) {
 
   const fetchProfile = async () => {
     try {
-      const res = await authRepository.api.getUser();
+      const res =
+        (await authRepository.api.getUser()) ||
+        (await authRepository.api.loginWithGoogle);
       if (!res) {
         router.push("/login");
         return;

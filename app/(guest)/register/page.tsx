@@ -56,6 +56,10 @@ const Register = () => {
     console.log("Failed:", errorInfo);
   };
 
+  const handleLoginGoogle = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`; // Ganti dengan URL BE login Google
+  };
+
   return (
     <div className="flex flex-col md:flex-row h-screen bg-[#F8F8FF] px-16">
       <div className="md:w-1/2 w-full flex items-center justify-center">
@@ -171,7 +175,11 @@ const Register = () => {
           </Form>
           <Divider>Or continue with</Divider>
           <Space size="large" className="flex justify-center my-4">
-            <Button icon={<GoogleOutlined />} shape="circle" />
+            <Button
+              onClick={handleLoginGoogle}
+              icon={<GoogleOutlined />}
+              shape="circle"
+            />
             <Button icon={<FacebookOutlined />} shape="circle" />
             <Button icon={<AppleOutlined />} shape="circle" />
           </Space>

@@ -60,11 +60,9 @@ const Authenticator: React.FC = () => {
       const req = await authRepository.api.verifyOtp(data);
       if (req.ok) {
         router.push("/reset-password");
+      } else {
+        router.push("/authenticator");
       }
-      // } else {
-      //   router.push("/authenticator");
-      // }
-      console.log(req);
     } catch (error) {}
   };
 
