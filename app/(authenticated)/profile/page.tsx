@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import BookingDetail from "#/app/components/user/bookingDetail";
 import { authRepository } from "#/repository/auth";
 import { usersRepository } from "#/repository/users";
+import { useCookies } from "next-client-cookies";
+import { TokenUtil } from "#/utils/token";
 
 interface PageProps {
   id: string;
@@ -18,31 +20,37 @@ interface PageProps {
 export default function Page({ id, data }: PageProps) {
   const router = useRouter();
   const [userId, setUserId] = useState<string>("");
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState<any>("");
+  const cookies = useCookies();
+
+  const idCookie = cookies.get("id");
+  const accessTokenByCookie = cookies.get("access_token");
+  const refreshTokenByCookie = cookies.get("refresh_token");
+
+  const idLocal: any = idCookie;
+
+  useEffect(() => {
+    if (accessTokenByCookie) {
+      TokenUtil.setAccessToken(accessTokenByCookie);
+    }
+    if (refreshTokenByCookie) {
+      TokenUtil.setRefreshToken(refreshTokenByCookie);
+    }
+    TokenUtil.persistToken();
+    fetchProfile();
+  }, [idCookie, accessTokenByCookie, refreshTokenByCookie]);
 
   const fetchProfile = async () => {
     try {
-      const res =
-        (await authRepository.api.getUser()) ||
-        (await authRepository.api.loginWithGoogle);
-      if (!res) {
-        router.push("/login");
-        return;
+      const res = await authRepository.api.getUser();
+      if (res) {
+        setUserId(res.sub);
+      } else {
+        setUserId(idLocal);
       }
-      setUserId(res.sub);
     } catch (error) {
       console.error("Error fetching profile:", error);
-      // router.push("/login");
-    }
-  };
-
-  const fetchProfileData = async (userId: string) => {
-    try {
-      const res = await usersRepository.api.getUser(userId);
-      const userData = res.body.data;
-      setUserData(userData);
-    } catch (error) {
-      console.error("Error fetching profile data:", error);
+      setUserId(idLocal);
     }
   };
 
@@ -52,9 +60,22 @@ export default function Page({ id, data }: PageProps) {
     }
   }, [userId]);
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
+  const fetchProfileData = async (userId: string) => {
+    try {
+      const res = await usersRepository.api.getUser(userId);
+      setUserData(res.body.data);
+
+      cookies.remove("id");
+      cookies.remove("access_token");
+      cookies.remove("refresh_token");
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
+
+  if (!userData) {
+    return <div>kasih loading ui aaa...</div>;
+  }
 
   return (
     <main className="bg-[#F8F8FF]">

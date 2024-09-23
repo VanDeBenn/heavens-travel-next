@@ -38,7 +38,7 @@ export default function ChangePassword({ id, data }: ComponentsProps) {
         email,
       });
       if (req.ok) {
-        router.push("/login");
+        // router.push("/login");
       }
     } catch (error) {
       console.error("Error changing password:", error);

@@ -28,7 +28,7 @@ const NavProfile: React.FC = () => {
     TokenUtil.clearRefreshToken();
     TokenUtil.clearResetToken();
     TokenUtil.persistToken();
-    router.push("/login");
+    // router.push("/login");
   }
 
   const handleMenuClick = (key: string) => {

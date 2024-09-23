@@ -29,7 +29,7 @@ const Login = () => {
     if (TokenUtil.accessToken && TokenUtil.refreshToken) {
       router.push("/profile");
     } else {
-      router.push("/login");
+      // router.push("/login");
     }
   } catch (error) {}
 
