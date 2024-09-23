@@ -53,11 +53,9 @@ const PopularHotelsIn: React.FC = () => {
               className="shadow-lg rounded-md"
             >
               {/* Title and Rating */}
-            
+
               <div className="flex items-center justify-between mb-2 gap-2">
-                <h1 className="text-xl font-semibold">
-                  {hotel.title}
-                </h1>
+                <h1 className="text-xl font-semibold">{hotel.title}</h1>
                 <Rate
                   disabled
                   defaultValue={hotel.rating}
@@ -79,6 +77,8 @@ const PopularHotelsIn: React.FC = () => {
               <div className="text-right text-base font-medium text-gray-700">
                 Start from <span className="text-[#DC143C]">{hotel.price}</span>
               </div>
+
+              <div className="">wishlist</div>
             </Card>
           </Col>
         ))}
@@ -90,59 +90,58 @@ const PopularHotelsIn: React.FC = () => {
 export default PopularHotelsIn;
 
 const hotelData = {
-    Jakarta: [
-      {
-        id: 1,
-        title: "Grand Indonesia Hotel",
-        description: "Hotel modern dengan pemandangan kota Jakarta.",
-        image: "/images/illustration/hawaii-beach.jpg",
-        rating: 5,
-        price: "Rp750.000",
-      },
-      {
-        id: 2,
-        title: "Jakarta Central Inn",
-        description: "Penginapan nyaman dekat pusat kota Jakarta.",
-        image: "/images/illustration/hawaii-beach.jpg",
-        rating: 4,
-        price: "Rp500.000",
-      },
-    ],
-    Bekasi: [
-      {
-        id: 3,
-        title: "Bekasi Luxury Hotel",
-        description: "Penginapan mewah di pusat kota Bekasi.",
-        image: "/images/illustration/hawaii-beach.jpg",
-        rating: 4.5,
-        price: "Rp600.000",
-      },
-    ],
-    Bali: [
-      {
-        id: 4,
-        title: "Bali Beach Resort",
-        description: "Resort indah di tepi pantai Bali.",
-        image: "/images/illustration/hawaii-beach.jpg",
-        rating: 5,
-        price: "Rp1.200.000",
-      },
-      {
-        id: 5,
-        title: "Ubud Serenity Hotel",
-        description: "Hotel dengan suasana tenang di Ubud.",
-        image: "/images/illustration/hawaii-beach.jpg",
-        rating: 4.7,
-        price: "Rp850.000",
-      },
-      {
-        id: 6,
-        title: "Kuta Sunrise Inn",
-        description: "Penginapan murah dan nyaman di Kuta.",
-        image: "/images/illustration/hawaii-beach.jpg",
-        rating: 4,
-        price: "Rp450.000",
-      },
-    ],
-  };
-  
+  Jakarta: [
+    {
+      id: 1,
+      title: "Grand Indonesia Hotel",
+      description: "Hotel modern dengan pemandangan kota Jakarta.",
+      image: "/images/illustration/hawaii-beach.jpg",
+      rating: 5,
+      price: "Rp750.000",
+    },
+    {
+      id: 2,
+      title: "Jakarta Central Inn",
+      description: "Penginapan nyaman dekat pusat kota Jakarta.",
+      image: "/images/illustration/hawaii-beach.jpg",
+      rating: 4,
+      price: "Rp500.000",
+    },
+  ],
+  Bekasi: [
+    {
+      id: 3,
+      title: "Bekasi Luxury Hotel",
+      description: "Penginapan mewah di pusat kota Bekasi.",
+      image: "/images/illustration/hawaii-beach.jpg",
+      rating: 4.5,
+      price: "Rp600.000",
+    },
+  ],
+  Bali: [
+    {
+      id: 4,
+      title: "Bali Beach Resort",
+      description: "Resort indah di tepi pantai Bali.",
+      image: "/images/illustration/hawaii-beach.jpg",
+      rating: 5,
+      price: "Rp1.200.000",
+    },
+    {
+      id: 5,
+      title: "Ubud Serenity Hotel",
+      description: "Hotel dengan suasana tenang di Ubud.",
+      image: "/images/illustration/hawaii-beach.jpg",
+      rating: 4.7,
+      price: "Rp850.000",
+    },
+    {
+      id: 6,
+      title: "Kuta Sunrise Inn",
+      description: "Penginapan murah dan nyaman di Kuta.",
+      image: "/images/illustration/hawaii-beach.jpg",
+      rating: 4,
+      price: "Rp450.000",
+    },
+  ],
+};

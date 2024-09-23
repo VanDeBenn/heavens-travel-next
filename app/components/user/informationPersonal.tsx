@@ -8,9 +8,14 @@ const { Option } = Select;
 interface ComponentsProps {
   id: string;
   data: any;
+  role: string;
 }
 
-export default function InformationPersonal({ id, data }: ComponentsProps) {
+export default function InformationPersonal({
+  id,
+  data,
+  role,
+}: ComponentsProps) {
   const router = useRouter();
   const [form] = useForm();
 
@@ -89,11 +94,32 @@ export default function InformationPersonal({ id, data }: ComponentsProps) {
   const cities = ["Bandung", "Jakarta", "Tangerang"];
   const districts = ["Cicendo", "Kebayoran", "Serpong"];
 
+  let roleUser: string = "";
+  if (role === "73176062-1eda-44ca-9112-57f775f9affd") {
+    roleUser = "customer";
+  }
+  if (role === "6b613253-8a5e-463d-85de-df3a6ad02811") {
+    roleUser = "admin";
+  }
+  if (role === undefined || null) {
+    roleUser = "guest";
+  }
+
   return (
     <div className="bg-white rounded-xl w-full">
-      <p className="text-xl font-semibold my-6 mx-9">Setting Account</p>
-      <div className="h-px bg-gray-300"></div>
+      {roleUser === "admin" && (
+        <p className="text-xl font-semibold my-6 mx-9">
+          Setting Account {roleUser}
+        </p>
+      )}
 
+      {roleUser === "customer" && (
+        <p className="text-xl font-semibold my-6 mx-9">
+          Setting Account {roleUser}
+        </p>
+      )}
+
+      <div className="h-px bg-gray-300"></div>
       <div className="px-9 py-6">
         <p className="text-base font-semibold">Profile</p>
         <span className="text-sm text-gray-500">

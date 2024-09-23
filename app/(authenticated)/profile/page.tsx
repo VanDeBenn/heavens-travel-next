@@ -15,12 +15,14 @@ import { TokenUtil } from "#/utils/token";
 interface PageProps {
   id: string;
   data: any;
+  role: string;
 }
 
-export default function Page({ id, data }: PageProps) {
+export default function Page({ id, data, role }: PageProps) {
   const router = useRouter();
   const [userId, setUserId] = useState<string>("");
   const [userData, setUserData] = useState<any>("");
+  const [userRole, setUserRole] = useState<string>("");
   const cookies = useCookies();
 
   const idCookie = cookies.get("id");
@@ -64,6 +66,7 @@ export default function Page({ id, data }: PageProps) {
     try {
       const res = await usersRepository.api.getUser(userId);
       setUserData(res.body.data);
+      setUserRole(res.body.data.role.id);
 
       cookies.remove("id");
       cookies.remove("access_token");
@@ -82,7 +85,7 @@ export default function Page({ id, data }: PageProps) {
       <div className="px-24 py-10 flex gap-3 w-full">
         <NavProfile />
         <div className="flex flex-col gap-4 w-full">
-          <InformationPersonal id={userId} data={userData} />
+          <InformationPersonal id={userId} data={userData} role={userRole} />
           <ChangePassword id={userId} data={userData} />
           <Wishlist />
           <MyBooking />
