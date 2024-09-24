@@ -1,21 +1,61 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tabs, Card, Typography, Row, Col, Rate } from "antd";
 import { StarOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import Link from "next/link";
 import "antd/dist/reset.css"; // Ant Design reset styles
 import "tailwindcss/tailwind.css"; // Tailwind CSS styles
+import { wishlistRepository } from "#/repository/wishlists";
+import { hotelRepository } from "#/repository/hotels";
+import { cityRepository } from "#/repository/cities";
 
 const { TabPane } = Tabs;
 const { Title, Paragraph } = Typography;
 
 const PopularHotelsIn: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>("Jakarta");
+  const [activeTab, setActiveTab] = useState<string>("");
+  const [dataHotels, setDataHotels] = useState<any[]>([]);
+  const [dataCities, setDataCities] = useState<any[]>([]);
+
+  const fetchCities = async () => {
+    try {
+      const res = await cityRepository.api.getCitys();
+      setDataCities(res.data);
+      setActiveTab(res.data[0]?.name || "");
+    } catch (error) {}
+  };
+
+  const fetchHotels = async () => {
+    try {
+      const res = await hotelRepository.api.getHotels();
+      setDataHotels(res.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    fetchHotels();
+    fetchCities();
+  }, []);
+
+  const handleWishlist = async (values: any) => {
+    try {
+      const data = {
+        userId: values.userId,
+        hotelId: values.hotelId,
+        destinationId: values.destinationId,
+      };
+      const req = await wishlistRepository.api.create(data);
+    } catch (error) {}
+  };
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
   };
+
+  const filteredHotels = dataHotels.filter(
+    (hotel) => hotel.district.city.name === activeTab
+  );
 
   return (
     <div className="">
@@ -28,21 +68,25 @@ const PopularHotelsIn: React.FC = () => {
         </span>
       </div>
 
-      <Tabs defaultActiveKey="1" onChange={handleTabChange} className="mb-6">
-        <TabPane tab="Jakarta" key="Jakarta" />
-        <TabPane tab="Bekasi" key="Bekasi" />
-        <TabPane tab="Bali" key="Bali" />
+      <Tabs
+        defaultActiveKey={activeTab}
+        onChange={handleTabChange}
+        className="mb-6"
+      >
+        {dataCities.map((city) => (
+          <TabPane tab={city.name} key={city.name} />
+        ))}
       </Tabs>
 
       <Row gutter={16}>
-        {hotelData[activeTab as keyof typeof hotelData].map((hotel) => (
+        {filteredHotels.map((hotel) => (
           <Col span={6} key={hotel.id}>
             <Card
               cover={
                 <Link href={`/hotel-detail/${hotel.id}`}>
                   <Image
-                    alt={hotel.title}
-                    src={hotel.image}
+                    alt={hotel.name}
+                    src={hotel.pathLocation}
                     layout="responsive"
                     width={500}
                     height={300}
@@ -53,9 +97,8 @@ const PopularHotelsIn: React.FC = () => {
               className="shadow-lg rounded-md"
             >
               {/* Title and Rating */}
-
               <div className="flex items-center justify-between mb-2 gap-2">
-                <h1 className="text-xl font-semibold">{hotel.title}</h1>
+                <h1 className="text-xl font-semibold">{hotel.name}</h1>
                 <Rate
                   disabled
                   defaultValue={hotel.rating}
@@ -65,7 +108,8 @@ const PopularHotelsIn: React.FC = () => {
 
               {/* Location */}
               <div className="flex items-center text-gray-500 mb-2">
-                <EnvironmentOutlined className="mr-1" /> {activeTab}
+                <EnvironmentOutlined className="mr-1" />{" "}
+                {hotel.district.city.name}
               </div>
 
               {/* Description */}
@@ -78,7 +122,9 @@ const PopularHotelsIn: React.FC = () => {
                 Start from <span className="text-[#DC143C]">{hotel.price}</span>
               </div>
 
-              <div className="">wishlist</div>
+              <button onClick={() => handleWishlist(hotel)} className="">
+                wishlist
+              </button>
             </Card>
           </Col>
         ))}
@@ -88,60 +134,3 @@ const PopularHotelsIn: React.FC = () => {
 };
 
 export default PopularHotelsIn;
-
-const hotelData = {
-  Jakarta: [
-    {
-      id: 1,
-      title: "Grand Indonesia Hotel",
-      description: "Hotel modern dengan pemandangan kota Jakarta.",
-      image: "/images/illustration/hawaii-beach.jpg",
-      rating: 5,
-      price: "Rp750.000",
-    },
-    {
-      id: 2,
-      title: "Jakarta Central Inn",
-      description: "Penginapan nyaman dekat pusat kota Jakarta.",
-      image: "/images/illustration/hawaii-beach.jpg",
-      rating: 4,
-      price: "Rp500.000",
-    },
-  ],
-  Bekasi: [
-    {
-      id: 3,
-      title: "Bekasi Luxury Hotel",
-      description: "Penginapan mewah di pusat kota Bekasi.",
-      image: "/images/illustration/hawaii-beach.jpg",
-      rating: 4.5,
-      price: "Rp600.000",
-    },
-  ],
-  Bali: [
-    {
-      id: 4,
-      title: "Bali Beach Resort",
-      description: "Resort indah di tepi pantai Bali.",
-      image: "/images/illustration/hawaii-beach.jpg",
-      rating: 5,
-      price: "Rp1.200.000",
-    },
-    {
-      id: 5,
-      title: "Ubud Serenity Hotel",
-      description: "Hotel dengan suasana tenang di Ubud.",
-      image: "/images/illustration/hawaii-beach.jpg",
-      rating: 4.7,
-      price: "Rp850.000",
-    },
-    {
-      id: 6,
-      title: "Kuta Sunrise Inn",
-      description: "Penginapan murah dan nyaman di Kuta.",
-      image: "/images/illustration/hawaii-beach.jpg",
-      rating: 4,
-      price: "Rp450.000",
-    },
-  ],
-};
