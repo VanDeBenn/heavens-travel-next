@@ -22,7 +22,7 @@ interface DataType {
   blockDate?: string;
 }
 
-// Example data source with 20 items
+// Example data coy
 const dataSource: DataType[] = Array.from({ length: 20 }, (_, index) => ({
   key: `${index + 1}`,
   fullName: `User ${index + 1}`,
@@ -112,11 +112,33 @@ const columns = [
 
 const DestinationList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
+
+  // Filtered data based on the search value
+  const filteredData = dataSource.filter(
+    (item) =>
+      item.fullName.toLowerCase().includes(searchValue.toLowerCase()) ||
+      item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
+      item.phoneNumber.toLowerCase().includes(searchValue.toLowerCase()) ||
+      item.country.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+    setCurrentPage(1); // Reset to first page when search changes
+  };
+
+  const showTotalEntries = (total: number, range: [number, number]) => {
+    return `Showing ${range[0]} to ${range[1]} of ${total} entries`;
+  };
+
+  const startEntry = (currentPage - 1) * pageSize + 1;
+  const endEntry = Math.min(currentPage * pageSize, filteredData.length);
 
   return (
     <div className="bg-white rounded-xl shadow-md">
@@ -127,10 +149,14 @@ const DestinationList: React.FC = () => {
             className="w-64"
             prefix={<SearchOutlined />}
             placeholder="Search user"
+            value={searchValue}
+            onChange={handleSearchChange}
           />
         </div>
+
+        {/* Table and pagination container with justify-between */}
         <Table
-          dataSource={dataSource.slice(
+          dataSource={filteredData.slice(
             (currentPage - 1) * pageSize,
             currentPage * pageSize
           )}
@@ -138,11 +164,17 @@ const DestinationList: React.FC = () => {
           pagination={{
             current: currentPage,
             pageSize,
-            total: dataSource.length,
+            total: filteredData.length,
             onChange: handlePageChange,
             showSizeChanger: false,
           }}
         />
+
+        <div className="flex items-center justify-between">
+          <div>
+            {showTotalEntries(filteredData.length, [startEntry, endEntry])}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -231,6 +231,7 @@ export interface BookingItem {
   rating: number;
   link: string;
   guests: string;
+  DestinationType?: string; // Properti baru untuk tipe destinasi
   HotelRoomType?: string;
   HotelPricePerAdult?: number;
   DestinationPriceAdults?: number;
@@ -270,6 +271,7 @@ export const initialBookingItems: BookingItem[] = [
     rating: 4,
     link: "/",
     guests: "1 adult, 2 children",
+    DestinationType: "Ubud Palace Tour", // Tipe destinasi dengan akhiran 'Tour'
     DestinationPriceAdults: 200000,
     DestinationPriceChildren: 100000,
     DestinationTotalReviews: 85,

@@ -13,10 +13,6 @@ function page() {
       <div className=" px-16 pb-8 pt-24">
         <HeavensCare />
       </div>
-      
-      <div>
-        <Footer />
-      </div>
     </main>
   );
 }
