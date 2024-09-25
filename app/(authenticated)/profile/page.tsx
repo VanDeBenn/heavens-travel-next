@@ -25,11 +25,9 @@ export default function Page({ id, data, role }: PageProps) {
   const [userRole, setUserRole] = useState<string>("");
   const cookies = useCookies();
 
-  const idCookie = cookies.get("id");
+  const idCookie: any = cookies.get("id");
   const accessTokenByCookie = cookies.get("access_token");
   const refreshTokenByCookie = cookies.get("refresh_token");
-
-  const idLocal: any = idCookie;
 
   useEffect(() => {
     if (accessTokenByCookie) {
@@ -48,16 +46,17 @@ export default function Page({ id, data, role }: PageProps) {
       if (res) {
         setUserId(res.sub);
       } else {
-        setUserId(idLocal);
+        setUserId(idCookie);
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
-      setUserId(idLocal);
+      setUserId(idCookie);
     }
   };
 
   useEffect(() => {
     if (userId) {
+      localStorage.setItem("_id", userId);
       fetchProfileData(userId);
     }
   }, [userId]);
@@ -87,7 +86,7 @@ export default function Page({ id, data, role }: PageProps) {
         <div className="flex flex-col gap-4 w-full">
           <InformationPersonal id={userId} data={userData} role={userRole} />
           <ChangePassword id={userId} data={userData} />
-          <Wishlist />
+          <Wishlist id={userId} data={userData} />
           <MyBooking />
           <BookingDetail />
         </div>

@@ -13,6 +13,6 @@ module.exports = nextConfig;
 
 module.exports = {
   images: {
-    domains: ["ik.imagekit.io"], // Add your external image domain here
+    domains: ["ik.imagekit.io", "www.traveltomtom.net"],
   },
 };

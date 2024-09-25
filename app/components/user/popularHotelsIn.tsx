@@ -38,17 +38,6 @@ const PopularHotelsIn: React.FC = () => {
     fetchCities();
   }, []);
 
-  const handleWishlist = async (values: any) => {
-    try {
-      const data = {
-        userId: values.userId,
-        hotelId: values.hotelId,
-        destinationId: values.destinationId,
-      };
-      const req = await wishlistRepository.api.create(data);
-    } catch (error) {}
-  };
-
   const handleTabChange = (key: string) => {
     setActiveTab(key);
   };
@@ -56,6 +45,21 @@ const PopularHotelsIn: React.FC = () => {
   const filteredHotels = dataHotels.filter(
     (hotel) => hotel.district.city.name === activeTab
   );
+  console.log(filteredHotels);
+  const handleWishlist = async (values: any) => {
+    try {
+      const data = {
+        userId: localStorage.getItem("_id"),
+        hotelId: filteredHotels[0]?.id,
+      };
+      const req = await wishlistRepository.api.create(data);
+      console.log(req);
+      console.log(data);
+    } catch (error: any) {
+      const errorMessage = error.response;
+      console.log(errorMessage);
+    }
+  };
 
   return (
     <div className="">
