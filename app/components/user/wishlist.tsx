@@ -17,24 +17,24 @@ interface ComponentsProps {
 
 export default function Wishlist({ id, data: initialData }: ComponentsProps) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [removeItem, setRemoveItem] = useState<string>("");
+  const [removeItemId, setRemoveItemId] = useState<string>("");
   const [currentItemIndex, setCurrentItemIndex] = useState<number | null>(null);
   const [data, setData] = useState(initialData);
 
   const showConfirmModal = (index: number, id: string) => {
     setCurrentItemIndex(index);
-    setRemoveItem(id);
+    setRemoveItemId(id);
     setModalVisible(true);
   };
 
   const handleRemove = async () => {
     try {
-      await wishlistRepository.api.deleteWishlist(removeItem);
+      await wishlistRepository.api.deleteWishlist(removeItemId);
 
       setData((prevData: any) => ({
         ...prevData,
         wishlists: prevData.wishlists.filter(
-          (item: any) => item.id !== removeItem
+          (item: any) => item.id !== removeItemId
         ),
       }));
 

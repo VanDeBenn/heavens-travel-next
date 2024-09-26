@@ -45,7 +45,6 @@ const PopularHotelsIn: React.FC = () => {
   const filteredHotels = dataHotels.filter(
     (hotel) => hotel.district.city.name === activeTab
   );
-  console.log(filteredHotels);
   const handleWishlist = async (values: any) => {
     try {
       const data = {
@@ -53,8 +52,6 @@ const PopularHotelsIn: React.FC = () => {
         hotelId: filteredHotels[0]?.id,
       };
       const req = await wishlistRepository.api.create(data);
-      console.log(req);
-      console.log(data);
     } catch (error: any) {
       const errorMessage = error.response;
       console.log(errorMessage);
@@ -87,7 +84,7 @@ const PopularHotelsIn: React.FC = () => {
           <Col span={6} key={hotel.id}>
             <Card
               cover={
-                <Link href={`/hotel-detail/${hotel.id}`}>
+                <Link href={`/hotel/detail/${hotel.id}`}>
                   <Image
                     alt={hotel.name}
                     src={hotel.pathLocation}
@@ -109,26 +106,19 @@ const PopularHotelsIn: React.FC = () => {
                   className="text-yellow-500 text-xl"
                 />
               </div>
-
               {/* Location */}
               <div className="flex items-center text-gray-500 mb-2">
                 <EnvironmentOutlined className="mr-1" />{" "}
                 {hotel.district.city.name}
               </div>
-
               {/* Description */}
               <Paragraph ellipsis={{ rows: 2 }} className="text-gray-600">
                 {hotel.description}
               </Paragraph>
-
               {/* Price */}
               <div className="text-right text-base font-medium text-gray-700">
                 Start from <span className="text-[#DC143C]">{hotel.price}</span>
               </div>
-
-              <button onClick={() => handleWishlist(hotel)} className="">
-                wishlist
-              </button>
             </Card>
           </Col>
         ))}
