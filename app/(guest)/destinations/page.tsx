@@ -1,5 +1,6 @@
 "use client";
 import { destinationRepository } from "#/repository/destinations";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 export default function page() {
@@ -46,6 +47,7 @@ export default function page() {
               {item.priceAdult} <br />
               {item.priceChildren}
             </div>
+            <Link href={`/destinations/detail/${item.id}`}>klik link</Link>
             <button onClick={handleDecrement}>-</button>
             {count}
             <button onClick={handleIncrement}>+</button>

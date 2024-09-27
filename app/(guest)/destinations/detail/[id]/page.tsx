@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 
 export default function page({ params }: { params: { id: string } }) {
   const [dataDestinations, setDataDestinations] = useState<any[]>([]);
-  const [count, setCount] = useState<number>(1);
+  const [count, setCount] = useState({ adult: 1, children: 0 });
   const [destinationId, setDestinationId] = useState<string>("");
 
   const fetchDestinatios = async () => {
@@ -17,17 +17,18 @@ export default function page({ params }: { params: { id: string } }) {
     } catch (error) {}
   };
 
-  function handleIncrement() {
-    if (count < 20) {
-      setCount(count + 1);
-    }
-  }
-
-  function handleDecrement() {
-    if (count > 1) {
-      setCount(count - 1);
-    }
-  }
+  const handleCountChange = (
+    type: "adult" | "children",
+    operation: "increment" | "decrement"
+  ) => {
+    setCount((prevCount) => ({
+      ...prevCount,
+      [type]:
+        operation === "increment"
+          ? Math.min(prevCount[type] + 1, 20)
+          : Math.max(prevCount[type] - 1, type === "adult" ? 1 : 0),
+    }));
+  };
 
   const handleWishlist = async () => {
     try {
@@ -35,12 +36,8 @@ export default function page({ params }: { params: { id: string } }) {
         userId: localStorage.getItem("_id"),
         destinationId: destinationId,
       };
-      const req = await wishlistRepository.api.create(data);
-      console.log(req);
-    } catch (error: any) {
-      const errorMessage = error.response;
-      console.log(errorMessage);
-    }
+      await wishlistRepository.api.create(data);
+    } catch (error) {}
   };
 
   const handleCart = async () => {
@@ -49,38 +46,50 @@ export default function page({ params }: { params: { id: string } }) {
         userId: localStorage.getItem("_id"),
         destinationId: destinationId,
       };
-      const req = await cartRepository.api.create(data);
+      await cartRepository.api.create(data);
     } catch (error) {}
   };
 
   useEffect(() => {
     fetchDestinatios();
   }, []);
+
   return (
-    <>
-      <div>
-        {dataDestinations.map((item) => (
-          <>
-            <div key={item.id} className="">
-              {item.name} <br />
-              {item.address} <br />
-              {item.description} <br />
-              {/* {item.district.name} <br /> */}
-              {item.maxCapacity} <br />
-              {item.name} <br />
-              {item.pathLocation} <br />
-              {item.priceAdult} <br />
-              {item.priceChildren}
-            </div>
-            <button onClick={handleDecrement}>-</button>
-            {count}
-            <button onClick={handleIncrement}>+</button>
-            <button onClick={handleCart}>cart</button>
-            <button onClick={handleWishlist}>wishlist</button>
-            <button>book now</button>
-          </>
-        ))}
-      </div>
-    </>
+    <div>
+      {dataDestinations.map((item) => (
+        <div key={item.id}>
+          {item.name} <br />
+          {item.address} <br />
+          {item.description} <br />
+          {item.maxCapacity} <br />
+          {item.priceAdult} <br />
+          {item.priceChildren}
+          {/* Adult Counter */}
+          <div>
+            Adult:
+            <button onClick={() => handleCountChange("adult", "decrement")}>
+              -
+            </button>
+            {count.adult}
+            <button onClick={() => handleCountChange("adult", "increment")}>
+              +
+            </button>
+          </div>
+          {/* Children Counter */}
+          <div>
+            Children:
+            <button onClick={() => handleCountChange("children", "decrement")}>
+              -
+            </button>
+            {count.children}
+            <button onClick={() => handleCountChange("children", "increment")}>
+              +
+            </button>
+          </div>
+          <button onClick={handleCart}>Add to Cart</button>
+          <button onClick={handleWishlist}>Add to Wishlist</button>
+        </div>
+      ))}
+    </div>
   );
 }

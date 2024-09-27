@@ -75,6 +75,11 @@ export default function Page({ id, data, role }: PageProps) {
     }
   };
 
+  if (!TokenUtil.accessToken) {
+    localStorage.removeItem("_id");
+  } else {
+  }
+
   if (!userData) {
     return <div>kasih loading ui aaa...</div>;
   }
