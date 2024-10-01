@@ -76,7 +76,7 @@ const Register = () => {
       <div className="md:w-1/2 w-full flex items-center justify-center p-4">
         <Card
           className="w-full rounded-xl bg-white shadow-lg"
-          style={{ maxHeight: "calc(100vh - 4rem)" }}
+          
         >
           <div className="text-center mb-4">
             <Typography.Title level={3} className="m-0">
