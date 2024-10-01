@@ -75,40 +75,37 @@ const ForgotPassword: React.FC = () => {
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              label={<span>Please enter Email or Number </span>}
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Email or Number!",
-                },
-                {
-                  validator: (_, value) => {
-                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    const phonePattern = /^[0-9]{10,15}$/;
+  label={<span>Please enter Email or Number </span>}
+  name="email"
+  rules={[
+    {
+      required: true,
+      message: "Please input your Email or Number!",
+    },
+    ({ getFieldValue }) => ({
+      validator(_, value) {
+        if (!value) {
+          // Jangan jalankan validasi custom jika input kosong
+          return Promise.resolve();
+        }
 
-                    if (!value) {
-                      return Promise.reject(
-                        "Please input your Email or Number!"
-                      );
-                    }
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phonePattern = /^[0-9]{10,15}$/;
 
-                    if (
-                      !emailPattern.test(value) &&
-                      !phonePattern.test(value)
-                    ) {
-                      return Promise.reject(
-                        "Please enter a valid Email or Number!"
-                      );
-                    }
+        if (!emailPattern.test(value) && !phonePattern.test(value)) {
+          return Promise.reject(
+            new Error("Please enter a valid Email or Number!")
+          );
+        }
 
-                    return Promise.resolve();
-                  },
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
+        return Promise.resolve();
+      },
+    }),
+  ]}
+>
+  <Input />
+</Form.Item>
+
             <div className="text-center my-5">
               <Text type="secondary">
                 Back to
