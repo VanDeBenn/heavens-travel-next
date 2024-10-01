@@ -109,29 +109,28 @@ const Login = () => {
                   required: true,
                   message: "Please input your Email or Number!",
                 },
-                {
-                  validator: (_, value) => {
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value) {
+                      // Jika input kosong, jangan memunculkan validator cuk
+                      return Promise.resolve();
+                    }
+
                     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     const phonePattern = /^[0-9]{10,15}$/;
-
-                    if (!value) {
-                      return Promise.reject(
-                        "Please input your Email or Number!"
-                      );
-                    }
 
                     if (
                       !emailPattern.test(value) &&
                       !phonePattern.test(value)
                     ) {
                       return Promise.reject(
-                        "Please enter a valid Email or Number!"
+                        new Error("Please enter a valid Email or Number!")
                       );
                     }
 
                     return Promise.resolve();
                   },
-                },
+                }),
               ]}
             >
               <Input />
