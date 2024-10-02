@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { Tabs, Card, Typography, Row, Col, Rate } from "antd";
 import { StarOutlined, EnvironmentOutlined } from "@ant-design/icons";
@@ -6,57 +5,31 @@ import Image from "next/image";
 import Link from "next/link";
 import "antd/dist/reset.css"; // Ant Design reset styles
 import "tailwindcss/tailwind.css"; // Tailwind CSS styles
-import { wishlistRepository } from "#/repository/wishlists";
-import { hotelRepository } from "#/repository/hotels";
-import { cityRepository } from "#/repository/cities";
 
 const { TabPane } = Tabs;
-const { Title, Paragraph } = Typography;
+const { Paragraph } = Typography;
 
-const PopularHotelsIn: React.FC = () => {
+interface ComponentProps {
+  data: any;
+  dataCity: any;
+}
+
+const PopularHotelsIn = ({ data, dataCity }: ComponentProps) => {
   const [activeTab, setActiveTab] = useState<string>("");
-  const [dataHotels, setDataHotels] = useState<any[]>([]);
-  const [dataCities, setDataCities] = useState<any[]>([]);
-
-  const fetchCities = async () => {
-    try {
-      const res = await cityRepository.api.getCitys();
-      setDataCities(res.data);
-      setActiveTab(res.data[0]?.name || "");
-    } catch (error) {}
-  };
-
-  const fetchHotels = async () => {
-    try {
-      const res = await hotelRepository.api.getHotels();
-      setDataHotels(res.data);
-    } catch (error) {}
-  };
 
   useEffect(() => {
-    fetchHotels();
-    fetchCities();
-  }, []);
+    if (dataCity.length > 0) {
+      setActiveTab(dataCity[0].name);
+    }
+  }, [dataCity]);
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
   };
 
-  const filteredHotels = dataHotels.filter(
-    (hotel) => hotel.district.city.name === activeTab
+  const filteredHotels = data.filter(
+    (hotel: any) => hotel.district.city.name === activeTab
   );
-  const handleWishlist = async (values: any) => {
-    try {
-      const data = {
-        userId: localStorage.getItem("_id"),
-        hotelId: filteredHotels[0]?.id,
-      };
-      const req = await wishlistRepository.api.create(data);
-    } catch (error: any) {
-      const errorMessage = error.response;
-      console.log(errorMessage);
-    }
-  };
 
   return (
     <div className="">
@@ -74,13 +47,13 @@ const PopularHotelsIn: React.FC = () => {
         onChange={handleTabChange}
         className="mb-6"
       >
-        {dataCities.map((city) => (
+        {dataCity.map((city: any) => (
           <TabPane tab={city.name} key={city.name} />
         ))}
       </Tabs>
 
       <Row gutter={16}>
-        {filteredHotels.map((hotel) => (
+        {filteredHotels.map((hotel: any) => (
           <Col span={6} key={hotel.id}>
             <Card
               cover={

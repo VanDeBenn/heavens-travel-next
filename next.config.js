@@ -13,6 +13,6 @@ module.exports = nextConfig;
 
 module.exports = {
   images: {
-    domains: ["ik.imagekit.io", "www.traveltomtom.net"],
+    domains: ["imgs.search.brave.com"],
   },
 };

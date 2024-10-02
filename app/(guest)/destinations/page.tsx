@@ -30,7 +30,6 @@ export default function page() {
     fetchDestinatios();
   }, []);
 
-  console.log(dataDestinations);
   return (
     <>
       <div>
@@ -51,8 +50,6 @@ export default function page() {
             <button onClick={handleDecrement}>-</button>
             {count}
             <button onClick={handleIncrement}>+</button>
-            <button>cart</button>
-            <button>book now</button>
           </>
         ))}
       </div>

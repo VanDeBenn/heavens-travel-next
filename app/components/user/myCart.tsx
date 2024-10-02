@@ -111,8 +111,6 @@ export default function MyCart() {
     return <div className="">Loading...</div>;
   }
 
-  console.log(dataCart);
-
   return (
     <div className="w-full">
       <div className="flex gap-5">
@@ -124,17 +122,28 @@ export default function MyCart() {
 
           <div className="grid grid-cols-1 px-8 py-6 gap-6 w-full">
             {dataCart.map(
-              ({ roomhotel, destination, id }: any, index: number) => {
+              (
+                {
+                  roomhotel,
+                  destination,
+                  id,
+                  startDate,
+                  endDate,
+                  quantity,
+                }: any,
+                index: number
+              ) => {
                 const isSelected = selectedItems[index];
+
                 // const totalCost =
-                //   roomhotel?.HotelPricePerAdult &&
-                //   Number(roomhotel?.guests.match(/\d+/)?.[0]) *
-                //     roomhotel?.HotelPricePerAdult;
+                //   roomhotel.HotelPricePerAdult &&
+                //   Number(roomhotel.guests.match(/\d+/)?.[0]) *
+                //     roomhotel.HotelPricePerAdult;
 
                 // const adultsCount =
-                //   Number(destination?.guests.match(/(\d+)\s*adult/)?.[1]) || 0;
+                //   Number(destination.guests.match(/(\d+)\s*adult/)?.[1]) || 0;
                 // const childrenCount =
-                //   Number(destination?.guests.match(/(\d+)\s*child/)?.[1]) || 0;
+                //   Number(destination.guests.match(/(\d+)\s*child/)?.[1]) || 0;
 
                 return (
                   <div
@@ -162,16 +171,13 @@ export default function MyCart() {
                     </div>
 
                     <div className="flex items-center gap-2 py-3">
-                      <Link
-                        href={`/hotel/detail/${
-                          roomhotel?.id || destination?.id
-                        }`}
-                      >
+                      <Link href={``}>
                         <Image
                           src={
-                            roomhotel?.pathLocation || destination?.pathLocation
+                            "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                            // roomhotel.pathLocation || destination.pathLocation
                           }
-                          alt={roomhotel?.name || destination?.name}
+                          alt={destination.name || roomhotel.name}
                           width={100}
                           height={100}
                           className="rounded-xl w-44"
@@ -180,30 +186,27 @@ export default function MyCart() {
 
                       <div className="flex flex-col gap-1 w-full">
                         <Link
-                          href={roomhotel?.id || destination?.id}
+                          href={
+                            roomhotel
+                              ? `/hotel/detail/${roomhotel.id}`
+                              : `destinations/detail/${destination.id}`
+                          }
                           className="font-semibold no-underline"
                         >
-                          {roomhotel?.name || destination?.name}
+                          {destination.name || roomhotel.name}
                         </Link>
 
                         <div className="flex items-center gap-1">
                           <RiCalendarLine className="text-lg text-black" />
                           <span className="text-xs text-gray-400">
-                            {roomhotel?.startDate ||
-                              destination?.startDate ||
-                              "1 January 2023"}{" "}
-                            -{" "}
-                            {roomhotel?.endDate ||
-                              destination?.endDate ||
-                              "3 January 2023"}
+                            {startDate} - {endDate}
                           </span>
                         </div>
 
                         <div className="flex gap-1">
                           <RiTeamLine size={16} color="#6b7280" />
                           <span className="text-xs text-gray-500">
-                            Guests:{" "}
-                            {roomhotel?.guests || destination?.guests || 3}
+                            Guests: {quantity} Adult
                           </span>
                         </div>
 
@@ -222,20 +225,18 @@ export default function MyCart() {
                                 isSelected ? "text-[#4F28D9]" : "text-gray-400"
                               }`}
                             >
-                              {roomhotel?.HotelRoomType ||
-                                destination?.DestinationType ||
-                                "deluxe"}
+                              {destination.name || roomhotel.name}
                             </span>
                           </div>
 
                           <div className="flex items-end gap-1">
-                            {/* {roomhotel?.HotelPricePerAdult && (
+                            {/* {roomhotel.HotelPricePerAdult && (
                               <span className="text-sm text-gray-500">
-                                {roomhotel?.guests.match(/\d+/)?.[0]} x{" "}
+                                {roomhotel.guests.match(/\d+/)?.[0]} x{" "}
                                 {formatCurrency(roomhotel.HotelPricePerAdult)}
                               </span>
                             )} */}
-                            {/* {destination?.DestinationPriceAdults &&
+                            {/* {destination.DestinationPriceAdults &&
                               adultsCount > 0 && (
                                 <>
                                   <span className="text-sm text-gray-500">
@@ -275,9 +276,9 @@ export default function MyCart() {
                             ? formatCurrency(totalCost)
                             : formatCurrency(
                                 adultsCount *
-                                  destination?.DestinationPriceAdults +
+                                  destination.DestinationPriceAdults +
                                   childrenCount *
-                                    destination?.DestinationPriceChildren
+                                    destination.DestinationPriceChildren
                               )} */}
                         </span>
                       </div>
