@@ -41,7 +41,7 @@ const Register = () => {
         phoneNumber: values.phoneNumber,
         password: values.password,
         confirmPassword: values.confirmPassword,
-        roleId: "73176062-1eda-44ca-9112-57f775f9affd",
+        roleId: "32a5bee8-e7a7-4631-9f6e-f394b519ae86",
       };
       const { confirmPassword, ...data } = dataRegister;
 
@@ -57,7 +57,7 @@ const Register = () => {
   };
 
   const handleLoginGoogle = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`; // Ganti dengan URL BE login Google
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
   };
 
   return (
@@ -74,10 +74,7 @@ const Register = () => {
         </div>
       </div>
       <div className="md:w-1/2 w-full flex items-center justify-center p-4">
-        <Card
-          className="w-full rounded-xl bg-white shadow-lg"
-          
-        >
+        <Card className="w-full rounded-xl bg-white shadow-lg">
           <div className="text-center mb-4">
             <Typography.Title level={3} className="m-0">
               Create new account

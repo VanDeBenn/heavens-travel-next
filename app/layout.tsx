@@ -1,6 +1,7 @@
 import "./globals.css";
 import "antd/dist/reset.css";
 import { Provider } from "./provider";
+import { CookiesProvider } from "next-client-cookies/server";
 import Script from "next/script";
 
 export const metadata = {
@@ -23,10 +24,12 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-
       <body>
         <Script src="/api/env" strategy={"beforeInteractive"}></Script>
-        <Provider>{children}</Provider>
+        <CookiesProvider>
+          {/* Wrap your app in CookiesProvider */}
+          <Provider>{children}</Provider>
+        </CookiesProvider>
       </body>
     </html>
   );

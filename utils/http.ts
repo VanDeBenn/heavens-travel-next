@@ -6,7 +6,7 @@ import { attachSuperagentLogger } from "./http_logger";
 import { TokenUtil } from "./token";
 
 let AuthIntercept = superagentIntercept((err: any, res: any) => {
-  if (res && res.status === 401 && !localStorage.getItem("id")) {
+  if (res && res.status === 401 && !TokenUtil.accessToken) {
     console.log("AuthIntercept 401");
     TokenUtil.clearAccessToken();
     TokenUtil.persistToken();

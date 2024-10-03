@@ -14,8 +14,8 @@ import { TokenUtil } from "#/utils/token";
 
 const menuItems = [
   { key: "profile", icon: <UserOutlined />, label: "Profile" },
-  { key: "wishlist", icon: <HeartOutlined />, label: "Wishlist" },
-  { key: "booking", icon: <CalendarOutlined />, label: "Booking" },
+  { key: "profile/wishlists", icon: <HeartOutlined />, label: "Wishlists" },
+  { key: "profile/bookings", icon: <CalendarOutlined />, label: "Bookings" },
 ];
 
 const NavProfile: React.FC = () => {

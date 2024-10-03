@@ -1,12 +1,8 @@
 "use client";
 import ChangePassword from "#/app/components/user/changePassword";
 import InformationPersonal from "#/app/components/user/informationPersonal";
-import MyBooking from "#/app/components/user/myBooking";
-import NavProfile from "#/app/components/user/navProfile";
-import Wishlist from "#/app/components/user/wishlist";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import BookingDetail from "#/app/components/user/bookingDetail";
 import { authRepository } from "#/repository/auth";
 import { usersRepository } from "#/repository/users";
 import { useCookies } from "next-client-cookies";
@@ -56,7 +52,9 @@ export default function Page({ id, data, role }: PageProps) {
 
   useEffect(() => {
     if (userId) {
-      localStorage.setItem("_id", userId);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("_id", userId);
+      }
       fetchProfileData(userId);
     }
   }, [userId]);
@@ -75,10 +73,13 @@ export default function Page({ id, data, role }: PageProps) {
     }
   };
 
-  if (!TokenUtil.accessToken) {
-    localStorage.removeItem("_id");
-  } else {
-  }
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (!TokenUtil.accessToken) {
+        localStorage.removeItem("_id");
+      }
+    }
+  }, []);
 
   if (!userData) {
     return <div>kasih loading ui aaa...</div>;
@@ -86,15 +87,9 @@ export default function Page({ id, data, role }: PageProps) {
 
   return (
     <main className="bg-[#F8F8FF]">
-      <div className="px-24 py-10 flex gap-3 w-full">
-        <NavProfile />
-        <div className="flex flex-col gap-4 w-full">
-          <InformationPersonal id={userId} data={userData} role={userRole} />
-          <ChangePassword id={userId} data={userData} />
-          <Wishlist id={userId} data={userData} />
-          <MyBooking />
-          <BookingDetail />
-        </div>
+      <div className="flex flex-col gap-4 w-full">
+        <InformationPersonal id={userId} data={userData} role={userRole} />
+        <ChangePassword id={userId} data={userData} />
       </div>
     </main>
   );

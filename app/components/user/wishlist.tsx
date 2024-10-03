@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import {
   RiGlassesLine,
@@ -44,6 +45,7 @@ export default function Wishlist({ id, data: initialData }: ComponentsProps) {
     }
   };
 
+  console.log(data);
   return (
     <div className="bg-white rounded-xl">
       <p className="text-xl font-semibold my-6 mx-9">Wishlist</p>
@@ -58,13 +60,13 @@ export default function Wishlist({ id, data: initialData }: ComponentsProps) {
             >
               <div className="flex justify-between items-center">
                 <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                  {hotel ? (
-                    <RiHome3Line size={18} color="#ffff" />
-                  ) : (
+                  {destination ? (
                     <RiGlassesLine size={18} color="#ffff" />
+                  ) : (
+                    <RiHome3Line size={18} color="#ffff" />
                   )}
                   <span className="text-xs font-semibold text-white">
-                    {hotel ? "Hotel" : "Destination"}
+                    {destination ? "Destination" : "Hotel"}
                   </span>
                 </div>
                 <div>
@@ -78,10 +80,22 @@ export default function Wishlist({ id, data: initialData }: ComponentsProps) {
               </div>
 
               <div className="pt-2 flex items-center gap-2">
-                <Link href={hotel ? `hotel/${id}` : `destination/${id}`}>
+                <Link
+                  href={
+                    destination
+                      ? `destinations/detail/${id}`
+                      : `hotel/detail/${id}`
+                  }
+                >
                   <Image
-                    src={hotel?.pathLocation || destination?.pathLocation}
-                    alt={hotel?.name || destination?.name}
+                    src={`${
+                      destination?.pathLocation ||
+                      hotel?.pathLocation ||
+                      "https://imgs.search.brave.com/Cb0SfcZNuP0OQsADJiTc-OPZ9WbdoJ6KK1bm6RYVTSA/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9hd3Np/bWFnZXMuZGV0aWsu/bmV0LmlkL2NvbW11/bml0eS9tZWRpYS92/aXN1YWwvMjAyMC8w/Ni8xMC9odXRhbi1i/YW1idS1kaS1rYXdh/c2FuLWJ1a2l0LW1i/YWgtZ2FydXQtMl8x/NjkuanBlZz93PTcw/MCZxPTkw"
+                    }`}
+                    alt={
+                      destination?.name || hotel?.name || "No image available"
+                    }
                     width={100}
                     height={100}
                     className="rounded-xl w-44"
@@ -90,14 +104,18 @@ export default function Wishlist({ id, data: initialData }: ComponentsProps) {
                 <div className="flex flex-col gap-1 w-full">
                   <div className="flex justify-between items-center">
                     <Link
-                      href={hotel ? `hotel/${id}` : `destination/${id}`}
+                      href={
+                        destination
+                          ? `destinations/detail/${id}`
+                          : `hotel/detail/${id}`
+                      }
                       className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
                     >
-                      {hotel?.name || destination?.name}
+                      {destination?.name || hotel?.name}
                     </Link>
                     <Rate
                       disabled
-                      value={hotel?.rating || destination?.rating}
+                      value={destination?.rating || hotel?.rating || 4}
                       allowHalf={false}
                       style={{ fontSize: 16, color: "#F59E0B" }}
                     />
@@ -105,12 +123,12 @@ export default function Wishlist({ id, data: initialData }: ComponentsProps) {
                   <div className="flex items-center gap-1">
                     <RiMapPinLine size={16} color="#6b7280 " />
                     <span className="text-xs text-gray-500">
-                      {hotel?.address || destination?.location}
+                      {`${destination?.address || hotel?.address}`}
                     </span>
                   </div>
 
                   <span className="text-sm text-gray-500">
-                    {hotel?.description || destination?.description}
+                    {`${destination?.description || hotel?.description}`}
                   </span>
                 </div>
               </div>
