@@ -1,12 +1,13 @@
 "use client";
 import ChangePassword from "#/app/components/user/changePassword";
 import InformationPersonal from "#/app/components/user/informationPersonal";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { authRepository } from "#/repository/auth";
 import { usersRepository } from "#/repository/users";
 import { useCookies } from "next-client-cookies";
 import { TokenUtil } from "#/utils/token";
+import Loading from "#/app/loading";
 
 interface PageProps {
   id: string;
@@ -82,7 +83,7 @@ export default function Page({ id, data, role }: PageProps) {
   }, []);
 
   if (!userData) {
-    return <div>kasih loading ui aaa...</div>;
+    return <Loading />;
   }
 
   return (
