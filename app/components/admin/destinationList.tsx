@@ -1,3 +1,58 @@
+// "use client";
+// import { Input } from "antd";
+// import React, { useState } from "react";
+// import {
+//   MoreOutlined,
+//   InfoCircleOutlined,
+//   BlockOutlined,
+//   UnlockOutlined,
+//   SearchOutlined,
+// } from "@ant-design/icons";
+// import {
+//   largeMontserrat,
+//   mediumMontserrat,
+//   smallMontserrat,
+// } from "#/app/components/user/myBooking";
+// import Link from "next/link";
+// export default function DestinationList() {
+//   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setSearchValue(e.target.value);
+//     setCurrentPage(1); // Reset to first page when search changes
+//   };
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [searchValue, setSearchValue] = useState("");
+//   return (
+//     <div className="bg-white rounded-xl p-7">
+//       <div
+//         className={`${mediumMontserrat.className} flex items-center justify-between pb-4`}
+//       >
+//         <h2 className="text-xl font-bold mb-2">Destination Listing</h2>
+//         <div className="flex gap-4">
+//           <div>
+//             <Input
+//               className="w-64"
+//               prefix={<SearchOutlined />}
+//               placeholder="Search destination"
+//               value={searchValue}
+//               onChange={handleSearchChange}
+//             />
+//           </div>
+
+//           <Link
+//             href={"/"}
+//             className="border-[#4F28D9] border-solid no-underline border hover:bg-[#4F28D9] transition-all duration-300 hover:text-white text-sm rounded-md py-1 px-16 text-[#4F28D9] text-center font-semibold
+//            "
+//           >
+//             + Create Destination
+//           </Link>
+//         </div>
+//       </div>
+
+//     </div>
+//   );
+// }
+
+
 "use client";
 
 import React, { useState } from "react";
@@ -9,33 +64,26 @@ import {
   UnlockOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
+import Link from "next/link";
+import { mediumMontserrat } from "../user/myBooking";
 
 interface DataType {
   key: string;
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  gender: string;
-  birthdate: string;
-  country: string;
-  joined: string;
-  blockDate?: string;
+  destinationName: string;
+  address: string;
+  rating: string;
+  price: string;
+  max: string;
 }
 
-// Example data coy
+// Data yang sudah diperbaiki
 const dataSource: DataType[] = Array.from({ length: 20 }, (_, index) => ({
   key: `${index + 1}`,
-  fullName: `User ${index + 1}`,
-  email: `user${index + 1}@example.com`,
-  phoneNumber: `+1 123 456 ${String(index + 1).padStart(3, "0")}`,
-  gender: index % 2 === 0 ? "Male" : "Female",
-  birthdate: `199${index % 10}-01-01`,
-  country: index % 2 === 0 ? "USA" : "UK",
-  joined: `202${index % 10}-05-15`,
-  blockDate:
-    index % 2 === 0
-      ? `2024-07-${String(index + 1).padStart(2, "0")}`
-      : undefined,
+  destinationName: `Destination ${index + 1}`,
+  address: `Address ${index + 1}, City, Country`,
+  rating: Math.random() > 0.5 ? "4" : "5", // Rating hanya 4 atau 5
+  price: `$${(Math.random() * 500 + 50).toFixed(2)}`, // Price berupa angka dengan format dollar
+  max: `${Math.floor(Math.random() * 100) + 1}`, // Max capacity dalam format "X persons"
 }));
 
 const handleMenuClick = (e: any) => {
@@ -44,46 +92,31 @@ const handleMenuClick = (e: any) => {
 
 const columns = [
   {
-    title: "Full Name",
-    dataIndex: "fullName",
-    key: "fullName",
+    title: "Destination Name",
+    dataIndex: "destinationName",
+    key: "destinationName",
   },
   {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
+    title: "Address",
+    dataIndex: "address",
+    key: "address",
   },
   {
-    title: "Phone Number",
-    dataIndex: "phoneNumber",
-    key: "phoneNumber",
+    title: "Rating",
+    dataIndex: "rating",
+    key: "rating",
   },
   {
-    title: "Gender",
-    dataIndex: "gender",
-    key: "gender",
+    title: "Price",
+    dataIndex: "price",
+    key: "price",
   },
   {
-    title: "Birthdate",
-    dataIndex: "birthdate",
-    key: "birthdate",
+    title: "Max Capacity/Book",
+    dataIndex: "max",
+    key: "max",
   },
-  {
-    title: "Country",
-    dataIndex: "country",
-    key: "country",
-  },
-  {
-    title: "Joined",
-    dataIndex: "joined",
-    key: "joined",
-  },
-  {
-    title: "Block Date",
-    dataIndex: "blockDate",
-    key: "blockDate",
-    render: (blockDate: string) => (blockDate ? blockDate : "N/A"),
-  },
+
   {
     title: "",
     key: "actions",
@@ -92,7 +125,7 @@ const columns = [
         overlay={
           <Menu onClick={handleMenuClick}>
             <Menu.Item key="1" icon={<InfoCircleOutlined />}>
-              Detail User
+              <Link href="/admin/users/detail">Detail User</Link>
             </Menu.Item>
             <Menu.Item key="2" icon={<BlockOutlined />}>
               Block User
@@ -118,10 +151,9 @@ const DestinationList: React.FC = () => {
   // Filtered data based on the search value
   const filteredData = dataSource.filter(
     (item) =>
-      item.fullName.toLowerCase().includes(searchValue.toLowerCase()) ||
-      item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
-      item.phoneNumber.toLowerCase().includes(searchValue.toLowerCase()) ||
-      item.country.toLowerCase().includes(searchValue.toLowerCase())
+      item.destinationName.toLowerCase().includes(searchValue.toLowerCase()) ||
+      item.address.toLowerCase().includes(searchValue.toLowerCase()) ||
+      item.rating.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   const handlePageChange = (page: number) => {
@@ -143,15 +175,29 @@ const DestinationList: React.FC = () => {
   return (
     <div className="bg-white rounded-xl shadow-md">
       <div className="p-7 ">
-        <div className="flex items-center justify-between pb-4">
+        <div
+          className={`${mediumMontserrat.className} flex items-center justify-between pb-4`}
+        >
           <h2 className="text-xl font-bold mb-2">Destination Listing</h2>
-          <Input
-            className="w-64"
-            prefix={<SearchOutlined />}
-            placeholder="Search user"
-            value={searchValue}
-            onChange={handleSearchChange}
-          />
+          <div className="flex gap-4">
+            <div>
+              <Input
+                className="w-64"
+                prefix={<SearchOutlined />}
+                placeholder="Search destination"
+                value={searchValue}
+                onChange={handleSearchChange}
+              />
+            </div>
+
+            <Link
+              href={"/"}
+              className="border-[#4F28D9] border-solid no-underline border hover:bg-[#4F28D9] transition-all duration-300 hover:text-white text-sm rounded-md py-1 px-16 text-[#4F28D9] text-center font-semibold
+           "
+            >
+              + Create Destination
+            </Link>
+          </div>
         </div>
 
         {/* Table and pagination container with justify-between */}
