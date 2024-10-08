@@ -15,22 +15,24 @@ import { mediumMontserrat } from "../user/myBooking";
 
 interface DataType {
   key: string;
-  destinationName: string;
+  hotelName: string;
   address: string;
   rating: string;
-  price: string;
-  max: string;
+  totalRoom: string;
+  roomType: string;
+  facility: string[];
   imageUrl: string;
 }
 
-// Data yang sudah diperbaiki, dengan gambar ditambahkan
+// Data yang sudah diperbaiki
 const dataSource: DataType[] = Array.from({ length: 20 }, (_, index) => ({
   key: `${index + 1}`,
-  destinationName: `Destination ${index + 1}`,
+  hotelName: `Hotel ${index + 1}`,
   address: `Jl. Caman Raya No.${index + 1}, RT.013/RW.008, Jatibening Baru`,
   rating: Math.random() > 0.5 ? "4" : "5", // Rating hanya 4 atau 5
-  price: `$${(Math.random() * 500 + 50).toFixed(2)}`, // Price berupa angka dengan format dollar
-  max: `${Math.floor(Math.random() * 100) + 1}`, // Max capacity dalam format "X persons"
+  totalRoom: `${Math.floor(Math.random() * 100) + 1}`, // Total Room dalam format angka
+  roomType: Math.random() > 0.5 ? "Deluxe" : "Standard", // Room Type berupa Deluxe atau Standard
+  facility: ["WiFi", "Pool", "Gym", "Pool", "Gym", "Pool", "Gym"], // Fasilitas di sini dalam bentuk array
   imageUrl: "/images/illustration/hawaii.jpg", // URL dummy untuk semua gambar
 }));
 
@@ -40,43 +42,67 @@ const handleMenuClick = (e: any) => {
 
 const columns = [
   {
-    title: "Destination Name",
-    dataIndex: "destinationName",
-    key: "destinationName",
+    title: "Hotel Name",
+    dataIndex: "hotelName",
+    key: "hotelName",
     render: (text: string, record: DataType) => (
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 justify-center"> {/* Menambahkan justify-center */}
         <Image
           src={record.imageUrl}
-          alt="Destination Image"
-          width={60} // Lebar gambar 50px
-          height={75} // Tinggi gambar 75px untuk membuatnya portrait
-          className="object-cover rounded-xl" // Menjaga rasio gambar agar sesuai dengan ukuran portrait
+          alt="Hotel Image"
+          width={60}
+          height={75}
+          className="object-cover rounded-xl"
         />
         <span>{text}</span>
       </div>
     ),
   },
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
     title: "Rating",
     dataIndex: "rating",
     key: "rating",
+    className: "text-center", // Menambahkan text-center
   },
   {
-    title: "Price",
-    dataIndex: "price",
-    key: "price",
+    title: "Address",
+    dataIndex: "address",
+    key: "address",
+    className: "text-center", // Menambahkan text-center
+    render: (text: string) => (
+      <div className="w-[240px] whitespace-normal text-center">{text}</div> // Menambahkan text-center pada div juga
+    ),
   },
   {
-    title: "Max Capacity/Book",
-    dataIndex: "max",
-    key: "max",
+    title: "Total Room",
+    dataIndex: "totalRoom",
+    key: "totalRoom",
+    className: "text-center", // Menambahkan text-center
   },
-
+  {
+    title: "Room Type",
+    dataIndex: "roomType",
+    key: "roomType",
+    className: "text-center", // Menambahkan text-center
+  },
+  {
+    title: "Facility",
+    dataIndex: "facility",
+    key: "facility",
+    className: "text-center", // Menambahkan text-center
+    render: (facilityList: string[]) => (
+      <div className="flex gap-2 flex-wrap justify-center"> {/* Menambahkan justify-center */}
+        {facilityList.map((facility, index) => (
+          <div
+            key={index}
+            className="bg-[#cabff4] text-[#4F28D9] py-1 px-2 rounded-xl"
+          >
+            {facility}
+          </div>
+        ))}
+      </div>
+    ),
+  },
   {
     title: "",
     key: "actions",
@@ -100,7 +126,8 @@ const columns = [
   },
 ];
 
-const DestinationList: React.FC = () => {
+
+const HotelList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
@@ -108,7 +135,7 @@ const DestinationList: React.FC = () => {
   // Filtered data based on the search value
   const filteredData = dataSource.filter(
     (item) =>
-      item.destinationName.toLowerCase().includes(searchValue.toLowerCase()) ||
+      item.hotelName.toLowerCase().includes(searchValue.toLowerCase()) ||
       item.address.toLowerCase().includes(searchValue.toLowerCase()) ||
       item.rating.toLowerCase().includes(searchValue.toLowerCase())
   );
@@ -135,13 +162,13 @@ const DestinationList: React.FC = () => {
         <div
           className={`${mediumMontserrat.className} flex items-center justify-between pb-4`}
         >
-          <h2 className="text-xl font-bold mb-2">Destination Listing</h2>
+          <h2 className="text-xl font-bold mb-2">Hotel Listing</h2>
           <div className="flex gap-4">
             <div>
               <Input
                 className="w-64"
                 prefix={<SearchOutlined />}
-                placeholder="Search destination"
+                placeholder="Search hotel"
                 value={searchValue}
                 onChange={handleSearchChange}
               />
@@ -152,7 +179,7 @@ const DestinationList: React.FC = () => {
               className="border-[#4F28D9] border-solid no-underline border hover:bg-[#4F28D9] transition-all duration-300 hover:text-white text-sm rounded-md py-1 px-16 text-[#4F28D9] text-center font-semibold
            "
             >
-              + Create Destination
+              + Create Hotel
             </Link>
           </div>
         </div>
@@ -183,4 +210,4 @@ const DestinationList: React.FC = () => {
   );
 };
 
-export default DestinationList;
+export default HotelList;
