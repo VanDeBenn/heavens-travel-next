@@ -13,6 +13,10 @@ import SomeHelpfulFacts from "../components/user/someHelpfulFacts";
 import UserList from "#/app/components/admin/userList";
 import UserDetail from "../components/admin/userDetail";
 import DestinationList from "../components/admin/destinationList";
+import DestinationDetail from "../components/admin/destinationDetail";
+import NextStepDestination from "../components/admin/nextStepDestination";
+import ResultDestination from "../components/admin/resultDestination";
+import HotelList from "../components/admin/hotelList";
 
 export default function page() {
   return (
@@ -27,8 +31,16 @@ export default function page() {
 
       {/* <UserList />
       <UserDetail /> */}
+      {/* 
+      <DestinationList /> */}
 
-      <DestinationList />
+      {/* <NextStepDestination /> */}
+
+      {/* <DestinationDetail /> */}
+
+      {/* <ResultDestination /> */}
+
+      <HotelList />
     </div>
   );
 }
