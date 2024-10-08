@@ -1,18 +1,11 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { HashLoader } from 'react-spinners';
+import { HashLoader } from "react-spinners";
 
-interface SpinnerProps {
-  color?: string;
-}
-
-const Spinner: React.FC<SpinnerProps> = ({ color = "#4F28D9" }) => {
+export default function spinner() {
   return (
-    <div className="Spinner justify-center flex items-center h-screen">
-      <HashLoader color={color} />
+    <div className=" justify-center flex items-center h-screen">
+      <HashLoader color="#4F28D9" />
     </div>
   );
-};
-
-export default Spinner;
+}

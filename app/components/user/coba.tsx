@@ -15,13 +15,14 @@ import {
   DatePicker,
   TimePicker,
   Spin,
-  Progress
+  Progress,
+  Steps
 } from "antd";
 
 import { UserOutlined } from "@ant-design/icons";
 import { TIMEOUT } from "dns";
 
-export default function coba() {
+export default function Coba() {
   // const [isLoading, setIsLoading] = useState(false);
 
   // const onBtnClick = (e: any) => {
@@ -113,86 +114,72 @@ export default function coba() {
   // ];
 
   // const [loading, setLoading] = useState(false);
+  const { Step } = Steps;
+  const [current, setCurrent] = useState(0);
+
+  const steps = [
+    {
+      title: 'Step 1',
+      content: 'First Step Content',
+    },
+    {
+      title: 'Step 2',
+      content: 'Second Step Content',
+    },
+    {
+      title: 'Step 3',
+      content: 'Third Step Content',
+    },
+  ];
+
+  const next = () => {
+    setCurrent(current + 1);
+  };
+
+  const prev = () => {
+    setCurrent(current - 1);
+  };
+
+  const finish = () => {
+    message.success('All steps completed!');
+  };
   return (
-    <div className="flex flex-col justify-center p-24">
-      {/* <Progress percent={22} type="line"/>
-      <Progress percent={22} type="circle" status="active"/> */}
-
-      {/* <Spin spinning={loading}></Spin>
-      <Button
-        onClick={() => {
-          setLoading((prevValue) => !prevValue);
-        }}
-      >
-        Tugel
-      </Button>
-      <Spin spinning={loading}>
-        <p>Lorem</p>
-        <p>Lorem 2</p>
-        <p>Lorem 3</p>
-      </Spin> */}
-
-      {/* mengatur jadwal */}
-      {/* <DatePicker />
-      <DatePicker.RangePicker />
-      <TimePicker /> */}
-
-      {/* <Table dataSource={data} columns={columns}></Table> */}
-
-      {/* {ShowAlert && <Alert type="error" message='Error' description="gagalllll" closable />}
-      <Form onFinish={onSelesai}>
-        <Form.Item label="User bau" name="username">
-          <Input placeholder="Username" allowClear required></Input>
-        </Form.Item>
-        <Form.Item label="Password" name="password">
-          <Input.Password placeholder="Password" required></Input.Password>
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" block>
-            Masuk
+<div className="w-full p-8">
+      <Steps current={current}>
+        {steps.map((item) => (
+          <Step key={item.title} title={item.title} />
+        ))}
+      </Steps>
+      <div className="my-8 p-4 bg-gray-100 rounded shadow">
+        {steps[current].content}
+      </div>
+      <div className="flex justify-between">
+        {current > 0 && (
+          <Button onClick={() => prev()} className="bg-gray-200">
+            Previous
           </Button>
-        </Form.Item>
-      </Form> */}
-
-      {/* <p>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptates
-        itaque repudiandae iusto.
-      </p> */}
-
-      {/* <Select
-        mode="multiple"
-        placeholder="Select Bool"
-        style={{ width: "605" }}
-        maxTagCount={2}
-        allowClear
-      >
-        {Prot.map((Prots, index) => {
-          return (
-            <Select.Option key={index} value={Prots}>
-              {Prots}
-            </Select.Option>
-          );
-        })}
-      </Select> */}
-
-      {/* <Input.Search
-        placeholder="Nama bool"
-        maxLength={7}
-        prefix={<UserOutlined />}
-        allowClear
-        
-      ></Input.Search> */}
-
-      {/* <Button
-        type="primary"
-        block
-        onClick={onBtnClick}
-        loading={isLoading}
-        className="bg-[#01e4b3]"
-        icon={<UserOutlined />}
-      >
-        Silit Button
-      </Button> */}
+        )}
+        {current < steps.length - 1 && (
+          <Button
+            type="primary"
+            onClick={() => next()}
+            className="bg-blue-500 hover:bg-blue-600"
+          >
+            Next Step
+          </Button>
+        )}
+        {current === steps.length - 1 && (
+          <Button
+            type="primary"
+            onClick={finish}
+            className="bg-green-500 hover:bg-green-600"
+          >
+            Done
+          </Button>
+        )}
+      </div>
     </div>
+
+ 
   );
 }

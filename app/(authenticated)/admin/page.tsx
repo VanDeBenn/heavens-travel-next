@@ -6,7 +6,12 @@ import ProfileLayout from "../layout";
 import Sidebar from "#/app/components/admin/sidebar";
 
 const Page = () => {
-  return <InformationAdmin id={""} data={undefined} />;
+  return (
+    <div className="flex flex-col gap-5">
+      <InformationAdmin id={""} data={undefined} />
+      <ChangePasswordAdmin id={""} data={undefined} />
+    </div>
+  );
 };
 
 export default Page;
