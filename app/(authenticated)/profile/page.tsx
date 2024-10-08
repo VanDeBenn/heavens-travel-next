@@ -45,9 +45,13 @@ export default function Page({ id, data, role }: PageProps) {
       } else {
         setUserId(idCookie);
       }
+      if (res && res.status === 401) {
+        TokenUtil.clearAccessToken();
+        localStorage.removeItem("access_token");
+        TokenUtil.persistToken();
+      }
     } catch (error) {
       console.error("Error fetching profile:", error);
-      setUserId(idCookie);
     }
   };
 

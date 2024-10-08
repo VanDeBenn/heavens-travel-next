@@ -9,50 +9,57 @@ import {
   RiCheckboxFill,
   RiCheckboxBlankLine,
 } from "react-icons/ri";
-
 import Image from "next/image";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import { Modal } from "antd";
 import { usersRepository } from "#/repository/users";
 import { cartRepository } from "#/repository/carts";
+import { bookingRepository } from "#/repository/bookings";
 
 const formatCurrency = (amount: number) =>
   `Rp${amount.toLocaleString("id-ID").replace(",", ".")}`;
 
-// Mengimpor font Montserrat dari Google Fonts
-const largeMontserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["600"],
-});
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
-const smallMontserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["400"],
-});
 
 export default function MyCart() {
-  const [bookingItems, setBookingItems] = useState<any[]>([]);
-  const [selectedItems, setSelectedItems] = useState<boolean[]>([]);
   const [dataCart, setDataCart] = useState<any[]>([]);
-  const [cartId, setCartId] = useState<string>("");
+  const [selectedItems, setSelectedItems] = useState<boolean[]>([]);
+  const [selectedItemsId, setSelectedItemsId] = useState<string[]>([]);
 
   const fetchCart = async () => {
     const id: any = localStorage.getItem("_id");
     try {
       const res = await usersRepository.api.getUser(id);
       setDataCart(res.body.data.carts);
+      setSelectedItems(new Array(res.body.data.carts.length).fill(false));
     } catch (error) {
       console.error(error);
     }
   };
 
+  const getTotalPrice = () => {
+    return dataCart.reduce((total, item, index) => {
+      if (selectedItems[index]) {
+        const priceForAdults = item.quantityAdult * item.destination.priceAdult;
+        const priceForChildren =
+          item.quantityChildren * item.destination.priceChildren;
+        total += priceForAdults + priceForChildren;
+      }
+      return total;
+    }, 0);
+  };
+
   useEffect(() => {
     fetchCart();
   }, []);
+
+  if (!dataCart.length) {
+    return <div>Loading...</div>;
+  }
 
   const hanndleDelete = async (id: string) => {
     try {
@@ -64,52 +71,34 @@ export default function MyCart() {
     }
   };
 
-  // const handleDelete = (indexToDelete: number) => {
-  //   Modal.confirm({
-  //     title: "Are you sure?",
-  //     content: "Do you want to remove this item from your cart?",
-  //     onOk: () => {
-  //       const updatedItems = bookingItems.filter(
-  //         (_, index) => index !== indexToDelete
-  //       );
-  //       const updatedSelected = selectedItems.filter(
-  //         (_, index) => index !== indexToDelete
-  //       );
-  //       setBookingItems(updatedItems);
-  //       setSelectedItems(updatedSelected);
-  //     },
-  //   });
-  // };
-
-  const handleCheckboxChange = (index: number) => {
+  const handleCheckboxChange = (index: number, id: string) => {
     const updatedSelectedItems = [...selectedItems];
+    const updatedSelectedItemsId = [...selectedItemsId];
+
     updatedSelectedItems[index] = !updatedSelectedItems[index];
+
+    if (updatedSelectedItems[index]) {
+      updatedSelectedItemsId.push(id);
+    } else {
+      const idIndex = updatedSelectedItemsId.indexOf(id);
+      if (idIndex > -1) {
+        updatedSelectedItemsId.splice(idIndex, 1);
+      }
+    }
+
     setSelectedItems(updatedSelectedItems);
+    setSelectedItemsId(updatedSelectedItemsId);
   };
 
-  // const getTotalPrice = () => {
-  //   return bookingItems.reduce((total, item, index) => {
-  //     if (selectedItems[index]) {
-  //       if (item.category === "Hotel" && item.HotelPricePerAdult) {
-  //         const guests = Number(item.guests.match(/\d+/)?.[0]) || 1;
-  //         total += item.HotelPricePerAdult * guests;
-  //       } else if (item.category === "Destination") {
-  //         const adultsCount =
-  //           Number(item.guests.match(/(\d+)\s*adult/)?.[1]) || 0;
-  //         const childrenCount =
-  //           Number(item.guests.match(/(\d+)\s*child/)?.[1]) || 0;
-
-  //         total += (item.DestinationPriceAdults || 0) * adultsCount;
-  //         total += (item.DestinationPriceChildren || 0) * childrenCount;
-  //       }
-  //     }
-  //     return total;
-  //   }, 0);
-  // };
-
-  if (!dataCart.length) {
-    return <div className="">Loading...</div>;
-  }
+  const handleBook = async (values: any) => {
+    try {
+      const data = {
+        destinationId: values.destination,
+        hotelId: values.hotel,
+      };
+      const req = await bookingRepository.api.create(data);
+    } catch (error) {}
+  };
 
   return (
     <div className="w-full">
@@ -129,21 +118,15 @@ export default function MyCart() {
                   id,
                   startDate,
                   endDate,
-                  quantity,
+                  quantityAdult,
+                  quantityChildren,
                 }: any,
                 index: number
               ) => {
                 const isSelected = selectedItems[index];
-
-                // const totalCost =
-                //   roomhotel.HotelPricePerAdult &&
-                //   Number(roomhotel.guests.match(/\d+/)?.[0]) *
-                //     roomhotel.HotelPricePerAdult;
-
-                // const adultsCount =
-                //   Number(destination.guests.match(/(\d+)\s*adult/)?.[1]) || 0;
-                // const childrenCount =
-                //   Number(destination.guests.match(/(\d+)\s*child/)?.[1]) || 0;
+                const totalPrice =
+                  quantityAdult * destination.priceAdult +
+                  quantityChildren * destination.priceChildren;
 
                 return (
                   <div
@@ -171,30 +154,20 @@ export default function MyCart() {
                     </div>
 
                     <div className="flex items-center gap-2 py-3">
-                      <Link href={``}>
-                        <Image
-                          src={
-                            "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
-                            // roomhotel.pathLocation || destination.pathLocation
-                          }
-                          alt={destination.name || roomhotel.name}
-                          width={100}
-                          height={100}
-                          className="rounded-xl w-44"
-                        />
-                      </Link>
+                      <Image
+                        src={
+                          "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                        }
+                        alt={destination.name || roomhotel.name}
+                        width={100}
+                        height={100}
+                        className="rounded-xl w-44"
+                      />
 
                       <div className="flex flex-col gap-1 w-full">
-                        <Link
-                          href={
-                            roomhotel
-                              ? `/hotel/detail/${roomhotel.id}`
-                              : `destinations/detail/${destination.id}`
-                          }
-                          className="font-semibold no-underline"
-                        >
+                        <div className="font-semibold">
                           {destination.name || roomhotel.name}
-                        </Link>
+                        </div>
 
                         <div className="flex items-center gap-1">
                           <RiCalendarLine className="text-lg text-black" />
@@ -206,14 +179,15 @@ export default function MyCart() {
                         <div className="flex gap-1">
                           <RiTeamLine size={16} color="#6b7280" />
                           <span className="text-xs text-gray-500">
-                            Guests: {quantity} Adult
+                            Guests: {quantityAdult} Adult, {quantityChildren}{" "}
+                            Children
                           </span>
                         </div>
 
                         <div className="flex justify-between w-full">
                           <div
                             className="flex gap-1 cursor-pointer"
-                            onClick={() => handleCheckboxChange(index)}
+                            onClick={() => handleCheckboxChange(index, id)}
                           >
                             {isSelected ? (
                               <RiCheckboxFill className="text-[#4F28D9] text-lg" />
@@ -230,32 +204,11 @@ export default function MyCart() {
                           </div>
 
                           <div className="flex items-end gap-1">
-                            {/* {roomhotel.HotelPricePerAdult && (
-                              <span className="text-sm text-gray-500">
-                                {roomhotel.guests.match(/\d+/)?.[0]} x{" "}
-                                {formatCurrency(roomhotel.HotelPricePerAdult)}
-                              </span>
-                            )} */}
-                            {/* {destination.DestinationPriceAdults &&
-                              adultsCount > 0 && (
-                                <>
-                                  <span className="text-sm text-gray-500">
-                                    {adultsCount} x{" "}
-                                    {formatCurrency(
-                                      destination.DestinationPriceAdults
-                                    )}
-                                  </span>
-                                  {childrenCount > 0 && (
-                                    <span className="text-sm text-gray-500">
-                                      {" - "}
-                                      {childrenCount} x{" "}
-                                      {formatCurrency(
-                                        destination.DestinationPriceChildren
-                                      )}
-                                    </span>
-                                  )}
-                                </>
-                              )} */}
+                            {quantityAdult} x Rp
+                            {destination.priceAdult ||
+                              roomhotel.priceAdult} - {quantityChildren} x Rp
+                            {destination.priceChildren ||
+                              roomhotel.priceChildren}
                           </div>
                         </div>
                       </div>
@@ -272,14 +225,7 @@ export default function MyCart() {
                             isSelected ? "text-[#DC143C]" : "text-gray-400"
                           }`}
                         >
-                          {/* {roomhotel
-                            ? formatCurrency(totalCost)
-                            : formatCurrency(
-                                adultsCount *
-                                  destination.DestinationPriceAdults +
-                                  childrenCount *
-                                    destination.DestinationPriceChildren
-                              )} */}
+                          {formatCurrency(totalPrice)}
                         </span>
                       </div>
                     </div>
@@ -290,7 +236,7 @@ export default function MyCart() {
           </div>
         </div>
 
-        <div className="w-1/3 bg-white rounded-xl h-48 sticky top-4">
+        <div className="w-1/3 bg-white rounded-xl h-full sticky top-4">
           <div className={`${mediumMontserrat.className} py-6 px-9`}>
             <span className="text-lg font-semibold">Price Details</span>
           </div>
@@ -299,9 +245,15 @@ export default function MyCart() {
           <div className="flex justify-between items-center py-6 px-9">
             <span className="text-gray-500">Total</span>
             <span className="font-semibold text-lg text-gray-900">
-              {/* {formatCurrency(getTotalPrice())} */}
+              {formatCurrency(getTotalPrice())}
             </span>
           </div>
+
+          <Link href={"/booking"}>
+            <div className="bg-[#4F28D9] text-center text-white text-sm rounded-xl cursor-pointer py-3 px-9 mx-9 mb-3">
+              <span>Booking Now</span>
+            </div>
+          </Link>
         </div>
       </div>
     </div>

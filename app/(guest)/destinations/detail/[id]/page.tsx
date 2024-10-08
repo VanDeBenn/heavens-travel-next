@@ -70,7 +70,8 @@ export default function Page({ params }: { params: { id: string } }) {
       const data = {
         userId: localStorage.getItem("_id"),
         destinationId: destinationId,
-        quantity: values.quantity || 2,
+        quantityAdult: count.adult,
+        quantityChildren: count.children,
         startDate: startDate,
         endDate: endDate,
       };
@@ -83,6 +84,9 @@ export default function Page({ params }: { params: { id: string } }) {
   useEffect(() => {
     fetchDestinations();
   }, []);
+
+  console.log(startDate);
+  console.log(endDate);
 
   return (
     <div>

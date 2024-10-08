@@ -172,10 +172,10 @@ const NextStep: React.FC = () => {
                       Penida iceland
                     </span>
                     <span className="text-sm">(Bali, indonesian)</span>
-                    </div>
-                    <div
-                      className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
-                    >
+                  </div>
+                  <div
+                    className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
+                  >
                     <RiCalendarLine className="text-lg text-black" />
                     <span className="text-xs text-black">26 Nov, 2024</span>
                   </div>
