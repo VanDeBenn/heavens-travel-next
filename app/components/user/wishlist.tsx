@@ -12,7 +12,7 @@ import { wishlistRepository } from "#/repository/wishlists";
 import Loading from "#/app/loading";
 
 interface ComponentsProps {
-  data: any[];
+  data: any;
 }
 
 export default function Wishlist({ data }: ComponentsProps) {
@@ -45,19 +45,41 @@ export default function Wishlist({ data }: ComponentsProps) {
     }
   };
 
-  if (!wishlistData.length) {
+  if (!wishlistData) {
     return <Loading />;
   }
 
+  console.log("data:", wishlistData);
+  const destination = data.destination;
+  console.log("desti:", destination);
+  const hotel = data.hotel;
+  console.log("hotel", hotel);
+  const combined = [...(destination || []), ...(hotel || [])];
+  console.log("comb:", combined);
+  // console.log(combined.map(({ item, index }: any) => {
+  //   return (
+  //     <div className="" key={index}>
+  //       {item.name}
+  //     </div>
+  //   )
+  // }));
   return (
     <div className="bg-white rounded-xl">
       <p className="text-xl font-semibold my-6 mx-9">Wishlist</p>
       <div className="h-px bg-gray-300"></div>
 
       <div className="px-8 py-6 grid grid-cols-2 gap-6">
-        {wishlistData.map(({ hotel, destination, id }: any) => (
+        {/* {combined.map((item) => (
+          <div className="" key={item.id}>
+            {item.name}
+          </div>
+        ))} */}
+        {combined.map((item: any) => (
+          // <div key={id} className="">
+          //   {hotel.name}
+          // </div>
           <div
-            key={id}
+            key={item.id}
             className="p-3 border border-solid border-[#DBDBDB] rounded-xl"
           >
             <div className="flex justify-between items-center">
@@ -75,7 +97,7 @@ export default function Wishlist({ data }: ComponentsProps) {
                 <RiBookmarkFill
                   size={25}
                   color="#4F28D9"
-                  onClick={() => showConfirmModal(id)}
+                  onClick={() => showConfirmModal(item.id)}
                   style={{ cursor: "pointer" }}
                 />
               </div>
@@ -85,8 +107,8 @@ export default function Wishlist({ data }: ComponentsProps) {
               <Link
                 href={
                   destination
-                    ? `destinations/detail/${id}`
-                    : `hotel/detail/${id}`
+                    ? `destinations/detail/${item.id}`
+                    : `hotel/detail/${item.id}`
                 }
               >
                 <Image
@@ -102,16 +124,16 @@ export default function Wishlist({ data }: ComponentsProps) {
                   <Link
                     href={
                       destination
-                        ? `destinations/detail/${id}`
-                        : `hotel/detail/${id}`
+                        ? `destinations/detail/${item.id}`
+                        : `hotel/detail/${item.id}`
                     }
                     className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
                   >
-                    {destination?.name || hotel?.name}
+                    {item.name}
                   </Link>
                   <Rate
                     disabled
-                    value={destination?.rating || hotel?.rating || 4}
+                    value={item.rating}
                     allowHalf={false}
                     style={{ fontSize: 16, color: "#F59E0B" }}
                   />
@@ -119,12 +141,12 @@ export default function Wishlist({ data }: ComponentsProps) {
                 <div className="flex items-center gap-1">
                   <RiMapPinLine size={16} color="#6b7280 " />
                   <span className="text-xs text-gray-500">
-                    {`${destination?.address || hotel?.address}`}
+                    {`${item.address}`}
                   </span>
                 </div>
 
                 <span className="text-sm text-gray-500">
-                  {`${destination?.description || hotel?.description}`}
+                  {`${item.description}`}
                 </span>
               </div>
             </div>

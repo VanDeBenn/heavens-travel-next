@@ -34,6 +34,7 @@ export default function MyCart() {
     const id: any = localStorage.getItem("_id");
     try {
       const res = await usersRepository.api.getUser(id);
+      console.log(res.body.data.carts);
       setDataCart(res.body.data.carts);
       setSelectedItems(new Array(res.body.data.carts.length).fill(false));
     } catch (error) {

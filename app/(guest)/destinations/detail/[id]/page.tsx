@@ -85,9 +85,6 @@ export default function Page({ params }: { params: { id: string } }) {
     fetchDestinations();
   }, []);
 
-  console.log(startDate);
-  console.log(endDate);
-
   return (
     <div>
       {dataDestinations.map((item) => (
