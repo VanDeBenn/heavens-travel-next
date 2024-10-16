@@ -2,24 +2,25 @@ import { http } from "#/utils/http";
 
 const url = {
   carts: () => "/carts",
-  cart: (id: string) => `/carts/${id}`,
+  addDestination: (id: string) => `/carts/${id}/destination`,
+  removeDestination: (id: string, dest: string) => `/carts/${id}/${dest}`,
 };
 
 const api = {
   create(data: any) {
     return http.post(url.carts()).send(data);
   },
-  getCarts() {
-    return http.fetcher(url.carts());
+  addDestination(id: string, data: any) {
+    return http.post(url.addDestination(id)).send(data);
   },
-  getCart(id: string) {
-    return http.fetcher(url.cart(id));
+  removeDestination(id: string, dest: string, data: any) {
+    return http.del(url.removeDestination(id, dest)).send(data);
   },
-  updateCart(id: string, data: any) {
-    return http.put(url.cart(id)).send(data);
+  addHotel(id: string, data: any) {
+    return http.post(url.addDestination(id)).send(data);
   },
-  deleteCart(id: string) {
-    return http.del(url.cart(id));
+  removeHotel(id: string, dest: string, data: any) {
+    return http.del(url.removeDestination(id, dest)).send(data);
   },
 };
 

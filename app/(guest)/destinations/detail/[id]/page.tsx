@@ -57,25 +57,28 @@ export default function Page({ params }: { params: { id: string } }) {
     try {
       const data = {
         userId: localStorage.getItem("_id"),
+        wishlistId: localStorage.getItem("_wishlists"),
         destinationId: destinationId,
       };
-      await wishlistRepository.api.create(data);
+      await wishlistRepository.api.addDestination(params.id, data);
     } catch (error) {
       console.error("Failed to add to wishlist", error);
     }
   };
 
+  const cartId = localStorage.getItem("_carts");
   const handleCart = async (values: any) => {
     try {
       const data = {
         userId: localStorage.getItem("_id"),
         destinationId: destinationId,
-        quantityAdult: count.adult,
-        quantityChildren: count.children,
-        startDate: startDate,
-        endDate: endDate,
+        // quantityAdult: count.adult,
+        // quantityChildren: count.children,
+        // startDate: startDate,
+        // endDate: endDate,
+        carts: cartId,
       };
-      await cartRepository.api.create(data);
+      await cartRepository.api.addDestination(cartId || "", data);
     } catch (error) {
       console.error("Failed to add to cart", error);
     }

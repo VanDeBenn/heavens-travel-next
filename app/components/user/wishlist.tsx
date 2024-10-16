@@ -33,11 +33,21 @@ export default function Wishlist({ data }: ComponentsProps) {
 
   const handleRemove = async () => {
     try {
-      await wishlistRepository.api.deleteWishlist(removeItemId);
-
-      setWishlistData((prevData) =>
-        prevData.filter((item) => item.id !== removeItemId)
+      // await wishlistRepository.api.deleteWishlist(removeItemId);
+      const data = {
+        userId: localStorage.getItem("_id"),
+        wishlistId: localStorage.getItem("_wishlists"),
+        destinationId: removeItemId,
+      };
+      await wishlistRepository.api.removeDestination(
+        localStorage.getItem("_wishlists") || "",
+        removeItemId,
+        data
       );
+
+      // setWishlistData((prevData) =>
+      //   prevData.filter((item) => item.id !== removeItemId)
+      // );
 
       setModalVisible(false);
     } catch (error) {
@@ -49,11 +59,11 @@ export default function Wishlist({ data }: ComponentsProps) {
     return <Loading />;
   }
 
-  console.log("data:", wishlistData);
+  // console.log("data:", wishlistData);
   const destination = data.destination;
-  console.log("desti:", destination);
+  // console.log("desti:", destination);
   const hotel = data.hotel;
-  console.log("hotel", hotel);
+  // console.log("hotel", hotel);
   const combined = [...(destination || []), ...(hotel || [])];
   console.log("comb:", combined);
   // console.log(combined.map(({ item, index }: any) => {

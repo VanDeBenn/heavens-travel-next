@@ -2,17 +2,32 @@
 import { Button, Spin, Steps, message } from "antd";
 import { useState } from "react";
 import { LuShoppingCart } from "react-icons/lu";
-import {
-  RiInformation2Line,
-  RiMapPinLine,
-  RiCameraLine,
-} from "react-icons/ri";
-
+import { RiInformation2Line, RiMapPinLine, RiCameraLine } from "react-icons/ri";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import BasicInfoDestination from "./basicInfoDestination";
 import LocationInfoDestination from "./locationInfoDestination";
 import PhotoDestination from "./photoDestination";
+import { destinationRepository } from "#/repository/destinations";
+
+// Define the types for BasicInfo and LocationInfo
+interface BasicInfo {
+  nameDestination: string;
+  adultPrice: number;
+  childrenPrice: number;
+  description: string;
+  maxCapacity: number;
+  rating: number;
+}
+
+interface LocationInfo {
+  pathLocation: string;
+  district: string;
+  city: string;
+  province: string;
+  country: string;
+  address: string;
+}
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -34,9 +49,84 @@ const NextStepDestination: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
+  // Use state with defined types for basicInfo and locationInfo
+  const [basicInfo, setBasicInfo] = useState<BasicInfo>({
+    nameDestination: "",
+    adultPrice: 0,
+    childrenPrice: 0,
+    description: "",
+    maxCapacity: 0,
+    rating: 0,
+  });
+
+  const [locationInfo, setLocationInfo] = useState<LocationInfo>({
+    pathLocation: "",
+    district: "",
+    city: "",
+    province: "",
+    country: "",
+    address: "",
+  });
+
+  const [photoInfo, setPhotoInfo] = useState([]); // Assuming this holds the photos array
+
+  const next = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setCompletedSteps([...completedSteps, current]); // Add current step to completed steps
+      setCurrent(current + 1);
+      setLoading(false);
+    }, 2000);
+  };
+
+  const prev = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setCompletedSteps(completedSteps.filter((step) => step !== current - 1)); // Remove the reverted step from completed steps
+      setCurrent(current - 1);
+      setLoading(false);
+    }, 1200);
+  };
+
+  const finish = async () => {
+    setLoading(true);
+    try {
+      const finalData = {
+        name: basicInfo.nameDestination,
+        priceAdult: basicInfo.adultPrice,
+        priceChildren: basicInfo.childrenPrice,
+        // district: locationInfo.district,
+        // city: locationInfo.city,
+        // province: locationInfo.province,
+        // country: locationInfo.country,
+        address: locationInfo.address,
+        description: basicInfo.description,
+        maxCapacity: basicInfo.maxCapacity,
+        rating: basicInfo.rating,
+        pathLocation: locationInfo.pathLocation,
+        // photos: photoInfo, // Uncomment if needed to include photos
+      };
+
+      console.log("Final Data:", finalData);
+      await destinationRepository.api.create(finalData);
+      message.success("Destination created successfully!");
+    } catch (error) {
+      console.error("Error while creating destination:", error);
+      message.error("Failed to create destination.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const steps = [
     {
-      content: <BasicInfoDestination />,
+      content: (
+        <BasicInfoDestination
+          setBasicInfo={setBasicInfo}
+          next={next}
+          data={basicInfo}
+        />
+      ),
       icon:
         loading && current === 0 ? (
           <Spin size="small" />
@@ -50,7 +140,13 @@ const NextStepDestination: React.FC = () => {
         ),
     },
     {
-      content: <LocationInfoDestination />,
+      content: (
+        <LocationInfoDestination
+          setLocationInfo={setLocationInfo}
+          next={next}
+          data={locationInfo}
+        />
+      ),
       icon:
         loading && current === 1 ? (
           <Spin size="small" />
@@ -79,28 +175,6 @@ const NextStepDestination: React.FC = () => {
     },
   ];
 
-  const next = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setCompletedSteps([...completedSteps, current]); // Tambahkan langkah saat ini ke daftar langkah yang selesai
-      setCurrent(current + 1);
-      setLoading(false);
-    }, 2000);
-  };
-
-  const prev = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setCompletedSteps(completedSteps.filter((step) => step !== current - 1)); // Hapus langkah yang dikembalikan dari daftar yang selesai
-      setCurrent(current - 1);
-      setLoading(false);
-    }, 1200);
-  };
-
-  const finish = () => {
-    message.success("All steps completed!");
-  };
-
   return (
     <div className="w-full">
       <div className="w-full ">
@@ -114,7 +188,7 @@ const NextStepDestination: React.FC = () => {
 
         <div className="w-full flex flex-col gap-5 pt-5">
           <div className="w-full">
-            {/* Tampilkan konten langkah tanpa loading */}
+            {/* Display step content */}
             <div>{steps[current].content}</div>
           </div>
 
@@ -130,7 +204,7 @@ const NextStepDestination: React.FC = () => {
                     Previous
                   </Button>
                 )}
-                {current < steps.length - 1 && (
+                {current < steps.length - 1 && current !== 0 && (
                   <div
                     onClick={next}
                     className="w-full bg-[#4F28D9] text-center py-2 text-white text-sm rounded-xl cursor-pointer"
@@ -141,15 +215,14 @@ const NextStepDestination: React.FC = () => {
               </div>
               <div>
                 {current === steps.length - 1 && (
-                  <Link href="/admin/destinations/create/result">
-                    <Button
-                      type="primary"
-                      className="w-full rounded-xl"
-                      disabled={loading}
-                    >
-                      Done
-                    </Button>
-                  </Link>
+                  <Button
+                    type="primary"
+                    className="w-full rounded-xl"
+                    disabled={loading}
+                    onClick={finish}
+                  >
+                    Done
+                  </Button>
                 )}
               </div>
             </div>

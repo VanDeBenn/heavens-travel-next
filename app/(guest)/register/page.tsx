@@ -41,7 +41,7 @@ const Register = () => {
         phoneNumber: values.phoneNumber,
         password: values.password,
         confirmPassword: values.confirmPassword,
-        roleId: "484c20e8-5dcf-4345-9bc9-896a6abc2a55",
+        roleId: "32a5bee8-e7a7-4631-9f6e-f394b519ae86",
       };
       const { confirmPassword, ...data } = dataRegister;
 
