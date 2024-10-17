@@ -1,10 +1,10 @@
-import DestinationDetail from "#/app/components/admin/destinationDetail";
+"use client";
+import Loading from "#/app/loading";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function page() {
-  return (
-    <div>
-      <DestinationDetail />
-    </div>
-  );
+  const router = useRouter();
+  router.push("/admin/destinations");
+  return <Loading />;
 }

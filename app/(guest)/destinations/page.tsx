@@ -21,7 +21,7 @@ export default function page() {
 
   const fetchDestinatios = async () => {
     try {
-      const res = await destinationRepository.api.getDestinations();
+      const res: any = await destinationRepository.api.getDestinations();
       setDataDestinations(res.data);
     } catch (error) {}
   };

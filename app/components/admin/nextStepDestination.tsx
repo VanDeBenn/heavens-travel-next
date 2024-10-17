@@ -9,6 +9,7 @@ import BasicInfoDestination from "./basicInfoDestination";
 import LocationInfoDestination from "./locationInfoDestination";
 import PhotoDestination from "./photoDestination";
 import { destinationRepository } from "#/repository/destinations";
+import { useRouter } from "next/navigation";
 
 // Define the types for BasicInfo and LocationInfo
 interface BasicInfo {
@@ -45,6 +46,7 @@ const smallMontserrat = Montserrat({
 const { Step } = Steps;
 
 const NextStepDestination: React.FC = () => {
+  const router = useRouter();
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
@@ -108,7 +110,13 @@ const NextStepDestination: React.FC = () => {
       };
 
       console.log("Final Data:", finalData);
-      await destinationRepository.api.create(finalData);
+      const res = await destinationRepository.api.create(finalData);
+      const idDestination = res.body.data.id;
+      if (idDestination) {
+        localStorage.setItem("_destination", idDestination);
+        router.push("/admin/destinations/create/result");
+      }
+      console.log("return:", res.body.data.id);
       message.success("Destination created successfully!");
     } catch (error) {
       console.error("Error while creating destination:", error);

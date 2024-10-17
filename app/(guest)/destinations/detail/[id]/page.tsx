@@ -18,7 +18,9 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const fetchDestinations = async () => {
     try {
-      const res = await destinationRepository.api.getDestination(params.id);
+      const res: any = await destinationRepository.api.getDestination(
+        params.id
+      );
       setDataDestinations([res.data]);
       setDestinationId(res.data.id);
     } catch (error) {

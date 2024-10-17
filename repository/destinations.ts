@@ -10,10 +10,10 @@ const api = {
     return http.post(url.destinations()).send(data);
   },
   getDestinations() {
-    return http.fetcher(url.destinations());
+    return http.get(url.destinations());
   },
   getDestination(id: string) {
-    return http.fetcher(url.destination(id));
+    return http.get(url.destination(id));
   },
   updateDestination(id: string, data: any) {
     return http.put(url.destination(id)).send(data);

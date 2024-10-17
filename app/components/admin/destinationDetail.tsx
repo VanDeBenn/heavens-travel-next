@@ -9,7 +9,57 @@ import {
 } from "#/app/components/user/myBooking";
 import Link from "next/link";
 
-const destinationDetail: React.FC = () => {
+interface ComponentsProps {
+  destinationData: any;
+}
+
+export default function destinationDetail({
+  destinationData,
+}: ComponentsProps) {
+  const guestDetails = [
+    { label: "Name Destination", value: destinationData.name },
+    { label: "Rating", value: destinationData.rating },
+    { label: "Description", value: destinationData.description },
+    { label: "Adult Price", value: `Rp${destinationData.priceAdult}` },
+    { label: "Children Price", value: `Rp${destinationData.priceChildren}` },
+  ];
+
+  const guestDetails2 = [
+    { label: "Address", value: destinationData.address },
+    { label: "Path Location", value: destinationData.pathLocation },
+    {
+      label: "District",
+      value: destinationData.disrict,
+    },
+    {
+      label: "City",
+      value: destinationData.city,
+    },
+    {
+      label: "Province",
+      value: destinationData.province,
+    },
+    {
+      label: "Country",
+      value: destinationData.country,
+    },
+  ];
+
+  const guestDetails3 = [
+    {
+      value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+    },
+  ];
+
   return (
     <div>
       <div className={`${mediumMontserrat.className} py-6 px-7`}>
@@ -65,16 +115,10 @@ const destinationDetail: React.FC = () => {
                     <span className="font-semibold">:</span>
                   </div>
                   {detail.label === "Path Location" ? (
-                    <div className="w-full">
-                      {/* Menggunakan next/image untuk gambar dengan ukuran w-full h-32 */}
-                      <Image
-                        src={detail.value}
-                        alt="Location Map"
-                        width={400} // Lebar asli gambar
-                        height={128} // Sesuaikan tinggi
-                        className="w-full h-48 object-cover rounded-lg"
-                      />
-                    </div>
+                    <div
+                      className="w-full"
+                      dangerouslySetInnerHTML={{ __html: detail.value }}
+                    />
                   ) : (
                     <div className={`text-base text-black ${mediumMontserrat}`}>
                       {detail.value}
@@ -125,70 +169,68 @@ const destinationDetail: React.FC = () => {
       </div>{" "}
     </div>
   );
-};
+}
 
-export default destinationDetail;
+// const guestDetails = [
+//   {
+//     label: "Name Destination",
+//     value: "Nusa Penuda iceland",
+//   },
+//   {
+//     label: "Rating",
+//     value: "4",
+//   },
+//   {
+//     label: "Description",
+//     value: "Nusa Penuda iceland the best in indonesian",
+//   },
+//   {
+//     label: "Adult Price",
+//     value: "Rp233.000",
+//   },
+//   {
+//     label: "Children Price",
+//     value: "Rp100.000",
+//   },
+// ];
 
-const guestDetails = [
-  {
-    label: "Name Destination",
-    value: "Nusa Penuda iceland",
-  },
-  {
-    label: "Rating",
-    value: "4",
-  },
-  {
-    label: "Description",
-    value: "Nusa Penuda iceland the best in indonesian",
-  },
-  {
-    label: "Adult Price",
-    value: "Rp233.000",
-  },
-  {
-    label: "Children Price",
-    value: "Rp100.000",
-  },
-];
-
-const guestDetails2 = [
-  {
-    label: "Address",
-    value: "Jl. Caman Raya No.23, RT.013/RW.008, Jatibening Baru",
-  },
-  {
-    label: "Path Location",
-    value: "/images/illustration/property-map-entry.png", // Path gambar
-  },
-  {
-    label: "District",
-    value: "Jatobenong Bawru",
-  },
-  {
-    label: "City",
-    value: "Bekasi",
-  },
-  {
-    label: "Province",
-    value: "West Java",
-  },
-  {
-    label: "Country",
-    value: "Indonesia",
-  },
-];
-const guestDetails3 = [
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
-  },
-];
+// const guestDetails2 = [
+//   {
+//     label: "Address",
+//     value: "Jl. Caman Raya No.23, RT.013/RW.008, Jatibening Baru",
+//   },
+//   {
+//     label: "Path Location",
+//     value: "/images/illustration/property-map-entry.png", // Path gambar
+//   },
+//   {
+//     label: "District",
+//     value: "Jatobenong Bawru",
+//   },
+//   {
+//     label: "City",
+//     value: "Bekasi",
+//   },
+//   {
+//     label: "Province",
+//     value: "West Java",
+//   },
+//   {
+//     label: "Country",
+//     value: "Indonesia",
+//   },
+// ];
+// const guestDetails3 = [
+//   {
+//     value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+//   },
+//   {
+//     value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+//   },
+//   {
+//     value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+//   },
+//   {
+//     value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+//   },
+// ];
