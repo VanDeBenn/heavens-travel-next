@@ -1,13 +1,32 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import ChangePasswordAdmin from "#/app/components/admin/changePasswordAdmin";
 import InformationAdmin from "#/app/components/admin/informationAdmin";
 import ProfileLayout from "../layout";
 import UserList from "#/app/components/admin/userList";
+import { usersRepository } from "#/repository/users";
 
-const UserPage = () => {
+interface PageProps {
+  data: any;
+}
+
+const UserPage = ({ data }: PageProps) => {
+  const [allUserData, setAllUserData] = useState<any[]>([]);
+
+  const fetchAllUser = async () => {
+    try {
+      const res = await usersRepository.api.getAllUsers();
+      setAllUserData(res.body.data);
+    } catch (error) {}
+  };
+  console.log(allUserData);
+
+  useEffect(() => {
+    fetchAllUser();
+  }, []);
   return (
     <div className="flex flex-col gap-5">
-      <UserList />
+      <UserList data={allUserData} />
     </div>
   );
 };

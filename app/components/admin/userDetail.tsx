@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-
 import {
   largeMontserrat,
   mediumMontserrat,
@@ -8,10 +7,59 @@ import {
 } from "#/app/components/user/myBooking";
 import Link from "next/link";
 
-const UserDetail: React.FC = () => {
+interface ComponentsProps {
+  userData: any;
+}
+
+export default function UserDetail({ userData }: ComponentsProps) {
+  const guestDetails = [
+    {
+      label: "Full Name",
+      value: userData.fullName || "N/A",
+    },
+    {
+      label: "Email",
+      value: userData.email || "N/A",
+    },
+    {
+      label: "Phone Number",
+      value: userData.phoneNumber || "N/A",
+    },
+    {
+      label: "Gender",
+      value: userData.gender || "N/A",
+    },
+    {
+      label: "Birthdate",
+      value: userData.birthDate
+        ? new Date(userData.birthDate).toLocaleDateString()
+        : "N/A",
+    },
+    {
+      label: "District",
+      value: userData.district || "N/A",
+    },
+    {
+      label: "City",
+      value: userData.city || "N/A",
+    },
+    {
+      label: "Province",
+      value: userData.province || "N/A",
+    },
+    {
+      label: "Country",
+      value: userData.country || "N/A",
+    },
+    {
+      label: "Role",
+      value: userData.role?.name || "N/A",
+    },
+  ];
+
   return (
     <div className="bg-white rounded-xl shadow-md p-7">
-      <div className={` `}>
+      <div>
         <div className={`${mediumMontserrat.className} pb-6`}>
           <span className="text-lg font-semibold">User Detail</span>
         </div>
@@ -50,45 +98,4 @@ const UserDetail: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default UserDetail;
-
-const guestDetails = [
-  {
-    label: "Full Name",
-    value: "Disoue Oie",
-  },
-  {
-    label: "Email",
-    value: "DisoueOie@asolole.com",
-  },
-  {
-    label: "Phone Number",
-    value: "08123456789",
-  },
-  {
-    label: "Gender",
-    value: "Laki-Laki",
-  },
-  {
-    label: "Birthdate",
-    value: "26-05-2024",
-  },
-  {
-    label: "District",
-    value: "Tambun",
-  },
-  {
-    label: "City",
-    value: "Bekasi",
-  },
-  {
-    label: "Province",
-    value: "West Java",
-  },
-  {
-    label: "Country",
-    value: "Indonesia",
-  },
-];
+}

@@ -33,8 +33,8 @@ const hooks = {
 };
 
 const api = {
-  getAllUsers(data: any) {
-    return http.post(url.users()).send(data);
+  getAllUsers() {
+    return http.get(url.users());
   },
   getUser(id: string) {
     return http.get(url.userId(id));

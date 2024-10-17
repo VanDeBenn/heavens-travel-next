@@ -1,9 +1,11 @@
+"use client";
 import React from "react";
 import UserDetail from "#/app/components/admin/userDetail";
+import Loading from "#/app/loading";
+import { useRouter } from "next/navigation";
+
 export default function page() {
-  return (
-    <div className="bg-[#F8F8FF] flex flex-col gap-4">
-      <UserDetail />
-    </div>
-  );
+  const router = useRouter();
+  router.push("/admin/users");
+  return <Loading />;
 }

@@ -11,33 +11,19 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 
-interface DataType {
-  key: string;
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  gender: string;
-  birthdate: string;
-  country: string;
-  joined: string;
-  blockDate?: string;
+interface ComponentsProps {
+  data: {
+    id: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    gender: string;
+    birthDate: string | null;
+    role: { name: string };
+    createdAt: string;
+    updatedAt: string;
+  }[];
 }
-
-// Example data coy
-const dataSource: DataType[] = Array.from({ length: 20 }, (_, index) => ({
-  key: `${index + 1}`,
-  fullName: `User ${index + 1}`,
-  email: `user${index + 1}@example.com`,
-  phoneNumber: `+1 123 456 ${String(index + 1).padStart(3, "0")}`,
-  gender: index % 2 === 0 ? "Male" : "Female",
-  birthdate: `199${index % 10}-01-01`,
-  country: index % 2 === 0 ? "USA" : "UK",
-  joined: `202${index % 10}-05-15`,
-  blockDate:
-    index % 2 === 0
-      ? `2024-07-${String(index + 1).padStart(2, "0")}`
-      : undefined,
-}));
 
 const handleMenuClick = (e: any) => {
   console.log("Menu item clicked:", e);
@@ -65,35 +51,32 @@ const columns = [
     key: "gender",
   },
   {
-    title: "Birthdate",
-    dataIndex: "birthdate",
-    key: "birthdate",
+    title: "Birth Date",
+    dataIndex: "birthDate",
+    key: "birthDate",
+    render: (birthDate: string | null) => (birthDate ? birthDate : "N/A"),
   },
   {
-    title: "Country",
-    dataIndex: "country",
-    key: "country",
+    title: "Role",
+    dataIndex: "role",
+    key: "role",
+    render: (role: { name: string }) => role.name,
   },
   {
     title: "Joined",
-    dataIndex: "joined",
-    key: "joined",
-  },
-  {
-    title: "Block Date",
-    dataIndex: "blockDate",
-    key: "blockDate",
-    render: (blockDate: string) => (blockDate ? blockDate : "N/A"),
+    dataIndex: "createdAt",
+    key: "createdAt",
+    render: (createdAt: string) => new Date(createdAt).toLocaleDateString(),
   },
   {
     title: "",
     key: "actions",
-    render: () => (
+    render: (record: { id: string }) => (
       <Dropdown
         overlay={
           <Menu onClick={handleMenuClick}>
             <Menu.Item key="1" icon={<InfoCircleOutlined />}>
-              <Link href="/admin/users/detail">Detail User</Link>
+              <Link href={`/admin/users/detail/${record.id}`}>Detail User</Link>
             </Menu.Item>
             <Menu.Item key="2" icon={<BlockOutlined />}>
               Block User
@@ -111,18 +94,17 @@ const columns = [
   },
 ];
 
-const UserList: React.FC = () => {
+export default function UserList({ data }: ComponentsProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
 
   // Filtered data based on the search value
-  const filteredData = dataSource.filter(
+  const filteredData = data.filter(
     (item) =>
       item.fullName.toLowerCase().includes(searchValue.toLowerCase()) ||
       item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
-      item.phoneNumber.toLowerCase().includes(searchValue.toLowerCase()) ||
-      item.country.toLowerCase().includes(searchValue.toLowerCase())
+      item.phoneNumber.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   const handlePageChange = (page: number) => {
@@ -179,6 +161,4 @@ const UserList: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default UserList;
+}
