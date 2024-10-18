@@ -5,7 +5,7 @@ import Header from "#/app/components/user/header";
 import HeavensCare from "#/app/components/user/heavensCare";
 function page() {
   return (
-    <main className="bg-[#F8F8FF]">
+    <main className="bg-Lilac-50">
       <div>
         <Header />
       </div>

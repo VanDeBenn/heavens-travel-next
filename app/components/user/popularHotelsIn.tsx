@@ -34,7 +34,7 @@ const PopularHotelsIn = ({ data, dataCity }: ComponentProps) => {
   return (
     <div className="">
       <div className="flex items-center mb-6">
-        <div className="text-[#4F28D9] text-3xl mr-3">
+        <div className="text-RoyalAmethyst-700 text-3xl mr-3">
           <StarOutlined style={{ fontSize: "27px", color: "#4F28D9" }} />
         </div>
         <span className="text-xl font-semibold">
@@ -90,7 +90,7 @@ const PopularHotelsIn = ({ data, dataCity }: ComponentProps) => {
               </Paragraph>
               {/* Price */}
               <div className="text-right text-base font-medium text-gray-700">
-                Start from <span className="text-[#DC143C]">{hotel.price}</span>
+                Start from <span className="text-InfernoEcho-600">{hotel.price}</span>
               </div>
             </Card>
           </Col>

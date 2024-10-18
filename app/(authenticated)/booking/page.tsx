@@ -5,7 +5,7 @@ import BookingSteps from "#/app/components/user/booking-step";
 
 export default function page() {
   return (
-    <div className="bg-[#F8F8FF]">
+    <div className="bg-Lilac-50">
       <Header />
       <div className=" px-16 2xl:px-48 pb-8 pt-24">
         <NextStep />

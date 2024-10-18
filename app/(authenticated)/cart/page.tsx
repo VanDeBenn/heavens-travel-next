@@ -4,7 +4,7 @@ import MyCart from "#/app/components/user/myCart";
 
 export default function page() {
   return (
-    <main className="bg-[#F8F8FF]">
+    <main className="bg-Lilac-50">
       <Header />
       <div className=" px-28 2xl:px-48 pb-8 pt-24">
         <MyCart />

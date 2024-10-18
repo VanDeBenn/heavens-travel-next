@@ -64,19 +64,19 @@ const AboutNearbyLocations = {
       title: "The property",
       data: [
         {
-          icon: <TbWavesElectricity className="text-lg text-[#4F28D9]" />,
+          icon: <TbWavesElectricity className="text-lg text-RoyalAmethyst-700" />,
           text: "Room voltage: 300",
         },
         {
-          icon: <SiLevelsdotfyi className="text-lg text-[#4F28D9]" />,
+          icon: <SiLevelsdotfyi className="text-lg text-RoyalAmethyst-700" />,
           text: "Number of floors; 2",
         },
         {
-          icon: <SiHomeassistant className="text-lg text-[#4F28D9]" />,
+          icon: <SiHomeassistant className="text-lg text-RoyalAmethyst-700" />,
           text: "Year property opened: 2012",
         },
         {
-          icon: <RiKey2Fill className="text-lg text-[#4F28D9]" />,
+          icon: <RiKey2Fill className="text-lg text-RoyalAmethyst-700" />,
           text: "Number of rooms: 23",
         },
       ],
@@ -86,15 +86,15 @@ const AboutNearbyLocations = {
       title: "Getting around",
       data: [
         {
-          icon: <RiCarFill className="text-lg text-[#4F28D9]" />,
+          icon: <RiCarFill className="text-lg text-RoyalAmethyst-700" />,
           text: "Airport transfer fee: Rp300.000",
         },
         {
-          icon: <RiHotelLine className="text-lg text-[#4F28D9]" />,
+          icon: <RiHotelLine className="text-lg text-RoyalAmethyst-700" />,
           text: "Distance from city center: 0,5 km",
         },
         {
-          icon: <TbMapPins className="text-lg text-[#4F28D9]" />,
+          icon: <TbMapPins className="text-lg text-RoyalAmethyst-700" />,
           text: "Travel time to airport (minutes): 40 minutes",
         },
       ],
@@ -103,11 +103,11 @@ const AboutNearbyLocations = {
       title: "Check-in/Check-out time",
       data: [
         {
-          icon: <RiCustomerService2Line className="text-lg text-[#4F28D9]" />,
+          icon: <RiCustomerService2Line className="text-lg text-RoyalAmethyst-700" />,
           text: "Check-in from : 14:22",
         },
         {
-          icon: <RiCustomerService2Line className="text-lg text-[#4F28D9]" />,
+          icon: <RiCustomerService2Line className="text-lg text-RoyalAmethyst-700" />,
           text: "Check-out until : 23:22",
         },
       ],
@@ -116,11 +116,11 @@ const AboutNearbyLocations = {
       title: "Extra",
       data: [
         {
-          icon: <RiParkingBoxLine className="text-lg text-[#4F28D9]" />,
+          icon: <RiParkingBoxLine className="text-lg text-RoyalAmethyst-700" />,
           text: "Daily parking: FREE",
         },
         {
-          icon: <RiWifiFill className="text-lg text-[#4F28D9]" />,
+          icon: <RiWifiFill className="text-lg text-RoyalAmethyst-700" />,
           text: "Daily internet/Wifi: FREE",
         },
       ],

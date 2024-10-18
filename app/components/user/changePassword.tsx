@@ -169,7 +169,7 @@ export default function ChangePassword({ id, data }: ComponentsProps) {
                 <Form.Item>
                   <Button
                     onClick={handleForgetPasswordClick}
-                    className="w-max mt-6 bg-white text-[#4F28D9] border border-[#4F28D9] border-solid"
+                    className="w-max mt-6 bg-white text-RoyalAmethyst-700 border border-RoyalAmethyst-700 border-solid"
                   >
                     Forget Password
                   </Button>

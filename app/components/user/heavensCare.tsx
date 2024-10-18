@@ -83,7 +83,7 @@ export default function HeavensCare() {
       {/* Header section dengan judul 'Heavens Care' */}
       <div className="py-6 px-9">
         <span className="text-xl font-semibold">
-          Heavens <span className="text-[#4F28D9]">Care</span>
+          Heavens <span className="text-RoyalAmethyst-700">Care</span>
         </span>
       </div>
 
@@ -102,7 +102,7 @@ export default function HeavensCare() {
               >
                 {/* Bagian atas: kategori dan status */}
                 <div className="flex justify-between items-center">
-                  <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                  <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
                     {item.category === "Hotel" ? (
                       <RiHome3Line size={18} color="#ffff" />
                     ) : (
@@ -126,8 +126,8 @@ export default function HeavensCare() {
                       <span
                         className={`text-xs font-semibold ${
                           item.status === "waiting for payment"
-                            ? "text-[#DC143C]"
-                            : "text-[#4F28D9]"
+                            ? "text-InfernoEcho-600"
+                            : "text-RoyalAmethyst-700"
                         }`}
                       >
                         {item.status === "waiting for payment"
@@ -155,7 +155,7 @@ export default function HeavensCare() {
                   >
                     <Link
                       href={item.link}
-                      className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
+                      className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                     >
                       {item.name}
                     </Link>
@@ -198,7 +198,7 @@ export default function HeavensCare() {
                   className={`${mediumMontserrat.className} flex flex-col gap-1`}
                 >
                   {item.category === "Hotel" && item.HotelRoomType && (
-                    <span className="text-sm font-semibold text-[#4F28D9]">
+                    <span className="text-sm font-semibold text-RoyalAmethyst-700">
                       {item.HotelRoomType}
                     </span>
                   )}
@@ -302,14 +302,14 @@ export default function HeavensCare() {
         <div className="pt-12 flex justify-between w-full">
           <Link
             href={"/profile"}
-            className="border border-solid border-[#4F28D9] rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-[#4F28D9] no-underline font-semibold"
+            className="border border-solid border-RoyalAmethyst-700 rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-RoyalAmethyst-700 no-underline font-semibold"
           >
             Return
           </Link>
 
           <Link
             href={"/"}
-            className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-white no-underline font-semibold"
+            className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-white no-underline font-semibold"
           >
             Submit your report
           </Link>

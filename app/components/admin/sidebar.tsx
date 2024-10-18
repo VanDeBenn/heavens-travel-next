@@ -158,7 +158,7 @@ export default function Sidebar() {
                     className={`flex items-center gap-2 ${
                       expanded ? "justify-start pl-4" : "justify-center"
                     } w-full cursor-pointer transition-all duration-300 ${
-                      activeItem === item.href ? "text-[#4F28D9]" : "text-black"
+                      activeItem === item.href ? "text-RoyalAmethyst-700" : "text-black"
                     }`}
                   >
                     {item.icon}
@@ -177,8 +177,8 @@ export default function Sidebar() {
               } w-full cursor-pointer transition-all duration-300`}
               onClick={showLogoutModal}
             >
-              <RiLogoutCircleLine className="text-2xl text-[#DC143C]" />
-              {expanded && <span className="text-[#DC143C]">Logout</span>}
+              <RiLogoutCircleLine className="text-2xl text-InfernoEcho-600" />
+              {expanded && <span className="text-InfernoEcho-600">Logout</span>}
             </div>
           </Tooltip>
         </div>

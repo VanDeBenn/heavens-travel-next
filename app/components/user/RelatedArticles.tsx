@@ -10,7 +10,7 @@ export default function RelatedArticles() {
     <div className="pt-9">
       {/* Header Section */}
       <div className="flex items-center mb-5">
-        <FileTextOutlined className="text-2xl mr-2 text-[#4F28D9]" />
+        <FileTextOutlined className="text-2xl mr-2 text-RoyalAmethyst-700" />
         <span className="text-xl font-semibold">
           You might enjoy reading this article.
         </span>
@@ -36,7 +36,7 @@ export default function RelatedArticles() {
 
               <Link
                 href={card.link}
-                className="text-lg font-semibold text-black hover:text-[#4F28D9] transition-all duration-300 no-underline leading-6"
+                className="text-lg font-semibold text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline leading-6"
               >
                 {card.title}
               </Link>

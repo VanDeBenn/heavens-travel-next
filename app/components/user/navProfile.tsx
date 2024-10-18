@@ -56,12 +56,12 @@ const NavProfile: React.FC = () => {
                 key={item.key}
                 icon={item.icon}
                 className={`flex ${
-                  selectedKey === item.key ? "text-[#4F28D9]" : "text-black"
+                  selectedKey === item.key ? "text-RoyalAmethyst-700" : "text-black"
                 }`}
               >
                 {item.label}
                 {selectedKey === item.key && (
-                  <span className="ml-7 text-[#4F28D9]">|</span>
+                  <span className="ml-7 text-RoyalAmethyst-700">|</span>
                 )}
               </Menu.Item>
             ))}
@@ -69,7 +69,7 @@ const NavProfile: React.FC = () => {
         </div>
 
         <div
-          className="flex justify-center items-center gap-2 cursor-pointer mt-auto text-[#DC143C]"
+          className="flex justify-center items-center gap-2 cursor-pointer mt-auto text-InfernoEcho-600"
           onClick={logout}
         >
           <LogoutOutlined style={{ color: "#DC143C", fontSize: 26 }} />

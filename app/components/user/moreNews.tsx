@@ -37,7 +37,7 @@ rounded-xl"
               <div className="w-full flex flex-col">
                 <Link
                   href={card.link}
-                  className="text-black hover:text-[#4F28D9] transition-all duration-300 no-underline text-xl font-semibold leading-6"
+                  className="text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline text-xl font-semibold leading-6"
                 >
                   {card.title}
                 </Link>
@@ -54,7 +54,7 @@ rounded-xl"
       <div className="flex justify-center mt-6">
         <Link
           href={"/blog/list"}
-          className="bg-[#ffffff] text-[#4F28D9] px-11 py-3 no-underline font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:bg-[#4F28D9] hover:text-white shadow-lg"
+          className="bg-[#ffffff] text-RoyalAmethyst-700 px-11 py-3 no-underline font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:bg-RoyalAmethyst-700 hover:text-white shadow-lg"
         >
           Load more
         </Link>

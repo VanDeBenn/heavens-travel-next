@@ -10,7 +10,7 @@ export default function DashboardLayout({
   return (
     <>
       <section
-        className={`flex flex-col lg:flex-row min-h-screen bg-[#F8F8FF] `}
+        className={`flex flex-col lg:flex-row min-h-screen bg-Lilac-50 `}
       >
         <div className="hidden lg:flex h-full lg:sticky top-0">
           <Sidebar />

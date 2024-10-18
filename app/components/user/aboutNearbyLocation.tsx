@@ -77,12 +77,12 @@ const AboutNearbyLocations = {
       title: "Public transportation",
       data: [
         {
-          icon: <RiBusFill className="text-lg text-[#4F28D9]" />,
+          icon: <RiBusFill className="text-lg text-RoyalAmethyst-700" />,
           text: "Terminal Tidar Magelang",
           distance: "7.4 km",
         },
         {
-          icon: <RiBusFill className="text-lg text-[#4F28D9]" />,
+          icon: <RiBusFill className="text-lg text-RoyalAmethyst-700" />,
           text: "Terminal Bus Kebonbolo",
           distance: "10.4 km",
         },
@@ -92,12 +92,12 @@ const AboutNearbyLocations = {
       title: "Hospital or clinic",
       data: [
         {
-          icon: <FaRegHospital className="text-lg text-[#4F28D9]" />,
+          icon: <FaRegHospital className="text-lg text-RoyalAmethyst-700" />,
           text: "Laboratorium Kesehatan Masyarakat",
           distance: "11.4 km",
         },
         {
-          icon: <FaRegHospital className="text-lg text-[#4F28D9]" />,
+          icon: <FaRegHospital className="text-lg text-RoyalAmethyst-700" />,
           text: "Soerojo Hospital",
           distance: "5.4 km",
         },
@@ -107,12 +107,12 @@ const AboutNearbyLocations = {
       title: "Nearby Stores",
       data: [
         {
-          icon: <RiStore2Line className="text-lg text-[#4F28D9]" />,
+          icon: <RiStore2Line className="text-lg text-RoyalAmethyst-700" />,
           text: "Alfamart",
           distance: "12.4 km",
         },
         {
-          icon: <RiStore2Line className="text-lg text-[#4F28D9]" />,
+          icon: <RiStore2Line className="text-lg text-RoyalAmethyst-700" />,
           text: "Indomaret",
           distance: "12.4 km",
         },

@@ -41,7 +41,7 @@ export default function BannerViewHotel() {
             Indonesia, 56553 -{" "}
             <Link
               href={"https://maps.app.goo.gl/o9cH4Qs4bRXWTbBy5"}
-              className="text-[#4F28D9] no-underline"
+              className="text-RoyalAmethyst-700 no-underline"
             >
               SEE MAP
             </Link>
@@ -49,12 +49,12 @@ export default function BannerViewHotel() {
 
           <div className="flex gap-2 items-center">
             <span className="text-xs ">Start from</span>
-            <span className="text-[#DC143C] text-base font-semibold">
+            <span className="text-InfernoEcho-600 text-base font-semibold">
               Rp600.000
             </span>
 
             <div
-              className="px-5 py-2 rounded-xl bg-[#4F28D9] cursor-pointer
+              className="px-5 py-2 rounded-xl bg-RoyalAmethyst-700 cursor-pointer
             "
             >
               <span className="text-white">view this deal</span>

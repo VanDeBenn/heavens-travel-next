@@ -123,7 +123,7 @@ export default function PaymentMethod() {
                   className="p-3 border border-solid border-[#DBDBDB] rounded-xl w-full"
                 >
                   <div className="flex justify-between items-center">
-                    <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                    <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
                       {item.category === "Hotel" ? (
                         <RiHome3Line size={18} color="#ffff" />
                       ) : (
@@ -158,7 +158,7 @@ export default function PaymentMethod() {
                     >
                       <Link
                         href={item.link}
-                        className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
+                        className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                       >
                         {item.name}
                       </Link>
@@ -179,7 +179,7 @@ export default function PaymentMethod() {
 
                       <div className="flex justify-between w-full">
                         <div className="flex items-center gap-1 w-full">
-                          <span className="text-sm font-semibold text-[#4F28D9]">
+                          <span className="text-sm font-semibold text-RoyalAmethyst-700">
                             {item.category === "Hotel" && item.HotelRoomType}
                             {item.category === "Destination" &&
                               item.DestinationType}
@@ -221,7 +221,7 @@ export default function PaymentMethod() {
                       className={`${mediumMontserrat.className} flex flex-col gap-1`}
                     >
                       <span className="font-semibold text-xs">Total Price</span>
-                      <span className="text-sm font-semibold text-[#DC143C]">
+                      <span className="text-sm font-semibold text-InfernoEcho-600">
                         {item.category === "Hotel" &&
                           formatCurrency(
                             (Number(item.guests.match(/\d+/)?.[0]) || 1) *

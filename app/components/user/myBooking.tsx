@@ -42,7 +42,7 @@ export default function MyBooking() {
           label: (
             <Link
               href="/help"
-              className="no-underline hover:text-[#4F28D9] duration-300 transition-all"
+              className="no-underline hover:text-RoyalAmethyst-700 duration-300 transition-all"
             >
               Help
             </Link>
@@ -77,7 +77,7 @@ export default function MyBooking() {
             >
               <div className="flex justify-between items-center">
                 {/* title and icon */}
-                <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
                   {item.category === "Hotel" ? (
                     <RiHome3Line size={18} color="#ffff" />
                   ) : (
@@ -100,8 +100,8 @@ export default function MyBooking() {
                     <span
                       className={`text-xs font-semibold ${
                         item.status === "waiting for payment"
-                          ? "text-[#DC143C]"
-                          : "text-[#4F28D9]"
+                          ? "text-InfernoEcho-600"
+                          : "text-RoyalAmethyst-700"
                       }`}
                     >
                       {item.status === "waiting for payment"
@@ -136,7 +136,7 @@ export default function MyBooking() {
                 >
                   <Link
                     href={item.link}
-                    className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
+                    className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                   >
                     {item.name}
                   </Link>
@@ -199,14 +199,14 @@ export default function MyBooking() {
               <div className="pt-5 pb-3 flex justify-end w-full gap-2">
                 <Link
                   href={"/"}
-                  className="border border-solid border-[#4F28D9] rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-[#4F28D9] no-underline font-semibold"
+                  className="border border-solid border-RoyalAmethyst-700 rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-RoyalAmethyst-700 no-underline font-semibold"
                 >
                   See booking details
                 </Link>
                 {item.status !== "waiting for payment" && (
                   <Link
                     href={"/profile/review"}
-                    className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-white no-underline font-semibold"
+                    className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-white no-underline font-semibold"
                   >
                     Review
                   </Link>

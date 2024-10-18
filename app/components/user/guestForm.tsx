@@ -91,7 +91,7 @@ export default function GuestForm() {
             {isBookingForAnotherPerson ? (
               <RiCircleLine className="text-lg" />
             ) : (
-              <RiCircleFill className="text-[#4F28D9] text-lg" />
+              <RiCircleFill className="text-RoyalAmethyst-700 text-lg" />
             )}
             <span className="text-base">I am the guest</span>
           </div>
@@ -100,7 +100,7 @@ export default function GuestForm() {
             onClick={() => setIsBookingForAnotherPerson(true)} // Set state for "I am booking for another person"
           >
             {isBookingForAnotherPerson ? (
-              <RiCircleFill className="text-[#4F28D9] text-lg" />
+              <RiCircleFill className="text-RoyalAmethyst-700 text-lg" />
             ) : (
               <RiCircleLine className="text-lg" />
             )}

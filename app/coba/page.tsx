@@ -17,10 +17,15 @@ import DestinationDetail from "../components/admin/destinationDetail";
 import NextStepDestination from "../components/admin/nextStepDestination";
 import ResultDestination from "../components/admin/resultDestination";
 import HotelList from "../components/admin/hotelList";
+import HotelDetail from "../components/admin/hotelDetail";
+import NextStepHotel from "../components/admin/nextStepHotel";
+import FacilityInfoHotel from "../components/admin/facilityInfoHotel";
+import CreateFacilityHotel from "../components/admin/createFacilityHotel";
+import NearbyLocationHotel from "../components/admin/nearbyLocationHotel";
 
 export default function page() {
   return (
-    <div className="bg-[#F8F8FF] px-28 2xl:px-48 py-14 flex flex-col gap-4">
+    <div className="bg-Lilac-50 px-28 2xl:px-48 py-14 flex flex-col gap-4">
       {/* <BannerViewHotel />
       <DescriptionHotel />
       <ServicesAmenities />
@@ -39,8 +44,16 @@ export default function page() {
       {/* <DestinationDetail /> */}
 
       {/* <ResultDestination /> */}
+      {/* 
+      <HotelList /> */}
 
-      <HotelList />
+      {/* <HotelDetail /> */}
+
+      {/* <NextStepHotel /> */}
+      {/* <FacilityInfoHotel /> */}
+      {/* <CreateFacilityHotel /> */}
+
+      <NearbyLocationHotel />
     </div>
   );
 }

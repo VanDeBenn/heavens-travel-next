@@ -150,7 +150,7 @@ const NextStep: React.FC = () => {
                   className={`${mediumMontserrat.className} flex justify-between items-center`}
                 >
                   <span className="text-base font-semibold">2 item</span>{" "}
-                  <span className="text-base font-semibold text-[#DC143C]">
+                  <span className="text-base font-semibold text-InfernoEcho-600">
                     Rp1.299.000
                   </span>
                 </div>
@@ -159,8 +159,8 @@ const NextStep: React.FC = () => {
                   <div
                     className={`${mediumMontserrat.className} flex items-center gap-1`}
                   >
-                    <RiGlassesLine className="text-[#4F28D9] text-2xl" />
-                    <span className="text-[#4F28D9] text-base font-semibold">
+                    <RiGlassesLine className="text-RoyalAmethyst-700 text-2xl" />
+                    <span className="text-RoyalAmethyst-700 text-base font-semibold">
                       Destination
                     </span>
                   </div>
@@ -207,7 +207,7 @@ const NextStep: React.FC = () => {
                     <span className="text-sm font-semibold">
                       Total Destination Price
                     </span>
-                    <span className="text-sm font-semibold text-[#DC143C]">
+                    <span className="text-sm font-semibold text-InfernoEcho-600">
                       Rp2.555.000
                     </span>
                   </div>
@@ -216,8 +216,8 @@ const NextStep: React.FC = () => {
                   <div
                     className={`${mediumMontserrat.className} flex items-center gap-1`}
                   >
-                    <RiHome3Line className="text-[#4F28D9] text-2xl" />
-                    <span className="text-[#4F28D9] text-base font-semibold">
+                    <RiHome3Line className="text-RoyalAmethyst-700 text-2xl" />
+                    <span className="text-RoyalAmethyst-700 text-base font-semibold">
                       Hotel
                     </span>
                   </div>
@@ -260,7 +260,7 @@ const NextStep: React.FC = () => {
                         Guest : 2 adults, 3 child
                       </span>
 
-                      <span className="text-sm font-semibold text-[#DC143C]">
+                      <span className="text-sm font-semibold text-InfernoEcho-600">
                         Rp2.555.000
                       </span>
                     </div>
@@ -272,7 +272,7 @@ const NextStep: React.FC = () => {
                     <span className="text-sm font-semibold">
                       Total Room Price
                     </span>
-                    <span className="text-sm font-semibold text-[#DC143C]">
+                    <span className="text-sm font-semibold text-InfernoEcho-600">
                       Rp2.555.000
                     </span>
                   </div>
@@ -289,7 +289,7 @@ const NextStep: React.FC = () => {
                 className={`${mediumMontserrat.className} flex justify-between items-center `}
               >
                 <span className="text-sm font-semibold">Booking Fees</span>
-                <span className="text-sm text-[#4F28D9]  font-semibold">
+                <span className="text-sm text-RoyalAmethyst-700  font-semibold">
                   Free
                 </span>
               </div>
@@ -297,7 +297,7 @@ const NextStep: React.FC = () => {
                 className={`${mediumMontserrat.className} flex justify-between items-center pt-1`}
               >
                 <span className="text-sm font-semibold text-black">Total</span>
-                <span className="text-sm text-[#DC143C]  font-semibold">
+                <span className="text-sm text-InfernoEcho-600  font-semibold">
                   Rp12.344.000
                 </span>
               </div>{" "}
@@ -315,7 +315,7 @@ const NextStep: React.FC = () => {
                   {current < steps.length - 1 && (
                     <div
                       onClick={next}
-                      className="w-full bg-[#4F28D9] text-center py-2 text-white text-sm rounded-xl cursor-pointer"
+                      className="w-full bg-RoyalAmethyst-700 text-center py-2 text-white text-sm rounded-xl cursor-pointer"
                     >
                       <span>Next</span>
                     </div>

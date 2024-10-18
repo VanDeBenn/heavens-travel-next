@@ -70,13 +70,13 @@ export default function BookingDetail() {
               className="flex items-center cursor-pointer"
               onClick={handleDropdownToggle}
             >
-              <span className="text-lg font-medium text-[#4F28D9]">
+              <span className="text-lg font-medium text-RoyalAmethyst-700">
                 See detail
               </span>
               {isDropdownOpen ? (
-                <RiArrowDropUpLine className="text-2xl ml-2 text-[#4F28D9]" />
+                <RiArrowDropUpLine className="text-2xl ml-2 text-RoyalAmethyst-700" />
               ) : (
-                <RiArrowDropDownLine className="text-2xl ml-2 text-[#4F28D9]" />
+                <RiArrowDropDownLine className="text-2xl ml-2 text-RoyalAmethyst-700" />
               )}
             </div>
           </div>
@@ -103,7 +103,7 @@ export default function BookingDetail() {
                     <div className="flex flex-col items-center">
                       <div
                         className={`w-4 h-4 rounded-full ${
-                          index <= currentStep ? "bg-[#4F28D9]" : "bg-gray-300"
+                          index <= currentStep ? "bg-RoyalAmethyst-700" : "bg-gray-300"
                         }`}
                       />
                       {index < steps.length - 1 && (
@@ -130,7 +130,7 @@ export default function BookingDetail() {
             <div key={index} className="mt-6 flex flex-col gap-2">
               <div className="flex justify-between items-center">
                 <span className="text-base text-gray-500  ">No.Invoice</span>
-                <span className="text-base text-[#4F28D9] font-semibold">
+                <span className="text-base text-RoyalAmethyst-700 font-semibold">
                   {invoice.invoiceNumber}
                 </span>
               </div>
@@ -145,7 +145,7 @@ export default function BookingDetail() {
               <div className="flex justify-between items-center">
                 <span className="text-base text-gray-500  ">Ticket Code</span>
                 <span
-                  className="text-base text-[#4F28D9] font-semibold cursor-pointer"
+                  className="text-base text-RoyalAmethyst-700 font-semibold cursor-pointer"
                   onClick={() => handleOpenQrCode(invoice.qrCodeImage)}
                 >
                   See QR Code

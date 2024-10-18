@@ -42,7 +42,7 @@ const ForgotPassword: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-[#F8F8FF] px-16">
+    <div className="flex flex-col md:flex-row h-screen bg-Lilac-50 px-16">
       <div className="md:w-1/2 w-full flex items-center justify-center">
         <div className="relative w-full h-64 md:h-full">
           <Image

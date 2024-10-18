@@ -9,7 +9,7 @@ import BlogDetail from "#/app/components/user/blogDetail";
 
 function page() {
   return (
-    <main className="bg-[#F8F8FF]">
+    <main className="bg-Lilac-50">
       <Header />
       <div className=" px-16 pb-8 pt-24">
         <HighlightBlog />

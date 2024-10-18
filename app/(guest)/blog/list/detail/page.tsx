@@ -6,7 +6,7 @@ import RelatedArticles from "#/app/components/user/RelatedArticles";
 
 export default function page() {
   return (
-    <main className="bg-[#F8F8FF]">
+    <main className="bg-Lilac-50">
       <Header />
       <div className=" px-16 pb-8 pt-24">
         <BlogDetail />

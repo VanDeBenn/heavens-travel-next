@@ -9,7 +9,7 @@ export default function NewsHighlight() {
   return (
     <div className="py-5 ">
       <div className="flex items-center mb-4">
-        <RiDashboardHorizontalLine className="text-[#4F28D9] text-3xl mr-3" />
+        <RiDashboardHorizontalLine className="text-RoyalAmethyst-700 text-3xl mr-3" />
         <span className="text-xl font-bold">News Highlights</span>
       </div>
 
@@ -31,7 +31,7 @@ rounded-l-xl"
             <div className="w-full md:w-7/12 p-4 flex flex-col">
               <Link
                 href={card.link}
-                className="text-black hover:text-[#4F28D9] transition-all duration-300 no-underline text-2xl font-semibold mb-2 leading-7"
+                className="text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline text-2xl font-semibold mb-2 leading-7"
               >
                 {card.title}
               </Link>
@@ -75,7 +75,7 @@ rounded-l-xl"
                     <div className="flex flex-col">
                       <Link
                         href={card.link}
-                        className="text-base font-semibold mb-1 leading-4 text-black hover:text-[#4F28D9] transition-all duration-300 no-underline"
+                        className="text-base font-semibold mb-1 leading-4 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
                       >
                         {card.title}
                       </Link>
@@ -91,7 +91,7 @@ rounded-l-xl"
       <div className="flex justify-center mt-6">
         <Link
           href={"/blog/list"}
-          className="bg-[#ffffff] text-[#4F28D9] px-11 py-3 no-underline font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:bg-[#4F28D9] hover:text-white shadow-lg"
+          className="bg-[#ffffff] text-RoyalAmethyst-700 px-11 py-3 no-underline font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:bg-RoyalAmethyst-700 hover:text-white shadow-lg"
         >
           See more
         </Link>

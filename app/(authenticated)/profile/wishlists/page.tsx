@@ -24,7 +24,7 @@ export default function wishlist() {
   }, []);
 
   return (
-    <main className="bg-[#F8F8FF]">
+    <main className="bg-Lilac-50">
       <div className="flex flex-col gap-4 w-full">
         <Wishlist data={userData} />
       </div>

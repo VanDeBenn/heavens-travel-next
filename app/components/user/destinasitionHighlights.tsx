@@ -42,7 +42,7 @@ export default function destinasitionHighlights() {
                 <div className="flex flex-col ">
                   <Link
                     href={card.link}
-                    className="text-base font-semibold mb-1 leading-4 text-black hover:text-[#4F28D9] transition-all duration-300 no-underline"
+                    className="text-base font-semibold mb-1 leading-4 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
                   >
                     {card.title}
                   </Link>

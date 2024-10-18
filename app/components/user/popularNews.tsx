@@ -38,7 +38,7 @@ export default function popularNews() {
                   href={news.link}
                   //yang bener buat abang beckend
                   // href={`/news/popular/${index}`}
-                  className="text-base font-semibold mb-1 leading-5 text-black hover:text-[#4F28D9] transition-all duration-300 no-underline"
+                  className="text-base font-semibold mb-1 leading-5 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
                 >
                   {news.title}
                 </Link>

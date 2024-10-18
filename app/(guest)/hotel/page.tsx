@@ -37,7 +37,7 @@ export default function page({ data, dataCity }: PageProps) {
   }, []);
 
   return (
-    <main className="bg-[#F8F8FF]">
+    <main className="bg-Lilac-50">
       <Header />
       <div className="">
         <Hotels data={dataHotels} dataCity={dataCities} />
