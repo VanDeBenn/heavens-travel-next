@@ -25,7 +25,7 @@ export default function Page(
   }, []);
 
   return (
-    <div className="bg-[#F8F8FF] flex flex-col gap-4">
+    <div className="bg-Lilac-50 flex flex-col gap-4">
       <UserDetail userData={userData} />
     </div>
   );

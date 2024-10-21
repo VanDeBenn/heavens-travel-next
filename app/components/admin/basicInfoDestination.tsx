@@ -2,8 +2,8 @@
 
 import React, { useEffect } from "react";
 import { Form, Input, InputNumber, Button } from "antd";
-import { Montserrat } from "next/font/google";
 import { useForm } from "antd/es/form/Form";
+import { Montserrat } from "next/font/google";
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -182,15 +182,6 @@ export default function BasicInfoDestination({
             Submit
           </Button>
         </Form>
-      </div>
-      <div className="flex justify-end">
-        <Button
-          type="primary"
-          onClick={() => form.submit()}
-          className="bg-[#4F28D9] text-center w-32 text-white text-sm rounded-xl cursor-pointer"
-        >
-          Next
-        </Button>
       </div>
     </>
   );

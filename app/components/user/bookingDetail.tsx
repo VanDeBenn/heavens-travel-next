@@ -98,7 +98,7 @@ export default function BookingDetail() {
                   >
                     <div className="text-left flex items-center gap-2">
                       <span>{step.date}</span>
-                      <span className="text-gray-500">{step.time}</span>{" "}
+                      <span className="text-gray-500">{step.time}</span>
                     </div>
                     <div className="flex flex-col items-center">
                       <div

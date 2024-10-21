@@ -269,8 +269,8 @@ export default function Review() {
                 </div>
               ))}
             </div>
-          </div>{" "}
-        </div>{" "}
+          </div>
+        </div>
         <div className="pt-12 flex justify-between w-full">
           <Link
             href={"/profile"}

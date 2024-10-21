@@ -65,10 +65,10 @@ const ResetPassword: React.FC = () => {
               Password
             </Typography.Title>
             <Text type="secondary">
-              Choose a{" "}
+              Choose a
               <Text style={{ color: "#4F28D9", fontWeight: 500 }}>
                 strong password
-              </Text>{" "}
+              </Text>
               and don&apos;t reuse it for other accounts.
             </Text>
           </div>
@@ -100,7 +100,7 @@ const ResetPassword: React.FC = () => {
                   color: "#6c757d", // Slightly different gray for better contrast
                 }}
               >
-                Use at least{" "}
+                Use at least
                 <Text style={{ color: "#4F28D9", fontWeight: 500 }}>
                   9 characters
                 </Text>

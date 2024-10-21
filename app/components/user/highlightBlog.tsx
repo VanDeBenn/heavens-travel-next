@@ -54,7 +54,7 @@ export default function HighlightBlog() {
           objectFit="cover"
           className="absolute inset-0"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div>{" "}
+        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
         {/* Dark overlay with 30% opacity */}
         <div className="absolute bottom-4 left-4 max-w-[40%] text-white p-4">
           <h2 className="text-2xl font-bold mb-2">Hawaii Beach</h2>
@@ -73,7 +73,7 @@ export default function HighlightBlog() {
           objectFit="cover"
           className="absolute inset-0"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div>{" "}
+        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
         {/* Dark overlay with 30% opacity */}
         <div className="absolute bottom-4 left-4 max-w-[40%] text-white p-4">
           <h2 className="text-2xl font-bold mb-2">Tropical Paradise</h2>
@@ -92,7 +92,7 @@ export default function HighlightBlog() {
           objectFit="cover"
           className="absolute inset-0"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div>{" "}
+        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
         {/* Dark overlay with 30% opacity */}
         <div className="absolute bottom-4 left-4 max-w-[40%] text-white p-4">
           <h2 className="text-2xl font-bold mb-2">Sunset Views</h2>
@@ -111,7 +111,7 @@ export default function HighlightBlog() {
           objectFit="cover"
           className="absolute inset-0"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div>{" "}
+        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
         {/* Dark overlay with 30% opacity */}
         <div className="absolute bottom-4 left-4 max-w-[40%] text-white p-4">
           <h2 className="text-2xl font-bold mb-2">Ocean Breeze</h2>

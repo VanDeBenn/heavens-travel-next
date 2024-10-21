@@ -38,7 +38,7 @@ export default function BannerViewHotel() {
         <div className="flex justify-between items-center">
           <span className="text-xs">
             Street Medang Kamulan, Dusun Janan Borobudur, Borobudur, Magelang,
-            Indonesia, 56553 -{" "}
+            Indonesia, 56553 -
             <Link
               href={"https://maps.app.goo.gl/o9cH4Qs4bRXWTbBy5"}
               className="text-RoyalAmethyst-700 no-underline"

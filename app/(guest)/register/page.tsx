@@ -61,7 +61,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-[#F8F8FF] px-16">
+    <div className="flex flex-col md:flex-row h-screen bg-Lilac-50 px-16">
       <div className="md:w-1/2 w-full flex items-center justify-center">
         <div className="relative w-full h-64 md:h-full">
           <Image
@@ -80,7 +80,7 @@ const Register = () => {
               Create new account
             </Typography.Title>
             <Text type="secondary">
-              Already a member?{" "}
+              Already a member?
               <Link href="/login" style={{ color: "#4F28D9" }}>
                 Log in
               </Link>

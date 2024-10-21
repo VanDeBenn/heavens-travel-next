@@ -100,7 +100,7 @@ export default function Page({ id, data, role }: PageProps) {
   }
 
   return (
-    <main className="bg-[#F8F8FF]">
+    <main className="bg-Lilac-50">
       <div className="flex flex-col gap-4 w-full">
         <InformationPersonal id={userId} data={userData} role={userRole} />
         <ChangePassword id={userId} data={userData} />

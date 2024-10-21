@@ -81,7 +81,7 @@ const PopularHotelsIn = ({ data, dataCity }: ComponentProps) => {
               </div>
               {/* Location */}
               <div className="flex items-center text-gray-500 mb-2">
-                <EnvironmentOutlined className="mr-1" />{" "}
+                <EnvironmentOutlined className="mr-1" />
                 {hotel.district.city.name}
               </div>
               {/* Description */}

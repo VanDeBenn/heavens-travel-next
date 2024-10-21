@@ -142,19 +142,19 @@ export default function YourBooking() {
                         <div className="flex justify-end w-full gap-1 items-end">
                           {item.HotelPricePerAdult && (
                             <div className="text-sm text-black">
-                              {item.guests.match(/\d+/)?.[0]} x{" "}
+                              {item.guests.match(/\d+/)?.[0]} x
                               {formatCurrency(item.HotelPricePerAdult)}
                             </div>
                           )}
 
                           {item.DestinationPriceAdults && adultsCount > 0 && (
                             <div className="text-sm text-black">
-                              {adultsCount} x{" "}
+                              {adultsCount} x
                               {formatCurrency(item.DestinationPriceAdults)}
                               {childrenCount > 0 && item.DestinationPriceChildren && (
                                 <>
                                   {" - "}
-                                  {childrenCount} x{" "}
+                                  {childrenCount} x
                                   {formatCurrency(item.DestinationPriceChildren)}
                                 </>
                               )}
