@@ -149,7 +149,7 @@ const NextStep: React.FC = () => {
                 <div
                   className={`${mediumMontserrat.className} flex justify-between items-center`}
                 >
-                  <span className="text-base font-semibold">2 item</span>{" "}
+                  <span className="text-base font-semibold">2 item</span>
                   <span className="text-base font-semibold text-InfernoEcho-600">
                     Rp1.299.000
                   </span>
@@ -246,7 +246,7 @@ const NextStep: React.FC = () => {
                     <div className=" flex gap-1 w-full justify-between">
                       <span className="text-xs text-black font-semibold">
                         26 Nov, 2024 - 29 Nov, 2024
-                      </span>{" "}
+                      </span>
                       <span className="text-xs">(3 day, 2 night)</span>
                     </div>
                   </div>
@@ -300,7 +300,7 @@ const NextStep: React.FC = () => {
                 <span className="text-sm text-InfernoEcho-600  font-semibold">
                   Rp12.344.000
                 </span>
-              </div>{" "}
+              </div>
               <div className="pt-4">
                 <div className="flex items-center justify-between w-full gap-3">
                   {current > 0 && (

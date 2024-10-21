@@ -149,15 +149,6 @@ export default function LocationInfoDestination({
           </Button>
         </Form>
       </div>
-      <div className="flex justify-end">
-        <Button
-          type="primary"
-          onClick={() => form.submit()}
-          className="bg-[#4F28D9] text-center w-32 text-white text-sm rounded-xl cursor-pointer"
-        >
-          Next
-        </Button>
-      </div>
     </>
   );
 }

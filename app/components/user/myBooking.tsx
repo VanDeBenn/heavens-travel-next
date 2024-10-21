@@ -164,13 +164,13 @@ export default function MyBooking() {
                     <div className={`flex flex-col items-center gap-1`}>
                       {item.DestinationPriceAdults && adultsCount > 0 && (
                         <span className="text-sm text-gray-500">
-                          {adultsCount} x{" "}
+                          {adultsCount} x
                           {formatCurrency(item.DestinationPriceAdults)}
                         </span>
                       )}
                       {item.DestinationPriceChildren && childrenCount > 0 && (
                         <span className="text-sm text-gray-500">
-                          {childrenCount} x{" "}
+                          {childrenCount} x
                           {formatCurrency(item.DestinationPriceChildren)}
                         </span>
                       )}
@@ -188,7 +188,7 @@ export default function MyBooking() {
                     )}
                     {item.HotelPricePerAdult && (
                       <span className="text-sm text-gray-500">
-                        {item.guests.match(/\d+/)?.[0]} x{" "}
+                        {item.guests.match(/\d+/)?.[0]} x
                         {formatCurrency(item.HotelPricePerAdult)}
                       </span>
                     )}

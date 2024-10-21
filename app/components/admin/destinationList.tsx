@@ -40,7 +40,7 @@
 
 //           <Link
 //             href={"/"}
-//             className="border-[#4F28D9] border-solid no-underline border hover:bg-[#4F28D9] transition-all duration-300 hover:text-white text-sm rounded-md py-1 px-16 text-[#4F28D9] text-center font-semibold
+//             className="border-RoyalAmethyst-700 border-solid no-underline border hover:bg-RoyalAmethyst-700 transition-all duration-300 hover:text-white text-sm rounded-md py-1 px-16 text-RoyalAmethyst-700 text-center font-semibold
 //            "
 //           >
 //             + Create Destination
@@ -217,7 +217,7 @@ export default function DestinationList({ data }: ComponentsProps) {
 
             <Link
               href={"/admin/destinations/create"}
-              className="border-[#4F28D9] border-solid no-underline border hover:bg-[#4F28D9] transition-all duration-300 hover:text-white text-sm rounded-md py-1 px-16 text-[#4F28D9] text-center font-semibold"
+              className="border-RoyalAmethyst-700 border-solid no-underline border hover:bg-RoyalAmethyst-700 transition-all duration-300 hover:text-white text-sm rounded-md py-1 px-16 text-RoyalAmethyst-700 text-center font-semibold"
             >
               + Create Destination
             </Link>

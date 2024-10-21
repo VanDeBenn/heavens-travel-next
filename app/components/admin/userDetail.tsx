@@ -89,8 +89,8 @@ export default function UserDetail({ userData }: ComponentsProps) {
         <div className="pt-7 flex justify-end">
           <Link
             href={"/admin/users"}
-            className="border-[#4F28D9] border-solid no-underline border hover:bg-[#4F28D9] transition-all duration-300 hover:text-white
-             rounded-xl py-2 px-20 text-[#4F28D9] text-center font-semibold"
+            className="border-RoyalAmethyst-700 border-solid no-underline border hover:bg-RoyalAmethyst-700 transition-all duration-300 hover:text-white
+             rounded-xl py-2 px-20 text-RoyalAmethyst-700 text-center font-semibold"
           >
             Back
           </Link>

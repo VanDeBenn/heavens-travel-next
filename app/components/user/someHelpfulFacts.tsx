@@ -18,9 +18,9 @@ import { SiHomeassistant, SiLevelsdotfyi } from "react-icons/si";
 export default function someHelpfulFacts() {
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border">
-      {" "}
+      
       <div className={`${mediumMontserrat.className} p-6`}>
-        {" "}
+        
         <div className="pb-4">
           <span className="text-base font-semibold">Some helpful facts</span>
         </div>

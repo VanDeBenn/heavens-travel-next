@@ -93,7 +93,7 @@ export default function Wishlist({ data }: ComponentsProps) {
             className="p-3 border border-solid border-[#DBDBDB] rounded-xl"
           >
             <div className="flex justify-between items-center">
-              <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+              <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
                 {destination ? (
                   <RiGlassesLine size={18} color="#ffff" />
                 ) : (
@@ -137,7 +137,7 @@ export default function Wishlist({ data }: ComponentsProps) {
                         ? `destinations/detail/${item.id}`
                         : `hotel/detail/${item.id}`
                     }
-                    className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
+                    className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                   >
                     {item.name}
                   </Link>
