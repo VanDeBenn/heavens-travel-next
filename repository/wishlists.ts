@@ -2,6 +2,7 @@ import { http } from "#/utils/http";
 
 const url = {
   wishlists: () => "/wishlists",
+  wishlist: (id: string) => `/wishlists/${id}`,
   addDestination: (id: string) => `/wishlists/${id}/destination`,
   removeDestination: (id: string, dest: string) => `/wishlists/${id}/${dest}`,
 };
@@ -21,6 +22,9 @@ const api = {
   },
   removeHotel(id: string, dest: string, data: any) {
     return http.del(url.removeDestination(id, dest)).send(data);
+  },
+  deleteWishlist(id: string) {
+    return http.del(url.wishlist(id));
   },
 };
 

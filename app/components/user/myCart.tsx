@@ -58,9 +58,9 @@ export default function MyCart() {
     fetchCart();
   }, []);
 
-  if (!dataCart.length) {
-    return <div>Loading...</div>;
-  }
+  // if (!dataCart.length) {
+  //   return <div>Loading...</div>;
+  // }
 
   const hanndleDelete = async (id: string) => {
     try {

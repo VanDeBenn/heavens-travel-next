@@ -61,17 +61,14 @@ export default function Page({ params }: { params: { id: string } }) {
     try {
       const data = {
         userId: localStorage.getItem("_id"),
-        wishlistId: localStorage.getItem("_wishlists"),
         destinationId: destinationId,
       };
-      await wishlistRepository.api.addDestination(params.id, data);
-    } catch (error) {
-      console.error("Failed to add to wishlist", error);
-    }
+      await wishlistRepository.api.create(data);
+    } catch (error) {}
   };
 
-  const cartId = localStorage.getItem("_carts");
-  const handleCart = async (values: any) => {
+  // const cartId = localStorage.getItem("_carts");
+  const handleCart = async () => {
     try {
       const data = {
         userId: localStorage.getItem("_id"),
@@ -80,8 +77,9 @@ export default function Page({ params }: { params: { id: string } }) {
         quantityChildren: count.children,
         startDate: startDate,
         endDate: endDate,
-        carts: cartId,
+        // carts: cartId,
       };
+      console.log(data);
       await cartRepository.api.addToCart(data);
     } catch (error) {
       console.error("Failed to add to cart", error);

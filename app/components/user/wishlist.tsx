@@ -12,7 +12,7 @@ import { wishlistRepository } from "#/repository/wishlists";
 import Loading from "#/app/loading";
 
 interface ComponentsProps {
-  data: any;
+  data: any[];
 }
 
 export default function Wishlist({ data }: ComponentsProps) {
@@ -33,21 +33,11 @@ export default function Wishlist({ data }: ComponentsProps) {
 
   const handleRemove = async () => {
     try {
-      // await wishlistRepository.api.deleteWishlist(removeItemId);
-      const data = {
-        userId: localStorage.getItem("_id"),
-        wishlistId: localStorage.getItem("_wishlists"),
-        destinationId: removeItemId,
-      };
-      await wishlistRepository.api.removeDestination(
-        localStorage.getItem("_wishlists") || "",
-        removeItemId,
-        data
-      );
+      await wishlistRepository.api.deleteWishlist(removeItemId);
 
-      // setWishlistData((prevData) =>
-      //   prevData.filter((item) => item.id !== removeItemId)
-      // );
+      setWishlistData((prevData) =>
+        prevData.filter((item) => item.id !== removeItemId)
+      );
 
       setModalVisible(false);
     } catch (error) {
@@ -55,45 +45,24 @@ export default function Wishlist({ data }: ComponentsProps) {
     }
   };
 
-  if (!wishlistData) {
-    return <Loading />;
-  }
+  // if (!wishlistData.length) {
+  //   return <Loading />;
+  // }
 
-  // console.log("data:", wishlistData);
-  const destination = data.destination;
-  // console.log("desti:", destination);
-  const hotel = data.hotel;
-  // console.log("hotel", hotel);
-  const combined = [...(destination || []), ...(hotel || [])];
-  console.log("comb:", combined);
-  // console.log(combined.map(({ item, index }: any) => {
-  //   return (
-  //     <div className="" key={index}>
-  //       {item.name}
-  //     </div>
-  //   )
-  // }));
+  console.log("data:", wishlistData);
   return (
     <div className="bg-white rounded-xl">
       <p className="text-xl font-semibold my-6 mx-9">Wishlist</p>
       <div className="h-px bg-gray-300"></div>
 
       <div className="px-8 py-6 grid grid-cols-2 gap-6">
-        {/* {combined.map((item) => (
-          <div className="" key={item.id}>
-            {item.name}
-          </div>
-        ))} */}
-        {combined.map((item: any) => (
-          // <div key={id} className="">
-          //   {hotel.name}
-          // </div>
+        {wishlistData.map(({ hotel, destination, id }: any) => (
           <div
-            key={item.id}
+            key={id}
             className="p-3 border border-solid border-[#DBDBDB] rounded-xl"
           >
             <div className="flex justify-between items-center">
-              <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+              <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
                 {destination ? (
                   <RiGlassesLine size={18} color="#ffff" />
                 ) : (
@@ -107,7 +76,7 @@ export default function Wishlist({ data }: ComponentsProps) {
                 <RiBookmarkFill
                   size={25}
                   color="#4F28D9"
-                  onClick={() => showConfirmModal(item.id)}
+                  onClick={() => showConfirmModal(id)}
                   style={{ cursor: "pointer" }}
                 />
               </div>
@@ -117,8 +86,8 @@ export default function Wishlist({ data }: ComponentsProps) {
               <Link
                 href={
                   destination
-                    ? `destinations/detail/${item.id}`
-                    : `hotel/detail/${item.id}`
+                    ? `destinations/detail/${id}`
+                    : `hotel/detail/${id}`
                 }
               >
                 <Image
@@ -134,16 +103,16 @@ export default function Wishlist({ data }: ComponentsProps) {
                   <Link
                     href={
                       destination
-                        ? `destinations/detail/${item.id}`
-                        : `hotel/detail/${item.id}`
+                        ? `destinations/detail/${id}`
+                        : `hotel/detail/${id}`
                     }
-                    className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
+                    className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
                   >
-                    {item.name}
+                    {destination?.name || hotel?.name}
                   </Link>
                   <Rate
                     disabled
-                    value={item.rating}
+                    value={destination?.rating || hotel?.rating || 4}
                     allowHalf={false}
                     style={{ fontSize: 16, color: "#F59E0B" }}
                   />
@@ -151,12 +120,12 @@ export default function Wishlist({ data }: ComponentsProps) {
                 <div className="flex items-center gap-1">
                   <RiMapPinLine size={16} color="#6b7280 " />
                   <span className="text-xs text-gray-500">
-                    {`${item.address}`}
+                    {`${destination?.address || hotel?.address}`}
                   </span>
                 </div>
 
                 <span className="text-sm text-gray-500">
-                  {`${item.description}`}
+                  {`${destination?.description || hotel?.description}`}
                 </span>
               </div>
             </div>
