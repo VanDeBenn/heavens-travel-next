@@ -39,6 +39,8 @@ export default function Page({ params }: { params: { id: string } }) {
     setStartDate(dateStrings[0]);
     setEndDate(dateStrings[1]);
   };
+  console.log("startdate:", startDate);
+  console.log("endate:", endDate);
 
   const { RangePicker } = DatePicker;
 
@@ -74,13 +76,13 @@ export default function Page({ params }: { params: { id: string } }) {
       const data = {
         userId: localStorage.getItem("_id"),
         destinationId: destinationId,
-        // quantityAdult: count.adult,
-        // quantityChildren: count.children,
-        // startDate: startDate,
-        // endDate: endDate,
+        quantityAdult: count.adult,
+        quantityChildren: count.children,
+        startDate: startDate,
+        endDate: endDate,
         carts: cartId,
       };
-      await cartRepository.api.addDestination(cartId || "", data);
+      await cartRepository.api.addToCart(data);
     } catch (error) {
       console.error("Failed to add to cart", error);
     }
