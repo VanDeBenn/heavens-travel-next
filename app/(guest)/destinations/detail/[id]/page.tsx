@@ -21,8 +21,8 @@ export default function Page({ params }: { params: { id: string } }) {
       const res: any = await destinationRepository.api.getDestination(
         params.id
       );
-      setDataDestinations([res.data]);
-      setDestinationId(res.data.id);
+      setDataDestinations([res.body.data]);
+      setDestinationId(res.body.data.id);
     } catch (error) {
       console.error("Failed to fetch destination", error);
     }

@@ -50,6 +50,7 @@ const NextStepDestination: React.FC = () => {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [destinationId, setDestinationId] = useState<string>("");
 
   // Use state with defined types for basicInfo and locationInfo
   const [basicInfo, setBasicInfo] = useState<BasicInfo>({
@@ -70,7 +71,7 @@ const NextStepDestination: React.FC = () => {
     address: "",
   });
 
-  const [photoInfo, setPhotoInfo] = useState([]); // Assuming this holds the photos array
+  const [photoInfo, setPhotoInfo] = useState();
 
   const next = () => {
     setLoading(true);
@@ -90,6 +91,22 @@ const NextStepDestination: React.FC = () => {
     }, 1200);
   };
 
+  const finalData = {
+    name: basicInfo.nameDestination,
+    priceAdult: basicInfo.adultPrice,
+    priceChildren: basicInfo.childrenPrice,
+    // district: locationInfo.district,
+    // city: locationInfo.city,
+    // province: locationInfo.province,
+    // country: locationInfo.country,
+    address: locationInfo.address,
+    description: basicInfo.description,
+    maxCapacity: basicInfo.maxCapacity,
+    rating: basicInfo.rating,
+    pathLocation: locationInfo.pathLocation,
+    // photos: photoInfo, // Uncomment if needed to include photos
+  };
+
   const finish = async () => {
     setLoading(true);
     try {
@@ -106,7 +123,7 @@ const NextStepDestination: React.FC = () => {
         maxCapacity: basicInfo.maxCapacity,
         rating: basicInfo.rating,
         pathLocation: locationInfo.pathLocation,
-        // photos: photoInfo, // Uncomment if needed to include photos
+        // photos: photoInfo,
       };
 
       console.log("Final Data:", finalData);
@@ -114,9 +131,11 @@ const NextStepDestination: React.FC = () => {
       const idDestination = res.body.data.id;
       if (idDestination) {
         localStorage.setItem("_destination", idDestination);
-        router.push("/admin/destinations/create/result");
+        setDestinationId(idDestination);
+        // router.push("/admin/destinations/create/result");
       }
       console.log("return:", res.body.data.id);
+      console.log("id desti", idDestination);
       message.success("Destination created successfully!");
     } catch (error) {
       console.error("Error while creating destination:", error);
@@ -168,7 +187,9 @@ const NextStepDestination: React.FC = () => {
         ),
     },
     {
-      content: <PhotoDestination />,
+      content: (
+        <PhotoDestination finish={finish} destinationId={destinationId} />
+      ),
       icon:
         loading && current === 2 ? (
           <Spin size="small" />

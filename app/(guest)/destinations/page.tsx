@@ -22,7 +22,7 @@ export default function page() {
   const fetchDestinatios = async () => {
     try {
       const res: any = await destinationRepository.api.getDestinations();
-      setDataDestinations(res.data);
+      setDataDestinations(res.body.data);
     } catch (error) {}
   };
 
@@ -30,6 +30,8 @@ export default function page() {
     fetchDestinatios();
   }, []);
 
+  console.log("data desti:", dataDestinations);
+  // console.log("desti:", dataDestinations[0].name);
   return (
     <>
       <div>
@@ -39,7 +41,7 @@ export default function page() {
               {item.name} <br />
               {item.address} <br />
               {item.description} <br />
-              {item.district.name} <br />
+              {/* {item.district.name} <br /> */}
               {item.maxCapacity} <br />
               {item.name} <br />
               {item.pathLocation} <br />

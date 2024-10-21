@@ -3,6 +3,7 @@ import { http } from "#/utils/http";
 const url = {
   destinations: () => "/destinations",
   destination: (id: string) => `/destinations/${id}`,
+  photoDestination: () => `/photo-destinations/upload`,
 };
 
 const api = {
@@ -20,6 +21,9 @@ const api = {
   },
   deleteDestination(id: string) {
     return http.del(url.destination(id));
+  },
+  addPhotoDestination(data: any) {
+    return http.post(url.photoDestination()).send(data);
   },
 };
 

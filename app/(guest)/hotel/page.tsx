@@ -20,14 +20,14 @@ export default function page({ data, dataCity }: PageProps) {
   const fetchCities = async () => {
     try {
       const res = await cityRepository.api.getCitys();
-      setDataCities(res.data);
+      setDataCities(res.body.data);
     } catch (error) {}
   };
 
   const fetchHotels = async () => {
     try {
       const res = await hotelRepository.api.getHotels();
-      setDataHotels(res.data);
+      setDataHotels(res.body.data);
     } catch (error) {}
   };
 

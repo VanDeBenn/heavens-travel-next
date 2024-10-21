@@ -10,7 +10,7 @@ export default async function page({ params }: { params: { id: string } }) {
   const fetchHotel = async () => {
     try {
       const res = await hotelRepository.api.getHotel(params.id);
-      setData(res.data);
+      setData(res.body.data);
     } catch (error) {}
   };
 

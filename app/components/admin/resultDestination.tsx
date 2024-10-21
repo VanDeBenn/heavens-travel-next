@@ -73,22 +73,37 @@ const ResultDestination: React.FC = () => {
     },
     {
       label: "District",
-      value: "Unknown", // You can update this when you have more detailed data
+      value: "Unknown",
     },
     {
       label: "City",
-      value: "Unknown", // You can update this when you have more detailed data
+      value: "Unknown",
     },
     {
       label: "Province",
-      value: "Unknown", // You can update this when you have more detailed data
+      value: "Unknown",
     },
     {
       label: "Country",
-      value: "Unknown", // You can update this when you have more detailed data
+      value: "Unknown",
     },
   ];
 
+  const guestDetails3 = [
+    {
+      value: destinationData.photodestinations[0],
+    },
+    {
+      value: destinationData.photodestinations[1],
+    },
+    {
+      value: destinationData.photodestinations[2],
+    },
+    {
+      value: destinationData.photodestinations[3],
+    },
+  ];
+  console.log("img", destinationData.photodestinations[0].pathPhoto);
   return (
     <div>
       <div className={`${mediumMontserrat.className} py-6 px-7`}>
@@ -171,15 +186,14 @@ const ResultDestination: React.FC = () => {
           <div
             className={`${mediumMontserrat.className} grid grid-cols-4 gap-4 pt-6`}
           >
-            {guestDetails3.map((detail, index) => (
-              <div key={index}>
+            {destinationData.photodestinations.map((photo: any) => (
+              <div key={photo.id}>
                 <div className="w-full">
-                  {/* Using next/image for responsive image */}
                   <Image
-                    src={detail.value}
+                    src={`http://localhost:3222/photo-destinations/${photo.pathPhoto}`}
                     alt="Location Map"
-                    width={400} // Image width
-                    height={150} // Image height
+                    width={400} // Lebar gambar
+                    height={150} // Tinggi gambar
                     className="w-full rounded-lg"
                   />
                 </div>
@@ -204,18 +218,3 @@ const ResultDestination: React.FC = () => {
 };
 
 export default ResultDestination;
-
-const guestDetails3 = [
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar (example)
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar (example)
-  },
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar (example)
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar (example)
-  },
-];
