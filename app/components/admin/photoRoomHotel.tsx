@@ -12,7 +12,7 @@ const mediumMontserrat = Montserrat({
   weight: ["500"],
 });
 
-const PhotoHotel: React.FC = () => {
+const PhotoRoomHotel: React.FC = () => {
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
@@ -48,10 +48,10 @@ const PhotoHotel: React.FC = () => {
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">
       <div className={`${mediumMontserrat.className} pb-4`}>
-        <span className="text-lg font-semibold">Hotel Photo</span>
+        <span className="text-lg font-semibold">Room Photo</span>
       </div>
       <div className="flex flex-col gap-5">
-          <div className={`${mediumMontserrat.className} `}>
+        <div className={`${mediumMontserrat.className} `}>
           <p className="text-sm font-semibold">Add photo</p>
           <div
             className={`${mediumMontserrat.className} items-center justify-center  flex flex-col gap-1 w-full border border-solid border-gray-200 rounded-lg p-6 h-36 cursor-pointer`}
@@ -96,4 +96,4 @@ const PhotoHotel: React.FC = () => {
   );
 };
 
-export default PhotoHotel;
+export default PhotoRoomHotel;

@@ -96,7 +96,7 @@ export default function PhotoDestination({
       </div>
 
       <div className="flex flex-col gap-5">
-        <div>
+          <div className={`${mediumMontserrat.className} `}>
           <p className="text-sm font-semibold">Add photo</p>
           <div
             className={`${mediumMontserrat.className} flex flex-col items-center justify-center border border-gray-200 rounded-lg p-6 h-36 cursor-pointer`}
@@ -157,7 +157,7 @@ export default function PhotoDestination({
               router.push("/admin/destinations/create/result");
             }, 1000);
           }}
-          className="bg-[#4F28D9] w-32 text-white rounded-xl"
+          className="bg-RoyalAmethyst-700 w-32 text-white rounded-xl"
         >
           Done
         </Button>

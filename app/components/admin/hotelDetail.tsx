@@ -7,8 +7,18 @@ import Link from "next/link";
 
 const hotelDetail: React.FC = () => {
   return (
-    <div className="flex flex-col">
-      <div className="bg-white rounded-xl shadow-md p-7">
+    <div className="flex flex-col ">
+      <div className={`${mediumMontserrat.className} flex items-center gap-2 mb-5`}>
+        <Link href={"/"} className="no-underline text-black text-sm">
+          Hotel
+        </Link>
+        <span>/</span>
+        <Link href={"/"} className="no-underline text-black text-sm">
+          Detail
+        </Link>
+      </div>
+
+      <div className="bg-white rounded-xl border-solid border-gray-200 border p-7">
         <div className={`${mediumMontserrat.className}  pb-6`}>
           <span className="text-xl font-semibold">Hotel Detail</span>
         </div>
@@ -412,11 +422,11 @@ const hotelDetail: React.FC = () => {
       </div>
 
       <div
-        className={`${mediumMontserrat.className}> bg-white rounded-xl shadow-md px-7 py-4 flex justify-between items-center mt-5`}
+        className={`${mediumMontserrat.className}> bg-white rounded-xl border-solid border-gray-200 border px-7 py-4 flex justify-between items-center mt-5`}
       >
         <span className="text-lg font-semibold">Room Listing</span>
         <Link
-          href={"/admin/"}
+          href={"/admin/hotels/detail/room-list"}
           className="bg-RoyalAmethyst-700 px-12 py-2 rounded-xl no-underline "
         >
           <span className="text-base font-semibold text-white">

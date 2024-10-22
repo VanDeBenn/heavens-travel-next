@@ -2,20 +2,7 @@
 
 import { Montserrat } from "next/font/google";
 import Link from "next/link";
-import {
-  RiArrowDownSLine,
-  RiBus2Line,
-  RiStore2Line,
-  RiWifiFill,
-} from "react-icons/ri";
-import { Disclosure, Transition } from "@headlessui/react";
-import { GiKnifeFork } from "react-icons/gi";
-import { TbHeadset, TbMapPins } from "react-icons/tb";
-import { Switch as AntSwitch } from "antd";
-import { CiHospital1 } from "react-icons/ci";
-import { GoPeople } from "react-icons/go";
-import { FaBuildingColumns } from "react-icons/fa6";
-import { LuBird } from "react-icons/lu";
+ 
 import BasicInfoHotel from "#/app/components/admin/basicInfoHotel";
 import LocationInfoHotel from "#/app/components/admin/locationInfoHotel";
 import PhotoHotel from "#/app/components/admin/photoHotel";

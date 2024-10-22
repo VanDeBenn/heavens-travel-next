@@ -229,7 +229,7 @@ const menuItems = [
     id: 4,
     icon: <RiNewsLine className="text-2xl" />,
     title: "Blog",
-    href: "/admin/blogs",
+    href: "/admin/blog",
   },
   {
     id: 5,

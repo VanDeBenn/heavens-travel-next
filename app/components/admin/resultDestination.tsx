@@ -207,7 +207,7 @@ const ResultDestination: React.FC = () => {
         <div className="pt-7 flex justify-end">
           <Link
             href={"/admin/destinations"}
-            className="bg-[#4F28D9] border-solid no-underline border transition-all duration-300 text-white rounded-xl py-2 px-20 text-center font-semibold"
+            className="bg-RoyalAmethyst-700 border-solid no-underline border transition-all duration-300 text-white rounded-xl py-2 px-20 text-center font-semibold"
           >
             Done
           </Link>

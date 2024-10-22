@@ -236,7 +236,7 @@ const NextStepDestination: React.FC = () => {
                 {current < steps.length - 1 && current !== 0 && (
                   <div
                     onClick={next}
-                    className="w-full bg-[#4F28D9] text-center py-2 text-white text-sm rounded-xl cursor-pointer"
+                    className="w-full bg-RoyalAmethyst-700 text-center py-2 text-white text-sm rounded-xl cursor-pointer"
                   >
                     <span>Next</span>
                   </div>

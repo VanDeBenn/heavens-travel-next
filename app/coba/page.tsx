@@ -153,21 +153,43 @@
 
 // export default PhotoDestination;
 
+// import React from "react";
+// import Image from "next/image";
+
+// export default function page() {
+//   return (
+//     <>
+//       <div>page</div>
+//       <Image
+//         src={
+//           "http://localhost:3222/photo-destinations/upload/b17e1047-4868-4a2b-b75e-faedbfe7557d.png"
+//         }
+//         alt={"image"}
+//         width={500}
+//         height={500}
+//       ></Image>
+//     </>
+//   );
+// }
+
 import React from "react";
-import Image from "next/image";
+import RoomList from "../components/admin/roomList";
+import RoomHotelDetail from "../components/admin/roomHotelDetail";
+import CreateInfoRoom from "../components/admin/createInfoRoom";
+import PhotoRoomHotel from "../components/admin/photoRoomHotel";
+import FacilityRoom from "../components/admin/facilityRoom";
+import ResultRoom from "../components/admin/resultRoom";
+import BlogList from "../components/admin/blogList";
+import BlogDetail from "../components/admin/blogDetail";
+import CreateBlogInfo from "../components/admin/createBlogInfo";
 
 export default function page() {
   return (
-    <>
-      <div>page</div>
-      <Image
-        src={
-          "http://localhost:3222/photo-destinations/upload/b17e1047-4868-4a2b-b75e-faedbfe7557d.png"
-        }
-        alt={"image"}
-        width={500}
-        height={500}
-      ></Image>
-    </>
+    <div className="bg-Lilac-50 px-28 2xl:px-48 py-14 flex flex-col gap-4">
+      {/* <BlogList /> */}
+      {/* <ResultRoom /> */}
+      {/* <BlogDetail /> */}
+      <CreateBlogInfo />
+    </div>
   );
 }
