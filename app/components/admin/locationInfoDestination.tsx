@@ -19,30 +19,33 @@ const smallMontserrat = Montserrat({
 });
 
 interface LocationInfoProps {
-  setLocationInfo: (info: any) => void;
-  next: () => void;
-  data: any;
+  setLocationDestination: any;
+  submitLocationForm: boolean;
+  // setLocationInfo: (info: any) => void;
+  // next: () => void;
+  // data: any;
 }
 
 export default function LocationInfoDestination({
-  setLocationInfo,
-  next,
-  data,
-}: LocationInfoProps) {
+  setLocationDestination,
+  submitLocationForm,
+}: // next,
+// data,
+LocationInfoProps) {
   const [form] = useForm();
 
-  useEffect(() => {
-    if (data) {
-      form.setFieldsValue({
-        address: data.address,
-        pathLocation: data.pathLocation,
-        district: data.district,
-        city: data.city,
-        province: data.province,
-        country: data.country,
-      });
-    }
-  }, [data, form]);
+  // useEffect(() => {
+  //   if (data) {
+  //     form.setFieldsValue({
+  //       address: data.address,
+  //       pathLocation: data.pathLocation,
+  //       district: data.district,
+  //       city: data.city,
+  //       province: data.province,
+  //       country: data.country,
+  //     });
+  //   }
+  // }, [data, form]);
 
   type LocationInfo = {
     address: string;
@@ -65,12 +68,18 @@ export default function LocationInfoDestination({
       };
 
       console.log("comp:", dataLocationInfo);
-      setLocationInfo(dataLocationInfo);
-      next();
+      setLocationDestination(dataLocationInfo);
+      // next();
     } catch (error) {
       console.error("Location info failed:", error);
     }
   };
+
+  useEffect(() => {
+    if (submitLocationForm) {
+      form.submit();
+    }
+  }, [submitLocationForm]);
 
   return (
     <>

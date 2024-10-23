@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Upload, message, Button } from "antd";
 import { RiCamera2Line } from "react-icons/ri";
 import type { RcFile } from "antd/es/upload/interface";
@@ -16,13 +16,17 @@ const mediumMontserrat = Montserrat({
 });
 
 interface PhotoDestinationProps {
-  finish: () => void;
+  setPhotoData: any;
   destinationId: string;
+  submitPhotoForm: boolean;
+  // finish: () => void;
+  // destinationId: string;
 }
 
 export default function PhotoDestination({
-  finish,
   destinationId,
+  setPhotoData,
+  submitPhotoForm,
 }: PhotoDestinationProps) {
   const router = useRouter();
   const [fileList, setFileList] = useState<RcFile[]>([]);
@@ -89,6 +93,12 @@ export default function PhotoDestination({
     setPreviewImages(updatedPreviewImages);
   };
 
+  useEffect(() => {
+    if (destinationId) {
+      handleUploadAllFiles();
+    }
+  }, [destinationId]);
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-9">
       <div className={`${mediumMontserrat.className} pb-4`}>
@@ -96,7 +106,7 @@ export default function PhotoDestination({
       </div>
 
       <div className="flex flex-col gap-5">
-          <div className={`${mediumMontserrat.className} `}>
+        <div className={`${mediumMontserrat.className} `}>
           <p className="text-sm font-semibold">Add photo</p>
           <div
             className={`${mediumMontserrat.className} flex flex-col items-center justify-center border border-gray-200 rounded-lg p-6 h-36 cursor-pointer`}
@@ -136,21 +146,21 @@ export default function PhotoDestination({
           ))}
         </div>
 
-        <Button
+        {/* <Button
           type="primary"
           onClick={handleUploadAllFiles}
           loading={uploading}
           disabled={fileList.length === 0}
         >
           {uploading ? "Uploading..." : "Upload Files"}
-        </Button>
+        </Button> */}
       </div>
 
-      <div className="flex justify-end mt-4">
+      {/* <div className="flex justify-end mt-4">
         <Button
           type="primary"
           onClick={() => {
-            finish();
+            // finish();
 
             setTimeout(() => {
               handleUploadAllFiles();
@@ -161,7 +171,7 @@ export default function PhotoDestination({
         >
           Done
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }

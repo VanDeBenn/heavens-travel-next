@@ -19,44 +19,22 @@ const smallMontserrat = Montserrat({
 });
 
 interface BasicInfoProps {
-  setBasicInfo: (info: any) => void;
-  next: () => void;
-  data: any;
+  setBasicInfoDestination: any;
+  submitBasicInfoForm: any;
+  // next: () => void;
+  // data: any;
 }
 
 export default function BasicInfoDestination({
-  setBasicInfo,
-  next,
-  data,
+  setBasicInfoDestination,
+  submitBasicInfoForm, // Tambahkan prop ini
 }: BasicInfoProps) {
   const [form] = useForm();
 
-  useEffect(() => {
-    if (data) {
-      form.setFieldsValue({
-        nameDestination: data.nameDestination,
-        rating: data.rating,
-        maxCapacity: data.maxCapacity,
-        description: data.description,
-        adultPrice: data.adultPrice,
-        childrenPrice: data.childrenPrice,
-      });
-    }
-  }, [data, form]);
-
-  type BasicInfo = {
-    nameDestination: string;
-    rating: number;
-    maxCapacity: number;
-    description: string;
-    adultPrice: number;
-    childrenPrice: number;
-  };
-
-  const onFinish = async (values: BasicInfo) => {
+  const onFinish = async (values: any) => {
     try {
       const dataBasicInfo = {
-        nameDestination: values.nameDestination,
+        name: values.name,
         rating: values.rating,
         maxCapacity: values.maxCapacity,
         description: values.description,
@@ -64,13 +42,17 @@ export default function BasicInfoDestination({
         childrenPrice: values.childrenPrice,
       };
 
-      console.log("comp:", dataBasicInfo);
-      setBasicInfo(dataBasicInfo);
-      next();
+      setBasicInfoDestination(dataBasicInfo);
     } catch (error) {
       console.error("Basic info failed:", error);
     }
   };
+
+  useEffect(() => {
+    if (submitBasicInfoForm) {
+      form.submit();
+    }
+  }, [submitBasicInfoForm]);
 
   return (
     <>
@@ -84,7 +66,7 @@ export default function BasicInfoDestination({
           <div className="flex justify-between gap-4">
             <Form.Item
               label="Name Destination"
-              name="nameDestination"
+              name="name"
               className="w-full"
               rules={[
                 { required: true, message: "Please input destination name!" },
