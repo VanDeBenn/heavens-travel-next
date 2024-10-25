@@ -13,7 +13,7 @@ interface PageProps {
 const UserPage = ({ data }: PageProps) => {
   const [allUserData, setAllUserData] = useState<any[]>([]);
 
-  const fetchAllUser = async () => {
+  const getAllUser = async () => {
     try {
       const res = await usersRepository.api.getAllUsers();
       setAllUserData(res.body.data);
@@ -22,7 +22,7 @@ const UserPage = ({ data }: PageProps) => {
   console.log(allUserData);
 
   useEffect(() => {
-    fetchAllUser();
+    getAllUser();
   }, []);
   return (
     <div className="flex flex-col gap-5">

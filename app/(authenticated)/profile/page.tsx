@@ -71,8 +71,6 @@ export default function Page({ id, data, role }: PageProps) {
       console.log(res);
       setUserData(res.body.data);
       setUserRole(res.body.data.role.id);
-      localStorage.setItem("_carts", res.body.data.carts.id);
-      localStorage.setItem("_wishlists", res.body.data.wishlists.id);
 
       cookies.remove("id");
       cookies.remove("access_token");
@@ -86,8 +84,6 @@ export default function Page({ id, data, role }: PageProps) {
     if (typeof window !== "undefined") {
       if (!TokenUtil.accessToken) {
         localStorage.removeItem("_id");
-        localStorage.removeItem("_carts");
-        localStorage.removeItem("_wishlists");
         cookies.remove("id");
         cookies.remove("access_token");
         cookies.remove("refresh_token");

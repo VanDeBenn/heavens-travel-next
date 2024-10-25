@@ -1,6 +1,6 @@
 "use client";
 import { Button, Spin, Steps, message } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LuShoppingCart } from "react-icons/lu";
 import {
   RiFileUserLine,
@@ -17,6 +17,7 @@ import PaymentMethod from "./paymentMethod";
 import DoneOrder from "./doneOrder";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
+import { bookingRepository } from "#/repository/bookings";
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["600"],
@@ -32,14 +33,27 @@ const smallMontserrat = Montserrat({
 
 const { Step } = Steps;
 
-const NextStep: React.FC = () => {
+export default function NextStep() {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [dataBooking, setDataBooking] = useState<any[]>([]);
+
+  const bookingId = localStorage.getItem("_booking");
+  const getBooking = async () => {
+    try {
+      const res = await bookingRepository.api.getBooking(bookingId || "");
+      setDataBooking(res.data.bookingdetails);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getBooking();
+  }, []);
 
   const steps = [
     {
-      content: <YourBooking />,
+      content: <YourBooking dataBooking={dataBooking} />,
       icon:
         loading && current === 0 ? (
           <Spin size="small" />
@@ -339,6 +353,4 @@ const NextStep: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default NextStep;
+}

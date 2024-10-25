@@ -12,10 +12,13 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 import { usersRepository } from "#/repository/users";
 import { cartRepository } from "#/repository/carts";
 import { bookingRepository } from "#/repository/bookings";
+import { bookingDetailRepository } from "#/repository/bookingDetail";
+import { useRouter } from "next/navigation";
+import NextStep from "./next-step";
 
 const formatCurrency = (amount: number) =>
   `Rp${amount.toLocaleString("id-ID").replace(",", ".")}`;
@@ -26,10 +29,13 @@ const mediumMontserrat = Montserrat({
 });
 
 export default function MyCart() {
+  const router = useRouter();
   const [dataCart, setDataCart] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = useState<boolean[]>([]);
   const [selectedItemsId, setSelectedItemsId] = useState<string[]>([]);
+  const [bookingDetailId, setBookingDetailId] = useState<string[]>([]);
 
+  console.log(dataCart);
   const fetchCart = async () => {
     const id: any = localStorage.getItem("_id");
     try {
@@ -49,7 +55,6 @@ export default function MyCart() {
           item.quantityChildren * item.destination.priceChildren;
         total += priceForAdults + priceForChildren;
       }
-      console.log(total);
       return total;
     }, 0);
   };
@@ -91,15 +96,61 @@ export default function MyCart() {
     setSelectedItemsId(updatedSelectedItemsId);
   };
 
-  const handleBook = async (values: any) => {
+  const handleAddBooking = async () => {
     try {
-      const data = {
-        destinationId: values.destination,
-        hotelId: values.hotel,
-      };
-      const req = await bookingRepository.api.create(data);
+      if (!localStorage.getItem("_booking")) {
+        const data = {
+          userId: localStorage.getItem("_id"),
+        };
+        const req = await bookingRepository.api.create(data);
+        console.log("booking id:", req);
+        const bookingId = req.body.data.id;
+        localStorage.setItem("_booking", bookingId);
+      }
+      const bookingId = localStorage.getItem("_booking");
+      handleSelectedCarts(bookingId);
+      // handleCreateBookingDetail(bookingId)
     } catch (error) {}
   };
+
+  const handleCreateBookingDetail = async (bookingId: string) => {
+    try {
+      for (const cartId of selectedItemsId) {
+        const data = {
+          cartId: cartId,
+          bookingId: bookingId,
+        };
+
+        const req = await bookingDetailRepository.api.create(data);
+        const id = req.body.data.id;
+      }
+
+      // {
+      //   "bookingId": "be1c08c2-e778-4f24-854d-f701e261e0e5",
+      //     "selectedCartIds": ["6bf4eda8-a8da-4c11-af75-3c501b305739"]
+      // }
+    } catch (error) {
+      console.error("Error creating booking details:", error);
+    }
+  };
+
+  const handleSelectedCarts = async (bookingId: any) => {
+    try {
+      const data = {
+        bookingId: bookingId,
+        selectedCartIds: selectedItemsId,
+      };
+      const req = await bookingDetailRepository.api.createBookingDetail(
+        bookingId,
+        data
+      );
+    } catch (error) {}
+  };
+
+  // bookingDetailId.push(id);
+  // const bookingDetailId = [];
+  // setBookingDetailId(bookingDetailId);
+  // localStorage.setItem('_details', bookingDetailId)
 
   return (
     <div className="w-full">
@@ -250,11 +301,22 @@ export default function MyCart() {
             </span>
           </div>
 
-          <Link href={"/booking"}>
+          <Button
+            onClick={() => {
+              // handleCreateBookingDetail();
+              handleAddBooking();
+
+              if (selectedItemsId.length > 0) {
+                setTimeout(() => {
+                  router.push("/booking");
+                }, 3000);
+              }
+            }}
+          >
             <div className="bg-[#4F28D9] text-center text-white text-sm rounded-xl cursor-pointer py-3 px-9 mx-9 mb-3">
               <span>Booking Now</span>
             </div>
-          </Link>
+          </Button>
         </div>
       </div>
     </div>
