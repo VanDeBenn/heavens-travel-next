@@ -29,8 +29,19 @@ const smallMontserrat = Montserrat({
   weight: ["400"],
 });
 
-export default function PaymentMethod() {
+interface ComponentsProps {
+  dataBooking: any;
+  dataBookingDetail: any;
+  setSubmit: any;
+}
+
+export default function PaymentMethod({
+  dataBooking,
+  dataBookingDetail,
+  setSubmit,
+}: ComponentsProps) {
   const [bookingItems, setBookingItems] = useState(initialBookingItems);
+  setSubmit(false);
 
   // Filter hotel dan destinasi untuk menampilkan hanya 1 hotel dan 1 destinasi
   const filteredBookingItems = [
@@ -57,21 +68,24 @@ export default function PaymentMethod() {
   const guestDetails = [
     {
       label: "Full Name",
-      value: "Disoue Oie",
+      value: dataBooking?.customerName || dataBooking?.guestName,
     },
     {
       label: "Email",
-      value: "DisoueOie@asolole.com",
+      value: dataBooking?.customerEmail || dataBooking?.guestEmail,
     },
     {
       label: "Phone Number",
-      value: "08123456789",
+      value: dataBooking?.customerPhoneNumber || dataBooking?.guestPhoneNumber,
     },
   ];
+
   return (
     <div className="w-full">
       <div className="flex flex-col gap-5">
-        <div className={`bg-white rounded-xl border-solid border-gray-200 border`}>
+        <div
+          className={`bg-white rounded-xl border-solid border-gray-200 border`}
+        >
           <div className={`${mediumMontserrat.className} py-6 px-9`}>
             <span className="text-lg font-semibold">Guest Detailed</span>
           </div>
@@ -106,140 +120,165 @@ export default function PaymentMethod() {
             <span className="text-lg font-semibold">Your Booking</span>
           </div>
           <div className="h-px bg-gray-300"></div>
-          <div className="grid grid-cols-1 px-8 py-6 gap-6 w-full ">
-            {filteredBookingItems.map((item, index) => {
-              const totalCost = item.HotelPricePerAdult
-                ? Number(item.guests.match(/\d+/)?.[0]) *
-                  item.HotelPricePerAdult
-                : 0;
-              const adultsCount =
-                Number(item.guests.match(/(\d+)\s*adult/)?.[1]) || 0;
-              const childrenCount =
-                Number(item.guests.match(/(\d+)\s*child/)?.[1]) || 0;
+          {dataBookingDetail.map((item: any) => {
+            const { cart } = item;
+            const { destination, roomHotel } = cart;
 
-              return (
-                <div
-                  key={index}
-                  className="p-3 border border-solid border-[#DBDBDB] rounded-xl w-full"
-                >
-                  <div className="flex justify-between items-center">
-                    <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                      {item.category === "Hotel" ? (
-                        <RiHome3Line size={18} color="#ffff" />
-                      ) : (
-                        <RiGlassesLine size={18} color="#ffff" />
-                      )}
-                      <span className="text-xs font-semibold text-white">
-                        {item.category}
-                      </span>
-                    </div>
-                    {/* <div className="flex items-center">
-                      <RiDeleteBin6Line
-                        size={24}
-                        color="#DC143C"
-                        className="cursor-pointer"
-                        onClick={() => handleDelete(index)}
-                      />
-                    </div> */}
+            const formatDate = (dateString: string) =>
+              new Date(dateString).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              });
+
+            // const totalCost = roomHotel?.priceAdult
+            //   ? Number(
+            //       cart?.quantityAdult cart?.quantityChildren ||
+            //         cart?.quantityAdult +
+            //           cart?.quantityChildren.match(/\d+/)?.[0]
+            //     ) * roomHotel?.priceAdult
+            //   : 0;
+            // const adultsCount =
+            //   Number(
+            //     cart?.quantityAdult cart?.quantityChildren ||
+            //       cart?.quantityAdult +
+            //         cart?.quantityChildren.match(/(\d+)\s*adult/)?.[1]
+            //   ) || 0;
+            // const childrenCount =
+            //   Number(
+            //     cart?.quantityAdult cart?.quantityChildren ||
+            //       cart?.quantityAdult +
+            //         cart?.quantityChildren.match(/(\d+)\s*child/)?.[1]
+            //   ) || 0;
+
+            return (
+              <div
+                key={item.id}
+                className="py-3 px-9 border border-solid border-[#DBDBDB] rounded-xl w-full"
+              >
+                <div className="flex justify-between items-center">
+                  <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                    {roomHotel ? (
+                      <RiHome3Line size={18} color="#ffff" />
+                    ) : (
+                      <RiGlassesLine size={18} color="#ffff" />
+                    )}
+                    <span className="text-xs font-semibold text-white">
+                      {/* {roomHotel?. ? "Hotel" : "Destination"} */}
+                      {roomHotel?.name || destination?.name}
+                    </span>
                   </div>
+                  {/* <div className="flex items-center">
+                    <RiDeleteBin6Line
+                      size={24}
+                      color="#DC143C"
+                      className="cursor-pointer"
+                      // onClick={() => handleDelete(item.id)}
+                    />
+                  </div> */}
+                </div>
 
-                  <div className="flex items-center gap-2 py-3">
-                    <Link href={item.link}>
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        width={100}
-                        height={100}
-                        className="rounded-xl w-44"
-                      />
+                <div className="flex items-center gap-2 py-3">
+                  <Link href={""}>
+                    <Image
+                      src={
+                        "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                      }
+                      alt={roomHotel?.name || destination?.name}
+                      width={100}
+                      height={100}
+                      className="rounded-xl w-44"
+                    />
+                  </Link>
+                  <div
+                    className={`${mediumMontserrat.className} flex flex-col gap-1 w-full`}
+                  >
+                    <Link
+                      href={""}
+                      className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
+                    >
+                      {roomHotel?.name || destination?.name}
                     </Link>
-                    <div
-                      className={`${mediumMontserrat.className} flex flex-col gap-1 w-full`}
-                    >
-                      <Link
-                        href={item.link}
-                        className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
-                      >
-                        {item.name}
-                      </Link>
-                      <div className="flex items-center gap-1">
-                        <RiCalendarLine className="text-lg text-black" />
-                        <span className="text-xs text-black">
-                          {item.category === "Hotel"
-                            ? item.HotelSchedule
-                            : item.DestinationSchedule}
-                        </span>
-                      </div>
-                      <div className="flex gap-1 items-center">
-                        <RiTeamLine className="text-lg text-black" />
-                        <span className="text-xs text-black">
-                          Guests: {item.guests}
-                        </span>
-                      </div>
-
-                      <div className="flex justify-between w-full">
-                        <div className="flex items-center gap-1 w-full">
-                          <span className="text-sm font-semibold text-RoyalAmethyst-700">
-                            {item.category === "Hotel" && item.HotelRoomType}
-                            {item.category === "Destination" &&
-                              item.DestinationType}
-                          </span>
-                        </div>
-
-                        <div className="flex justify-end w-full gap-1 items-end">
-                          {item.HotelPricePerAdult && (
-                            <div className="text-sm text-black">
-                              {item.guests.match(/\d+/)?.[0]} x
-                              {formatCurrency(item.HotelPricePerAdult)}
-                            </div>
-                          )}
-
-                          {item.DestinationPriceAdults && adultsCount > 0 && (
-                            <div className="text-sm text-black">
-                              {adultsCount} x
-                              {formatCurrency(item.DestinationPriceAdults)}
-                              {childrenCount > 0 &&
-                                item.DestinationPriceChildren && (
-                                  <>
-                                    {" - "}
-                                    {childrenCount} x
-                                    {formatCurrency(
-                                      item.DestinationPriceChildren
-                                    )}
-                                  </>
-                                )}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="h-px bg-gray-300"></div>
-                  <div className="pt-5 pb-3 flex justify-end w-full gap-2">
-                    <div
-                      className={`${mediumMontserrat.className} flex flex-col gap-1`}
-                    >
-                      <span className="font-semibold text-xs">Total Price</span>
-                      <span className="text-sm font-semibold text-InfernoEcho-600">
-                        {item.category === "Hotel" &&
-                          formatCurrency(
-                            (Number(item.guests.match(/\d+/)?.[0]) || 1) *
-                              (item.HotelPricePerAdult || 0)
-                          )}
-                        {item.category === "Destination" &&
-                          formatCurrency(
-                            adultsCount * (item.DestinationPriceAdults || 0) +
-                              childrenCount *
-                                (item.DestinationPriceChildren || 0)
-                          )}
+                    <div className="flex items-center gap-1">
+                      <RiCalendarLine className="text-lg text-black" />
+                      <span className="text-xs text-black">
+                        {cart?.startDate && cart?.endDate
+                          ? `${formatDate(cart.startDate)} - ${formatDate(
+                              cart.endDate
+                            )}`
+                          : ""}
                       </span>
+                    </div>
+                    <div className="flex gap-1 items-center">
+                      <RiTeamLine className="text-lg text-black" />
+                      <span className="text-xs text-black">
+                        Guests: {cart?.quantityAdult + cart?.quantityChildren}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between w-full">
+                      <div className="flex gap-1 w-full">
+                        <span className="text-sm font-semibold text-RoyalAmethyst-700">
+                          {roomHotel ||
+                            (destination && `${destination?.name} Tour`)}
+                        </span>
+                      </div>
+
+                      <div className="flex justify-end w-full gap-1 items-end">
+                        {roomHotel?.priceAdult && (
+                          <div className="text-sm text-black">
+                            {cart?.quantityAdult + cart?.quantityChildren ||
+                              cart?.quantityAdult +
+                                cart?.quantityChildren.match(/\d+/)?.[0]}{" "}
+                            x{formatCurrency(roomHotel?.priceAdult)}
+                          </div>
+                        )}
+
+                        {destination?.priceAdult && cart?.quantityAdult > 0 && (
+                          <div className="text-sm text-black">
+                            {cart?.quantityAdult} {"Adult"} x{" "}
+                            {formatCurrency(destination?.priceAdult)} <br />
+                            {cart?.quantityChildren > 0 &&
+                              destination?.priceChildren && (
+                                <>
+                                  {cart?.quantityChildren} {"Children"} x{" "}
+                                  {formatCurrency(destination?.priceChildren)}
+                                </>
+                              )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+
+                <div className="h-px bg-gray-300"></div>
+                <div className="pt-5 pb-3 flex justify-end w-full gap-2">
+                  <div
+                    className={`${mediumMontserrat.className} flex flex-col gap-1`}
+                  >
+                    <span className="font-semibold text-xs">Total Price</span>
+
+                    <span className="text-sm font-semibold text-InfernoEcho-600">
+                      {destination &&
+                        formatCurrency(
+                          (cart?.quantityAdult || 0) *
+                            (destination?.priceAdult || 0) +
+                            (cart?.quantityChildren || 0) *
+                              (destination?.priceChildren || 0)
+                        )}
+                      {roomHotel &&
+                        formatCurrency(
+                          ((cart?.quantityAdult || 0) +
+                            (cart?.quantityChildren || 0) || 1) *
+                            (roomHotel?.priceAdult || 0)
+                        )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

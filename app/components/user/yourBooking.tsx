@@ -30,13 +30,13 @@
 // });
 
 // interface ComponentsProps {
-//   dataBooking: any;
+//   dataBookingDetail: any;
 // }
 
-// export default function YourBooking({ dataBooking }: ComponentsProps) {
+// export default function YourBooking({ dataBookingDetail }: ComponentsProps) {
 //   const [bookingItems, setBookingItems] = useState(initialBookingItems);
 
-//   console.log("data", dataBooking);
+//   console.log("data", dataBookingDetail);
 //   // Filter hotel dan destinasi untuk menampilkan hanya 1 hotel dan 1 destinasi
 //   const filteredBookingItems = [
 //     ...bookingItems.filter((item) => roomHotel || destination === "Hotel").slice(0, 1),
@@ -128,8 +128,8 @@
 //                         <RiCalendarLine className="text-lg text-black" />
 //                         <span className="text-xs text-black">
 //                           {roomHotel || destination === "Hotel"
-//                             ?cart?.startDate -cart?.endDate
-//                             : cart?.startDate - cart?.endDate}
+//                             ?cart?.startDate ? formatDate(cart.startDate) : '' -cart?.endDate ? formatDate(cart.endDate)
+//                             : cart?.startDate ? formatDate(cart.startDate) : '' - cart?.endDate ? formatDate(cart.endDate)}
 //                         </span>
 //                       </div>
 //                       <div className="flex gap-1 items-center">
@@ -240,12 +240,16 @@ const smallMontserrat = Montserrat({
 });
 
 interface ComponentsProps {
-  dataBooking: any;
+  dataBookingDetail: any;
+  setSubmit: any;
 }
 
-export default function YourBooking({ dataBooking }: ComponentsProps) {
+export default function YourBooking({
+  dataBookingDetail,
+  setSubmit,
+}: ComponentsProps) {
   const [bookingItems, setBookingItems] = useState(initialBookingItems);
-
+  setSubmit(false);
   // Filter hotel dan destinasi untuk menampilkan hanya 1 hotel dan 1 destinasi
   // const filteredBookingItems = [
   //   ...bookingItems.filter((item) => roomHotel || destination === "Hotel").slice(0, 1),
@@ -269,14 +273,12 @@ export default function YourBooking({ dataBooking }: ComponentsProps) {
   //   });
   // };
 
-  console.log("data", dataBooking);
-  const allDestinations = dataBooking.flatMap(
+  const allDestinations = dataBookingDetail.flatMap(
     (item: any) =>
       // item.cart.map((item: any) => item.destination?.name)
       item.cart.destination?.name
   );
 
-  console.log("name:", allDestinations);
   return (
     <div className="w-full">
       <div className="flex gap-5">
@@ -286,9 +288,16 @@ export default function YourBooking({ dataBooking }: ComponentsProps) {
           </div>
           <div className="h-px bg-gray-300"></div>
           <div className="grid grid-cols-1 px-8 py-6 gap-6 w-full ">
-            {dataBooking.map((item: any) => {
+            {dataBookingDetail.map((item: any) => {
               const { cart } = item;
               const { destination, roomHotel } = cart;
+
+              const formatDate = (dateString: string) =>
+                new Date(dateString).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                });
 
               // const totalCost = roomHotel?.priceAdult
               //   ? Number(
@@ -317,11 +326,11 @@ export default function YourBooking({ dataBooking }: ComponentsProps) {
                 >
                   <div className="flex justify-between items-center">
                     <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                      {/* {roomHotel === "Hotel" ? (
+                      {roomHotel ? (
                         <RiHome3Line size={18} color="#ffff" />
                       ) : (
                         <RiGlassesLine size={18} color="#ffff" />
-                      )} */}
+                      )}
                       <span className="text-xs font-semibold text-white">
                         {/* {roomHotel?. ? "Hotel" : "Destination"} */}
                         {roomHotel?.name || destination?.name}
@@ -361,31 +370,25 @@ export default function YourBooking({ dataBooking }: ComponentsProps) {
                       <div className="flex items-center gap-1">
                         <RiCalendarLine className="text-lg text-black" />
                         <span className="text-xs text-black">
-                          {roomHotel === "Hotel"
-                            ? cart?.startDate - cart?.endDate
-                            : cart?.startDate - cart?.endDate}
+                          {cart?.startDate && cart?.endDate
+                            ? `${formatDate(cart.startDate)} - ${formatDate(
+                                cart.endDate
+                              )}`
+                            : ""}
                         </span>
                       </div>
                       <div className="flex gap-1 items-center">
                         <RiTeamLine className="text-lg text-black" />
                         <span className="text-xs text-black">
-                          Guests:{" "}
-                          {cart?.quantityAdult + cart?.quantityChildren ||
-                            cart?.quantityAdult + cart?.quantityChildren}
+                          Guests: {cart?.quantityAdult + cart?.quantityChildren}
                         </span>
                       </div>
 
                       <div className="flex justify-between w-full">
-                        <div className="flex items-center gap-1 w-full">
+                        <div className="flex gap-1 w-full">
                           <span className="text-sm font-semibold text-RoyalAmethyst-700">
-                            {
-                              roomHotel === "Hotel" && ""
-                              // item.HotelRoomType
-                            }
-                            {
-                              destination === "Destination" && ""
-                              // item.DestinationType
-                            }
+                            {roomHotel ||
+                              (destination && `${destination?.name} Tour`)}
                           </span>
                         </div>
 
@@ -399,20 +402,22 @@ export default function YourBooking({ dataBooking }: ComponentsProps) {
                             </div>
                           )}
 
-                          {/* {destination?.priceAdult && adultsCount > 0 && (
-                            <div className="text-sm text-black">
-                              {adultsCount} x
-                              {formatCurrency(destination?.priceAdult)}
-                              {childrenCount > 0 &&
-                                destination?.priceChildren && (
-                                  <>
-                                    {" - "}
-                                    {childrenCount} x
-                                    {formatCurrency(destination?.priceChildren)}
-                                  </>
-                                )}
-                            </div>
-                          )} */}
+                          {destination?.priceAdult &&
+                            cart?.quantityAdult > 0 && (
+                              <div className="text-sm text-black">
+                                {cart?.quantityAdult} {"Adult"} x{" "}
+                                {formatCurrency(destination?.priceAdult)} <br />
+                                {cart?.quantityChildren > 0 &&
+                                  destination?.priceChildren && (
+                                    <>
+                                      {cart?.quantityChildren} {"Children"} x{" "}
+                                      {formatCurrency(
+                                        destination?.priceChildren
+                                      )}
+                                    </>
+                                  )}
+                              </div>
+                            )}
                         </div>
                       </div>
                     </div>
@@ -424,29 +429,28 @@ export default function YourBooking({ dataBooking }: ComponentsProps) {
                       className={`${mediumMontserrat.className} flex flex-col gap-1`}
                     >
                       <span className="font-semibold text-xs">Total Price</span>
+
                       <span className="text-sm font-semibold text-InfernoEcho-600">
-                        {roomHotel ||
-                          (destination === "Hotel" &&
-                            formatCurrency(
-                              (Number(
-                                cart?.quantityAdult + cart?.quantityChildren ||
-                                  cart?.quantityAdult +
-                                    cart?.quantityChildren.match(/\d+/)?.[0]
-                              ) || 1) * (roomHotel?.priceAdult || 0)
-                            ))}
-                        {/* {roomHotel ||
-                          (destination === "Destination" &&
-                            formatCurrency(
-                              adultsCount * (destination?.priceAdult || 0) +
-                                childrenCount * (destination?.priceChildren || 0)
-                            ))} */}
+                        {destination &&
+                          formatCurrency(
+                            (cart?.quantityAdult || 0) *
+                              (destination?.priceAdult || 0) +
+                              (cart?.quantityChildren || 0) *
+                                (destination?.priceChildren || 0)
+                          )}
+                        {roomHotel &&
+                          formatCurrency(
+                            ((cart?.quantityAdult || 0) +
+                              (cart?.quantityChildren || 0) || 1) *
+                              (roomHotel?.priceAdult || 0)
+                          )}
                       </span>
                     </div>
                   </div>
                 </div>
               );
             })}
-            {/* {dataBooking.map((item: any) => {
+            {/* {dataBookingDetail.map((item: any) => {
               const { cart } = item;
               const { destination, roomHotel } = cart;
               // console.log(item.id);

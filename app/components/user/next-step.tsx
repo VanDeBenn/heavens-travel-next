@@ -18,6 +18,7 @@ import DoneOrder from "./doneOrder";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import { bookingRepository } from "#/repository/bookings";
+import form from "antd/es/form";
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["600"],
@@ -37,13 +38,18 @@ export default function NextStep() {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-  const [dataBooking, setDataBooking] = useState<any[]>([]);
+  const [dataBookingDetail, setdataBookingDetail] = useState<any[]>([]);
+  const [dataBooking, setdataBooking] = useState<any[]>([]);
+  const [dataUser, setDataUser] = useState<any>();
+  const [submitForms, setSubmitForms] = useState(false);
 
   const bookingId = localStorage.getItem("_booking");
   const getBooking = async () => {
     try {
       const res = await bookingRepository.api.getBooking(bookingId || "");
-      setDataBooking(res.data.bookingdetails);
+      setdataBooking(res.data);
+      setdataBookingDetail(res.data.bookingdetails);
+      setDataUser(res.data.user);
     } catch (error) {}
   };
 
@@ -51,9 +57,39 @@ export default function NextStep() {
     getBooking();
   }, []);
 
+  // console.log("data booking:", dataBooking);
+
+  const next = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setCompletedSteps([...completedSteps, current]); // Tambahkan langkah saat ini ke daftar langkah yang selesai
+      setCurrent(current + 1);
+      setLoading(false);
+    }, 2000);
+    setSubmitForms(true);
+  };
+
+  const prev = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setCompletedSteps(completedSteps.filter((step) => step !== current - 1)); // Hapus langkah yang dikembalikan dari daftar yang selesai
+      setCurrent(current - 1);
+      setLoading(false);
+    }, 1200);
+  };
+
+  const finish = () => {
+    message.success("All steps completed!");
+  };
+
   const steps = [
     {
-      content: <YourBooking dataBooking={dataBooking} />,
+      content: (
+        <YourBooking
+          dataBookingDetail={dataBookingDetail}
+          setSubmit={setSubmitForms}
+        />
+      ),
       icon:
         loading && current === 0 ? (
           <Spin size="small" />
@@ -67,7 +103,14 @@ export default function NextStep() {
         ),
     },
     {
-      content: <GuestForm />,
+      content: (
+        <GuestForm
+          dataUser={dataUser}
+          next={next}
+          submit={submitForms}
+          setSubmit={setSubmitForms}
+        />
+      ),
       icon:
         loading && current === 1 ? (
           <Spin size="small" />
@@ -81,7 +124,13 @@ export default function NextStep() {
         ),
     },
     {
-      content: <PaymentMethod />,
+      content: (
+        <PaymentMethod
+          dataBooking={dataBooking}
+          dataBookingDetail={dataBookingDetail}
+          setSubmit={setSubmitForms}
+        />
+      ),
       icon:
         loading && current === 2 ? (
           <Spin size="small" />
@@ -109,28 +158,6 @@ export default function NextStep() {
         ),
     },
   ];
-
-  const next = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setCompletedSteps([...completedSteps, current]); // Tambahkan langkah saat ini ke daftar langkah yang selesai
-      setCurrent(current + 1);
-      setLoading(false);
-    }, 2000);
-  };
-
-  const prev = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setCompletedSteps(completedSteps.filter((step) => step !== current - 1)); // Hapus langkah yang dikembalikan dari daftar yang selesai
-      setCurrent(current - 1);
-      setLoading(false);
-    }, 1200);
-  };
-
-  const finish = () => {
-    message.success("All steps completed!");
-  };
 
   return (
     <div className="w-full">
@@ -163,7 +190,9 @@ export default function NextStep() {
                 <div
                   className={`${mediumMontserrat.className} flex justify-between items-center`}
                 >
-                  <span className="text-base font-semibold">2 item</span>
+                  <span className="text-base font-semibold">
+                    {dataBookingDetail.length} item
+                  </span>
                   <span className="text-base font-semibold text-InfernoEcho-600">
                     Rp1.299.000
                   </span>
@@ -179,52 +208,66 @@ export default function NextStep() {
                     </span>
                   </div>
 
-                  <div
-                    className={`${mediumMontserrat.className} flex gap-1 items-center pt-2`}
-                  >
-                    <span className="text-black text-base font-semibold">
-                      Penida iceland
-                    </span>
-                    <span className="text-sm">(Bali, indonesian)</span>
-                  </div>
-                  <div
-                    className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
-                  >
-                    <RiCalendarLine className="text-lg text-black" />
-                    <span className="text-xs text-black">26 Nov, 2024</span>
-                  </div>
-
-                  <div
-                    className={`${mediumMontserrat.className} flex gap-1 pt-1`}
-                  >
-                    <RiTeamLine className="text-black text-lg" />
-                    <div className=" flex flex-col gap-1 w-full">
-                      <span className="  text-sm font-semibold">Guest :</span>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs font-semibold">2 adults</span>
-                        <span className="text-sm font-semibold">
-                          Rp2.555.000
+                  {dataBookingDetail.map(({ cart }: any, item: any) => (
+                    <>
+                      <div
+                        className={`${mediumMontserrat.className} flex gap-1 items-center pt-2`}
+                      >
+                        <span className="text-black text-base font-semibold">
+                          {cart?.destination.name}
+                        </span>
+                        <span className="text-sm">(Bali, indonesian)</span>
+                      </div>
+                      <div
+                        className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
+                      >
+                        <RiCalendarLine className="text-lg text-black" />
+                        <span className="text-xs text-black">
+                          {" "}
+                          {cart?.startDate}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs font-semibold">2 child</span>
+                      <div
+                        className={`${mediumMontserrat.className} flex gap-1 pt-1`}
+                      >
+                        <RiTeamLine className="text-black text-lg" />
+                        <div className=" flex flex-col gap-1 w-full">
+                          <span className="  text-sm font-semibold">
+                            Guest :
+                          </span>
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs font-semibold">
+                              {cart?.quantityAdult} adults
+                            </span>
+                            <span className="text-sm font-semibold">
+                              Rp{cart?.destination.priceAdult}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs font-semibold">
+                              {cart?.quantityChildren} child
+                            </span>
+                            <span className="text-sm font-semibold">
+                              Rp{cart?.destination.priceChildren}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className={`${mediumMontserrat.className} flex items-center justify-between pt-1`}
+                      >
                         <span className="text-sm font-semibold">
-                          Rp2.555.000
+                          Total Destination Price
+                        </span>
+                        <span className="text-sm font-semibold text-InfernoEcho-600">
+                          {(cart?.quantityAdult *
+                            cart?.destination.priceAdult || 0) +
+                            (cart?.quantityChildren *
+                              cart?.destination.priceChildren || 0)}
                         </span>
                       </div>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`${mediumMontserrat.className} flex items-center justify-between pt-1`}
-                  >
-                    <span className="text-sm font-semibold">
-                      Total Destination Price
-                    </span>
-                    <span className="text-sm font-semibold text-InfernoEcho-600">
-                      Rp2.555.000
-                    </span>
-                  </div>
+                    </>
+                  ))}
                 </div>
                 <div>
                   <div
@@ -240,42 +283,42 @@ export default function NextStep() {
                     className={`${mediumMontserrat.className} flex gap-1 items-center pt-2`}
                   >
                     <span className="text-black text-base font-semibold">
-                      Mandarin Oriental
+                      {/* Mandarin Oriental */}
                     </span>
-                    <span className="text-sm">(Bali, indonesian)</span>
+                    <span className="text-sm">{/* (Bali, indonesian) */}</span>
                   </div>
                   <div
                     className={`${mediumMontserrat.className} flex gap-1 items-center pt-1 justify-between`}
                   >
                     <span className="text-black text-sm font-semibold">
-                      Deluxe Double Room F
+                      {/* Deluxe Double Room F */}
                     </span>
-                    <span className="text-sm font-semibold">X2</span>
+                    <span className="text-sm font-semibold">{/* X2 */}</span>
                   </div>
 
                   <div
                     className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
                   >
-                    <RiCalendarLine className="text-lg text-black" />
+                    {/* <RiCalendarLine className="text-lg text-black" /> */}
                     <div className=" flex gap-1 w-full justify-between">
                       <span className="text-xs text-black font-semibold">
-                        26 Nov, 2024 - 29 Nov, 2024
+                        {/* 26 Nov, 2024 - 29 Nov, 2024 */}
                       </span>
-                      <span className="text-xs">(3 day, 2 night)</span>
+                      <span className="text-xs">{/* (3 day, 2 night) */}</span>
                     </div>
                   </div>
 
                   <div
                     className={`${mediumMontserrat.className} flex gap-1 pt-1 items-center`}
                   >
-                    <RiTeamLine className="text-black text-lg" />
+                    {/* <RiTeamLine className="text-black text-lg" /> */}
                     <div className=" flex gap-1 w-full justify-between  items-center">
                       <span className="text-xs font-semibold">
-                        Guest : 2 adults, 3 child
+                        {/* Guest : 2 adults, 3 child */}
                       </span>
 
                       <span className="text-sm font-semibold text-InfernoEcho-600">
-                        Rp2.555.000
+                        {/* Rp2.555.000 */}
                       </span>
                     </div>
                   </div>
@@ -284,14 +327,16 @@ export default function NextStep() {
                     className={`${mediumMontserrat.className} flex items-center justify-between pt-1`}
                   >
                     <span className="text-sm font-semibold">
-                      Total Room Price
+                      {/* Total Room Price */}
                     </span>
                     <span className="text-sm font-semibold text-InfernoEcho-600">
-                      Rp2.555.000
+                      {/* Rp2.555.000 */}
                     </span>
                   </div>
                   <div className={`${mediumMontserrat.className}  `}>
-                    <span className="text-xs">2 room (3 day, 2 night)</span>
+                    <span className="text-xs">
+                      {/* 2 room (3 day, 2 night) */}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -302,9 +347,11 @@ export default function NextStep() {
               <div
                 className={`${mediumMontserrat.className} flex justify-between items-center `}
               >
-                <span className="text-sm font-semibold">Booking Fees</span>
+                <span className="text-sm font-semibold">
+                  {/* Booking Fees */}
+                </span>
                 <span className="text-sm text-RoyalAmethyst-700  font-semibold">
-                  Free
+                  {/* Free */}
                 </span>
               </div>
               <div
