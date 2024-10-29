@@ -25,7 +25,7 @@ const BlogDetail: React.FC = () => {
       <div className="flex flex-col bg-white border-solid border-gray-200 border p-7 rounded-xl">
         {/* Basic Information Section */}
         <div className={` `}>
-          {" "}
+          
           <div className={`${mediumMontserrat.className}  pb-6`}>
             <span className="text-xl font-semibold">Room Detail</span>
           </div>

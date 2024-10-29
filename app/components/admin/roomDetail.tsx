@@ -44,7 +44,7 @@ const RoomDetail: React.FC = () => {
         <div
           className={`bg-white border-solid border-gray-200 border p-7 rounded-xl`}
         >
-          {" "}
+          
           <div className={`${mediumMontserrat.className}  pb-6`}>
             <span className="text-xl font-semibold">Room Detail</span>
           </div>
