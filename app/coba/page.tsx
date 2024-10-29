@@ -143,7 +143,7 @@
 //           loading={uploading} // Menampilkan loading state jika sedang uploading
 //           disabled={fileList.length === 0} // Menonaktifkan tombol jika tidak ada file yang diupload
 //         >
-//           {uploading ? "Uploading..." : "Upload Files"}{" "}
+//           {uploading ? "Uploading..." : "Upload Files"}
 //           {/* Menampilkan teks sesuai status uploading */}
 //         </Button>
 //       </div>
@@ -182,6 +182,10 @@ import ResultRoom from "../components/admin/resultRoom";
 import BlogList from "../components/admin/blogList";
 import BlogDetail from "../components/admin/blogDetail";
 import CreateBlogInfo from "../components/admin/createBlogInfo";
+import BookingList from "../components/admin/bookingList";
+import BookingDetail from "../components/admin/bookingDetail";
+import RefundList from "../components/admin/refundList";
+import RefundDetail from "../components/admin/refundDetail";
 
 export default function page() {
   return (
@@ -189,7 +193,13 @@ export default function page() {
       {/* <BlogList /> */}
       {/* <ResultRoom /> */}
       {/* <BlogDetail /> */}
-      <CreateBlogInfo />
+      {/* <CreateBlogInfo /> */}
+
+      {/* <BookingList /> */}
+      {/* <BookingDetail /> */}
+
+      {/* <RefundList /> */}
+      {/* <RefundDetail /> */}
     </div>
   );
 }

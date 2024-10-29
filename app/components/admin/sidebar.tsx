@@ -69,6 +69,7 @@ import {
   RiLogoutCircleLine,
   RiArrowLeftSLine,
   RiArrowRightSLine,
+  RiRefund2Line,
 } from "react-icons/ri";
 import { CgHomeAlt } from "react-icons/cg";
 import { MdOutlineRoomService } from "react-icons/md";
@@ -158,7 +159,9 @@ export default function Sidebar() {
                     className={`flex items-center gap-2 ${
                       expanded ? "justify-start pl-4" : "justify-center"
                     } w-full cursor-pointer transition-all duration-300 ${
-                      activeItem === item.href ? "text-RoyalAmethyst-700" : "text-black"
+                      activeItem === item.href
+                        ? "text-RoyalAmethyst-700"
+                        : "text-black"
                     }`}
                   >
                     {item.icon}
@@ -234,17 +237,23 @@ const menuItems = [
   {
     id: 5,
     icon: <CgHomeAlt className="text-2xl" />,
-    title: "Home",
-    href: "/admin/",
+    title: "Booking",
+    href: "/admin/booking",
   },
   {
     id: 6,
     icon: <MdOutlineRoomService className="text-2xl" />,
-    title: "Services",
-    href: "/admin/",
+    title: "Report",
+    href: "/admin/report",
   },
   {
     id: 7,
+    icon: <RiRefund2Line className="text-2xl" />,
+    title: "Refund",
+    href: "/admin/refund",
+  },
+  {
+    id: 8,
     icon: <RiUserSettingsLine className="text-2xl" />,
     title: "Profile",
     href: "/admin",
