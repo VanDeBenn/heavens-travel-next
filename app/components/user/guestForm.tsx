@@ -33,7 +33,7 @@ export default function GuestForm({
       form.setFieldsValue({
         customerName: dataUser?.fullName,
         customerEmail: dataUser?.email,
-        customerPhoneNumber: dataUser?.phoneNumber,
+        customerPhoneNumber: dataUser?.phoneNumber || "08",
       });
     }
     if (submit) {
@@ -63,8 +63,45 @@ export default function GuestForm({
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    // console.log("Failed:", errorInfo);
   };
+
+  const handlePayment = async () => {
+    try {
+      const data = {
+        external_id: `heavens-travel${bookingId}`,
+        user_id: dataUser?.id,
+        amount: "1650000",
+        payer_email: "customer@domain.com",
+        description: "Invoice webhook test",
+      };
+    } catch (error) {}
+  };
+
+  //   {
+  //     // id": "6720805cda6e0f7588bd7fc0",
+  //     "external_id": "heavens-travel",
+  //     "user_id": "6704bf4bfe6c7165c3ebabc2",
+  //     "amount": 1650000,
+  //     "payer_email": "customer@domain.com",
+  //     "description": "Invoice webhook test",
+  //     "items": [
+  //     {
+  //       "name": "Garuda Wisnu Kencana",
+  //       "quantity": 1,
+  //       "price": 150000,
+  //       "category": "Destination",
+  //       "url": "https://yourwebsite.com/gwk-tourism"
+  //     },
+  //     {
+  //       "name": "Nusa Penida",
+  //       "quantity": 1,
+  //       "price": 1500000,
+  //       "category": "Destination",
+  //       "url": "https://yourwebsite.com/gwk-tourism"
+  //     }
+  //   ]
+  // }
 
   return (
     <div className="flex flex-col gap-5">

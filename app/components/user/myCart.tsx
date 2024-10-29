@@ -35,7 +35,6 @@ export default function MyCart() {
   const [selectedItemsId, setSelectedItemsId] = useState<string[]>([]);
   const [bookingDetailId, setBookingDetailId] = useState<string[]>([]);
 
-  console.log(dataCart);
   const fetchCart = async () => {
     const id: any = localStorage.getItem("_id");
     try {
@@ -103,7 +102,7 @@ export default function MyCart() {
           userId: localStorage.getItem("_id"),
         };
         const req = await bookingRepository.api.create(data);
-        console.log("booking id:", req);
+        // console.log("booking id:", req);
         const bookingId = req.body.data.id;
         localStorage.setItem("_booking", bookingId);
       }

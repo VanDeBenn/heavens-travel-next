@@ -39,8 +39,8 @@ export default function Page({ params }: { params: { id: string } }) {
     setStartDate(dateStrings[0]);
     setEndDate(dateStrings[1]);
   };
-  console.log("startdate:", startDate);
-  console.log("endate:", endDate);
+  // console.log("startdate:", startDate);
+  // console.log("endate:", endDate);
 
   const { RangePicker } = DatePicker;
 
@@ -79,7 +79,7 @@ export default function Page({ params }: { params: { id: string } }) {
         endDate: endDate,
         // carts: cartId,
       };
-      console.log(data);
+      // console.log(data);
       await cartRepository.api.addToCart(data);
     } catch (error) {
       console.error("Failed to add to cart", error);

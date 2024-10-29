@@ -23,7 +23,7 @@ export default async function page({ params }: { params: { id: string } }) {
       const req = await wishlistRepository.api.create(data);
     } catch (error: any) {
       const errorMessage = error.response;
-      console.log(errorMessage);
+      // console.log(errorMessage);
     }
   };
 

@@ -17,31 +17,31 @@ export default function destinationDetail({
   destinationData,
 }: ComponentsProps) {
   const guestDetails = [
-    { label: "Name Destination", value: destinationData.name },
-    { label: "Rating", value: destinationData.rating },
-    { label: "Description", value: destinationData.description },
-    { label: "Adult Price", value: `Rp${destinationData.priceAdult}` },
-    { label: "Children Price", value: `Rp${destinationData.priceChildren}` },
+    { label: "Name Destination", value: destinationData?.name },
+    { label: "Rating", value: destinationData?.rating },
+    { label: "Description", value: destinationData?.description },
+    { label: "Adult Price", value: `Rp${destinationData?.priceAdult}` },
+    { label: "Children Price", value: `Rp${destinationData?.priceChildren}` },
   ];
 
   const guestDetails2 = [
-    { label: "Address", value: destinationData.address },
-    { label: "Path Location", value: destinationData.pathLocation },
+    { label: "Address", value: destinationData?.address },
+    { label: "Path Location", value: destinationData?.pathLocation },
     {
       label: "District",
-      value: destinationData.disrict,
+      value: destinationData?.disrict,
     },
     {
       label: "City",
-      value: destinationData.city,
+      value: destinationData?.city,
     },
     {
       label: "Province",
-      value: destinationData.province,
+      value: destinationData?.province,
     },
     {
       label: "Country",
-      value: destinationData.country,
+      value: destinationData?.country,
     },
   ];
 
@@ -60,6 +60,9 @@ export default function destinationDetail({
     },
   ];
 
+  const photos: any[] = destinationData?.photodestinations;
+
+  //  // console.log(photos);
   return (
     <div>
       <div className={`${mediumMontserrat.className} py-6 px-7`}>
@@ -121,7 +124,7 @@ export default function destinationDetail({
                     />
                   ) : (
                     <div className={`text-base text-black ${mediumMontserrat}`}>
-                      {detail.value}
+                      {""}
                     </div>
                   )}
                 </div>
@@ -139,15 +142,14 @@ export default function destinationDetail({
           <div
             className={`${mediumMontserrat.className} grid grid-cols-4 gap-4 pt-6`}
           >
-            {guestDetails3.map((detail, index) => (
-              <div key={index}>
+            {photos?.map((item: any) => (
+              <div key={item.id}>
                 <div className="w-full">
-                  {/* Menggunakan next/image untuk gambar dengan ukuran w-full h-32 */}
                   <Image
-                    src={detail.value}
+                    src={`http://localhost:3222/photo-destinations/${item?.pathPhoto}`}
                     alt="Location Map"
-                    width={400} // Lebar asli gambar
-                    height={150} // Sesuaikan tinggi
+                    width={400}
+                    height={150}
                     className="w-full rounded-lg"
                   />
                 </div>

@@ -19,7 +19,7 @@ const UserPage = ({ data }: PageProps) => {
       setAllUserData(res.body.data);
     } catch (error) {}
   };
-  console.log(allUserData);
+  // console.log(allUserData);
 
   useEffect(() => {
     getAllUser();

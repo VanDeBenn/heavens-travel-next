@@ -36,7 +36,7 @@
 // export default function YourBooking({ dataBookingDetail }: ComponentsProps) {
 //   const [bookingItems, setBookingItems] = useState(initialBookingItems);
 
-//   console.log("data", dataBookingDetail);
+//    // console.log("data", dataBookingDetail);
 //   // Filter hotel dan destinasi untuk menampilkan hanya 1 hotel dan 1 destinasi
 //   const filteredBookingItems = [
 //     ...bookingItems.filter((item) => roomHotel || destination === "Hotel").slice(0, 1),
@@ -453,7 +453,7 @@ export default function YourBooking({
             {/* {dataBookingDetail.map((item: any) => {
               const { cart } = item;
               const { destination, roomHotel } = cart;
-              // console.log(item.id);
+              //  // console.log(item.id);
               return (
                 <div className="" key={item.id}>
                   <div className="">{destination?.name}</div>

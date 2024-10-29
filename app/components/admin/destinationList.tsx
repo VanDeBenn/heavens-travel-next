@@ -77,7 +77,7 @@ interface DataType {
 }
 
 const handleMenuClick = (e: any) => {
-  console.log("Menu item clicked:", e);
+  // console.log("Menu item clicked:", e);
 };
 
 const columns = [
@@ -171,8 +171,8 @@ export default function DestinationList({ data }: ComponentsProps) {
     imageUrl:
       item.photodestinations?.[0]?.url || "/images/illustration/hawaii.jpg", // Fallback to default image
   }));
-  console.log("datasource:", dataSource);
-  console.log("data:", data);
+  // console.log("datasource:", dataSource);
+  // console.log("data:", data);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

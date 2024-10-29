@@ -67,7 +67,7 @@ LocationInfoProps) {
         country: values.country,
       };
 
-      console.log("comp:", dataLocationInfo);
+      // console.log("comp:", dataLocationInfo);
       setLocationDestination(dataLocationInfo);
       // next();
     } catch (error) {

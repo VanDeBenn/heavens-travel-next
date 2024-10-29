@@ -26,7 +26,7 @@ interface ComponentsProps {
 }
 
 const handleMenuClick = (e: any) => {
-  console.log("Menu item clicked:", e);
+  // console.log("Menu item clicked:", e);
 };
 
 const columns = [

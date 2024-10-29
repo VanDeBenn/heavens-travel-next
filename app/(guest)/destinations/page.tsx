@@ -30,8 +30,8 @@ export default function page() {
     fetchDestinatios();
   }, []);
 
-  console.log("data desti:", dataDestinations);
-  // console.log("desti:", dataDestinations[0].name);
+  // console.log("data desti:", dataDestinations);
+  //  // console.log("desti:", dataDestinations[0].name);
   return (
     <>
       <div>

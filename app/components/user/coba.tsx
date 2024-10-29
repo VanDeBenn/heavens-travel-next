@@ -16,7 +16,7 @@ import {
   TimePicker,
   Spin,
   Progress,
-  Steps
+  Steps,
 } from "antd";
 
 import { UserOutlined } from "@ant-design/icons";
@@ -26,7 +26,7 @@ export default function Coba() {
   // const [isLoading, setIsLoading] = useState(false);
 
   // const onBtnClick = (e: any) => {
-  //   console.log("ajg");
+  //    // console.log("ajg");
   //   setIsLoading(true);
   //   setTimeout(() => {
   //     setIsLoading(false);
@@ -36,7 +36,7 @@ export default function Coba() {
   // const [ShowAlert, setShowAlert] = useState(false);
 
   // const onSelesai = (e: any) => {
-  //   console.log(e);
+  //    // console.log(e);
   //   setTimeout(() => {
   //     setShowAlert(true);
   //   }, 1000);
@@ -119,16 +119,16 @@ export default function Coba() {
 
   const steps = [
     {
-      title: 'Step 1',
-      content: 'First Step Content',
+      title: "Step 1",
+      content: "First Step Content",
     },
     {
-      title: 'Step 2',
-      content: 'Second Step Content',
+      title: "Step 2",
+      content: "Second Step Content",
     },
     {
-      title: 'Step 3',
-      content: 'Third Step Content',
+      title: "Step 3",
+      content: "Third Step Content",
     },
   ];
 
@@ -141,10 +141,10 @@ export default function Coba() {
   };
 
   const finish = () => {
-    message.success('All steps completed!');
+    message.success("All steps completed!");
   };
   return (
-<div className="w-full p-8">
+    <div className="w-full p-8">
       <Steps current={current}>
         {steps.map((item) => (
           <Step key={item.title} title={item.title} />
@@ -179,7 +179,5 @@ export default function Coba() {
         )}
       </div>
     </div>
-
- 
   );
 }

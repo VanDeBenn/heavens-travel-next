@@ -70,7 +70,7 @@ export default function InformationPersonal({
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    // console.log("Failed:", errorInfo);
   };
 
   const days = Array.from({ length: 31 }, (_, i) => i + 1);

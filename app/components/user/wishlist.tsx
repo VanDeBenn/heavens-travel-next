@@ -49,7 +49,7 @@ export default function Wishlist({ data }: ComponentsProps) {
   //   return <Loading />;
   // }
 
-  console.log("data:", wishlistData);
+  // console.log("data:", wishlistData);
   return (
     <div className="bg-white rounded-xl">
       <p className="text-xl font-semibold my-6 mx-9">Wishlist</p>

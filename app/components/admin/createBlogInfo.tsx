@@ -25,7 +25,7 @@ const CreateBlogInfo: React.FC = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
-    console.log("Form Values:", values);
+    // console.log("Form Values:", values);
   };
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);

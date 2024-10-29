@@ -42,7 +42,7 @@ export default function Page({ id, data, role }: PageProps) {
       const res = await authRepository.api.getUser();
       if (res) {
         setUserId(res.sub);
-        console.log(res);
+        // console.log(res);
       } else {
         setUserId(idCookie);
       }
@@ -68,7 +68,7 @@ export default function Page({ id, data, role }: PageProps) {
   const fetchProfileData = async (userId: string) => {
     try {
       const res = await usersRepository.api.getUser(userId);
-      console.log(res);
+      // console.log(res);
       setUserData(res.body.data);
       setUserRole(res.body.data.role.id);
 

@@ -32,7 +32,7 @@
 //         formData
 //       ); // Menggunakan repository untuk melakukan POST request
 //       message.success(`File ${file.name} uploaded successfully!`); // Pesan sukses saat file berhasil diupload
-//       console.log("Response:", response); // Logging response dari server
+//        // console.log("Response:", response); // Logging response dari server
 //     } catch (error) {
 //       console.error("Error uploading file:", error); // Logging jika terjadi error
 //       message.error(`Failed to upload ${file.name}`); // Pesan error saat file gagal diupload
@@ -86,9 +86,9 @@
 //     setPreviewImages(updatedPreviewImages);
 //   };
 
-//   console.log("file list", fileList);
-//   console.log("preview", previewImages);
-//   console.log("uploading", uploading);
+//    // console.log("file list", fileList);
+//    // console.log("preview", previewImages);
+//    // console.log("uploading", uploading);
 //   return (
 //     <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">
 //       <div className={`${mediumMontserrat.className} pb-4`}>

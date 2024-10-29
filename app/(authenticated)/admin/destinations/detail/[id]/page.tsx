@@ -12,7 +12,7 @@ export default function page({ params }: { params: { id: string } }) {
       setDestinationData(res.body.data);
     } catch (error) {}
   };
-  console.log(destinationData);
+  // console.log(destinationData);
 
   useEffect(() => {
     fetchDestination();

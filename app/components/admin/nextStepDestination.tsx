@@ -126,7 +126,7 @@ const NextStepDestination: React.FC = () => {
         // photos: photoInfo,
       };
 
-      console.log("Final Data:", finalData);
+      // console.log("Final Data:", finalData);
       const res = await destinationRepository.api.create(finalData);
       const idDestination = res.body.data.id;
       if (idDestination) {
@@ -134,8 +134,8 @@ const NextStepDestination: React.FC = () => {
         setDestinationId(idDestination);
         // router.push("/admin/destinations/create/result");
       }
-      console.log("return:", res.body.data.id);
-      console.log("id desti", idDestination);
+      // console.log("return:", res.body.data.id);
+      // console.log("id desti", idDestination);
       message.success("Destination created successfully!");
     } catch (error) {
       console.error("Error while creating destination:", error);

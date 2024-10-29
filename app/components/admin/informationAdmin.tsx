@@ -52,11 +52,11 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
   }, [data, form]);
 
   const onFinish = async (values: InitialValues) => {
-    console.log("Form submitted with values:", values);
+    // console.log("Form submitted with values:", values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    // console.log("Failed:", errorInfo);
   };
 
   // Generate options for days, months, and years
@@ -105,7 +105,9 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
               <Form.Item
                 label="Full Name"
                 name="fullName"
-                rules={[{ required: true, message: "Please enter your full name!" }]}
+                rules={[
+                  { required: true, message: "Please enter your full name!" },
+                ]}
               >
                 <Input placeholder="Enter admin's full name" />
               </Form.Item>
@@ -116,7 +118,10 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
                 name="email"
                 rules={[
                   { required: true, message: "Please enter your email!" },
-                  { type: "email", message: "Please enter a valid email address!" },
+                  {
+                    type: "email",
+                    message: "Please enter a valid email address!",
+                  },
                 ]}
               >
                 <Input placeholder="Enter admin's email" />
@@ -126,7 +131,12 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
               <Form.Item
                 label="Phone Number"
                 name="phoneNumber"
-                rules={[{ required: true, message: "Please enter your phone number!" }]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter your phone number!",
+                  },
+                ]}
               >
                 <Input placeholder="Enter admin's phone number" />
               </Form.Item>
@@ -148,7 +158,9 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
                 <div className="grid grid-cols-3 gap-2">
                   <Form.Item
                     name="day"
-                    rules={[{ required: true, message: "Please select birth day!" }]}
+                    rules={[
+                      { required: true, message: "Please select birth day!" },
+                    ]}
                     noStyle
                   >
                     <Select placeholder="Day">
@@ -162,12 +174,17 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
 
                   <Form.Item
                     name="month"
-                    rules={[{ required: true, message: "Please select birth month!" }]}
+                    rules={[
+                      { required: true, message: "Please select birth month!" },
+                    ]}
                     noStyle
                   >
                     <Select placeholder="Month">
                       {months.map((month, index) => (
-                        <Option key={index + 1} value={(index + 1).toString().padStart(2, "0")}>
+                        <Option
+                          key={index + 1}
+                          value={(index + 1).toString().padStart(2, "0")}
+                        >
                           {month}
                         </Option>
                       ))}
@@ -176,7 +193,9 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
 
                   <Form.Item
                     name="year"
-                    rules={[{ required: true, message: "Please select birth year!" }]}
+                    rules={[
+                      { required: true, message: "Please select birth year!" },
+                    ]}
                     noStyle
                   >
                     <Select placeholder="Year">
@@ -194,7 +213,9 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
               <Form.Item
                 label="Country"
                 name="country"
-                rules={[{ required: true, message: "Please select your country!" }]}
+                rules={[
+                  { required: true, message: "Please select your country!" },
+                ]}
               >
                 <Select placeholder="Select country">
                   <Option value="Indonesia">Indonesia</Option>
@@ -206,7 +227,9 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
               <Form.Item
                 label="Province"
                 name="province"
-                rules={[{ required: true, message: "Please select your province!" }]}
+                rules={[
+                  { required: true, message: "Please select your province!" },
+                ]}
               >
                 <Select placeholder="Select province">
                   {provinces.map((province) => (
@@ -221,7 +244,9 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
               <Form.Item
                 label="City"
                 name="city"
-                rules={[{ required: true, message: "Please select your city!" }]}
+                rules={[
+                  { required: true, message: "Please select your city!" },
+                ]}
               >
                 <Select placeholder="Select city">
                   {cities.map((city) => (
@@ -236,7 +261,9 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
               <Form.Item
                 label="District"
                 name="district"
-                rules={[{ required: true, message: "Please select your district!" }]}
+                rules={[
+                  { required: true, message: "Please select your district!" },
+                ]}
               >
                 <Select placeholder="Select district">
                   {districts.map((district) => (
@@ -252,7 +279,9 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
                 label="Street Address"
                 name="streetAddress"
                 className="col-span-1 md:col-span-3"
-                rules={[{ required: true, message: "Please enter street address!" }]}
+                rules={[
+                  { required: true, message: "Please enter street address!" },
+                ]}
               >
                 <Input.TextArea
                   placeholder="Enter admin's street address"

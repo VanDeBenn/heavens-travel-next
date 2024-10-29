@@ -23,7 +23,7 @@ const ResultDestination: React.FC = () => {
       }
       const res = await destinationRepository.api.getDestination(id);
       setDestinationData(res.body.data); // Save data to state
-      console.log("data:", res.body.data); // Log to confirm
+      // console.log("data:", res.body.data); // Log to confirm
       localStorage.removeItem("_destination");
     } catch (error) {
       console.error("Error fetching destination:", error);
@@ -103,7 +103,7 @@ const ResultDestination: React.FC = () => {
       value: destinationData.photodestinations[3],
     },
   ];
-  console.log("img", destinationData.photodestinations[0].pathPhoto);
+  // console.log("img", destinationData.photodestinations[0].pathPhoto);
   return (
     <div>
       <div className={`${mediumMontserrat.className} py-6 px-7`}>

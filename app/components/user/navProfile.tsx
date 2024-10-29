@@ -34,7 +34,7 @@ const NavProfile: React.FC = () => {
   const handleMenuClick = (key: string) => {
     if (key === "logout") {
       // Logika untuk logout
-      console.log("Logging out...");
+      // console.log("Logging out...");
     } else {
       setSelectedKey(key);
       router.push(`/${key}`); // Navigasi ke halaman sesuai menu key
@@ -56,7 +56,9 @@ const NavProfile: React.FC = () => {
                 key={item.key}
                 icon={item.icon}
                 className={`flex ${
-                  selectedKey === item.key ? "text-RoyalAmethyst-700" : "text-black"
+                  selectedKey === item.key
+                    ? "text-RoyalAmethyst-700"
+                    : "text-black"
                 }`}
               >
                 {item.label}

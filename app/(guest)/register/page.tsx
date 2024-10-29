@@ -53,7 +53,7 @@ const Register = () => {
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    // console.log("Failed:", errorInfo);
   };
 
   const handleLoginGoogle = () => {

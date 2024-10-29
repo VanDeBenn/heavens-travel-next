@@ -46,7 +46,7 @@ export default function ChangePassword({ id, data }: ComponentsProps) {
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    // console.log("Failed:", errorInfo);
   };
 
   const togglePasswordVisibility = (

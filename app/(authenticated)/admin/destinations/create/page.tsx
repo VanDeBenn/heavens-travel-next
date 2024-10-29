@@ -70,7 +70,7 @@ export default function page() {
         pathLocation: locationDestination.pathLocation,
         // photos: photoInfo,
       };
-      console.log("Final Data:", finalData);
+      // console.log("Final Data:", finalData);
       const res = await destinationRepository.api.create(finalData);
       const idDestination = res.body.data.id;
       if (idDestination) {
@@ -78,8 +78,8 @@ export default function page() {
         setDestinationId(idDestination);
         // router.push("/admin/destinations/create/result");
       }
-      console.log("return:", res.body.data.id);
-      console.log("id desti", idDestination);
+      // console.log("return:", res.body.data.id);
+      // console.log("id desti", idDestination);
       message.success("Destination created successfully!");
     } catch (error) {
       console.error("Error while creating destination:", error);
@@ -89,9 +89,9 @@ export default function page() {
 
   useEffect(() => {
     if (submitForms) {
-      console.log("Location Data:", locationDestination);
-      console.log("Photo Data:", photoData);
-      console.log("Destination Data:", basicInfoDestination);
+      // console.log("Location Data:", locationDestination);
+      // console.log("Photo Data:", photoData);
+      // console.log("Destination Data:", basicInfoDestination);
 
       finish();
 

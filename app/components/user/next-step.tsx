@@ -57,7 +57,7 @@ export default function NextStep() {
     getBooking();
   }, []);
 
-  // console.log("data booking:", dataBooking);
+  //  // console.log("data booking:", dataBooking);
 
   const next = () => {
     setLoading(true);
