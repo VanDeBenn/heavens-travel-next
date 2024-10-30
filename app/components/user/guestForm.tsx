@@ -5,6 +5,7 @@ import { Montserrat } from "next/font/google";
 import { RiCircleLine, RiCircleFill } from "react-icons/ri";
 import { usersRepository } from "#/repository/users";
 import { bookingRepository } from "#/repository/bookings";
+import { useRouter } from "next/navigation";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
@@ -24,9 +25,12 @@ export default function GuestForm({
   submit,
   setSubmit,
 }: ComponentsProps) {
+  const router = useRouter();
   const [form] = Form.useForm();
   const [isBookingForAnotherPerson, setIsBookingForAnotherPerson] =
     useState(false); // State to track selected option
+  const bookingId = localStorage.getItem("_booking");
+  const userId = localStorage.getItem("_id");
 
   useEffect(() => {
     if (dataUser) {
@@ -40,10 +44,10 @@ export default function GuestForm({
       form.submit();
       onFinish;
       setSubmit(false);
+      handleCheckout();
     }
   }, [dataUser, form, submit]);
 
-  const bookingId = localStorage.getItem("_booking");
   const onFinish = async (values: any) => {
     try {
       const data = {
@@ -66,15 +70,15 @@ export default function GuestForm({
     // console.log("Failed:", errorInfo);
   };
 
-  const handlePayment = async () => {
+  const handleCheckout = async () => {
     try {
       const data = {
-        external_id: `heavens-travel${bookingId}`,
-        user_id: dataUser?.id,
-        amount: "1650000",
-        payer_email: "customer@domain.com",
-        description: "Invoice webhook test",
+        bookingId: bookingId,
+        userId: userId,
       };
+      const req = await bookingRepository.api.checkout(data);
+      // console.log(req);
+      router.push(req.body.redirect);
     } catch (error) {}
   };
 

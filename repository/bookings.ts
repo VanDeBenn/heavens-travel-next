@@ -3,6 +3,7 @@ import { http } from "#/utils/http";
 const url = {
   bookings: () => "/bookings",
   booking: (id: string) => `/bookings/${id}`,
+  checkout: () => "/bookings/checkout",
 };
 
 const api = {
@@ -20,6 +21,9 @@ const api = {
   },
   deleteBooking(id: string) {
     return http.del(url.booking(id));
+  },
+  checkout(data: any) {
+    return http.post(url.checkout()).send(data);
   },
 };
 
