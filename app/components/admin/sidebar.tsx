@@ -71,6 +71,8 @@ import {
   RiArrowRightSLine,
   RiRefund2Line,
 } from "react-icons/ri";
+import { AiOutlineComment } from "react-icons/ai";
+
 import { CgHomeAlt } from "react-icons/cg";
 import { MdOutlineRoomService } from "react-icons/md";
 import { BiBuildingHouse } from "react-icons/bi";
@@ -254,6 +256,12 @@ const menuItems = [
   },
   {
     id: 8,
+    icon: <AiOutlineComment className="text-2xl" />,
+    title: "Review",
+    href: "/admin/review",
+  },
+  {
+    id: 9,
     icon: <RiUserSettingsLine className="text-2xl" />,
     title: "Profile",
     href: "/admin",

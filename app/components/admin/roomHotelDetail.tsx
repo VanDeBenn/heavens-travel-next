@@ -8,7 +8,7 @@ import Link from "next/link";
 const roomHotelDetail: React.FC = () => {
   return (
     <div className="flex flex-col">
-      <div className="bg-white rounded-xl shadow-md p-7">
+      <div className="bg-white rounded-xl border-solid border-gray-200 border p-7">
         <div className={`${mediumMontserrat.className}  pb-6`}>
           <span className="text-xl font-semibold">Room Detail</span>
         </div>

@@ -186,6 +186,8 @@ import BookingList from "../components/admin/bookingList";
 import BookingDetail from "../components/admin/bookingDetail";
 import RefundList from "../components/admin/refundList";
 import RefundDetail from "../components/admin/refundDetail";
+import ReportList from "../components/admin/reportList";
+import ReportDetail from "../components/admin/reportDetail";
 
 export default function page() {
   return (
@@ -200,6 +202,8 @@ export default function page() {
 
       {/* <RefundList /> */}
       {/* <RefundDetail /> */}
+      {/* <ReportList /> */}
+      <ReportDetail />
     </div>
   );
 }

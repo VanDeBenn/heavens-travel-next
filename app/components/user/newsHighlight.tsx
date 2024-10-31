@@ -71,7 +71,7 @@ rounded-l-xl"
                     </div>
                   </Link>
 
-                  <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md shadow-md">
+                  <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
                     <div className="flex flex-col">
                       <Link
                         href={card.link}

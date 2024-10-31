@@ -58,7 +58,7 @@ export default function UserDetail({ userData }: ComponentsProps) {
   ];
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-7">
+    <div className="bg-white rounded-xl border-solid border-gray-200 border p-7">
       <div>
         <div className={`${mediumMontserrat.className} pb-6`}>
           <span className="text-lg font-semibold">User Detail</span>

@@ -185,7 +185,7 @@ export default function MyCart() {
                     className="p-3 border border-solid border-[#DBDBDB] rounded-xl w-full"
                   >
                     <div className="flex justify-between items-center">
-                      <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                      <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
                         {roomhotel ? (
                           <RiHome3Line size={18} color="#ffff" />
                         ) : (
@@ -241,13 +241,13 @@ export default function MyCart() {
                             onClick={() => handleCheckboxChange(index, id)}
                           >
                             {isSelected ? (
-                              <RiCheckboxFill className="text-[#4F28D9] text-lg" />
+                              <RiCheckboxFill className="text-RoyalAmethyst-700 text-lg" />
                             ) : (
                               <RiCheckboxBlankLine className="text-gray-400 text-lg" />
                             )}
                             <span
                               className={`text-sm font-semibold ${
-                                isSelected ? "text-[#4F28D9]" : "text-gray-400"
+                                isSelected ? "text-RoyalAmethyst-700" : "text-gray-400"
                               }`}
                             >
                               {destination.name || roomhotel.name}
@@ -312,7 +312,7 @@ export default function MyCart() {
               }
             }}
           >
-            <div className="bg-[#4F28D9] text-center text-white text-sm rounded-xl cursor-pointer py-3 px-9 mx-9 mb-3">
+            <div className="bg-RoyalAmethyst-700 text-center text-white text-sm rounded-xl cursor-pointer py-3 px-9 mx-9 mb-3">
               <span>Booking Now</span>
             </div>
           </Button>

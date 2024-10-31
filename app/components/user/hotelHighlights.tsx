@@ -24,7 +24,7 @@ export default function hotelHighlights() {
             //yang bener buat abang beckend
             // href={`/news/popular/${index}`}
           >
-            <div className="relative bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md transition-transform duration-300">
+            <div className="relative bg-white border border-gray-200 rounded-xl overflow-hidden border-solid border-gray-200 border transition-transform duration-300">
               <Link href={card.link}>
                 <div className="relative w-full h-[400px]">
                   <Image
@@ -38,7 +38,7 @@ export default function hotelHighlights() {
                   />
                 </div>
               </Link>
-              <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md shadow-md">
+              <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
                 <div className="flex flex-col ">
                   <Link
                     href={card.link}

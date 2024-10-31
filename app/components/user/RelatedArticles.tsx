@@ -21,7 +21,7 @@ export default function RelatedArticles() {
         {cardData.slice(0, 6).map((card, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-md overflow-hidden"
+            className="bg-white rounded-xl border-solid border-gray-200 border overflow-hidden"
           >
             <div className="p-3 flex flex-col gap-2">
               <Link href={card.link}>

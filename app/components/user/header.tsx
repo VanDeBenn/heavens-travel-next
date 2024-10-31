@@ -35,7 +35,7 @@ const HeaderComponent: React.FC = () => {
   const activeMenuKey = getMenuKey();
 
   return (
-    <Header className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+    <Header className="bg-white border-solid border-gray-200 border fixed top-0 left-0 w-full z-50">
       <div className="flex items-center justify-between container mx-auto">
         {/* Logo or App Name */}
         <Link href={"/"} className=" w-32">

@@ -42,7 +42,7 @@ const NavProfile: React.FC = () => {
   };
 
   return (
-    <div className="w-48 h-screen bg-white shadow-md rounded-xl">
+    <div className="w-48 h-screen bg-white border-solid border-gray-200 border rounded-xl">
       <div className="p-5 flex flex-col justify-between h-full">
         <div>
           <Menu

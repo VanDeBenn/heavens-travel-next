@@ -198,7 +198,7 @@ export default function DestinationList({ data }: ComponentsProps) {
   const endEntry = Math.min(currentPage * pageSize, filteredData.length);
 
   return (
-    <div className="bg-white rounded-xl shadow-md">
+    <div className="bg-white rounded-xl border-solid border-gray-200 border">
       <div className="p-7 ">
         <div
           className={`${mediumMontserrat.className} flex items-center justify-between pb-4`}

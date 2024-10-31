@@ -153,7 +153,7 @@ const BookingList: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md">
+    <div className="bg-white rounded-xl border-solid border-gray-200 border">
       <div className="p-7">
         <Input.Search
           placeholder="Search..."
