@@ -19,6 +19,7 @@ import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import { bookingRepository } from "#/repository/bookings";
 import form from "antd/es/form";
+import { useRouter } from "next/navigation";
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["600"],
@@ -35,6 +36,7 @@ const smallMontserrat = Montserrat({
 const { Step } = Steps;
 
 export default function NextStep() {
+  const router = useRouter();
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
@@ -43,6 +45,7 @@ export default function NextStep() {
   const [dataUser, setDataUser] = useState<any>();
   const [submitForms, setSubmitForms] = useState(false);
 
+  const redirectXendit = localStorage.getItem("_xendit");
   const bookingId = localStorage.getItem("_booking");
   const getBooking = async () => {
     try {
@@ -80,6 +83,8 @@ export default function NextStep() {
 
   const finish = () => {
     message.success("All steps completed!");
+    localStorage.removeItem("_xendit");
+    router.push("/profile/bookings");
   };
 
   const steps = [
@@ -158,6 +163,14 @@ export default function NextStep() {
         ),
     },
   ];
+
+  useEffect(() => {
+    if (redirectXendit === "success") {
+      // router.push(redirectUrl);
+      setCurrent(steps.length - 1);
+      localStorage.removeItem("_xendit");
+    }
+  }, []);
 
   return (
     <div className="w-full">
@@ -364,7 +377,7 @@ export default function NextStep() {
               </div>
               <div className="pt-4">
                 <div className="flex items-center justify-between w-full gap-3">
-                  {current > 0 && (
+                  {current > 0 && current !== steps.length - 1 && (
                     <Button
                       onClick={prev}
                       className="w-full rounded-xl"
@@ -375,10 +388,18 @@ export default function NextStep() {
                   )}
                   {current < steps.length - 1 && (
                     <div
-                      onClick={next}
+                      onClick={() => {
+                        next();
+                        if (current === steps.length - 2) {
+                          localStorage.setItem("_xendit", "success");
+                          router.push(redirectXendit || "");
+                        }
+                      }}
                       className="w-full bg-RoyalAmethyst-700 text-center py-2 text-white text-sm rounded-xl cursor-pointer"
                     >
-                      <span>Next</span>
+                      <span>
+                        {current === steps.length - 2 ? "Pay" : "Next"}{" "}
+                      </span>
                     </div>
                   )}
                 </div>
