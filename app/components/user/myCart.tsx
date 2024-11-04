@@ -39,7 +39,11 @@ export default function MyCart() {
     const id: any = localStorage.getItem("_id");
     try {
       const res = await usersRepository.api.getUser(id);
-      setDataCart(res.body.data.carts);
+      const dataCart = res.body.data.carts.filter(
+        (cart: any) => !cart.bookingDetail || !cart.bookingDetail.booking
+      );
+      setDataCart(dataCart);
+
       setSelectedItems(new Array(res.body.data.carts.length).fill(false));
     } catch (error) {
       console.error(error);
@@ -230,7 +234,7 @@ export default function MyCart() {
                         <div className="flex gap-1">
                           <RiTeamLine size={16} color="#6b7280" />
                           <span className="text-xs text-gray-500">
-                            Guests: {quantityAdult} Adult, {quantityChildren} 
+                            Guests: {quantityAdult} Adult, {quantityChildren}
                             Children
                           </span>
                         </div>
@@ -247,7 +251,9 @@ export default function MyCart() {
                             )}
                             <span
                               className={`text-sm font-semibold ${
-                                isSelected ? "text-RoyalAmethyst-700" : "text-gray-400"
+                                isSelected
+                                  ? "text-RoyalAmethyst-700"
+                                  : "text-gray-400"
                               }`}
                             >
                               {destination.name || roomhotel.name}
