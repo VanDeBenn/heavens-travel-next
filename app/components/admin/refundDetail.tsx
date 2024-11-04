@@ -286,7 +286,7 @@ const RefundDetail: React.FC = () => {
                   ]}
                 >
                   <Input placeholder="Enter account holder's name" />
-                </Form.Item>{" "}
+                </Form.Item> 
               </div>
             </div>
             <div className="w-full">
@@ -301,7 +301,7 @@ const RefundDetail: React.FC = () => {
                 ]}
               >
                 <Input placeholder="Enter Refund Reason" />
-              </Form.Item>{" "}
+              </Form.Item> 
             </div>
           </Form>
         </div>
@@ -350,7 +350,7 @@ const RefundDetail: React.FC = () => {
           <div className="flex gap-3 items-center">
             <div className="cursor-pointer  bg-InfernoEcho-600   px-7 py-2 rounded-xl">
               <span className="text-xs text-white">Reject Refund</span>
-            </div>{" "}
+            </div> 
             <div className="cursor-pointer   bg-RoyalAmethyst-700 border px-7 py-2 rounded-xl">
               <span className="text-xs text-white">Approve Refund</span>
             </div>

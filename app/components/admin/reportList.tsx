@@ -127,7 +127,7 @@ const ReportList: React.FC = () => {
               >
                 <div className="border-solid border-gray-200 border rounded-xl cursor-pointer">
                   <div className="flex flex-col gap-2 p-3">
-                    <span className="font-semibold text-lg text-black">
+                    <span className="font-semibold text-lg text-black no-underline hover:text-RoyalAmethyst-700 transition-all duration-300">
                       {item.reportTitle}
                     </span>
                     <p className="text-base text-black">{item.description}</p>

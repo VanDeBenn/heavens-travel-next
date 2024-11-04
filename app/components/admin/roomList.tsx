@@ -116,7 +116,7 @@ const RoomList: React.FC = () => {
             {amenitiesList.map((amenity, index) => (
               <div
                 key={index}
-                className="bg-perfume-300 text-RoyalAmethyst-700 py-1 px-2 rounded-xl "
+                className="bg-Perfume-300 text-RoyalAmethyst-700 py-1 px-2 rounded-xl "
               >
                 {amenity}
               </div>

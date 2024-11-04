@@ -230,7 +230,7 @@ export default function MyCart() {
                         <div className="flex gap-1">
                           <RiTeamLine size={16} color="#6b7280" />
                           <span className="text-xs text-gray-500">
-                            Guests: {quantityAdult} Adult, {quantityChildren}{" "}
+                            Guests: {quantityAdult} Adult, {quantityChildren} 
                             Children
                           </span>
                         </div>

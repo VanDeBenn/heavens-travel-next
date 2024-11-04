@@ -230,19 +230,19 @@ export default function PaymentMethod({
                           <div className="text-sm text-black">
                             {cart?.quantityAdult + cart?.quantityChildren ||
                               cart?.quantityAdult +
-                                cart?.quantityChildren.match(/\d+/)?.[0]}{" "}
+                                cart?.quantityChildren.match(/\d+/)?.[0]} 
                             x{formatCurrency(roomHotel?.priceAdult)}
                           </div>
                         )}
 
                         {destination?.priceAdult && cart?.quantityAdult > 0 && (
                           <div className="text-sm text-black">
-                            {cart?.quantityAdult} {"Adult"} x{" "}
+                            {cart?.quantityAdult} {"Adult"} x 
                             {formatCurrency(destination?.priceAdult)} <br />
                             {cart?.quantityChildren > 0 &&
                               destination?.priceChildren && (
                                 <>
-                                  {cart?.quantityChildren} {"Children"} x{" "}
+                                  {cart?.quantityChildren} {"Children"} x 
                                   {formatCurrency(destination?.priceChildren)}
                                 </>
                               )}
