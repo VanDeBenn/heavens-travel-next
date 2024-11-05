@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Form, Input, Upload, message } from "antd";
+import { Form, Input, Upload, Button, message } from "antd";
 import { Montserrat } from "next/font/google";
 import { RiCamera2Line } from "react-icons/ri";
 import type { RcFile } from "antd/es/upload/interface";
 import Image from "next/image";
 import Link from "next/link";
+import { blogRepository } from "#/repository/blogs";
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -23,21 +24,42 @@ const smallMontserrat = Montserrat({
 
 const CreateBlogInfo: React.FC = () => {
   const [form] = Form.useForm();
-
-  const onFinish = (values: any) => {
-    // console.log("Form Values:", values);
-  };
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const userId = localStorage.getItem("_id");
+
+  const onFinish = async (values: any) => {
+    if (fileList.length === 0) {
+      message.error("Please upload a photo!");
+      return;
+    }
+
+    const photodata = new FormData();
+    photodata.append("file", fileList[0]);
+
+    try {
+      const dataBlog = {
+        title: values.blogTitle,
+        description: values.description,
+        pathPhoto: photodata,
+        userId: userId,
+      };
+      const req = await blogRepository.api.create(dataBlog);
+      if (req.status === 201) {
+        message.success("Blog created successfully!");
+        form.resetFields();
+        setFileList([]);
+        setPreviewImages([]);
+      }
+    } catch (error) {
+      message.error("Failed to create blog. Please try again.");
+    }
+  };
 
   const handleRemove = (file: RcFile) => {
     const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
     setFileList(updatedFileList);
-
-    const updatedPreviewImages = previewImages.filter(
-      (_, index) => index !== fileList.indexOf(file)
-    );
-    setPreviewImages(updatedPreviewImages);
+    setPreviewImages([]);
   };
 
   const handleBeforeUpload = (file: RcFile) => {
@@ -52,7 +74,7 @@ const CreateBlogInfo: React.FC = () => {
     };
     reader.readAsDataURL(file);
 
-    setFileList([file]); // Update to allow only one file
+    setFileList([file]); // Only allow one file
     return false;
   };
 
@@ -75,7 +97,7 @@ const CreateBlogInfo: React.FC = () => {
 
       <div className="bg-white border-solid border-gray-200 border p-7 rounded-xl">
         <div className={`${mediumMontserrat.className} pb-6`}>
-          <span className="text-xl font-semibold">Blog Detail</span>
+          <span className="text-xl font-semibold">Blog Create</span>
           <div className="flex flex-col gap-5 mt-4">
             <Form
               form={form}
@@ -155,13 +177,13 @@ const CreateBlogInfo: React.FC = () => {
                       <Image
                         src={image}
                         alt={`Uploaded photo ${index + 1}`}
-                        width={128} // set width according to your needs
-                        height={350} // set height according to your needs
+                        width={128}
+                        height={350}
                         className="rounded-lg object-cover w-full h-full"
                       />
                       <div
                         className="absolute top-0 right-0 p-1 cursor-pointer bg-red-500 text-white rounded-full"
-                        onClick={() => handleRemove(fileList[index])}
+                        onClick={() => handleRemove(fileList[0])}
                       >
                         &times;
                       </div>
@@ -169,6 +191,13 @@ const CreateBlogInfo: React.FC = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Submit Button */}
+              <Form.Item>
+                <Button type="primary" htmlType="submit" className="mt-4">
+                  Submit
+                </Button>
+              </Form.Item>
             </Form>
           </div>
         </div>

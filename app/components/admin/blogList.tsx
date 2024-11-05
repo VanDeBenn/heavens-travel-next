@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import Image from "next/image";
-import { ColumnsType } from "antd/es/table"; // Import the ColumnsType
+import { ColumnsType } from "antd/es/table";
 
 import { Montserrat } from "next/font/google";
 
@@ -35,34 +35,37 @@ interface DataType {
   imageUrl: string;
 }
 
-const BlogList: React.FC = () => {
+interface ComponentsProps {
+  data: any;
+}
+
+export default function BlogList({ data }: ComponentsProps) {
   const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
 
   useEffect(() => {
-    const generatedData: DataType[] = Array.from(
-      { length: 20 },
-      (_, index) => ({
-        key: `${index + 1}`,
-        blogTitle: `Blog Title ${index + 1}`,
-        description: `This is a sample description for blog number ${
-          index + 1
-        }.`,
-        date: `20/12/${2019 + (index % 3)}`, // Random dates between 2019-2021
-        imageUrl: "/images/illustration/hawaii.jpg", // Placeholder image URL
-      })
-    );
+    if (data) {
+      const generatedData: DataType[] = data.map((item: any) => ({
+        key: item.id, // gunakan 'key' untuk antd table
+        blogTitle: item.title,
+        description: item.description,
+        date: item.createdAt,
+        imageUrl: "/images/illustration/hawaii.jpg",
+      }));
+      setDataSource(generatedData);
+    }
+  }, [data]);
 
-    setDataSource(generatedData);
-  }, []);
-
-  const handleMenuClick = (e: any) => {
-    // console.log("Menu item clicked:", e);
+  const handleMenuClick = (e: any, id: string) => {
+    if (e.key === "1") {
+      console.log(`View details of blog ID: ${id}`);
+    } else if (e.key === "2") {
+      console.log(`Delete blog ID: ${id}`);
+    }
   };
 
-  // Define the columns with the correct type ColumnsType<DataType>
   const columns: ColumnsType<DataType> = [
     {
       title: "Blog Title",
@@ -70,12 +73,12 @@ const BlogList: React.FC = () => {
       key: "blogTitle",
       align: "center",
       render: (text: string, record: DataType) => (
-        <div className="flex items-center gap-3 justify-center">
+        <div className="flex items-center gap-3">
           <Image
             src={record.imageUrl}
             alt="Blog Image"
-            width={60} // Image width 50px
-            height={75} // Image height 75px
+            width={60}
+            height={75}
             className="object-cover rounded-xl"
           />
           <span>{text}</span>
@@ -98,18 +101,17 @@ const BlogList: React.FC = () => {
       dataIndex: "date",
       key: "date",
       align: "center",
-      className: "text-center",
     },
     {
       title: "",
       key: "actions",
       align: "center",
-      render: () => (
+      render: (text, record) => (
         <Dropdown
           overlay={
-            <Menu onClick={handleMenuClick}>
+            <Menu onClick={(e) => handleMenuClick(e, record.key)}>
               <Menu.Item key="1" icon={<InfoCircleOutlined />}>
-                <Link href="/admin/blog/detail">Detail</Link>
+                <Link href={`/admin/blog/detail/${record.key}`}>Detail</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<BlockOutlined />}>
                 Delete
@@ -157,15 +159,13 @@ const BlogList: React.FC = () => {
         <div className="flex items-center justify-between pb-4">
           <h2 className="text-xl font-bold mb-2">Blog Listing</h2>
           <div className="flex gap-4">
-            <div>
-              <Input
-                className="w-64"
-                prefix={<SearchOutlined />}
-                placeholder="Search blog"
-                value={searchValue}
-                onChange={handleSearchChange}
-              />
-            </div>
+            <Input
+              className="w-64"
+              prefix={<SearchOutlined />}
+              placeholder="Search blog"
+              value={searchValue}
+              onChange={handleSearchChange}
+            />
 
             <Link
               href={"/admin/blog/create"}
@@ -191,7 +191,7 @@ const BlogList: React.FC = () => {
           }}
         />
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-4">
           <div>
             {showTotalEntries(filteredData.length, [startEntry, endEntry])}
           </div>
@@ -199,6 +199,4 @@ const BlogList: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default BlogList;
+}
