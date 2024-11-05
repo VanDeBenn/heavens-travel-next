@@ -4,6 +4,7 @@ import { Table, Dropdown, Menu, Button, Input } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { EllipsisOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { RefundRepository } from "#/repository/refund";
 
 interface DataType {
   key: string;
@@ -21,28 +22,44 @@ const RefundList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
+  const [dataRefund, setDataRefund] = useState<any[]>([]);
+
+  // Fungsi untuk mengambil semua refund
+  const getAllRefund = async () => {
+    const res = await RefundRepository.api.getrefunds();
+    setDataRefund(res.data || []); // simpan data
+  };
 
   useEffect(() => {
-    const generatedData: DataType[] = Array.from(
-      { length: 20 },
-      (_, index) => ({
-        key: `${index + 1}`,
-        refundId: `RFD${index + 1}`, // Generate refund ID
-        bookingId: `#${index + 1}`,
-        customer: `Sumanto Susanto Shiuun ${index + 1}`,
-        total: `Rp${(Math.random() * 1000000 + 100000).toFixed(0)}`,
-        qtyRoom: `${Math.random() > 0.5 ? 1 : 2}`,
-        fulfillmentStatus: ["Cancel", "Refund Request", "Refunded"][
-          Math.floor(Math.random() * 3)
-        ],
-        dateOfOrder: `${(Math.floor(Math.random() * 28) + 1)
-          .toString()
-          .padStart(2, "0")}/02/2023`, // Example date
-      })
-    );
-
-    setDataSource(generatedData);
+    getAllRefund();
   }, []);
+
+  useEffect(() => {
+    // Periksa jika dataRefund tidak kosong
+    if (dataRefund.length > 0) {
+      const generatedData: DataType[] = dataRefund.map((item: any) => ({
+        key: item.id,
+        refundId: item.id, // Generate refund ID
+        bookingId: item.booking?.id || "N/A",
+        customer: item.booking?.customerName || "N/A",
+        total: item?.booking?.payment?.amount,
+        qtyRoom: item.quantity
+          ? item.quantity.toString()
+          : `${Math.random() > 0.5 ? 1 : 2}`,
+        fulfillmentStatus: item.status,
+        dateOfOrder: new Date(item.createdAt || Date.now()).toLocaleDateString(
+          "id-ID",
+          {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          }
+        ),
+      }));
+      setDataSource(generatedData);
+    }
+  }, [dataRefund]);
+  console.log(dataRefund[0]?.booking?.payment?.amount);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -142,7 +159,9 @@ const RefundList: React.FC = () => {
           overlay={
             <Menu>
               <Menu.Item>
-                <Link href={"/admin/refund/detail"}>Detail</Link>
+                <Link href={`/admin/refund/detail/${record.refundId}`}>
+                  Detail
+                </Link>
               </Menu.Item>
               <Menu.Item onClick={() => handleDelete(record.bookingId)}>
                 Delete
@@ -198,9 +217,3 @@ const RefundList: React.FC = () => {
 };
 
 export default RefundList;
-
-
-
-
-
-

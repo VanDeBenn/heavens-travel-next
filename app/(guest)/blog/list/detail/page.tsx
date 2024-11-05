@@ -9,7 +9,7 @@ export default function page() {
     <main className="bg-Lilac-50">
       <Header />
       <div className=" px-16 pb-8 pt-24">
-        <BlogDetail />
+        <BlogDetail data={undefined} />
         <RelatedArticles />
       </div>
       <div>
