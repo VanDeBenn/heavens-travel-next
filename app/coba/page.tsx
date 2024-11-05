@@ -189,7 +189,10 @@ import RefundDetail from "../components/admin/refundDetail";
 import ReportList from "../components/admin/reportList";
 import ReportDetail from "../components/admin/reportDetail";
 import ReviewList from "../components/admin/reviewList";
- 
+import Banner from "../components/user/banner";
+import WhatInterestsYou from "../components/user/whatInterestsYou";
+import Faq from "../components/user/faq";
+
 export default function page() {
   return (
     <div className="bg-Lilac-50 px-28 2xl:px-48 py-14 flex flex-col gap-4">
@@ -205,8 +208,11 @@ export default function page() {
       {/* <RefundDetail /> */}
       {/* <ReportList /> */}
 
-      <ReviewList />
-      
+      {/* <ReviewList /> */}
+      {/* <Banner /> */}
+
+      {/* <WhatInterestsYou /> */}
+      {/* <Faq /> */}
     </div>
   );
 }

@@ -10,7 +10,7 @@ const poppins = Poppins({
 
 const Footer = () => {
   return (
-    <footer className="w-full sticky z-50 bottom-0 lg:relative bg-white px-16 overflow-hidden text-black">
+    <div className="w-full sticky z-50 bottom-0 lg:relative bg-white px-28 2xl:px-48 overflow-hidden text-black">
       <div className="pt-16">
         <div className="flex flex-col lg:flex-row gap-12">
           {/* Logo and Description Section */}
@@ -155,7 +155,7 @@ const Footer = () => {
           <br /> Site Operator: HTrip.com Travel Bekasi Pte. Ltd.
         </p>
       </div>
-    </footer>
+    </div>
   );
 };
 
