@@ -4,21 +4,22 @@ import { blogRepository } from "#/repository/blogs";
 import React, { useEffect, useState } from "react";
 
 export default function page() {
-  const [dataBlogs, setDataBlogs] = useState();
+  const [blogsData, setBlogsData] = useState();
 
-  const getAllBlog = async () => {
+  const getAllBlogs = async () => {
     try {
       const res = await blogRepository.api.getBlogs();
-      setDataBlogs(res.data);
+      setBlogsData(res.data);
     } catch (error) {}
   };
 
   useEffect(() => {
-    getAllBlog();
+    getAllBlogs();
   }, []);
+
   return (
     <div>
-      <BlogList data={dataBlogs} />
+      <BlogList data={blogsData} />
     </div>
   );
 }

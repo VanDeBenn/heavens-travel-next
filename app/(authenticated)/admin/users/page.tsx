@@ -11,22 +11,23 @@ interface PageProps {
 }
 
 const UserPage = ({ data }: PageProps) => {
-  const [allUserData, setAllUserData] = useState<any[]>([]);
+  const [allUsersData, setAllUsersData] = useState<any[]>([]);
 
-  const getAllUser = async () => {
+  const getAllUsers = async () => {
     try {
       const res = await usersRepository.api.getAllUsers();
-      setAllUserData(res.body.data);
+      setAllUsersData(res.body.data);
     } catch (error) {}
   };
-  // console.log(allUserData);
+  // console.log(allUsersData);
 
   useEffect(() => {
-    getAllUser();
+    getAllUsers();
   }, []);
+
   return (
     <div className="flex flex-col gap-5">
-      <UserList data={allUserData} />
+      <UserList data={allUsersData} />
     </div>
   );
 };

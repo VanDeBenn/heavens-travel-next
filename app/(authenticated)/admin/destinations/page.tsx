@@ -13,7 +13,7 @@ interface PageProps {
 const DestinationPage = () => {
   const [allDestinationsData, setAllDestinationsData] = useState<any[]>([]);
 
-  const getAllUser = async () => {
+  const getAllDestinations = async () => {
     try {
       const res = await destinationRepository.api.getDestinations();
       setAllDestinationsData(res.body.data);
@@ -22,7 +22,7 @@ const DestinationPage = () => {
   // console.log(allDestinationsData);
 
   useEffect(() => {
-    getAllUser();
+    getAllDestinations();
   }, []);
 
   return (

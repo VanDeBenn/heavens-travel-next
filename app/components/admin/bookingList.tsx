@@ -10,41 +10,49 @@ interface DataType {
   bookingId: string;
   customer: string;
   total: string;
-  qtyRoom: string;
+  quantity: string;
   fulfillmentStatus: string;
   dateOfOrder: string;
 }
 
-const BookingList: React.FC = () => {
+interface ComponentProps {
+  data: any;
+}
+
+export default function BookingList({ data }: ComponentProps) {
   const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
 
+  console.log("data: ", data);
+
   useEffect(() => {
-    const generatedData: DataType[] = Array.from(
-      { length: 20 },
-      (_, index) => ({
-        key: `${index + 1}`,
-        bookingId: `#${index + 1}`,
-        customer: `Sumanto Susanto Shiuun ${index + 1}`,
-        total: `Rp${(Math.random() * 1000000 + 100000).toFixed(0)}`,
-        qtyRoom: `${Math.random() > 0.5 ? 1 : 2}`, // Random qty room number
+    if (Array.isArray(data)) {
+      // Pastikan data adalah array
+      const generatedData: DataType[] = data.map((item: any) => ({
+        key: item.id,
+        bookingId: item.id,
+        customer: item?.user?.fullName || "Unknown Customer", // Jika user kosong
+        total: item?.payment?.amount ? item.payment.amount.toString() : "0", // Jika payment kosong
+        quantity: `${Math.random() > 0.5 ? 1 : 2}`, // Random qty room number
         fulfillmentStatus: ["Cancel", "Refund Request", "Refunded"][
           Math.floor(Math.random() * 3)
         ],
         dateOfOrder: `${(Math.floor(Math.random() * 28) + 1)
           .toString()
           .padStart(2, "0")}/02/2023`, // Example date
-      })
-    );
+      }));
 
-    setDataSource(generatedData);
-  }, []);
+      setDataSource(generatedData);
+    } else {
+      console.error("Data is not an array:", data);
+    }
+  }, [data]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-  };    
+  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -87,9 +95,9 @@ const BookingList: React.FC = () => {
       render: (text: string) => `Rp${Number(text).toLocaleString("id-ID")}`, // Format Rp
     },
     {
-      title: "Qty Room",
-      dataIndex: "qtyRoom",
-      key: "qtyRoom",
+      title: "Quantity",
+      dataIndex: "quantity",
+      key: "quantity",
       align: "center",
     },
     {
@@ -129,7 +137,7 @@ const BookingList: React.FC = () => {
           overlay={
             <Menu>
               <Menu.Item>
-                <Link href={"/admin/booking/detail"}>Detail</Link>
+                <Link href={`/admin/booking/detail/${record.key}`}>Detail</Link>
               </Menu.Item>
               <Menu.Item onClick={() => handleDelete(record.bookingId)}>
                 Delete
@@ -184,6 +192,4 @@ const BookingList: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default BookingList;
+}

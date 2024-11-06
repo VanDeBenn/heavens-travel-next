@@ -39,12 +39,17 @@ export default function MyCart() {
     const id: any = localStorage.getItem("_id");
     try {
       const res = await usersRepository.api.getUser(id);
-      const dataCart = res.body.data.carts.filter(
-        (cart: any) => !cart.bookingDetail || !cart.bookingDetail.booking
-      );
-      setDataCart(dataCart);
+      const carts = res?.body?.data?.carts || []; // Pastikan carts ada dan merupakan array
 
-      setSelectedItems(new Array(res.body.data.carts.length).fill(false));
+      // Filter cart untuk hanya item yang tidak memiliki status 'PAID'
+      const dataCart = carts.filter(
+        (cart: any) =>
+          !cart.bookingDetail?.booking?.payment?.status ||
+          cart.bookingDetail.booking.payment.status !== "PENDING"
+      );
+
+      setDataCart(dataCart);
+      setSelectedItems(new Array(carts.length).fill(false)); // Set selected items berdasarkan panjang array carts
     } catch (error) {
       console.error(error);
     }
