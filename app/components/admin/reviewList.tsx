@@ -20,6 +20,7 @@ import {
 import { FaRegClock, FaUserCircle } from "react-icons/fa";
 import { Montserrat } from "next/font/google";
 import { FiXCircle } from "react-icons/fi";
+import Loading from "#/app/loading";
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -31,94 +32,28 @@ const mediumMontserrat = Montserrat({
 });
 
 interface DataType {
-  key: string;
-  reviewTitle: string;
-  description: string;
-  date: string;
-  imageUrls: string[];
-  email: string;
-  reviewerName: string;
-  starRating: number; // Tambahkan properti starRating
+  id: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  user: {
+    fullName: string;
+    email: string;
+  };
+  bookingdetail: {
+    id: string;
+  };
 }
 
-const reviewListData: DataType[] = [
-  {
-    key: "1",
-    reviewTitle: "Monthly Sales Review",
-    description: "Detailed monthly sales analysis for April 2020.",
-    date: "20/04/2020",
-    imageUrls: [
-      "/images/illustration/hawaii.jpg",
-      "/images/illustration/hawaii.jpg",
-    ],
-    email: "cihuy@gmail.com",
-    reviewerName: "Aceng Toyo",
-    starRating: 4.5,
-  },
-  {
-    key: "2",
-    reviewTitle: "Customer Feedback Analysis",
-    description: "Compilation of customer feedback from Q1.",
-    date: "18/03/2020",
-    imageUrls: ["/images/illustration/hawaii.jpg"],
-    email: "example2@gmail.com",
-    reviewerName: "Sumanto Susanto",
-    starRating: 3.5,
-  },
-  {
-    key: "3",
-    reviewTitle: "Market Research",
-    description: "Insights into the current market trends.",
-    date: "12/02/2020",
-    imageUrls: [
-      "/images/illustration/hawaii.jpg",
-      "/images/illustration/hawaii.jpg",
-    ],
-    email: "example3@gmail.com",
-    reviewerName: "Shiuun Taro",
-    starRating: 5,
-  },
-  {
-    key: "4",
-    reviewTitle: "Monthly Sales Review",
-    description: "Detailed monthly sales analysis for April 2020.",
-    date: "20/04/2020",
-    imageUrls: [
-      "/images/illustration/hawaii.jpg",
-      "/images/illustration/hawaii.jpg",
-    ],
-    email: "cihuy@gmail.com",
-    reviewerName: "Aceng Toyo",
-    starRating: 4.5,
-  },
-  {
-    key: "5",
-    reviewTitle: "Customer Feedback Analysis",
-    description: "Compilation of customer feedback from Q1.",
-    date: "18/03/2020",
-    imageUrls: ["/images/illustration/hawaii.jpg"],
-    email: "example2@gmail.com",
-    reviewerName: "Sumanto Susanto",
-    starRating: 3.5,
-  },
-  {
-    key: "6",
-    reviewTitle: "Market Research",
-    description: "Insights into the current market trends.",
-    date: "12/02/2020",
-    imageUrls: [
-      "/images/illustration/hawaii.jpg",
-      "/images/illustration/hawaii.jpg",
-      "/images/illustration/hawaii.jpg",
-    ],
-    email: "example3@gmail.com",
-    reviewerName: "Shiuun Taro",
-    starRating: 5,
-  },
-];
+interface ComponentProps {
+  data: DataType[];
+}
 
-const ReviewList: React.FC = () => {
-  const [dataSource, setDataSource] = useState<DataType[]>(reviewListData);
+export default function ReviewList({ data }: ComponentProps) {
+  if (!data) {
+    return <Loading />;
+  }
+
   const [currentPage, setCurrentPage] = useState(1);
   const [isApproveModalVisible, setIsApproveModalVisible] = useState(false);
   const [isRejectModalVisible, setIsRejectModalVisible] = useState(false);
@@ -135,7 +70,7 @@ const ReviewList: React.FC = () => {
   };
 
   const startEntry = (currentPage - 1) * pageSize + 1;
-  const endEntry = Math.min(currentPage * pageSize, dataSource.length);
+  const endEntry = Math.min(currentPage * pageSize, data.length);
 
   const handleApprove = (review: DataType) => {
     setSelectedReview(review);
@@ -148,20 +83,8 @@ const ReviewList: React.FC = () => {
   };
 
   const confirmApprove = () => {
-    // Implementasi logika persetujuan
     setIsApproveModalVisible(false);
     setSelectedReview(null);
-  };
-
-  const confirmReject = () => {
-    // Menghapus review yang dipilih dari dataSource
-    if (selectedReview) {
-      setDataSource(
-        dataSource.filter((review) => review.key !== selectedReview.key)
-      );
-      setIsRejectModalVisible(false);
-      setSelectedReview(null);
-    }
   };
 
   const renderStars = (rating: number) => {
@@ -182,46 +105,41 @@ const ReviewList: React.FC = () => {
   };
 
   return (
-    <div
-      className="
-    flex flex-col gap-5
-    "
-    >
+    <div className="flex flex-col gap-5">
       <div className="bg-white rounded-xl border-solid border-gray-200 border">
         <div className={`${mediumMontserrat.className} p-7`}>
           <h1 className="text-xl font-bold mb-4">Review Listing</h1>
 
           <div className="grid grid-cols-2 gap-4">
-            {dataSource
+            {data
               .slice((currentPage - 1) * pageSize, currentPage * pageSize)
-              .map((item) => (
-                <div key={item.key} className="no-underline">
+              .map((item: DataType) => (
+                <div key={item?.id} className="no-underline">
                   <div className="border-solid border-gray-200 border rounded-xl">
                     <div className="flex flex-col gap-2 p-3">
                       <Link
                         href={`/admin/review/detail`}
                         className="font-semibold text-lg text-black no-underline hover:text-RoyalAmethyst-700 transition-all duration-300"
                       >
-                        {item.reviewTitle}
+                        Booking Review
                       </Link>
-                      <p className="text-base text-black">{item.description}</p>
+                      <p className="text-base text-black">{item?.comment}</p>
                       <div className="flex justify-end gap-3">
-                        {item.imageUrls.slice(0, 3).map((imageUrl, index) => (
-                          <Image
-                            key={index}
-                            src={imageUrl}
-                            height={200}
-                            width={300}
-                            alt="review-image"
-                            className="rounded-xl w-36 h-24"
-                          />
-                        ))}
+                        <Image
+                          src={"/images/illustration/hawaii.jpg"}
+                          height={200}
+                          width={300}
+                          alt="review-image"
+                          className="rounded-xl w-36 h-24"
+                        />
                       </div>
 
                       <div className="flex justify-between items-center text-black">
                         <div className="flex items-center gap-2 text-black">
                           <CgHomeAlt className="text-lg" />
-                          <span className="text-sm">Booking #{item.key}</span>
+                          <span className="text-sm">
+                            Booking #{item?.bookingdetail?.id}
+                          </span>
                         </div>
                         <div className="flex items-center gap-2">
                           <div
@@ -246,21 +164,23 @@ const ReviewList: React.FC = () => {
                           <FaUserCircle className="text-4xl" />
                           <div className="flex flex-col gap-1">
                             <span className="text-sm text-black font-semibold">
-                              {item.reviewerName}
+                              {item?.user?.fullName}
                             </span>
                             <div className="flex items-center gap-1">
-                              {renderStars(item.starRating)}
+                              {renderStars(item?.rating)}
                             </div>
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
                           <div className="flex items-center gap-2">
                             <RiUserLine className="text-lg" />
-                            <span className="text-sm">{item.email}</span>
+                            <span className="text-sm">{item?.user?.email}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <FaRegClock className="text-lg" />
-                            <span className="text-sm">{item.date}</span>
+                            <span className="text-sm">
+                              {new Date(item?.createdAt).toLocaleDateString()}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -271,9 +191,7 @@ const ReviewList: React.FC = () => {
           </div>
 
           <div className="flex items-center justify-between pt-5">
-            <div>
-              {showTotalEntries(dataSource.length, [startEntry, endEntry])}
-            </div>
+            <div>{showTotalEntries(data.length, [startEntry, endEntry])}</div>
             <div className="flex items-center gap-2">
               <Button
                 type="primary"
@@ -285,7 +203,7 @@ const ReviewList: React.FC = () => {
               <Button
                 type="primary"
                 onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage * pageSize >= dataSource.length}
+                disabled={currentPage * pageSize >= data.length}
               >
                 Next
               </Button>
@@ -309,7 +227,6 @@ const ReviewList: React.FC = () => {
             title="Are you sure you want to remove this rating?"
             visible={isRejectModalVisible}
             onCancel={() => setIsRejectModalVisible(false)}
-            onOk={confirmReject}
             okText="Continue"
             cancelText="Cancel"
           >
@@ -317,14 +234,6 @@ const ReviewList: React.FC = () => {
           </Modal>
         </div>
       </div>
-
-      {/* table */}
-      {/* <div className="bg-white rounded-xl border-solid border-gray-200 border">
-        <div className={`${mediumMontserrat.className} p-7`}></div>
-      </div> */}
-      {/* end table */}
     </div>
   );
-};
-
-export default ReviewList;
+}
