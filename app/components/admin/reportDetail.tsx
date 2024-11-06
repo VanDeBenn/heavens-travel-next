@@ -11,11 +11,10 @@ import { LuFeather } from "react-icons/lu";
 import { CiCamera } from "react-icons/ci";
 import Image from "next/image";
 import Link from "next/link";
-import { BookingItem, initialBookingItems } from "../user/myBooking";
 import { Montserrat } from "next/font/google";
-import { Rate, Input, Upload, message, Form, Button } from "antd";
+import { Input, Upload, message, Form } from "antd";
+import Loading from "#/app/loading";
 
-// Mengimpor font Montserrat dari Google Fonts
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["600"],
@@ -29,19 +28,50 @@ const smallMontserrat = Montserrat({
   weight: ["400"],
 });
 
-export default function ReportDetail() {
+interface ComponentProps {
+  data: {
+    id: string;
+    title: string;
+    description: string;
+    email: string;
+    pathPhoto: string[] | null;
+    replyReport: string | null;
+    bookingdetail: {
+      cart: {
+        quantityAdult: number;
+        quantityChildren: number;
+        startDate: string;
+        endDate: string;
+        destination?: {
+          id: string;
+          name: string;
+          address: string;
+          rating: number;
+          description: string;
+        };
+        roomHotel?: any; // Add proper typing if hotel data structure is provided
+      };
+    };
+  };
+}
+
+export default function ReportDetail({ data }: ComponentProps) {
+  if (!data) {
+    return <Loading />;
+  }
+
   const [previewImages, setPreviewImages] = useState<string[]>([]);
-  // Handle file upload
+  const [form] = Form.useForm();
+
   const handleUpload = (options: { file: File }) => {
     const { file } = options;
 
     if (previewImages.length >= 3) {
       message.error("You can only upload up to 3 files.");
-      return false; // Prevent auto-upload
+      return false;
     }
 
     const reader = new FileReader();
-
     reader.onload = () => {
       setPreviewImages((prevImages) => [
         ...prevImages,
@@ -49,27 +79,44 @@ export default function ReportDetail() {
       ]);
       message.success(`${file.name} file uploaded successfully`);
     };
-
     reader.onerror = () => {
       message.error(`Failed to upload ${file.name}`);
     };
-
     reader.readAsDataURL(file);
-    return false; // Prevent auto-upload
+    return false;
   };
-  // State untuk menyimpan data booking
-  const [bookingItems, setBookingItems] =
-    useState<BookingItem[]>(initialBookingItems);
 
-  // State untuk menyimpan form data
-  const [form] = Form.useForm();
-
-  // Handle form submission
   const handleSubmit = (values: any) => {
     console.log("Form values:", values);
     message.success("Report replied successfully!");
-    form.resetFields(); // Reset form fields after submission
+    form.resetFields();
   };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const { cart } = data.bookingdetail;
+  const isDestination = !!cart.destination;
+
+  const reportInfo = [
+    {
+      label: "Report Title",
+      value: data.title,
+    },
+    {
+      label: "Description",
+      value: data.description,
+    },
+    {
+      label: "Email",
+      value: data.email,
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-5">
@@ -77,151 +124,71 @@ export default function ReportDetail() {
         <div className="py-6 px-9">
           <span className="text-xl font-semibold">Report Detail</span>
         </div>
-
-        {/* Garis pemisah */}
         <div className="h-px bg-gray-300"></div>
 
         <div className="py-6 px-9 flex flex-col gap-3">
           <h1 className="text-xl font-semibold">Related Issue</h1>
-          {/* Bagian review item */}
-          <div className="grid grid-cols-1">
-            {bookingItems.slice(0, 1).map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className={`p-3 border border-solid border-[#DBDBDB] rounded-xl`}
-                >
-                  {/* Bagian atas: kategori dan status */}
-                  <div className="flex justify-between items-center">
-                    <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                      {item.category === "Hotel" ? (
-                        <RiHome3Line size={18} color="#ffff" />
-                      ) : (
-                        <RiGlassesLine size={18} color="#ffff" />
-                      )}
-                      <span className="text-xs font-semibold text-white">
-                        {item.category}
-                      </span>
-                    </div>
 
-                    <div
-                      className={`${mediumMontserrat.className} flex items-center`}
-                    >
-                      <div
-                        className={`border-2 border-solid border-[#DBDBDB] ${
-                          item.status === "waiting for payment"
-                            ? "bg-[#FFD600] border-[#FFD600]"
-                            : "bg-[#cbbef4] border-[#DBDBDB]"
-                        } rounded-xl py-1 px-5 w-max mr-2`}
-                      >
-                        <span
-                          className={`text-xs font-semibold ${
-                            item.status === "waiting for payment"
-                              ? "text-InfernoEcho-600"
-                              : "text-RoyalAmethyst-700"
-                          }`}
-                        >
-                          {item.status === "waiting for payment"
-                            ? "Waiting for Payment"
-                            : "Done"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+          <div className="p-3 border border-solid border-[#DBDBDB] rounded-xl">
+            <div className="flex justify-between items-center">
+              <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                {isDestination ? (
+                  <RiGlassesLine size={18} color="#ffff" />
+                ) : (
+                  <RiHome3Line size={18} color="#ffff" />
+                )}
+                <span className="text-xs font-semibold text-white">
+                  {isDestination ? "Destination" : "Hotel"}
+                </span>
+              </div>
+            </div>
 
-                  {/* Bagian tengah: gambar dan detail hotel/destinasi */}
-                  <div className="flex items-center gap-2 py-3">
-                    <Link href={item.link}>
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        width={100}
-                        height={100}
-                        className="rounded-xl w-44"
-                      />
-                    </Link>
+            <div className="flex items-center gap-2 py-3">
+              {/* Use a placeholder image or proper image path from your data */}
+              <Image
+                src="/images/illustration/bedroom-suite.jpg"
+                alt={isDestination ? cart.destination?.name || "" : "Hotel"}
+                width={100}
+                height={100}
+                className="rounded-xl w-44"
+              />
 
-                    <div
-                      className={`${mediumMontserrat.className} flex flex-col gap-1`}
-                    >
-                      <Link
-                        href={item.link}
-                        className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
-                      >
-                        {item.name}
-                      </Link>
+              <div
+                className={`${mediumMontserrat.className} flex flex-col gap-1`}
+              >
+                <span className="font-semibold text-black">
+                  {isDestination ? cart.destination?.name : "Hotel Name"}
+                </span>
 
-                      {item.category === "Hotel" ? (
-                        <div className="flex items-center gap-1">
-                          <RiMapPin2Line size={16} color="#6b7280" />
-                          <span className="text-xs text-gray-500">
-                            {item.HotelLocation}
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-1">
-                          <RiMapPin2Line size={16} color="#6b7280 " />
-                          <span className="text-xs text-gray-500">
-                            {item.DestinationLocation}
-                          </span>
-                        </div>
-                      )}
-
-                      {item.category === "Hotel" ? (
-                        <div className="flex items-center gap-1">
-                          <LuFeather size={16} color="#6b7280 " />
-                          <span className="text-xs text-gray-500">
-                            {item.HotelTotalReviews} reviews
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-1">
-                          <LuFeather size={16} color="#6b7280 " />
-                          <span className="text-xs text-gray-500">
-                            {item.DestinationTotalReviews} reviews
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div
-                    className={`${mediumMontserrat.className} flex flex-col gap-1`}
-                  >
-                    {item.category === "Hotel" && item.HotelRoomType && (
-                      <span className="text-sm font-semibold text-RoyalAmethyst-700">
-                        {item.HotelRoomType}
-                      </span>
-                    )}
-
-                    <div className="flex items-center gap-1">
-                      <RiCalendarLine size={16} color="black " />
-                      <span className="text-xs text-black">
-                        {item.category === "Hotel"
-                          ? item.HotelSchedule
-                          : item.DestinationSchedule}
-                      </span>
-                    </div>
-
-                    {item.category === "Hotel" && (
-                      <div
-                        className={`${mediumMontserrat.className} flex justify-between`}
-                      >
-                        <div className="flex gap-1">
-                          <RiTeamLine size={16} color="black" />
-                          <span className="text-xs text-black">
-                            Guests: {item.guests}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                <div className="flex items-center gap-1">
+                  <RiMapPin2Line size={16} color="#6b7280" />
+                  <span className="text-xs text-gray-500">
+                    {isDestination
+                      ? cart.destination?.address
+                      : "Hotel Address"}
+                  </span>
                 </div>
-              );
-            })}
+
+                <div className="flex items-center gap-1">
+                  <RiCalendarLine size={16} color="black" />
+                  <span className="text-xs text-black">
+                    {`${formatDate(cart.startDate)} - ${formatDate(
+                      cart.endDate
+                    )}`}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <RiTeamLine size={16} color="black" />
+                  <span className="text-xs text-black">
+                    {`Adults: ${cart.quantityAdult}, Children: ${cart.quantityChildren}`}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className={`${mediumMontserrat.className} `}>
+          <div className={`${mediumMontserrat.className}`}>
             {reportInfo.map((detail, index) => (
               <div key={index}>
                 <div className="flex items-center py-5 gap-2">
@@ -242,39 +209,37 @@ export default function ReportDetail() {
             ))}
           </div>
 
-          {/* 4 Photo */}
-          <div>
-            <div className={`${mediumMontserrat.className} py-6`}>
-              <span className="text-xl font-semibold">Photos</span>
-            </div>
-            <div className="h-px bg-gray-300"></div>
+          {/* Only show photos section if pathPhoto exists */}
+          {data.pathPhoto && data.pathPhoto.length > 0 && (
+            <div>
+              <div className={`${mediumMontserrat.className} py-6`}>
+                <span className="text-xl font-semibold">Photos</span>
+              </div>
+              <div className="h-px bg-gray-300"></div>
 
-            <div
-              className={`${mediumMontserrat.className} grid grid-cols-3 gap-4 pt-6`}
-            >
-              {photoReport.map((detail, index) => (
-                <div key={index}>
-                  <div className="w-full">
-                    {/* Menggunakan next/image untuk gambar dengan ukuran w-full h-32 */}
+              <div
+                className={`${mediumMontserrat.className} grid grid-cols-3 gap-4 pt-6`}
+              >
+                {data.pathPhoto.map((path, index) => (
+                  <div key={index}>
                     <Image
-                      src={detail.value}
-                      alt="Location Map"
+                      src={path || ""}
+                      alt={`Report photo ${index + 1}`}
                       width={400}
                       height={150}
                       className="w-full rounded-lg"
                     />
                   </div>
-
-                  <div className="h-px bg-gray-300"></div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
-      {/* form */}
+
+      {/* Reply Form Section */}
       <div className="bg-white rounded-xl border-solid border-gray-200 border">
-        <div className={`${mediumMontserrat.className} py-6 px-9 `}>
+        <div className={`${mediumMontserrat.className} py-6 px-9`}>
           <span className="font-semibold text-lg">Reply Report</span>
           <Form
             form={form}
@@ -282,7 +247,6 @@ export default function ReportDetail() {
             onFinish={handleSubmit}
             className="mt-4"
           >
-            {/* Title */}
             <Form.Item
               name="title"
               label="Title"
@@ -290,8 +254,7 @@ export default function ReportDetail() {
             >
               <Input placeholder="Input title" />
             </Form.Item>
-            {/* end Title */}
-            {/* Deskripsi */}
+
             <Form.Item
               name="description"
               label="Description"
@@ -301,11 +264,9 @@ export default function ReportDetail() {
             >
               <Input.TextArea placeholder="Input description" rows={8} />
             </Form.Item>
-            {/* end Deskripsi */}
           </Form>
 
-          {/* Bagian upload foto/video */}
-          <div className="">
+          <div>
             <h1 className="text-lg font-semibold">
               Add Photo/Video (Optional)
             </h1>
@@ -317,11 +278,8 @@ export default function ReportDetail() {
                 showUploadList={false}
                 className="w-72"
               >
-                <div className="flex  items-center justify-center border-2 border-dashed border-gray-300 rounded-xl h-64 cursor-pointer w-full">
-                  <div
-                    className="flex flex-col items-center justify-center px-20 
-              "
-                  >
+                <div className="flex items-center justify-center border-2 border-dashed border-gray-300 rounded-xl h-64 cursor-pointer w-full">
+                  <div className="flex flex-col items-center justify-center px-20">
                     <CiCamera className="text-gray-500" size={32} />
                     <p className="text-gray-500">Add photo/video</p>
                   </div>
@@ -343,19 +301,18 @@ export default function ReportDetail() {
           </div>
         </div>
       </div>
-      {/* end form */}
 
-      <div className="flex justify-end  ">
+      <div className="flex justify-end">
         <div className="flex items-center gap-3">
           <Link
-            href={"/admin/report"}
+            href="/admin/report"
             className="w-max border-solid border-RoyalAmethyst-700 border px-9 py-2 rounded-xl cursor-pointer no-underline"
           >
             <span className="font-semibold text-RoyalAmethyst-700 text-base">
               Back
             </span>
           </Link>
-          <div className="w-max bg-RoyalAmethyst-700 px-9 py-2 rounded-xl cursor-pointer ">
+          <div className="w-max bg-RoyalAmethyst-700 px-9 py-2 rounded-xl cursor-pointer">
             <span className="text-white font-semibold text-base">Done</span>
           </div>
         </div>
@@ -363,31 +320,3 @@ export default function ReportDetail() {
     </div>
   );
 }
-
-const reportInfo = [
-  {
-    label: "Blog Title",
-    value: "Wahid Borobudur is a hotel located in Borobudur",
-  },
-  {
-    label: "Description",
-    value:
-      "Wahid Borobudur is a hotel located in Borobudur, a 13-minute walk from the famous Borobudur Temple, a UNESCO World Heritage Site and one of the seven wonders of the world. ",
-  },
-  {
-    label: "Email",
-    value: "tuy23@gmail.com",
-  },
-];
-
-const photoReport = [
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-];

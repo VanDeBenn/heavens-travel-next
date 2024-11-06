@@ -14,6 +14,7 @@ import { CgHomeAlt } from "react-icons/cg";
 import { RiUserLine } from "react-icons/ri";
 import { FaRegClock } from "react-icons/fa";
 import { Montserrat } from "next/font/google";
+import Loading from "#/app/loading";
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -25,74 +26,21 @@ const mediumMontserrat = Montserrat({
 });
 
 interface DataType {
-  key: string;
-  reportTitle: string;
+  id: string;
+  title: string;
   description: string;
-  date: string;
-  imageUrls: string[];
+  createdAt: string;
+  user: {
+    email: string;
+  };
+  photoreports: { url: string }[];
 }
 
-const reportListData: DataType[] = [
-  {
-    key: "1",
-    reportTitle: "Monthly Sales Report",
-    description: "Detailed monthly sales analysis for April 2020.",
-    date: "20/04/2020",
-    imageUrls: [
-      "/images/illustration/hawaii.jpg",
-      "/images/illustration/hawaii.jpg",
-      "/images/illustration/hawaii.jpg",
-    ],
-  },
-  {
-    key: "2",
-    reportTitle: "Customer Feedback Analysis",
-    description: "Compilation of customer feedback from Q1.",
-    date: "18/03/2020",
-    imageUrls: ["/images/illustration/hawaii.jpg"],
-  },
-  {
-    key: "3",
-    reportTitle: "Market Research",
-    description: "Insights into the current market trends.",
-    date: "12/02/2020",
-    imageUrls: [
-      "/images/illustration/hawaii.jpg",
-      "/images/illustration/hawaii.jpg",
-    ],
-  },
-  {
-    key: "4",
-    reportTitle: "Monthly Sales Report",
-    description: "Detailed monthly sales analysis for April 2020.",
-    date: "20/04/2020",
-    imageUrls: [
-      "/images/illustration/hawaii.jpg",
-      "/images/illustration/hawaii.jpg",
-      "/images/illustration/hawaii.jpg",
-    ],
-  },
-  {
-    key: "5",
-    reportTitle: "Customer Feedback Analysis",
-    description: "Compilation of customer feedback from Q1.",
-    date: "18/03/2020",
-    imageUrls: ["/images/illustration/hawaii.jpg"],
-  },
-  {
-    key: "6",
-    reportTitle: "Market Research",
-    description: "Insights into the current market trends.",
-    date: "12/02/2020",
-    imageUrls: [
-      "/images/illustration/hawaii.jpg",
-      "/images/illustration/hawaii.jpg",
-    ],
-  },
-];
+interface ComponentProps {
+  data: any;
+}
 
-const ReportList: React.FC = () => {
-  const [dataSource, setDataSource] = useState<DataType[]>(reportListData);
+export default function ReportList({ data }: ComponentProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
 
@@ -104,8 +52,13 @@ const ReportList: React.FC = () => {
     return `Showing ${range[0]} to ${range[1]} of ${total} entries`;
   };
 
+  if (!data) {
+    return <Loading />;
+  }
+
+  const reports = data;
   const startEntry = (currentPage - 1) * pageSize + 1;
-  const endEntry = Math.min(currentPage * pageSize, dataSource.length);
+  const endEntry = Math.min(currentPage * pageSize, reports.length);
 
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border">
@@ -115,48 +68,58 @@ const ReportList: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          {dataSource
+          {reports
             .slice((currentPage - 1) * pageSize, currentPage * pageSize)
-            .map((item) => (
+            .map((item: DataType) => (
               <Link
-                href={`/admin/report/detail`}
-                // mungkin yang bener bawah ini
-                // href={`/admin/report/${item.key}`}
-                key={item.key}
+                href={`/admin/report/detail/${item?.id}`}
+                key={item.id}
                 className="no-underline"
               >
                 <div className="border-solid border-gray-200 border rounded-xl cursor-pointer">
                   <div className="flex flex-col gap-2 p-3">
                     <span className="font-semibold text-lg text-black no-underline hover:text-RoyalAmethyst-700 transition-all duration-300">
-                      {item.reportTitle}
+                      {item.title}
                     </span>
                     <p className="text-base text-black">{item.description}</p>
                     <div className="flex justify-end gap-3">
-                      {item.imageUrls.slice(0, 3).map((imageUrl, index) => (
+                      {item.photoreports.length > 0 ? (
+                        item.photoreports
+                          .slice(0, 3)
+                          .map((photo, index) => (
+                            <Image
+                              key={index}
+                              src={photo.url}
+                              height={200}
+                              width={300}
+                              alt="report-image"
+                              className="rounded-xl w-36 h-24"
+                            />
+                          ))
+                      ) : (
                         <Image
-                          key={index}
-                          src={imageUrl}
+                          src="/images/illustration/hawaii.jpg"
                           height={200}
                           width={300}
-                          alt="report-image"
+                          alt="default-image"
                           className="rounded-xl w-36 h-24"
                         />
-                      ))}
+                      )}
                     </div>
                     <div className="h-px bg-gray-300 "></div>
                     <div className="flex justify-between items-center py-2 text-black">
                       <div className="flex items-center gap-2">
                         <CgHomeAlt className="text-lg" />
-                        <span className="text-sm">Booking #1</span>
+                        <span className="text-sm">Booking #{item.id}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="flex items-center gap-2">
                           <RiUserLine className="text-lg" />
-                          <span className="text-sm">cihuy@gmail.com</span>
+                          <span className="text-sm">{item.user.email}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <FaRegClock className="text-lg" />
-                          <span className="text-sm">{item.date}</span>
+                          <span className="text-sm">{item.createdAt}</span>
                         </div>
                       </div>
                     </div>
@@ -167,9 +130,7 @@ const ReportList: React.FC = () => {
         </div>
 
         <div className="flex items-center justify-between pt-5">
-          <div>
-            {showTotalEntries(dataSource.length, [startEntry, endEntry])}
-          </div>
+          <div>{showTotalEntries(data.count, [startEntry, endEntry])}</div>
           <div className="flex items-center gap-2">
             <Button
               type="primary"
@@ -181,7 +142,7 @@ const ReportList: React.FC = () => {
             <Button
               type="primary"
               onClick={() => setCurrentPage(currentPage + 1)}
-              disabled={currentPage * pageSize >= dataSource.length}
+              disabled={currentPage * pageSize >= data.count}
             >
               Next
             </Button>
@@ -190,6 +151,4 @@ const ReportList: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default ReportList;
+}
