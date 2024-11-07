@@ -4,8 +4,86 @@ import Image from "next/image"; // Import Image dari next/image
 
 import { mediumMontserrat } from "#/app/components/user/myBooking";
 import Link from "next/link";
+import Loading from "#/app/loading";
 
-const RoomDetail: React.FC = () => {
+interface ComponentProps {
+  data: any;
+}
+
+export default function RoomDetail({ data }: ComponentProps) {
+  if (!data) {
+    return <Loading />;
+  }
+
+  const basicInfo = [
+    {
+      label: "Room Type",
+      value: "Deluxe king",
+    },
+    {
+      label: "Price",
+      value: `Rp${data.price}`,
+    },
+    {
+      label: "Adult",
+      value: data.adult,
+    },
+    {
+      label: "Childen Allowed",
+      value: data.children,
+    },
+    {
+      label: "Bed Type",
+      value: "2 Double bed and 1 King Bed",
+    },
+    {
+      label: "Number Room",
+      value: "5",
+    },
+  ];
+
+  const photosPreview = [
+    {
+      value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+    },
+  ];
+
+  const facility = [
+    {
+      label: "Air Conditioning",
+      value: "Available",
+    },
+    {
+      label: "Shower",
+      value: "Available",
+    },
+    {
+      label: "Toilettries",
+      value: "Available",
+    },
+    {
+      label: "Towels",
+      value: "Available",
+    },
+    {
+      label: "Telephone",
+      value: "Available",
+    },
+    {
+      label: "Television",
+      value: "Available",
+    },
+  ];
+
   return (
     <div className="">
       <div
@@ -44,7 +122,6 @@ const RoomDetail: React.FC = () => {
         <div
           className={`bg-white border-solid border-gray-200 border p-7 rounded-xl`}
         >
-          
           <div className={`${mediumMontserrat.className}  pb-6`}>
             <span className="text-xl font-semibold">Room Detail</span>
           </div>
@@ -140,75 +217,4 @@ const RoomDetail: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default RoomDetail;
-
-const basicInfo = [
-  {
-    label: "Room Type",
-    value: "Deluxe king",
-  },
-  {
-    label: "Price",
-    value: "Rp1,299,000,00",
-  },
-  {
-    label: "Adult",
-    value: "4",
-  },
-  {
-    label: "Childen Allowed",
-    value: "4",
-  },
-  {
-    label: "Bed Type",
-    value: "2 Double bed and 1 King Bed",
-  },
-  {
-    label: "Number Room",
-    value: "5",
-  },
-];
-
-const photosPreview = [
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
-  },
-];
-
-const facility = [
-  {
-    label: "Air Conditioning",
-    value: "Available",
-  },
-  {
-    label: "Shower",
-    value: "Available",
-  },
-  {
-    label: "Toilettries",
-    value: "Available",
-  },
-  {
-    label: "Towels",
-    value: "Available",
-  },
-  {
-    label: "Telephone",
-    value: "Available",
-  },
-  {
-    label: "Television",
-    value: "Available",
-  },
-];
+}

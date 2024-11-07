@@ -11,6 +11,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ColumnsType } from "antd/es/table"; // Import the ColumnsType
 import { mediumMontserrat } from "../user/myBooking";
+import Loading from "#/app/loading";
 
 interface DataType {
   key: string;
@@ -23,17 +24,24 @@ interface DataType {
   imageUrl: string; // Image URL for the room
 }
 
-const RoomList: React.FC = () => {
+interface ComponentProps {
+  data: any;
+  id: string;
+}
+
+export default function RoomList({ data, id }: ComponentProps) {
+  if (!data) {
+    return <Loading />;
+  }
   const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
 
   useEffect(() => {
-    const generatedData: DataType[] = Array.from(
-      { length: 20 },
-      (_, index) => ({
-        key: `${index + 1}`,
+    if (data) {
+      const generatedData: DataType[] = data.map((item: any) => ({
+        key: item.id,
         photoRoom: "", // Only image, no text
         roomType: Math.random() > 0.5 ? "Standard Room" : "Deluxe Room", // Random room type
         typeBed: `${Math.floor(Math.random() * 3) + 1} Single Bed`, // Random type bed
@@ -43,10 +51,10 @@ const RoomList: React.FC = () => {
         numberRoom: `${Math.floor(Math.random() * 10) + 1}`, // Random number of rooms
         amenities: ["WiFi", "Pool", "Gym"], // Example amenities
         imageUrl: "/images/illustration/hawaii.jpg", // Placeholder image URL
-      })
-    );
+      }));
 
-    setDataSource(generatedData);
+      setDataSource(generatedData);
+    }
   }, []);
 
   const handleMenuClick = (e: any) => {
@@ -129,12 +137,14 @@ const RoomList: React.FC = () => {
       title: "",
       key: "actions",
       align: "center",
-      render: () => (
+      render: (_, record) => (
         <Dropdown
           overlay={
             <Menu onClick={handleMenuClick}>
               <Menu.Item key="1" icon={<InfoCircleOutlined />}>
-                <Link href={"/admin/hotels/detail/room-list/detail"}>
+                <Link
+                  href={`/admin/hotels/detail/${id}/room-list/detail/${record.key}`}
+                >
                   Detail
                 </Link>
               </Menu.Item>
@@ -251,6 +261,4 @@ const RoomList: React.FC = () => {
       </div>
     </>
   );
-};
-
-export default RoomList;
+}
