@@ -4,11 +4,207 @@ import Image from "next/image"; // Import Image dari next/image
 
 import { mediumMontserrat } from "#/app/components/user/myBooking";
 import Link from "next/link";
+import Loading from "#/app/loading";
 
-const hotelDetail: React.FC = () => {
+interface ComponentProps {
+  data: any;
+}
+
+export default function hotelDetail({ data }: ComponentProps) {
+  if (!data) {
+    return <Loading />;
+  }
+
+  const basicInfo = [
+    {
+      label: "Name Hotel",
+      value: data?.name,
+    },
+    {
+      label: "Rating",
+      value: data?.rating,
+    },
+    {
+      label: "Description",
+      value: data?.description,
+    },
+  ];
+
+  const locationDetail = [
+    {
+      label: "Address",
+      value: data?.address,
+    },
+    {
+      label: "Path Location",
+      value: "/images/illustration/property-map-entry.png", // Path gambar
+    },
+    {
+      label: "District",
+      value: "Jatobenong Bawru",
+    },
+    {
+      label: "City",
+      value: "Bekasi",
+    },
+    {
+      label: "Province",
+      value: "West Java",
+    },
+    {
+      label: "Country",
+      value: "Indonesia",
+    },
+  ];
+  const photosPreview = [
+    {
+      value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+    },
+  ];
+
+  const languageSpoken = [
+    {
+      label: "Indonesia",
+      value: "Available",
+    },
+    {
+      label: "English",
+      value: "Available",
+    },
+    {
+      label: "Malaysia",
+      value: "Available",
+    },
+  ];
+  const Internet = [
+    {
+      label: "Free WiFi",
+      value: "Available",
+    },
+    {
+      label: "WiFi in Public Area",
+      value: "Available",
+    },
+  ];
+  const publicTrans = [
+    {
+      label: "Terminal Tidar Magelang",
+      value: "Available",
+    },
+    {
+      label: "Terminal Bus Kebonpolo",
+      value: "Available",
+    },
+  ];
+  const hosOrCli = [
+    {
+      label: "Kidungan Sehat Clinic",
+      value: "Available",
+    },
+    {
+      label: "Soerojo Hospital",
+      value: "Available",
+    },
+  ];
+  const pp = [
+    {
+      label:
+        "When booking more than 5 rooms, different policies and additional supplements may apply.",
+    },
+    {
+      label:
+        "Infant 0-2 year(s) stay for free if using existing bedding, baby cot/crib may be requested directly from the property.",
+    },
+  ];
+  const schedule = [
+    {
+      label: "Check-in Time",
+      value: "07:20 AM",
+    },
+    {
+      label: "Check-out Time",
+      value: "10:00 PM",
+    },
+  ];
+  const GettingArround = [
+    {
+      label: "Airport Transfer Fee",
+      value: "Rp350.000",
+    },
+    {
+      label: "Distance from City Center",
+      value: "0,7 km",
+    },
+  ];
+
+  const RecommendDestinationNearby = [
+    {
+      label: "Name",
+      value: "Taman Burung Jatibening Estate",
+    },
+    {
+      label: "Photo",
+      value: "/images/illustration/rainbow-appearing-sky.jpg", // Path gambar
+    },
+    {
+      label: "Rating",
+      value: "4",
+    },
+    {
+      label: "District",
+      value: "Jatobenong Bawru",
+    },
+
+    {
+      label: "Review",
+      value: "Good, Recommend!!",
+    },
+    {
+      label: "Price",
+      value: "Rp500.000",
+    },
+    {
+      label: "URL",
+      value:
+        "https://htrip.com/destinations/tamanBurungJatibeningEstate/details",
+    },
+  ];
+
+  const PopularDestinations = [
+    {
+      label: "Urumqi Travel",
+      value: "https://htrip.com/destinations/tamanBurungJatibeningEstate/",
+    },
+    {
+      label: "Kauai Travel",
+      value: "https://htrip.com/destinations/tamanBurungJatibeningEstate/",
+    },
+  ];
+  const PopularAttraction = [
+    {
+      label: "Kecak Bali",
+      value: "https://htrip.com/destinations/tamanBurungJatibeningEstate/",
+    },
+    {
+      label: "Calonarang",
+      value: "https://htrip.com/destinations/tamanBurungJatibeningEstate/",
+    },
+  ];
+
   return (
     <div className="flex flex-col ">
-      <div className={`${mediumMontserrat.className} flex items-center gap-2 mb-5`}>
+      <div
+        className={`${mediumMontserrat.className} flex items-center gap-2 mb-5`}
+      >
         <Link href={"/"} className="no-underline text-black text-sm">
           Hotel
         </Link>
@@ -426,7 +622,7 @@ const hotelDetail: React.FC = () => {
       >
         <span className="text-lg font-semibold">Room Listing</span>
         <Link
-          href={"/admin/hotels/detail/room-list"}
+          href={`/admin/hotels/detail/${data?.id}/room-list`}
           className="bg-RoyalAmethyst-700 px-12 py-2 rounded-xl no-underline "
         >
           <span className="text-base font-semibold text-white">
@@ -445,190 +641,4 @@ const hotelDetail: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default hotelDetail;
-
-const basicInfo = [
-  {
-    label: "Name Hotel",
-    value: "Grand Caman",
-  },
-  {
-    label: "Rating",
-    value: "4",
-  },
-  {
-    label: "Description",
-    value: "Grand caman the best in indonesian",
-  },
-];
-
-const locationDetail = [
-  {
-    label: "Address",
-    value: "Jl. Caman Raya No.23, RT.013/RW.008, Jatibening Baru",
-  },
-  {
-    label: "Path Location",
-    value: "/images/illustration/property-map-entry.png", // Path gambar
-  },
-  {
-    label: "District",
-    value: "Jatobenong Bawru",
-  },
-  {
-    label: "City",
-    value: "Bekasi",
-  },
-  {
-    label: "Province",
-    value: "West Java",
-  },
-  {
-    label: "Country",
-    value: "Indonesia",
-  },
-];
-const photosPreview = [
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
-  },
-];
-
-const languageSpoken = [
-  {
-    label: "Indonesia",
-    value: "Available",
-  },
-  {
-    label: "English",
-    value: "Available",
-  },
-  {
-    label: "Malaysia",
-    value: "Available",
-  },
-];
-const Internet = [
-  {
-    label: "Free WiFi",
-    value: "Available",
-  },
-  {
-    label: "WiFi in Public Area",
-    value: "Available",
-  },
-];
-const publicTrans = [
-  {
-    label: "Terminal Tidar Magelang",
-    value: "Available",
-  },
-  {
-    label: "Terminal Bus Kebonpolo",
-    value: "Available",
-  },
-];
-const hosOrCli = [
-  {
-    label: "Kidungan Sehat Clinic",
-    value: "Available",
-  },
-  {
-    label: "Soerojo Hospital",
-    value: "Available",
-  },
-];
-const pp = [
-  {
-    label:
-      "When booking more than 5 rooms, different policies and additional supplements may apply.",
-  },
-  {
-    label:
-      "Infant 0-2 year(s) stay for free if using existing bedding, baby cot/crib may be requested directly from the property.",
-  },
-];
-const schedule = [
-  {
-    label: "Check-in Time",
-    value: "07:20 AM",
-  },
-  {
-    label: "Check-out Time",
-    value: "10:00 PM",
-  },
-];
-const GettingArround = [
-  {
-    label: "Airport Transfer Fee",
-    value: "Rp350.000",
-  },
-  {
-    label: "Distance from City Center",
-    value: "0,7 km",
-  },
-];
-
-const RecommendDestinationNearby = [
-  {
-    label: "Name",
-    value: "Taman Burung Jatibening Estate",
-  },
-  {
-    label: "Photo",
-    value: "/images/illustration/rainbow-appearing-sky.jpg", // Path gambar
-  },
-  {
-    label: "Rating",
-    value: "4",
-  },
-  {
-    label: "District",
-    value: "Jatobenong Bawru",
-  },
-
-  {
-    label: "Review",
-    value: "Good, Recommend!!",
-  },
-  {
-    label: "Price",
-    value: "Rp500.000",
-  },
-  {
-    label: "URL",
-    value: "https://htrip.com/destinations/tamanBurungJatibeningEstate/details",
-  },
-];
-
-const PopularDestinations = [
-  {
-    label: "Urumqi Travel",
-    value: "https://htrip.com/destinations/tamanBurungJatibeningEstate/",
-  },
-  {
-    label: "Kauai Travel",
-    value: "https://htrip.com/destinations/tamanBurungJatibeningEstate/",
-  },
-];
-const PopularAttraction = [
-  {
-    label: "Kecak Bali",
-    value: "https://htrip.com/destinations/tamanBurungJatibeningEstate/",
-  },
-  {
-    label: "Calonarang",
-    value: "https://htrip.com/destinations/tamanBurungJatibeningEstate/",
-  },
-];
+}

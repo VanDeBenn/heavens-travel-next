@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { ColumnsType } from "antd/es/table"; // Import the ColumnsType
+import Loading from "#/app/loading";
 
 interface DataType {
   key: string;
@@ -22,30 +23,35 @@ interface DataType {
   imageUrl: string;
 }
 
-const HotelList: React.FC = () => {
+interface ComponentProps {
+  data: any;
+}
+
+export default function HotelList({ data }: ComponentProps) {
+  if (!data) {
+    return <Loading />;
+  }
+
   const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
 
   useEffect(() => {
-    const generatedData: DataType[] = Array.from(
-      { length: 20 },
-      (_, index) => ({
-        key: `${index + 1}`,
-        hotelName: `Hotel ${index + 1}`,
-        address: `Jl. Caman Raya No.${
-          index + 1
-        }, RT.013/RW.008, Jatibening Baru`,
+    if (data) {
+      const generatedData: DataType[] = data.map((item: any) => ({
+        key: item?.id,
+        hotelName: `Hotel ${item?.name}`,
+        address: item?.address,
         rating: Math.random() > 0.5 ? "4" : "5", // Random rating between 4 or 5
         totalRoom: `${Math.floor(Math.random() * 100) + 1}`, // Random total room number
         roomType: Math.random() > 0.5 ? "Deluxe" : "Standard", // Room type as Deluxe or Standard
         facility: ["WiFi", "Pool", "Gym"], // Example facilities
         imageUrl: "/images/illustration/hawaii.jpg", // Placeholder image URL
-      })
-    );
+      }));
 
-    setDataSource(generatedData);
+      setDataSource(generatedData);
+    }
   }, []);
 
   const handleMenuClick = (e: any) => {
@@ -127,12 +133,12 @@ const HotelList: React.FC = () => {
       title: "",
       key: "actions",
       align: "center",
-      render: () => (
+      render: (_, record) => (
         <Dropdown
           overlay={
             <Menu onClick={handleMenuClick}>
               <Menu.Item key="1" icon={<InfoCircleOutlined />}>
-                <Link href="/admin/hotels/detail">Detail</Link>
+                <Link href={`/admin/hotels/detail/${record.key}`}>Detail</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<BlockOutlined />}>
                 Delete
@@ -222,6 +228,4 @@ const HotelList: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default HotelList;
+}
