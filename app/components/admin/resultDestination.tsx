@@ -190,7 +190,7 @@ const ResultDestination: React.FC = () => {
               <div key={photo.id}>
                 <div className="w-full">
                   <Image
-                    src={`http://localhost:3222/photo-destinations/${photo.pathPhoto}`}
+                    src={`https://a9b3-101-255-119-166.ngrok-free.app/photo-destinations/${photo.pathPhoto}`}
                     alt="Location Map"
                     width={400} // Lebar gambar
                     height={150} // Tinggi gambar

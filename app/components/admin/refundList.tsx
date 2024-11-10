@@ -26,7 +26,7 @@ const RefundList: React.FC = () => {
 
   // Fungsi untuk mengambil semua refund
   const getAllRefund = async () => {
-    const res = await RefundRepository.api.getrefunds();
+    const res = await RefundRepository.api.getRefunds();
     setDataRefund(res.data || []); // simpan data
   };
 
