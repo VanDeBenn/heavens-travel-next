@@ -10,7 +10,7 @@ let AuthIntercept = superagentIntercept((err: any, res: any) => {
     // console.log("AuthIntercept 401");
     TokenUtil.clearAccessToken();
     TokenUtil.persistToken();
-    window.location.href = "/login";
+    // window.location.href = "/login";
   }
 });
 
@@ -19,7 +19,8 @@ export const http = {
     let req = superagent
       .get(config.baseUrl + url)
       .use(AuthIntercept)
-      .use(attachSuperagentLogger);
+      .use(attachSuperagentLogger)
+      .set("ngrok-skip-browser-warning", "true");
 
     if (TokenUtil.accessToken) {
       req = req.set("Authorization", "Bearer " + TokenUtil.accessToken);
@@ -32,7 +33,8 @@ export const http = {
     let req = superagent
       .post(config.baseUrl + url)
       .use(AuthIntercept)
-      .use(attachSuperagentLogger);
+      .use(attachSuperagentLogger)
+      .set("ngrok-skip-browser-warning", "true");
 
     if (TokenUtil.accessToken) {
       req = req.set("Authorization", "Bearer " + TokenUtil.accessToken);
@@ -44,7 +46,8 @@ export const http = {
     let req = superagent
       .put(config.baseUrl + url)
       .use(AuthIntercept)
-      .use(attachSuperagentLogger);
+      .use(attachSuperagentLogger)
+      .set("ngrok-skip-browser-warning", "true");
 
     if (TokenUtil.accessToken) {
       req = req.set("Authorization", "Bearer " + TokenUtil.accessToken);
@@ -57,7 +60,8 @@ export const http = {
     let req = superagent
       .del(config.baseUrl + url)
       .use(AuthIntercept)
-      .use(attachSuperagentLogger);
+      .use(attachSuperagentLogger)
+      .set("ngrok-skip-browser-warning", "true");
 
     if (TokenUtil.accessToken) {
       req = req.set("Authorization", "Bearer " + TokenUtil.accessToken);
@@ -69,7 +73,8 @@ export const http = {
     let req = superagent
       .get(config.baseUrl + url)
       .use(AuthIntercept)
-      .use(attachSuperagentLogger);
+      .use(attachSuperagentLogger)
+      .set("ngrok-skip-browser-warning", "true");
 
     if (TokenUtil.accessToken) {
       req = req.set("Authorization", "Bearer " + TokenUtil.accessToken);

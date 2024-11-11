@@ -6,7 +6,12 @@ import React from "react";
 import { RiNewspaperLine } from "react-icons/ri";
 import PopularNews from "../../components/user/popularNews";
 
-export default function News() {
+interface ComponentsProps {
+  data:any
+}
+
+export default function News({data}:ComponentsProps) {
+  console.log
   return (
     <div className="py-5 flex flex-col items-center">
       {/* News Section */}

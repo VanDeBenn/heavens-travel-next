@@ -24,7 +24,7 @@ export default function destinasitionHighlights() {
             //yang bener buat abang beckend
             // href={`/news/popular/${index}`}
           >
-            <div className="relative bg-white border border-gray-200 rounded-xl overflow-hidden border-solid border-gray-200 border transition-transform duration-300">
+            <div className="relative bg-white border border-gray-200 rounded-xl overflow-hidden border-solid transition-transform duration-300">
               <Link href={card.link}>
                 <div className="relative w-full h-[400px]">
                   <Image

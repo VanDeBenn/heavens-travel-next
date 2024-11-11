@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   CalendarOutlined,
   ShareAltOutlined,
@@ -21,6 +21,7 @@ import {
 import PopularNews from "../../components/user/popularNews";
 import Image from "next/image";
 import Loading from "#/app/loading";
+import { blogRepository } from "#/repository/blogs";
 
 interface ComponentsProps {
   data: any;
@@ -29,6 +30,15 @@ interface ComponentsProps {
 export default function BlogDetail({ data }: ComponentsProps) {
   const [showShareButtons, setShowShareButtons] = useState(false);
   const inputRef = useRef(null); // Ref untuk input teks
+
+  const getAllBlog = async () => {
+    const res = await blogRepository.api.getBlogs()
+    console.log(res)
+  };
+
+  useEffect(() => {
+    getAllBlog()
+  });
 
   const handleShareClick = () => {
     setShowShareButtons(true);
