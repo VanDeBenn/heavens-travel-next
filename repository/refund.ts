@@ -10,7 +10,7 @@ const api = {
   create(data: any) {
     return http.post(url.refunds()).send(data);
   },
-  getrefunds() {
+  getRefunds() {
     return http.fetcher(url.refunds());
   },
   getRefund(id: string) {
