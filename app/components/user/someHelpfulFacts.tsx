@@ -26,7 +26,7 @@ export default function someHelpfulFacts() {
         </div>
         <div className="border border-gray-300 border-dashed h-0"></div>
         {/* grid dengan 3 kolom */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 pt-4">
           {AboutNearbyLocations.sections.map((section, sectionIndex) => (
             <div key={sectionIndex}>
               <span className="font-semibold text-sm">{section.title}</span>

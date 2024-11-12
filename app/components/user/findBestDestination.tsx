@@ -4,35 +4,32 @@ import { Montserrat } from "next/font/google";
 import { LiaBinocularsSolid } from "react-icons/lia";
 import Image from "next/image";
 import Link from "next/link";
+import { BsSuitcaseLg } from "react-icons/bs";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
 
-export default function HolidayIntroduction() {
+export default function FindBestDestination() {
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex justify-center">
-        <div className="flex flex-col gap-2">
-          <div className="flex justify-center">
-            <div
-              className={`${mediumMontserrat.className} flex items-center gap-2`}
-            >
-              <LiaBinocularsSolid className="text-3xl text-RoyalAmethyst-700" />
-              <span className="text-xl font-semibold">
-                Enjoy yourself on holiday in Asia and beyond
-              </span>
-            </div>
-          </div>
-
-          <span
-            className={`${mediumMontserrat.className} text-base text-black`}
+      <div className="flex flex-col gap-2">
+        <div className=" ">
+          <div
+            className={`${mediumMontserrat.className} flex items-center gap-2`}
           >
-            where every destination offers a unique blend of culture, adventure,
-            and relaxation
-          </span>
+            <BsSuitcaseLg className="text-3xl text-RoyalAmethyst-700" />
+            <span className="text-xl font-semibold">
+              Find the best destination for your family
+            </span>
+          </div>
         </div>
+
+        <span className={`${mediumMontserrat.className} text-base text-black`}>
+          Explore family-friendly destinations that offer fun, adventure, and
+          relaxation for everyone.
+        </span>
       </div>
 
       {/* grid kota */}
@@ -62,7 +59,6 @@ export default function HolidayIntroduction() {
     </div>
   );
 }
-
 
 const HolidayData = [
   {

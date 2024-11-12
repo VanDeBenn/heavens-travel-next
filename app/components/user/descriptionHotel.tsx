@@ -6,34 +6,35 @@ import Image from "next/image";
 export default function DescriptionHotel() {
   return (
     <div className="flex justify-between gap-4">
-      <div className="bg-white rounded-xl border-solid border-gray-200 border w-2/3">
+      {/* Container Deskripsi */}
+      <div className="bg-white rounded-xl border border-gray-200 w-2/3 border-solid">
         <div className={`${mediumMontserrat.className} p-6`}>
           <div>
             <div className="pb-4">
               <span className="text-base font-semibold">Description</span>
             </div>
-            <div className="border border-gray-300 border-dashed h-0"></div>
+            <div className="border border-gray-300 border-dashed"></div>
             <div className="pt-6 text-sm">
               {hotelDescriptions.map((description, index) => (
                 <p key={index}>{description}</p>
               ))}
             </div>
           </div>
-          <div></div>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border-solid border-gray-200 border w-1/3 h-2/3">
+      {/* Container Peta */}
+      <div className="bg-white rounded-xl border border-gray-200 border-solid w-1/3 flex-shrink-0 h-auto">
         <div className={`${mediumMontserrat.className} p-6 h-full`}>
-          <div className="w-full h-full">
+          <div className="w-full h-full cursor-pointer">
             {hotelImages.map((image, index) => (
               <Image
                 key={index}
                 src={image.src}
                 alt={image.alt}
-                height={image.height}
-                width={image.width}
-                className="w-full h-full rounded-xl" // Added margin-bottom for spacing
+                height={400} // Nilai tinggi yang lebih besar agar dapat menyesuaikan tinggi deskripsi
+                width={300}
+                className="w-full h-full object-cover rounded-xl"
               />
             ))}
           </div>
@@ -55,6 +56,7 @@ const smallMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["400"],
 });
+
 const hotelDescriptions = [
   "Wahid Borobudur is a 5-star hotel that offers exceptional service and amenities. Guests can enjoy an outdoor swimming pool, complimentary internet access, and free parking. The hotel has on-site eateries serving delicious meals, and a restaurant is also available. Recreational amenities include a pool and other activities. Wahid Borobudur is not just a place to stay but a destination in itself.",
   "The hotel’s architecture and design seamlessly blend modern luxury with traditional Indonesian elements, creating a unique ambiance that reflects the rich cultural heritage of the region. Whether you are traveling for business or leisure, the hotel offers a range of services and facilities to cater to all your needs. The attentive staff is always on hand to ensure that every guest’s stay is comfortable and memorable.",

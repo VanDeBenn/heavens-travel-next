@@ -12,7 +12,7 @@ export default function AboutNearbyLocation() {
           .slice(0, 1)
           .map((section, sectionIndex) => (
             <div key={sectionIndex}>
-              <span className="font-semibold text-sm">{section.title}</span>
+              <span className="font-semibold text-base">{section.title}</span>
               {section.data.map((item, index) => (
                 <div key={index} className="pt-2">
                   <span className="text-xs sm:text-sm text-black">

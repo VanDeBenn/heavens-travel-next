@@ -1,114 +1,8 @@
-// import React, { useEffect, useState } from "react";
-// import { Tabs, Card, Typography, Row, Col, Rate } from "antd";
-// import { StarOutlined, EnvironmentOutlined } from "@ant-design/icons";
-// import Image from "next/image";
-// import Link from "next/link";
-// import "antd/dist/reset.css"; // Ant Design reset styles
-// import "tailwindcss/tailwind.css"; // Tailwind CSS styles
-
-// const { TabPane } = Tabs;
-// const { Paragraph } = Typography;
-
-// interface ComponentProps {
-//   data: any;
-//   dataCity: any;
-// }
-
-// const PopularHotelsIn = ({ data, dataCity }: ComponentProps) => {
-//   const [activeTab, setActiveTab] = useState<string>("");
-
-//   useEffect(() => {
-//     if (dataCity.length > 0) {
-//       setActiveTab(dataCity[0].name);
-//     }
-//   }, [dataCity]);
-
-//   const handleTabChange = (key: string) => {
-//     setActiveTab(key);
-//   };
-
-//   const filteredHotels = data.filter(
-//     (hotel: any) => hotel.district.city.name === activeTab
-//   );
-
-//   return (
-//     <div className="">
-//       <div className="flex items-center mb-6">
-//         <div className="text-RoyalAmethyst-700 text-3xl mr-3">
-//           <StarOutlined style={{ fontSize: "27px", color: "#4F28D9" }} />
-//         </div>
-//         <span className="text-xl font-semibold">
-//           Popular Hotels In Indonesia
-//         </span>
-//       </div>
-
-//       <Tabs
-//         defaultActiveKey={activeTab}
-//         onChange={handleTabChange}
-//         className="mb-6"
-//       >
-//         {dataCity.map((city: any) => (
-//           <TabPane tab={city.name} key={city.name} />
-//         ))}
-//       </Tabs>
-
-//       <Row gutter={16}>
-//         {filteredHotels.map((hotel: any) => (
-//           <Col span={6} key={hotel.id}>
-//             <Card
-//               cover={
-//                 <Link href={`/hotel/detail/${hotel.id}`}>
-//                   <Image
-//                     alt={hotel.name}
-//                     src={hotel.pathLocation}
-//                     layout="responsive"
-//                     width={500}
-//                     height={300}
-//                     className="object-cover"
-//                   />
-//                 </Link>
-//               }
-//               className="shadow-lg rounded-md"
-//             >
-//               {/* Title and Rating */}
-//               <div className="flex items-center justify-between mb-2 gap-2">
-//                 <h1 className="text-xl font-semibold">{hotel.name}</h1>
-//                 <Rate
-//                   disabled
-//                   defaultValue={hotel.rating}
-//                   className="text-yellow-500 text-xl"
-//                 />
-//               </div>
-//               {/* Location */}
-//               <div className="flex items-center text-gray-500 mb-2">
-//                 <EnvironmentOutlined className="mr-1" />
-//                 {hotel.district.city.name}
-//               </div>
-//               {/* Description */}
-//               <Paragraph ellipsis={{ rows: 2 }} className="text-gray-600">
-//                 {hotel.description}
-//               </Paragraph>
-//               {/* Price */}
-//               <div className="text-right text-base font-medium text-gray-700">
-//                 Start from <span className="text-InfernoEcho-600">{hotel.price}</span>
-//               </div>
-//             </Card>
-//           </Col>
-//         ))}
-//       </Row>
-//     </div>
-//   );
-// };
-
-// export default PopularHotelsIn;
-
 "use client";
 
 import { Montserrat } from "next/font/google";
 import { useState } from "react";
 import { LiaBinocularsSolid } from "react-icons/lia";
-import { FaUmbrellaBeach } from "react-icons/fa";
-
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -138,7 +32,7 @@ type HotelCard = {
   stars: number;
 };
 
-export default function PopularHotelsIn() {
+export default function BestHotelFinder() {
   const [selectedCity, setSelectedCity] = useState("Bali");
 
   const handleCityChange = (city: string) => {
@@ -151,20 +45,20 @@ export default function PopularHotelsIn() {
         <div
           className={`${mediumMontserrat.className} flex items-center gap-2`}
         >
-          <FaUmbrellaBeach className="text-3xl text-RoyalAmethyst-700" />
+          <RiHotelLine className="text-3xl text-RoyalAmethyst-700" />
           <span className="text-xl font-semibold">
-            Popular Hotels in Indonesian
+            Rest in the best hotel in every city
           </span>
         </div>
         <span className={`${mediumMontserrat.className} text-base text-black`}>
-          Top Stays for Your Next Adventure
+          Where luxury meets comfort and every moment is a memorable experience.
         </span>
       </div>
 
       <div
         className={`${mediumMontserrat.className} flex items-center gap-4 py-2 font-semibold`}
       >
-        {["Bali", "Bekasi", "Bandung", "Jogja"].map((city) => (
+        {["Bali", "Manila", "Bangkok", "Singapore"].map((city) => (
           <Button
             key={city}
             type={selectedCity === city ? "primary" : "default"}
@@ -182,76 +76,84 @@ export default function PopularHotelsIn() {
 
       {/* Grid cardcuyy */}
       <div className="grid grid-cols-4 gap-4">
-        {cityData[selectedCity] ? (
-          cityData[selectedCity].slice(0, 4).map((card) => (
+        {cityData[selectedCity].map((card) => (
+          <div
+            key={card.id}
+            className="no-underline border border-gray-300 border-solid rounded-xl flex flex-col gap-3 bg-white"
+          >
+            <Link href={card.link} className="flex flex-col items-center">
+              <Image
+                src={card.imgSrc}
+                alt={card.text}
+                className="h-52 w-full rounded-t-xl"
+                height={300}
+                width={300}
+              />
+            </Link>
             <div
-              key={card.id}
-              className="no-underline border border-gray-300 border-solid rounded-xl flex flex-col gap-3 bg-white"
+              className={`${mediumMontserrat.className} px-4 pb-2 flex flex-col gap-2`}
             >
-              <Link href={card.link} className="flex flex-col items-center">
-                <Image
-                  src={card.imgSrc}
-                  alt={card.text}
-                  className="h-52 w-full rounded-t-xl"
-                  height={300}
-                  width={300}
-                />
-              </Link>
-              <div
-                className={`${mediumMontserrat.className} px-4 pb-2 flex flex-col gap-2`}
-              >
-                <div className="flex justify-between gap-1">
-                  <Link
-                    href={card.link}
-                    className="font-semibold text-black text-base no-underline hover:text-RoyalAmethyst-700 transition-all duration-300"
-                  >
-                    {card.text}
-                  </Link>
-                  <div className="flex gap-1 items-center">
-                    {[...Array(5)].map((_, index) => (
-                      <React.Fragment key={index}>
-                        {index + 0.5 < card.stars ? (
-                          <RiStarFill className="text-[#FFD700] text-lg" />
-                        ) : index < card.stars ? (
-                          <RiStarHalfFill className="text-[#FFD700] text-lg" />
-                        ) : null}
-                      </React.Fragment>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <RiMapPin2Fill className="text-lg text-gray-400" />
-                  <span className="text-sm text-gray-400">{card.loc}</span>
-                </div>
+              <div className="flex justify-between gap-1">
                 <Link
                   href={card.link}
-                  className="text-black text-base font-semibold no-underline leading-6"
+                  className="font-semibold text-black text-base no-underline hover:text-RoyalAmethyst-700 transition-all duration-300"
                 >
-                  {card.desc}
+                  {card.text}
                 </Link>
-                <div className="flex justify-end">
-                  <div className="flex gap-2 items-center">
-                    <span className="text-gray-400 text-sm align-text-bottom">
-                      Start from
-                    </span>
-                    <Link
-                      href={card.link}
-                      className="text-InfernoEcho-600 text-lg font-semibold no-underline"
-                    >
-                      {card.price}
-                    </Link>
-                  </div>
+                <div className="flex gap-1 items-center">
+                  {[...Array(5)].map((_, index) => (
+                    <React.Fragment key={index}>
+                      {index + 0.5 < card.stars ? (
+                        <RiStarFill className="text-[#FFD700] text-lg" />
+                      ) : index < card.stars ? (
+                        <RiStarHalfFill className="text-[#FFD700] text-lg" />
+                      ) : null}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center gap-1">
+                <RiMapPin2Fill className="text-lg text-gray-400" />
+                <span className="text-sm text-gray-400">{card.loc}</span>
+              </div>
+              <Link
+                href={card.link}
+                className="text-black text-base font-semibold no-underline leading-6"
+              >
+                {card.desc}
+              </Link>
+              <div className="flex justify-end">
+                <div className="flex gap-2 items-center">
+                  <span className="text-gray-400 text-sm align-text-bottom">
+                    Start from
+                  </span>
+                  <Link
+                    href={card.link}
+                    className="text-InfernoEcho-600 text-lg font-semibold no-underline"
+                  >
+                    {card.price}
+                  </Link>
                 </div>
               </div>
             </div>
-          ))
-        ) : (
-          <div className="col-span-4 text-center text-gray-500">
-            No hotels available for this city.
           </div>
-        )}  
+        ))}
       </div>
       {/* End cardcuyy */}
+
+      <div
+        className={`${mediumMontserrat.className} flex justify-center items-center pt-5`}
+      >
+        <Link
+          href="/hotel"
+          className="border-solid border-RoyalAmethyst-700 border hover:bg-RoyalAmethyst-700 hover:border-gray-300 transition-all duration-300 px-7 py-2 rounded-xl no-underline flex items-center group"
+        >
+          <span className="text-RoyalAmethyst-700 text-sm font-semibold group-hover:text-white transition-all duration-300 ">
+            See more
+          </span>
+          <RiArrowRightSLine className="text-2xl text-RoyalAmethyst-700 group-hover:text-white transition-all duration-300 " />
+        </Link>
+      </div>
     </div>
   );
 }

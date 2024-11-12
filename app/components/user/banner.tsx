@@ -23,8 +23,11 @@ export default function Banner() {
         className="absolute top-0 w-full h-full bg-center bg-cover"
         style={{ backgroundImage: "url('/images/illustration/beach2.png')" }}
       ></div>
+      
+      {/* Overlay Hitam untuk Menggelapkan Gambar */}
+      <div className="absolute top-0 w-full h-full bg-black opacity-20"></div>
 
-      {/* Text Over Main Background */}
+      {/* Teks di Atas Background */}
       <div className="container relative mx-auto">
         <div className="items-center flex flex-wrap">
           <div className="w-full lg:w-6/12 px-4 ml-auto mr-auto text-center">
