@@ -5,13 +5,10 @@ import InformationAdmin from "#/app/components/admin/informationAdmin";
 import ProfileLayout from "../layout";
 import UserList from "#/app/components/admin/userList";
 import { usersRepository } from "#/repository/users";
+import { Users } from "#/app/types/Users";
 
-interface PageProps {
-  data: any;
-}
-
-const UserPage = ({ data }: PageProps) => {
-  const [allUsersData, setAllUsersData] = useState<any[]>([]);
+const UserPage = () => {
+  const [allUsersData, setAllUsersData] = useState<Users[]>([]);
 
   const getAllUsers = async () => {
     try {
@@ -25,6 +22,7 @@ const UserPage = ({ data }: PageProps) => {
     getAllUsers();
   }, []);
 
+  // console.log(allUsersData);
   return (
     <div className="flex flex-col gap-5">
       <UserList data={allUsersData} />

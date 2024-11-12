@@ -10,20 +10,8 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
-
-interface ComponentsProps {
-  data: {
-    id: string;
-    fullName: string;
-    email: string;
-    phoneNumber: string;
-    gender: string;
-    birthDate: string | null;
-    role: { name: string };
-    createdAt: string;
-    updatedAt: string;
-  }[];
-}
+import { Users } from "#/app/types/Users";
+import Loading from "#/app/loading";
 
 const handleMenuClick = (e: any) => {
   // console.log("Menu item clicked:", e);
@@ -94,14 +82,21 @@ const columns = [
   },
 ];
 
-export default function UserList({ data }: ComponentsProps) {
+interface ComponentProps {
+  data: Users[];
+}
+
+export default function UserList({ data }: ComponentProps) {
+  if (!data.length) {
+    return <Loading />;
+  }
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
 
   // Filtered data based on the search value
   const filteredData = data.filter(
-    (item) =>
+    (item: any) =>
       item.fullName.toLowerCase().includes(searchValue.toLowerCase()) ||
       item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
       item.phoneNumber.toLowerCase().includes(searchValue.toLowerCase())

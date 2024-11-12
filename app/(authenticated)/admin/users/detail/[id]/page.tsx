@@ -1,17 +1,12 @@
 "use client";
 import UserDetail from "#/app/components/admin/userDetail";
+import Loading from "#/app/loading";
+import { User } from "#/app/types/Users";
 import { usersRepository } from "#/repository/users";
 import React, { useEffect, useState } from "react";
 
-interface PageProps {
-  data: any;
-}
-
-export default function Page(
-  { params }: { params: { id: string } },
-  { data }: PageProps
-) {
-  const [userData, setUserData] = useState<any[]>([]);
+export default function Page({ params }: { params: { id: string } }) {
+  const [userData, setUserData] = useState<User>();
 
   const fetchUser = async () => {
     try {
@@ -23,6 +18,10 @@ export default function Page(
   useEffect(() => {
     fetchUser();
   }, []);
+
+  if (!userData) {
+    return <Loading />;
+  }
 
   return (
     <div className="bg-Lilac-50 flex flex-col gap-4">

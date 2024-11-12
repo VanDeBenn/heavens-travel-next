@@ -2,7 +2,7 @@
 
 import { Montserrat } from "next/font/google";
 import Link from "next/link";
- 
+
 import BasicInfoHotel from "#/app/components/admin/basicInfoHotel";
 import LocationInfoHotel from "#/app/components/admin/locationInfoHotel";
 import PhotoHotel from "#/app/components/admin/photoHotel";
@@ -11,12 +11,27 @@ import NearbyLocationHotel from "#/app/components/admin/nearbyLocationHotel";
 import PoliciesHotel from "#/app/components/admin/PoliciesHotel";
 import SomeHelpfulFactsHotel from "#/app/components/admin/someHelpfulFactsHotel";
 import FaqsHotel from "#/app/components/admin/faqsHotel";
+import { Button } from "antd";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { hotelRepository } from "#/repository/hotels";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
+
 export default function page() {
+  const router = useRouter();
+  const [submitForms, setSubmitForms] = useState(false);
+
+  const finish = async () => {
+    try {
+      const finalData = {};
+      const res = await hotelRepository.api.create(finalData);
+    } catch (error) {}
+  };
+
   return (
     <>
       <div
@@ -44,12 +59,20 @@ export default function page() {
         <FaqsHotel />
       </div>
       <div className="flex justify-end mt-5">
-        <Link
+        <Button
+          onClick={() => {
+            setSubmitForms(true);
+            finish();
+
+            setTimeout(() => {
+              router.push("/admin/destinations/create/result");
+            }, 3000);
+          }}
           href={"/admin/hotels/create/result"}
           className="bg-RoyalAmethyst-700 text-center w-32 py-1 no-underline text-white text-sm rounded-xl cursor-pointer"
         >
           Done
-        </Link>
+        </Button>
       </div>
     </>
     // <div>

@@ -8,9 +8,10 @@ import {
   smallMontserrat,
 } from "#/app/components/user/myBooking";
 import Link from "next/link";
+import { Destination } from "#/app/types/Destinations";
 
 interface ComponentsProps {
-  destinationData: any;
+  destinationData: Destination;
 }
 
 export default function destinationDetail({
@@ -29,7 +30,9 @@ export default function destinationDetail({
     { label: "Path Location", value: destinationData?.pathLocation },
     {
       label: "District",
-      value: destinationData?.disrict,
+      value:
+        //  destinationData?.disrict ||
+        "",
     },
     {
       label: "City",
@@ -37,11 +40,15 @@ export default function destinationDetail({
     },
     {
       label: "Province",
-      value: destinationData?.province,
+      value:
+        //  destinationData?.province ||
+        "",
     },
     {
       label: "Country",
-      value: destinationData?.country,
+      value:
+        //  destinationData?.country ||
+        "",
     },
   ];
 
@@ -120,7 +127,7 @@ export default function destinationDetail({
                   {detail.label === "Path Location" ? (
                     <div
                       className="w-full"
-                      dangerouslySetInnerHTML={{ __html: detail.value }}
+                      // dangerouslySetInnerHTML={{ __html: detail.value }}
                     />
                   ) : (
                     <div className={`text-base text-black ${mediumMontserrat}`}>

@@ -18,6 +18,7 @@ export const http = {
   get: (url: string, opts = {}) => {
     let req = superagent
       .get(config.baseUrl + url)
+      .withCredentials()
       .use(AuthIntercept)
       .use(attachSuperagentLogger)
       .set("ngrok-skip-browser-warning", "true");
@@ -72,6 +73,7 @@ export const http = {
   fetcher: async (url: string) => {
     let req = superagent
       .get(config.baseUrl + url)
+      .withCredentials()
       .use(AuthIntercept)
       .use(attachSuperagentLogger)
       .set("ngrok-skip-browser-warning", "true");

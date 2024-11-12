@@ -32,12 +32,12 @@ export default function BlogDetail({ data }: ComponentsProps) {
   const inputRef = useRef(null); // Ref untuk input teks
 
   const getAllBlog = async () => {
-    const res = await blogRepository.api.getBlogs()
-    console.log(res)
+    const res = await blogRepository.api.getBlogs();
+    // console.log(res)
   };
 
   useEffect(() => {
-    getAllBlog()
+    getAllBlog();
   });
 
   const handleShareClick = () => {

@@ -6,12 +6,18 @@ import {
   smallMontserrat,
 } from "#/app/components/user/myBooking";
 import Link from "next/link";
+import Loading from "#/app/loading";
+import { User } from "#/app/types/Users";
 
 interface ComponentsProps {
-  userData: any;
+  userData: User;
 }
 
 export default function UserDetail({ userData }: ComponentsProps) {
+  if (!userData) {
+    return <Loading />;
+  }
+
   const guestDetails = [
     {
       label: "Full Name",
@@ -37,7 +43,9 @@ export default function UserDetail({ userData }: ComponentsProps) {
     },
     {
       label: "District",
-      value: userData.district || "N/A",
+      value:
+        // userData.district ||
+        "N/A",
     },
     {
       label: "City",
@@ -45,11 +53,15 @@ export default function UserDetail({ userData }: ComponentsProps) {
     },
     {
       label: "Province",
-      value: userData.province || "N/A",
+      value:
+        // userData.province ||
+        "N/A",
     },
     {
       label: "Country",
-      value: userData.country || "N/A",
+      value:
+        // userData.country ||
+        "N/A",
     },
     {
       label: "Role",

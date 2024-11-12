@@ -14,7 +14,7 @@ export default function page({ params }: { params: { id: string } }) {
   useEffect(() => {
     getRefund();
   }, []);
-  console.log("data refund: ", dataRefund);
+  // console.log("data refund: ", dataRefund);
   return (
     <div>
       <RefundDetail data={dataRefund} />

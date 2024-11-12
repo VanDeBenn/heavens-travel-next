@@ -25,7 +25,7 @@ export default function BookingList({ data }: ComponentProps) {
   const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
 
-  console.log("data: ", data);
+  // console.log("data: ", data);
 
   useEffect(() => {
     if (Array.isArray(data)) {
@@ -154,7 +154,7 @@ export default function BookingList({ data }: ComponentProps) {
 
   const handleDelete = (bookingId: string) => {
     // Logic untuk menghapus booking
-    console.log(`Delete booking ID: ${bookingId}`);
+    // console.log(`Delete booking ID: ${bookingId}`);
     setDataSource((prevData) =>
       prevData.filter((item) => item.bookingId !== bookingId)
     );

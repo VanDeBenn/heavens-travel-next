@@ -7,11 +7,11 @@ import { RiNewspaperLine } from "react-icons/ri";
 import PopularNews from "../../components/user/popularNews";
 
 interface ComponentsProps {
-  data:any
+  data: any;
 }
 
-export default function News({data}:ComponentsProps) {
-  console.log
+export default function News({ data }: ComponentsProps) {
+  // console.log
   return (
     <div className="py-5 flex flex-col items-center">
       {/* News Section */}
@@ -82,7 +82,8 @@ export default function News({data}:ComponentsProps) {
 
 export const cardData = [
   {
-    title: "The Ultimate Guide to Experiencing Hawaii’s Natural Beauty and Adventure",
+    title:
+      "The Ultimate Guide to Experiencing Hawaii’s Natural Beauty and Adventure",
     date: "August 25, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:

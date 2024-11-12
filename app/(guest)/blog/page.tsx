@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import Footer from "#/app/components/user/footer";
 import HighlightBlog from "#/app/components/user/highlightBlog";
@@ -22,14 +22,14 @@ function page() {
     fetchAllBlog();
   }, []);
 
-  console.log("data:", dataBlog);
+  // console.log("data:", dataBlog);
 
   return (
     <div>
       <main className="bg-Lilac-50">
         <Header />
         <div className=" px-16 pb-8 pt-24">
-          <HighlightBlog  />
+          <HighlightBlog />
           <News data={dataBlog} />
           <NewsHighlight />
         </div>

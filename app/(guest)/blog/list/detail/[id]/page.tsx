@@ -19,19 +19,19 @@ export default function page({ params }: { params: { id: string } }) {
     fetchAllBlog();
   }, []);
 
-  console.log("data:", datablog);
+  // console.log("data:", datablog);
   return (
     <>
-       <main className="bg-Lilac-50">
-      <Header />
-      <div className=" px-16 pb-8 pt-24">
-        <BlogDetail data={datablog} />
-        <RelatedArticles />
-      </div>
-      <div>
-        <Footer />
-      </div>
-    </main>
+      <main className="bg-Lilac-50">
+        <Header />
+        <div className=" px-16 pb-8 pt-24">
+          <BlogDetail data={datablog} />
+          <RelatedArticles />
+        </div>
+        <div>
+          <Footer />
+        </div>
+      </main>
     </>
   );
 }

@@ -9,97 +9,91 @@ import { useCookies } from "next-client-cookies";
 import { TokenUtil } from "#/utils/token";
 import Loading from "#/app/loading";
 
-interface PageProps {
-  id: string;
-  data: any;
-  role: string;
-}
+export default function Page() {
+  const router = useRouter();
+  const [userId, setUserId] = useState<string>("");
+  const [userData, setUserData] = useState<any>("");
+  const [userRole, setUserRole] = useState<string>("");
+  const cookies = useCookies();
 
-export default function Page({ id, data, role }: PageProps) {
-  // const router = useRouter();
-  // const [userId, setUserId] = useState<string>("");
-  // const [userData, setUserData] = useState<any>("");
-  // const [userRole, setUserRole] = useState<string>("");
-  // const cookies = useCookies();
+  const idCookie: any = cookies.get("id");
+  const accessTokenByCookie = cookies.get("access_token");
+  const refreshTokenByCookie = cookies.get("refresh_token");
 
-  // const idCookie: any = cookies.get("id");
-  // const accessTokenByCookie = cookies.get("access_token");
-  // const refreshTokenByCookie = cookies.get("refresh_token");
+  useEffect(() => {
+    if (accessTokenByCookie) {
+      TokenUtil.setAccessToken(accessTokenByCookie);
+    }
+    if (refreshTokenByCookie) {
+      TokenUtil.setRefreshToken(refreshTokenByCookie);
+    }
+    TokenUtil.persistToken();
+    fetchProfile();
+  }, [idCookie, accessTokenByCookie, refreshTokenByCookie]);
 
-  // useEffect(() => {
-  //   if (accessTokenByCookie) {
-  //     TokenUtil.setAccessToken(accessTokenByCookie);
-  //   }
-  //   if (refreshTokenByCookie) {
-  //     TokenUtil.setRefreshToken(refreshTokenByCookie);
-  //   }
-  //   TokenUtil.persistToken();
-  //   fetchProfile();
-  // }, [idCookie, accessTokenByCookie, refreshTokenByCookie]);
+  const fetchProfile = async () => {
+    try {
+      const res = await authRepository.api.getUser();
+      if (res) {
+        setUserId(res.sub);
+        // console.log(res);
+      } else {
+        setUserId(idCookie);
+      }
+      if (res && res.status === 401) {
+        TokenUtil.clearAccessToken();
+        localStorage.removeItem("access_token");
+        TokenUtil.persistToken();
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
 
-  // const fetchProfile = async () => {
-  //   try {
-  //     const res = await authRepository.api.getUser();
-  //     if (res) {
-  //       setUserId(res.sub);
-  //       // console.log(res);
-  //     } else {
-  //       setUserId(idCookie);
-  //     }
-  //     if (res && res.status === 401) {
-  //       TokenUtil.clearAccessToken();
-  //       localStorage.removeItem("access_token");
-  //       TokenUtil.persistToken();
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching profile:", error);
-  //   }
-  // };
+  useEffect(() => {
+    if (userId) {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("_id", userId);
+      }
+      fetchProfileData(userId);
+    }
+  }, [userId]);
 
-  // useEffect(() => {
-  //   if (userId) {
-  //     if (typeof window !== "undefined") {
-  //       localStorage.setItem("_id", userId);
-  //     }
-  //     fetchProfileData(userId);
-  //   }
-  // }, [userId]);
+  const fetchProfileData = async (userId: string) => {
+    try {
+      const res = await usersRepository.api.getUser(userId);
+      // console.log(res);
+      setUserData(res.body.data);
+      setUserRole(res.body.data.role.id);
 
-  // const fetchProfileData = async (userId: string) => {
-  //   try {
-  //     const res = await usersRepository.api.getUser(userId);
-  //     // console.log(res);
-  //     setUserData(res.body.data);
-  //     setUserRole(res.body.data.role.id);
+      cookies.remove("id");
+      cookies.remove("access_token");
+      cookies.remove("refresh_token");
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
 
-  //     cookies.remove("id");
-  //     cookies.remove("access_token");
-  //     cookies.remove("refresh_token");
-  //   } catch (error) {
-  //     console.error("Error fetching profile data:", error);
-  //   }
-  // };
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (!TokenUtil.accessToken) {
+        localStorage.removeItem("_id");
+        cookies.remove("id");
+        cookies.remove("access_token");
+        cookies.remove("refresh_token");
+      }
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     if (!TokenUtil.accessToken) {
-  //       localStorage.removeItem("_id");
-  //       cookies.remove("id");
-  //       cookies.remove("access_token");
-  //       cookies.remove("refresh_token");
-  //     }
-  //   }
-  // }, []);
-
-  // if (!userData) {
-  //   return <Loading />;
-  // }
+  if (!userData) {
+    return <Loading />;
+  }
 
   return (
     <main className="bg-Lilac-50">
       <div className="flex flex-col gap-4 w-full">
-        {/* <InformationPersonal id={userId} data={userData} role={userRole} />
-        <ChangePassword id={userId} data={userData} /> */}
+        <InformationPersonal id={userId} data={userData} role={userRole} />
+        <ChangePassword id={userId} data={userData} />
       </div>
     </main>
   );

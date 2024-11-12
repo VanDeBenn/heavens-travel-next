@@ -5,13 +5,12 @@ import InformationAdmin from "#/app/components/admin/informationAdmin";
 import ProfileLayout from "../layout";
 import DestinationList from "#/app/components/admin/destinationList";
 import { destinationRepository } from "#/repository/destinations";
-
-interface PageProps {
-  data: any;
-}
+import { Destinations } from "#/app/types/Destinations";
 
 const DestinationPage = () => {
-  const [allDestinationsData, setAllDestinationsData] = useState<any[]>([]);
+  const [allDestinationsData, setAllDestinationsData] = useState<
+    Destinations[]
+  >([]);
 
   const getAllDestinations = async () => {
     try {

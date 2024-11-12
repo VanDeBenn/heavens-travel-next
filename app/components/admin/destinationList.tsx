@@ -65,6 +65,8 @@ import {
 import Link from "next/link";
 import Image from "next/image"; // Import for displaying images
 import { mediumMontserrat } from "../user/myBooking";
+import Loading from "#/app/loading";
+import { Destinations } from "#/app/types/Destinations";
 
 interface DataType {
   key: string;
@@ -156,20 +158,25 @@ interface ComponentsProps {
 }
 
 export default function DestinationList({ data }: ComponentsProps) {
+  if (!data) {
+    return <Loading />;
+  }
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
 
   // Mapping backend data into the expected structure
-  const dataSource: DataType[] = data.map((item: any, index: number) => ({
-    id: item.id || `${index}`,
-    destinationName: item.name || `Destination ${index + 1}`,
+  const dataSource: DataType[] = data.map((item: Destinations) => ({
+    id: item.id,
+    destinationName: item.name,
     address: item.address || "Address not provided",
     rating: item.rating ? item.rating.toString() : "N/A",
     priceAdult: item.priceAdult || "N/A",
     maxCapacity: item.maxCapacity || "Unknown",
     imageUrl:
-      item.photodestinations?.[0]?.url || "/images/illustration/hawaii.jpg", // Fallback to default image
+      // item.photodestinations?.[0]?.url ||
+      "/images/illustration/hawaii.jpg", // Fallback to default image
   }));
   // console.log("datasource:", dataSource);
   // console.log("data:", data);
