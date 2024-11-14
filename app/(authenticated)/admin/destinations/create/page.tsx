@@ -23,9 +23,9 @@ interface BasicInfo {
 interface LocationInfo {
   pathLocation: string;
   district: string;
-  city: string;
-  province: string;
-  country: string;
+  cityName: string;
+  provinceName: string;
+  countryName: string;
   address: string;
 }
 
@@ -47,9 +47,9 @@ export default function page() {
   const [locationDestination, setLocationDestination] = useState<LocationInfo>({
     pathLocation: "",
     district: "",
-    city: "",
-    province: "",
-    country: "",
+    cityName: "",
+    provinceName: "",
+    countryName: "",
     address: "",
   });
 
@@ -60,9 +60,9 @@ export default function page() {
         priceAdult: basicInfoDestination.adultPrice,
         priceChildren: basicInfoDestination.childrenPrice,
         // district: locationDestination.district,
-        // city: locationDestination.city,
-        // province: locationDestination.province,
-        // country: locationDestination.country,
+        cityName: locationDestination.cityName,
+        provinceName: locationDestination.provinceName,
+        countryName: locationDestination.countryName,
         address: locationDestination.address,
         description: basicInfoDestination.description,
         maxCapacity: basicInfoDestination.maxCapacity,
@@ -70,7 +70,7 @@ export default function page() {
         pathLocation: locationDestination.pathLocation,
         // photos: photoInfo,
       };
-      // console.log("Final Data:", finalData);
+      console.log("Final Data:", finalData);
       const res = await destinationRepository.api.create(finalData);
       const idDestination = res.body.data.id;
       if (idDestination) {
@@ -89,9 +89,9 @@ export default function page() {
 
   useEffect(() => {
     if (submitForms) {
-      // console.log("Location Data:", locationDestination);
-      // console.log("Photo Data:", photoData);
-      // console.log("Destination Data:", basicInfoDestination);
+      console.log("Location Data:", locationDestination);
+      console.log("Photo Data:", photoData);
+      console.log("Destination Data:", basicInfoDestination);
 
       finish();
 
@@ -137,7 +137,7 @@ export default function page() {
             finish();
 
             setTimeout(() => {
-              router.push("/admin/destinations/create/result");
+              // router.push("/admin/destinations/create/result");
             }, 3000);
           }}
           className="bg-RoyalAmethyst-700 text-center w-32 py-1 no-underline text-white text-sm rounded-xl cursor-pointer"

@@ -3,6 +3,9 @@ import { Form, Input, Button, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useRouter } from "next/navigation";
 import { usersRepository } from "#/repository/users";
+import { countrieRepository } from "#/repository/countries";
+import { provinceRepository } from "#/repository/provinces";
+import { citieRepository } from "#/repository/cities";
 
 const { Option } = Select;
 interface ComponentsProps {
@@ -90,8 +93,30 @@ export default function InformationPersonal({
   ];
   const years = Array.from({ length: 100 }, (_, i) => 2024 - i);
 
-  const provinces = ["Jawa Barat", "DKI Jakarta", "Banten"];
-  const cities = ["Bandung", "Jakarta", "Tangerang"];
+  const [countriesData, setCountriesData] = useState<any[]>([]);
+  const [provincesData, setProvincesData] = useState<any[]>([]);
+  const [citiesData, setCitiesData] = useState<any[]>([]);
+
+  const getAllCountries = async () => {
+    const res = await countrieRepository.api.getCountries();
+    setCountriesData(res.data);
+  };
+  const getAllProvinces = async () => {
+    const res = await provinceRepository.api.getProvinces();
+    setProvincesData(res.data);
+  };
+  const getAllCities = async () => {
+    const res = await citieRepository.api.getCities();
+    setCitiesData(res.data);
+  };
+
+  useEffect(() => {
+    getAllCountries(), getAllProvinces();
+    getAllCities();
+  }, []);
+  const countries = countriesData.map((item: any) => item.name);
+  const provinces = provincesData.map((item: any) => item.name);
+  const cities = citiesData.map((item: any) => item.name);
   const districts = ["Cicendo", "Kebayoran", "Serpong"];
 
   let roleUser: string = "";
@@ -266,10 +291,11 @@ export default function InformationPersonal({
                 ]}
               >
                 <Select placeholder="Select your country">
-                  <Option value="Indonesia">Indonesia</Option>
-                  <Option value="United States">United States</Option>
-                  <Option value="Canada">Canada</Option>
-                  <Option value="Australia">Australia</Option>
+                  {countries.map((country: any) => (
+                    <Option key={country} value={country}>
+                      {country}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
 
@@ -282,7 +308,7 @@ export default function InformationPersonal({
                 ]}
               >
                 <Select placeholder="Select your province">
-                  {provinces.map((province) => (
+                  {provinces.map((province: any) => (
                     <Option key={province} value={province}>
                       {province}
                     </Option>
@@ -299,7 +325,7 @@ export default function InformationPersonal({
                 ]}
               >
                 <Select placeholder="Select your city">
-                  {cities.map((city) => (
+                  {cities.map((city: any) => (
                     <Option key={city} value={city}>
                       {city}
                     </Option>

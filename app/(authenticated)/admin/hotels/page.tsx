@@ -7,7 +7,7 @@ import HotelList from "#/app/components/admin/hotelList";
 import { hotelRepository } from "#/repository/hotels";
 
 const HotelPage = () => {
-  const [hotelsData, setHotelsData] = useState<any>();
+  const [hotelsData, setHotelsData] = useState<Hotels[]>([]);
 
   const getAllHotels = async () => {
     const res = await hotelRepository.api.getHotels();

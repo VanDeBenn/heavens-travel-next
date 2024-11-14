@@ -1,9 +1,14 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { Form, Input, Button } from "antd";
+import React, { useEffect, useState } from "react";
+import { Form, Input, Button, Select } from "antd";
 import { Montserrat } from "next/font/google";
 import { useForm } from "antd/es/form/Form";
+import { countrieRepository } from "#/repository/countries";
+import { provinceRepository } from "#/repository/provinces";
+import { citieRepository } from "#/repository/cities";
+
+const { Option } = Select;
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -19,145 +24,374 @@ const smallMontserrat = Montserrat({
 });
 
 interface LocationInfoProps {
-  setLocationDestination: any;
+  setLocationDestination: (data: LocationInfo) => void;
   submitLocationForm: boolean;
-  // setLocationInfo: (info: any) => void;
-  // next: () => void;
-  // data: any;
 }
+
+type LocationInfo = {
+  address: string;
+  pathLocation: string;
+  district: string;
+  cityName: string;
+  provinceName: string;
+  countryName: string;
+};
 
 export default function LocationInfoDestination({
   setLocationDestination,
   submitLocationForm,
-}: // next,
-// data,
-LocationInfoProps) {
+}: LocationInfoProps) {
   const [form] = useForm();
 
-  // useEffect(() => {
-  //   if (data) {
-  //     form.setFieldsValue({
-  //       address: data.address,
-  //       pathLocation: data.pathLocation,
-  //       district: data.district,
-  //       city: data.city,
-  //       province: data.province,
-  //       country: data.country,
-  //     });
-  //   }
-  // }, [data, form]);
-
-  type LocationInfo = {
-    address: string;
-    pathLocation: string;
-    district: string;
-    city: string;
-    province: string;
-    country: string;
-  };
-
-  const onFinish = async (values: LocationInfo) => {
-    try {
-      const dataLocationInfo = {
-        address: values.address,
-        pathLocation: values.pathLocation,
-        district: values.district,
-        city: values.city,
-        province: values.province,
-        country: values.country,
-      };
-
-      // console.log("comp:", dataLocationInfo);
-      setLocationDestination(dataLocationInfo);
-      // next();
-    } catch (error) {
-      console.error("Location info failed:", error);
-    }
-  };
+  const [countriesData, setCountriesData] = useState<string[]>([]);
+  const [provincesData, setProvincesData] = useState<string[]>([]);
+  const [citiesData, setCitiesData] = useState<string[]>([]);
 
   useEffect(() => {
     if (submitLocationForm) {
       form.submit();
     }
-  }, [submitLocationForm]);
+  }, [submitLocationForm, form]);
+
+  const getAllCountries = async () => {
+    try {
+      const res = await countrieRepository.api.getCountries();
+      setCountriesData(res.data.map((item: any) => item.name));
+    } catch (error) {
+      console.error("Failed to fetch countries:", error);
+    }
+  };
+
+  const getAllProvinces = async () => {
+    try {
+      const res = await provinceRepository.api.getProvinces();
+      setProvincesData(res.data.map((item: any) => item.name));
+    } catch (error) {
+      console.error("Failed to fetch provinces:", error);
+    }
+  };
+
+  const getAllCities = async () => {
+    try {
+      const res = await citieRepository.api.getCities();
+      setCitiesData(res.data.map((item: any) => item.name));
+    } catch (error) {
+      console.error("Failed to fetch cities:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllCountries();
+    getAllProvinces();
+    getAllCities();
+  }, []);
+
+  const onFinish = (values: LocationInfo) => {
+    try {
+      setLocationDestination(values);
+    } catch (error) {
+      console.error("Location info submission failed:", error);
+    }
+  };
 
   return (
-    <>
-      <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">
-        <div className={`${mediumMontserrat.className} pb-6`}>
-          <span className="text-lg font-semibold">Location Information</span>
+    <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">
+      <div className={`${mediumMontserrat.className} pb-6`}>
+        <span className="text-lg font-semibold">Location Information</span>
+      </div>
+      <Form form={form} layout="vertical" onFinish={onFinish}>
+        <Form.Item
+          label="Address"
+          name="address"
+          className="w-full"
+          rules={[{ required: true, message: "Please input address!" }]}
+        >
+          <Input placeholder="Enter address" />
+        </Form.Item>
+
+        <Form.Item
+          label="Path Location"
+          name="pathLocation"
+          className="w-full"
+          rules={[{ required: true, message: "Please input path location!" }]}
+        >
+          <Input.TextArea rows={7} placeholder="Enter path location" />
+        </Form.Item>
+
+        <div className="flex justify-between gap-5">
+          <Form.Item
+            label="District"
+            name="district"
+            className="w-full"
+            rules={[{ required: true, message: "Please input district!" }]}
+          >
+            <Input placeholder="Enter district" className="w-full" />
+          </Form.Item>
+
+          <Form.Item
+            label="City"
+            name="cityName"
+            className="w-full"
+            rules={[
+              { required: true, message: "Please select your cityName!" },
+            ]}
+          >
+            <Select placeholder="Select your cityName">
+              {citiesData.map((cityName) => (
+                <Option key={cityName} value={cityName}>
+                  {cityName}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
         </div>
 
-        {/* Form */}
-        <Form form={form} layout="vertical" onFinish={onFinish}>
-          {/* Address */}
+        <div className="flex justify-between gap-5">
           <Form.Item
-            label="Address"
-            name="address"
+            label="Province"
+            name="provinceName"
             className="w-full"
-            rules={[{ required: true, message: "Please input address!" }]}
+            rules={[
+              { required: true, message: "Please select your provinceName!" },
+            ]}
           >
-            <Input placeholder="Enter address" />
+            <Select placeholder="Select your provinceName">
+              {provincesData.map((provinceName) => (
+                <Option key={provinceName} value={provinceName}>
+                  {provinceName}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
 
-          {/* Path Location */}
           <Form.Item
-            label="Path Location"
-            name="pathLocation"
+            label="Country"
+            name="countryName"
             className="w-full"
-            rules={[{ required: true, message: "Please input path location!" }]}
+            rules={[
+              { required: true, message: "Please select your countryName!" },
+            ]}
           >
-            <Input.TextArea rows={7} placeholder="Enter path location" />
+            <Select placeholder="Select your countryName">
+              {countriesData.map((countryName) => (
+                <Option key={countryName} value={countryName}>
+                  {countryName}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
+        </div>
 
-          {/* District, City */}
-          <div className="flex justify-between gap-5">
-            <Form.Item
-              label="District"
-              name="district"
-              className="w-full"
-              rules={[{ required: true, message: "Please input district!" }]}
-            >
-              <Input placeholder="Enter district" className="w-full" />
-            </Form.Item>
-
-            <Form.Item
-              label="City"
-              name="city"
-              className="w-full"
-              rules={[{ required: true, message: "Please input city!" }]}
-            >
-              <Input placeholder="Enter city" className="w-full" />
-            </Form.Item>
-          </div>
-
-          {/* Province, Country */}
-          <div className="flex justify-between gap-5">
-            <Form.Item
-              label="Province"
-              name="province"
-              className="w-full"
-              rules={[{ required: true, message: "Please input province!" }]}
-            >
-              <Input placeholder="Enter province" className="w-full" />
-            </Form.Item>
-
-            <Form.Item
-              label="Country"
-              name="country"
-              className="w-full"
-              rules={[{ required: true, message: "Please input country!" }]}
-            >
-              <Input placeholder="Enter country" className="w-full" />
-            </Form.Item>
-          </div>
-
-          {/* Hidden submit button */}
-          <Button type="primary" htmlType="submit" style={{ display: "none" }}>
-            Submit
-          </Button>
-        </Form>
-      </div>
-    </>
+        <Button type="primary" htmlType="submit" style={{ display: "none" }}>
+          Submit
+        </Button>
+      </Form>
+    </div>
   );
 }
+// }
+
+// export default function LocationInfoDestination({
+//   setLocationDestination,
+//   submitLocationForm,
+// }: LocationInfoProps) {
+//   const [form] = useForm();
+//   const [countriesData, setCountriesData] = useState<string[]>([]);
+//   const [provincesData, setProvincesData] = useState<string[]>([]);
+//   const [citiesData, setCitiesData] = useState<string[]>([]);
+//   const [isProvinceDisabled, setIsProvinceDisabled] = useState(false);
+//   const [isCountryDisabled, setIsCountryDisabled] = useState(false);
+
+//   useEffect(() => {
+//     if (submitLocationForm) {
+//       form.submit();
+//     }
+//   }, [submitLocationForm, form]);
+
+//   const getAllCountries = async () => {
+//     try {
+//       const res = await countrieRepository.api.getCountries();
+//       setCountriesData(res.data.map((item: any) => item.name));
+//     } catch (error) {
+//       console.error("Failed to fetch countries:", error);
+//     }
+//   };
+
+//   const getAllProvinces = async () => {
+//     try {
+//       const res = await provinceRepository.api.getProvinces();
+//       setProvincesData(res.data.map((item: any) => item.name));
+//     } catch (error) {
+//       console.error("Failed to fetch provinces:", error);
+//     }
+//   };
+
+//   const getAllCities = async () => {
+//     try {
+//       const res = await citieRepository.api.getCities();
+//       setCitiesData(res.data.map((item: any) => item.name));
+//     } catch (error) {
+//       console.error("Failed to fetch cities:", error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     getAllCountries();
+//     getAllProvinces();
+//     getAllCities();
+//   }, []);
+
+//   useEffect(() => {
+//     // Listen for changes in the "district" field
+//     form.setFieldsValue({
+//       provinceName: isProvinceDisabled
+//         ? form.getFieldValue("provinceName")
+//         : "",
+//       countryName: isCountryDisabled
+//         ? form.getFieldValue("countryName")
+//         : "Indonesia",
+//     });
+//   }, [isProvinceDisabled, isCountryDisabled, form]);
+
+//   const onValuesChange = (changedValues: any, allValues: any) => {
+//     if (changedValues.cityName) {
+//       setIsProvinceDisabled(true);
+//       setIsCountryDisabled(true);
+//     } else {
+//       setIsProvinceDisabled(false);
+//       setIsCountryDisabled(false);
+//     }
+//   };
+
+//   const resetField = (fieldName: string) => {
+//     form.setFieldsValue({ [fieldName]: undefined });
+//     if (fieldName === "cityName") {
+//       setIsProvinceDisabled(false);
+//       setIsCountryDisabled(false);
+//     }
+//   };
+
+//   const onFinish = (values: LocationInfo) => {
+//     // Pastikan semua data sudah ada
+//     console.log("Form values submitted:", values);
+//     if (values.cityName || values.provinceName || values.countryName) {
+//       try {
+//         setLocationDestination(values);
+//       } catch (error) {
+//         console.error("Location info submission failed:", error);
+//       }
+//     } else {
+//       console.error("Form data is incomplete");
+//     }
+//   };
+
+//   return (
+//     <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">
+//       <div className={`${mediumMontserrat.className} pb-6`}>
+//         <span className="text-lg font-semibold">Location Information</span>
+//       </div>
+//       <Form
+//         form={form}
+//         layout="vertical"
+//         onFinish={onFinish}
+//         onValuesChange={onValuesChange}
+//       >
+//         <Form.Item
+//           label="Address"
+//           name="address"
+//           className="w-full"
+//           rules={[{ required: true, message: "Please input address!" }]}
+//         >
+//           <Input placeholder="Enter address" />
+//         </Form.Item>
+
+//         <Form.Item
+//           label="Path Location"
+//           name="pathLocation"
+//           className="w-full"
+//           rules={[{ required: true, message: "Please input path location!" }]}
+//         >
+//           <Input.TextArea rows={7} placeholder="Enter path location" />
+//         </Form.Item>
+
+//         <div className="flex justify-between gap-5">
+//           <Form.Item
+//             label="District"
+//             name="district"
+//             className="w-full"
+//             rules={[{ required: true, message: "Please input district!" }]}
+//           >
+//             <Input placeholder="Enter district" className="w-full" />
+//           </Form.Item>
+
+//           <Form.Item
+//             label="City"
+//             name="cityName"
+//             className="w-full"
+//             rules={[{ required: true, message: "Please select your city!" }]}
+//           >
+//             <Select
+//               placeholder="Select your city"
+//               allowClear
+//               onClear={() => resetField("cityName")}
+//             >
+//               {citiesData.map((cityName) => (
+//                 <Option key={cityName} value={cityName}>
+//                   {cityName}
+//                 </Option>
+//               ))}
+//             </Select>
+//           </Form.Item>
+//         </div>
+
+//         <div className="flex justify-between gap-5">
+//           <Form.Item
+//             label="Province"
+//             name="provinceName"
+//             className="w-full"
+//             rules={[
+//               { required: true, message: "Please select your province!" },
+//             ]}
+//           >
+//             <Select
+//               placeholder="Select your province"
+//               disabled={isProvinceDisabled}
+//               allowClear
+//               onClear={() => resetField("provinceName")}
+//             >
+//               {provincesData.map((provinceName) => (
+//                 <Option key={provinceName} value={provinceName}>
+//                   {provinceName}
+//                 </Option>
+//               ))}
+//             </Select>
+//           </Form.Item>
+
+//           <Form.Item
+//             label="Country"
+//             name="countryName"
+//             className="w-full"
+//             rules={[{ required: true, message: "Please select your country!" }]}
+//           >
+//             <Select
+//               placeholder="Select your country"
+//               disabled={isCountryDisabled}
+//               allowClear
+//               onClear={() => resetField("countryName")}
+//             >
+//               {countriesData.map((countryName) => (
+//                 <Option key={countryName} value={countryName}>
+//                   {countryName}
+//                 </Option>
+//               ))}
+//             </Select>
+//           </Form.Item>
+//         </div>
+
+//         <Button type="primary" htmlType="submit" style={{ display: "none" }}>
+//           Submit
+//         </Button>
+//       </Form>
+//     </div>
+//   );
+// }

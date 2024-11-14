@@ -1,16 +1,16 @@
 import { http } from "#/utils/http";
 
 const url = {
-  citys: () => "/citys",
-  city: (id: string) => `/citys/${id}`,
+  cities: () => "/cities",
+  city: (id: string) => `/cities/${id}`,
 };
 
 const api = {
   create(data: any) {
-    return http.post(url.citys()).send(data);
+    return http.post(url.cities()).send(data);
   },
-  getCitys() {
-    return http.fetcher(url.citys());
+  getCities() {
+    return http.fetcher(url.cities());
   },
   getCity(id: string) {
     return http.fetcher(url.city(id));
@@ -23,7 +23,7 @@ const api = {
   },
 };
 
-export const cityRepository = {
+export const citieRepository = {
   url,
   api,
 };

@@ -12,7 +12,7 @@ import PoliciesHotel from "#/app/components/admin/PoliciesHotel";
 import SomeHelpfulFactsHotel from "#/app/components/admin/someHelpfulFactsHotel";
 import FaqsHotel from "#/app/components/admin/faqsHotel";
 import { Button } from "antd";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { hotelRepository } from "#/repository/hotels";
 
@@ -20,6 +20,23 @@ const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
+
+interface HotelInformation {
+  name: string;
+  roomType: string;
+  rating: number | string;
+  description: string;
+  location: {
+    address: string;
+    pathLocation: string;
+    district: string;
+    city: string;
+    province: string;
+    country: string;
+  };
+  hotelPhoto?: string;
+  policies?: string[];
+}
 
 export default function page() {
   const router = useRouter();
@@ -50,13 +67,25 @@ export default function page() {
       </div>
       <div className="flex flex-col gap-2 pt-4">
         <BasicInfoHotel />
-        <LocationInfoHotel />
+        <LocationInfoHotel
+          setLocationDestination={function (data: {
+            address: string;
+            pathLocation: string;
+            district: string;
+            city: string;
+            province: string;
+            country: string;
+          }): void {
+            throw new Error("Function not implemented.");
+          }}
+          submitLocationForm={false}
+        />
         <PhotoHotel />
-        <FacilityInfoHotel />
-        <NearbyLocationHotel />
+        {/* <FacilityInfoHotel /> */}
+        {/* <NearbyLocationHotel /> */}
         <PoliciesHotel />
-        <SomeHelpfulFactsHotel />
-        <FaqsHotel />
+        {/* <SomeHelpfulFactsHotel /> */}
+        {/* <FaqsHotel /> */}
       </div>
       <div className="flex justify-end mt-5">
         <Button

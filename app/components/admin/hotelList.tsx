@@ -9,19 +9,8 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import Image from "next/image";
-import { ColumnsType } from "antd/es/table"; // Import the ColumnsType
+import { ColumnsType } from "antd/es/table";
 import Loading from "#/app/loading";
-
-interface DataType {
-  key: string;
-  hotelName: string;
-  address: string;
-  rating: string;
-  totalRoom: string;
-  roomType: string;
-  facility: string[];
-  imageUrl: string;
-}
 
 interface ComponentProps {
   data: any;
@@ -32,46 +21,25 @@ export default function HotelList({ data }: ComponentProps) {
     return <Loading />;
   }
 
-  const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const pageSize = 10;
 
-  useEffect(() => {
-    if (data) {
-      const generatedData: DataType[] = data.map((item: any) => ({
-        key: item?.id,
-        hotelName: `Hotel ${item?.name}`,
-        address: item?.address,
-        rating: Math.random() > 0.5 ? "4" : "5", // Random rating between 4 or 5
-        totalRoom: `${Math.floor(Math.random() * 100) + 1}`, // Random total room number
-        roomType: Math.random() > 0.5 ? "Deluxe" : "Standard", // Room type as Deluxe or Standard
-        facility: ["WiFi", "Pool", "Gym"], // Example facilities
-        imageUrl: "/images/illustration/hawaii.jpg", // Placeholder image URL
-      }));
+  const handleMenuClick = (e: any) => {};
 
-      setDataSource(generatedData);
-    }
-  }, []);
-
-  const handleMenuClick = (e: any) => {
-    // console.log("Menu item clicked:", e);
-  };
-
-  // Define the columns with the correct type ColumnsType<DataType>
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<Hotels> = [
     {
       title: "Hotel Name",
-      dataIndex: "hotelName",
-      key: "hotelName",
+      dataIndex: "name",
+      key: "name",
       align: "center",
-      render: (text: string, record: DataType) => (
+      render: (text: string, record: any) => (
         <div className="flex items-center gap-3 justify-center">
           <Image
-            src={record.imageUrl}
+            src={record.imageUrl || "/images/illustration/hawaii.jpg"}
             alt="Hotel Image"
-            width={60} // Image width 50px
-            height={75} // Image height 75px
+            width={60}
+            height={75}
             className="object-cover rounded-xl"
           />
           <span>{text}</span>
@@ -92,16 +60,17 @@ export default function HotelList({ data }: ComponentProps) {
       align: "center",
       render: (text: string) => (
         <div className="w-full flex justify-center items-center">
-          <div className="w-[240px] whitespace-normal text-left	">{text}</div>
+          <div className="w-[240px] whitespace-normal text-left">{text}</div>
         </div>
       ),
     },
     {
       title: "Total Room",
-      dataIndex: "totalRoom",
+      dataIndex: "roomhotels",
       key: "totalRoom",
       align: "center",
       className: "text-center",
+      render: (roomhotels: any[]) => roomhotels.length,
     },
     {
       title: "Room Type",
@@ -118,14 +87,14 @@ export default function HotelList({ data }: ComponentProps) {
       className: "text-center",
       render: (facilityList: string[]) => (
         <div className="flex gap-2 flex-wrap justify-center">
-          {facilityList.map((facility, index) => (
+          {/* {facilityList.map((facility, index) => (
             <div
               key={index}
               className="bg-Perfume-300 text-RoyalAmethyst-700 py-1 px-2 rounded-xl"
             >
               {facility}
             </div>
-          ))}
+          ))} */}
         </div>
       ),
     },
@@ -138,7 +107,7 @@ export default function HotelList({ data }: ComponentProps) {
           overlay={
             <Menu onClick={handleMenuClick}>
               <Menu.Item key="1" icon={<InfoCircleOutlined />}>
-                <Link href={`/admin/hotels/detail/${record.key}`}>Detail</Link>
+                <Link href={`/admin/hotels/detail/${record.id}`}>Detail</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<BlockOutlined />}>
                 Delete
@@ -170,11 +139,11 @@ export default function HotelList({ data }: ComponentProps) {
     return `Showing ${range[0]} to ${range[1]} of ${total} entries`;
   };
 
-  const filteredData = dataSource.filter(
-    (item) =>
-      item.hotelName.toLowerCase().includes(searchValue.toLowerCase()) ||
+  const filteredData = data.filter(
+    (item: Hotels) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
       item.address.toLowerCase().includes(searchValue.toLowerCase()) ||
-      item.rating.toLowerCase().includes(searchValue.toLowerCase())
+      item.rating.toString().includes(searchValue.toLowerCase())
   );
 
   const startEntry = (currentPage - 1) * pageSize + 1;
@@ -210,7 +179,7 @@ export default function HotelList({ data }: ComponentProps) {
             (currentPage - 1) * pageSize,
             currentPage * pageSize
           )}
-          columns={columns} // no error here now
+          columns={columns}
           pagination={{
             current: currentPage,
             pageSize,

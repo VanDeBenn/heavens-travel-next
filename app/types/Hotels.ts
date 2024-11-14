@@ -1,4 +1,4 @@
-interface Hotel {
+interface Hotels {
   id: string;
   name: string;
   rating: number;
@@ -37,3 +37,4 @@ interface Hotel {
     deletedAt: string | null;
   };
 }
+[];

@@ -11,36 +11,31 @@ import Loading from "#/app/loading";
 
 export default function Page() {
   const router = useRouter();
-  const [userId, setUserId] = useState<string>("");
-  const [userData, setUserData] = useState<any>("");
-  const [userRole, setUserRole] = useState<string>("");
+  const [userId, setUserId] = useState("");
+  const [userData, setUserData] = useState(null);
+  const [userRole, setUserRole] = useState("");
   const cookies = useCookies();
 
-  const idCookie: any = cookies.get("id");
-  const accessTokenByCookie = cookies.get("access_token");
-  const refreshTokenByCookie = cookies.get("refresh_token");
+  const idCookie = cookies.get("id");
+  const accessToken = cookies.get("access_token");
+  const refreshToken = cookies.get("refresh_token");
 
   useEffect(() => {
-    if (accessTokenByCookie) {
-      TokenUtil.setAccessToken(accessTokenByCookie);
-    }
-    if (refreshTokenByCookie) {
-      TokenUtil.setRefreshToken(refreshTokenByCookie);
-    }
+    if (accessToken) TokenUtil.setAccessToken(accessToken);
+    if (refreshToken) TokenUtil.setRefreshToken(refreshToken);
     TokenUtil.persistToken();
     fetchProfile();
-  }, [idCookie, accessTokenByCookie, refreshTokenByCookie]);
+  }, [idCookie, accessToken, refreshToken]);
 
   const fetchProfile = async () => {
     try {
       const res = await authRepository.api.getUser();
       if (res) {
         setUserId(res.sub);
-        // console.log(res);
       } else {
-        setUserId(idCookie);
+        setUserId(idCookie || "");
       }
-      if (res && res.status === 401) {
+      if (res?.status === 401) {
         TokenUtil.clearAccessToken();
         localStorage.removeItem("access_token");
         TokenUtil.persistToken();
@@ -52,20 +47,16 @@ export default function Page() {
 
   useEffect(() => {
     if (userId) {
-      if (typeof window !== "undefined") {
-        localStorage.setItem("_id", userId);
-      }
+      localStorage.setItem("_id", userId);
       fetchProfileData(userId);
     }
   }, [userId]);
 
-  const fetchProfileData = async (userId: string) => {
+  const fetchProfileData = async (id: string) => {
     try {
-      const res = await usersRepository.api.getUser(userId);
-      // console.log(res);
+      const res = await usersRepository.api.getUser(id);
       setUserData(res.body.data);
       setUserRole(res.body.data.role.id);
-
       cookies.remove("id");
       cookies.remove("access_token");
       cookies.remove("refresh_token");
@@ -75,19 +66,15 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      if (!TokenUtil.accessToken) {
-        localStorage.removeItem("_id");
-        cookies.remove("id");
-        cookies.remove("access_token");
-        cookies.remove("refresh_token");
-      }
+    if (!TokenUtil.accessToken) {
+      localStorage.removeItem("_id");
+      cookies.remove("id");
+      cookies.remove("access_token");
+      cookies.remove("refresh_token");
     }
   }, []);
 
-  if (!userData) {
-    return <Loading />;
-  }
+  if (!userData) return <Loading />;
 
   return (
     <main className="bg-Lilac-50">
