@@ -32,16 +32,21 @@ type LocationInfo = {
   address: string;
   pathLocation: string;
   district: string;
-  city: string;
-  province: string;
-  country: string;
+  cityName: string;
+  provinceName?: string;
+  countryName?: string;
 };
 
-export default function LocationInfoDestination({
+export default function LocationInfoHotel({
   setLocationDestination,
   submitLocationForm,
 }: LocationInfoProps) {
   const [form] = useForm();
+  const [countriesData, setCountriesData] = useState<string[]>([]);
+  const [provincesData, setProvincesData] = useState<string[]>([]);
+  const [citiesData, setCitiesData] = useState<string[]>([]);
+  const [isProvinceDisabled, setIsProvinceDisabled] = useState(false);
+  const [isCountryDisabled, setIsCountryDisabled] = useState(false);
 
   useEffect(() => {
     if (submitLocationForm) {
@@ -49,14 +54,10 @@ export default function LocationInfoDestination({
     }
   }, [submitLocationForm, form]);
 
-  const [countriesData, setCountriesData] = useState<string[]>([]);
-  const [provincesData, setProvincesData] = useState<string[]>([]);
-  const [citiesData, setCitiesData] = useState<string[]>([]);
-
   const getAllCountries = async () => {
     try {
       const res = await countrieRepository.api.getCountries();
-      setCountriesData(res.data.map((item: { name: string }) => item.name));
+      setCountriesData(res.data.map((item: any) => item.name));
     } catch (error) {
       console.error("Failed to fetch countries:", error);
     }
@@ -65,7 +66,7 @@ export default function LocationInfoDestination({
   const getAllProvinces = async () => {
     try {
       const res = await provinceRepository.api.getProvinces();
-      setProvincesData(res.data.map((item: { name: string }) => item.name));
+      setProvincesData(res.data.map((item: any) => item.name));
     } catch (error) {
       console.error("Failed to fetch provinces:", error);
     }
@@ -74,7 +75,7 @@ export default function LocationInfoDestination({
   const getAllCities = async () => {
     try {
       const res = await citieRepository.api.getCities();
-      setCitiesData(res.data.map((item: { name: string }) => item.name));
+      setCitiesData(res.data.map((item: any) => item.name));
     } catch (error) {
       console.error("Failed to fetch cities:", error);
     }
@@ -85,6 +86,35 @@ export default function LocationInfoDestination({
     getAllProvinces();
     getAllCities();
   }, []);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      provinceName: isProvinceDisabled
+        ? form.getFieldValue("provinceName")
+        : null,
+      countryName: isCountryDisabled
+        ? form.getFieldValue("countryName")
+        : "Indonesia",
+    });
+  }, [isProvinceDisabled, isCountryDisabled, form]);
+
+  const onValuesChange = (changedValues: any, allValues: any) => {
+    if (changedValues.cityName) {
+      setIsProvinceDisabled(true);
+      setIsCountryDisabled(true);
+    } else {
+      setIsProvinceDisabled(false);
+      setIsCountryDisabled(false);
+    }
+  };
+
+  const resetField = (fieldName: string) => {
+    form.setFieldsValue({ [fieldName]: undefined });
+    if (fieldName === "cityName") {
+      setIsProvinceDisabled(false);
+      setIsCountryDisabled(false);
+    }
+  };
 
   const onFinish = (values: LocationInfo) => {
     try {
@@ -99,7 +129,12 @@ export default function LocationInfoDestination({
       <div className={`${mediumMontserrat.className} pb-6`}>
         <span className="text-lg font-semibold">Location Information</span>
       </div>
-      <Form form={form} layout="vertical" onFinish={onFinish}>
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={onFinish}
+        onValuesChange={onValuesChange}
+      >
         <Form.Item
           label="Address"
           name="address"
@@ -130,14 +165,18 @@ export default function LocationInfoDestination({
 
           <Form.Item
             label="City"
-            name="city"
+            name="cityName"
             className="w-full"
             rules={[{ required: true, message: "Please select your city!" }]}
           >
-            <Select placeholder="Select your city">
-              {citiesData.map((city) => (
-                <Option key={city} value={city}>
-                  {city}
+            <Select
+              placeholder="Select your city"
+              allowClear
+              onClear={() => resetField("cityName")}
+            >
+              {citiesData.map((cityName) => (
+                <Option key={cityName} value={cityName}>
+                  {cityName}
                 </Option>
               ))}
             </Select>
@@ -145,33 +184,31 @@ export default function LocationInfoDestination({
         </div>
 
         <div className="flex justify-between gap-5">
-          <Form.Item
-            label="Province"
-            name="province"
-            className="w-full"
-            rules={[
-              { required: true, message: "Please select your province!" },
-            ]}
-          >
-            <Select placeholder="Select your province">
-              {provincesData.map((province) => (
-                <Option key={province} value={province}>
-                  {province}
+          <Form.Item label="Province" name="provinceName" className="w-full">
+            <Select
+              placeholder="Select your province"
+              disabled={isProvinceDisabled}
+              allowClear
+              onClear={() => resetField("provinceName")}
+            >
+              {provincesData.map((provinceName) => (
+                <Option key={provinceName} value={provinceName}>
+                  {provinceName}
                 </Option>
               ))}
             </Select>
           </Form.Item>
 
-          <Form.Item
-            label="Country"
-            name="country"
-            className="w-full"
-            rules={[{ required: true, message: "Please select your country!" }]}
-          >
-            <Select placeholder="Select your country">
-              {countriesData.map((country) => (
-                <Option key={country} value={country}>
-                  {country}
+          <Form.Item label="Country" name="countryName" className="w-full">
+            <Select
+              placeholder="Select your country"
+              disabled={isCountryDisabled}
+              allowClear
+              onClear={() => resetField("countryName")}
+            >
+              {countriesData.map((countryName) => (
+                <Option key={countryName} value={countryName}>
+                  {countryName}
                 </Option>
               ))}
             </Select>

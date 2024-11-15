@@ -1,11 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image"; // Import Image from next/image
-import {
-  largeMontserrat,
-  mediumMontserrat,
-  smallMontserrat,
-} from "#/app/components/user/myBooking";
+import { mediumMontserrat } from "#/app/components/user/myBooking";
 import Link from "next/link";
 import { destinationRepository } from "#/repository/destinations";
 import Loading from "#/app/loading";
@@ -32,7 +28,6 @@ const ResultDestination: React.FC = () => {
 
   useEffect(() => {
     fetchDestination();
-    // localStorage.removeItem("_destination");
   }, []);
 
   if (!destinationData) {
@@ -77,7 +72,7 @@ const ResultDestination: React.FC = () => {
     },
     {
       label: "City",
-      value: "Unknown",
+      value: destinationData.city?.name || "Unknown", // Use city name if available
     },
     {
       label: "Province",
@@ -91,19 +86,19 @@ const ResultDestination: React.FC = () => {
 
   const guestDetails3 = [
     {
-      value: destinationData.photodestinations[0],
+      value: destinationData.photodestinations[0]?.pathPhoto,
     },
     {
-      value: destinationData.photodestinations[1],
+      value: destinationData.photodestinations[1]?.pathPhoto,
     },
     {
-      value: destinationData.photodestinations[2],
+      value: destinationData.photodestinations[2]?.pathPhoto,
     },
     {
-      value: destinationData.photodestinations[3],
+      value: destinationData.photodestinations[3]?.pathPhoto,
     },
   ];
-  // console.log("img", destinationData.photodestinations[0].pathPhoto);
+
   return (
     <div>
       <div className={`${mediumMontserrat.className} py-6 px-7`}>
@@ -162,7 +157,7 @@ const ResultDestination: React.FC = () => {
                     </div>
                     <span className="font-semibold">:</span>
                   </div>
-                  <div className="w-full">
+                  <div className={`w-full`}>
                     <div className={`text-base text-black ${mediumMontserrat}`}>
                       {detail.value}
                     </div>
@@ -190,10 +185,10 @@ const ResultDestination: React.FC = () => {
               <div key={photo.id}>
                 <div className="w-full">
                   <Image
-                    src={`https://a9b3-101-255-119-166.ngrok-free.app/photo-destinations/${photo.pathPhoto}`}
+                    src={`http://localhost:3222/photo-destinations/${photo.pathPhoto}`}
                     alt="Location Map"
-                    width={400} // Lebar gambar
-                    height={150} // Tinggi gambar
+                    width={400} // Image width
+                    height={150} // Image height
                     className="w-full rounded-lg"
                   />
                 </div>

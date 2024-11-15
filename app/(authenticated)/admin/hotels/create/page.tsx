@@ -21,21 +21,11 @@ const mediumMontserrat = Montserrat({
   weight: ["500"],
 });
 
-interface HotelInformation {
+interface BasicInfo {
   name: string;
   roomType: string;
-  rating: number | string;
+  rating: string;
   description: string;
-  location: {
-    address: string;
-    pathLocation: string;
-    district: string;
-    city: string;
-    province: string;
-    country: string;
-  };
-  hotelPhoto?: string;
-  policies?: string[];
 }
 
 export default function page() {
@@ -66,21 +56,16 @@ export default function page() {
         </Link>
       </div>
       <div className="flex flex-col gap-2 pt-4">
-        <BasicInfoHotel />
-        <LocationInfoHotel
-          setLocationDestination={function (data: {
-            address: string;
-            pathLocation: string;
-            district: string;
-            city: string;
-            province: string;
-            country: string;
-          }): void {
-            throw new Error("Function not implemented.");
-          }}
-          submitLocationForm={false}
+        <BasicInfoHotel
+          setBasicInfoDestination={undefined}
+          submitBasicInfoForm={undefined}
         />
-        <PhotoHotel />
+        <LocationInfoHotel setLocationDestination={undefined} />
+        <PhotoHotel
+          setPhotoData={undefined}
+          destinationId={""}
+          submitPhotoForm={false}
+        />
         {/* <FacilityInfoHotel /> */}
         {/* <NearbyLocationHotel /> */}
         <PoliciesHotel />

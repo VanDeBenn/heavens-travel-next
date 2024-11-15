@@ -21,6 +21,8 @@ export default function InformationPersonal({
 }: ComponentsProps) {
   const router = useRouter();
   const [form] = useForm();
+  const [isProvinceDisabled, setIsProvinceDisabled] = useState(false);
+  const [isCountryDisabled, setIsCountryDisabled] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -130,6 +132,24 @@ export default function InformationPersonal({
     roleUser = "guest";
   }
 
+  const onValuesChange = (changedValues: any, allValues: any) => {
+    if (changedValues.city) {
+      setIsProvinceDisabled(true);
+      setIsCountryDisabled(true);
+    } else {
+      setIsProvinceDisabled(false);
+      setIsCountryDisabled(false);
+    }
+  };
+
+  const resetField = (fieldName: string) => {
+    form.setFieldsValue({ [fieldName]: undefined });
+    if (fieldName === "city") {
+      setIsProvinceDisabled(false);
+      setIsCountryDisabled(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-xl w-full">
       {roleUser === "admin" && (
@@ -156,6 +176,7 @@ export default function InformationPersonal({
             name="personal_info"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
+            onValuesChange={onValuesChange}
             layout="vertical"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -290,8 +311,13 @@ export default function InformationPersonal({
                   { required: true, message: "Please select your country!" },
                 ]}
               >
-                <Select placeholder="Select your country">
-                  {countries.map((country: any) => (
+                <Select
+                  placeholder="Select your country"
+                  disabled={isCountryDisabled}
+                  allowClear
+                  onClear={() => resetField("country")}
+                >
+                  {countries.map((country) => (
                     <Option key={country} value={country}>
                       {country}
                     </Option>
@@ -307,8 +333,13 @@ export default function InformationPersonal({
                   { required: true, message: "Please select your province!" },
                 ]}
               >
-                <Select placeholder="Select your province">
-                  {provinces.map((province: any) => (
+                <Select
+                  placeholder="Select your province"
+                  disabled={isProvinceDisabled}
+                  allowClear
+                  onClear={() => resetField("province")}
+                >
+                  {provinces.map((province) => (
                     <Option key={province} value={province}>
                       {province}
                     </Option>
@@ -324,8 +355,12 @@ export default function InformationPersonal({
                   { required: true, message: "Please select your city!" },
                 ]}
               >
-                <Select placeholder="Select your city">
-                  {cities.map((city: any) => (
+                <Select
+                  placeholder="Select your city"
+                  allowClear
+                  onClear={() => resetField("city")}
+                >
+                  {cities.map((city) => (
                     <Option key={city} value={city}>
                       {city}
                     </Option>
