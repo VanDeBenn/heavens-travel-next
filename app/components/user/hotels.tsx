@@ -130,7 +130,7 @@ const Hotels = ({ data, dataCity }: ComponentsProps) => {
             ))
           ) : (
             <p>
-              Sorry, "{hotelSearch}" was not found in {location}
+              Sorry, &quot;{hotelSearch}&quot; was not found in {location}
             </p>
           )
         ) : (
