@@ -45,6 +45,7 @@ export default function LocationInfoDestination({
   const [countriesData, setCountriesData] = useState<string[]>([]);
   const [provincesData, setProvincesData] = useState<string[]>([]);
   const [citiesData, setCitiesData] = useState<string[]>([]);
+  const [isCItyDisabled, setIsCItyDisabled] = useState(false);
   const [isProvinceDisabled, setIsProvinceDisabled] = useState(false);
   const [isCountryDisabled, setIsCountryDisabled] = useState(false);
 
@@ -89,22 +90,38 @@ export default function LocationInfoDestination({
 
   useEffect(() => {
     form.setFieldsValue({
+      cityName: isCItyDisabled
+        ? form.getFieldValue("cityName")
+        : form.getFieldValue("cityName"),
       provinceName: isProvinceDisabled
         ? form.getFieldValue("provinceName")
         : null,
       countryName: isCountryDisabled
         ? form.getFieldValue("countryName")
-        : "Indonesia",
+        : form.getFieldValue("countryName"),
     });
-  }, [isProvinceDisabled, isCountryDisabled, form]);
+  }, [isCItyDisabled, isProvinceDisabled, isCountryDisabled, form]);
 
   const onValuesChange = (changedValues: any, allValues: any) => {
     if (changedValues.cityName) {
       setIsProvinceDisabled(true);
       setIsCountryDisabled(true);
+      // form.setFieldsValue({ countryName: "Indonesia" });
     } else {
       setIsProvinceDisabled(false);
       setIsCountryDisabled(false);
+    }
+
+    if (
+      changedValues.countryName &&
+      changedValues.countryName !== "Indonesia"
+    ) {
+      setIsProvinceDisabled(true);
+      setIsCItyDisabled(true);
+      form.setFieldsValue({ countryName: form.getFieldValue("countryName") });
+    } else if (changedValues.countryName === "Indonesia") {
+      setIsProvinceDisabled(false);
+      setIsCItyDisabled(false);
     }
   };
 
@@ -171,6 +188,7 @@ export default function LocationInfoDestination({
           >
             <Select
               placeholder="Select your city"
+              disabled={isCItyDisabled}
               allowClear
               onClear={() => resetField("cityName")}
             >
