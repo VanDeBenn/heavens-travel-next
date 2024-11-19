@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Montserrat } from "next/font/google";
 import {
@@ -6,9 +8,26 @@ import {
   RiShareFill,
   RiBookmarkLine,
   RiBookmarkFill,
+  RiFileCopyFill,
+  RiInstagramLine,
+  RiTelegramFill,
 } from "react-icons/ri";
 import Link from "next/link";
-import { Image } from "antd"; // Import Image dari Ant Design
+import { Image, Modal, Button } from "antd"; // Import Modal dan Button dari Ant Design
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  EmailShareButton,
+  TelegramShareButton,
+} from "react-share";
+import {
+  RiFacebookFill,
+  RiTwitterFill,
+  RiWhatsappFill,
+  RiMailFill,
+  RiFileCopyLine,
+} from "react-icons/ri";
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -71,8 +90,31 @@ const BannerViewHotel = ({
 }: {
   scrollToChooseRoom: () => void;
 }) => {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [copyText, setCopyText] = useState(
+    "https://htrip.com/hotel/detail/673c0710-15f8-c0ddf3df7be9"
+  );
+  const [isCopied, setIsCopied] = useState(false);
 
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const shareUrl = "https://htrip.com/hotel/detail/673c0710-15f8-c0ddf3df7be9"; // URL yang akan dibagikan
+  const title = hotelDetails[0].title;
+
+  const handleShareClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+    setIsCopied(false);
+  };
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(copyText);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 3000); // Reset status setelah 3 detik
+  };
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border">
       <div className={`${mediumMontserrat.className} p-6`}>
@@ -83,9 +125,9 @@ const BannerViewHotel = ({
             {/* Render 5 stars: filled for rating, empty for unfilled */}
             {Array.from({ length: 5 }, (_, index) =>
               index < hotelDetails[0].rating ? (
-                <RiStarFill key={index} className="text-[#FFD700]" /> // Full star for rating
+                <RiStarFill key={index} className="text-[#FFD700]" />
               ) : (
-                <RiStarLine key={index} className="text-[#FFD700]" /> // Empty star for unfilled rating
+                <RiStarLine key={index} className="text-[#FFD700]" />
               )
             )}
           </div>
@@ -124,7 +166,10 @@ const BannerViewHotel = ({
           {/* Icons on the top-left corner of the first image */}
           <div className="absolute top-5 left-5 flex gap-2 z-10">
             {/* Share Icon */}
-            <div className="h-10 w-10 bg-black/60 rounded-full cursor-pointer flex items-center justify-center">
+            <div
+              className="h-10 w-10 bg-black/60 rounded-full cursor-pointer flex items-center justify-center"
+              onClick={handleShareClick}
+            >
               <RiShareFill className="text-white text-lg" />
             </div>
 
@@ -167,6 +212,59 @@ const BannerViewHotel = ({
           </div>
         </div>
       </div>
+
+      {/* Share Modal */}
+      <Modal
+        title="Share this Hotel"
+        open={isModalVisible}
+        onCancel={handleModalClose}
+        footer={null}
+        centered
+      >
+        <div className="flex flex-col ">
+          <div className="flex gap-4 r">
+            <FacebookShareButton url={copyText}>
+              <RiFacebookFill className="text-[#4267B2] text-3xl" />
+            </FacebookShareButton>
+            <TwitterShareButton url={copyText} title={title}>
+              <RiTwitterFill className="text-[#1DA1F2] text-3xl" />
+            </TwitterShareButton>
+            <WhatsappShareButton url={copyText} title={title}>
+              <RiWhatsappFill className="text-[#25D366] text-3xl" />
+            </WhatsappShareButton>
+            <EmailShareButton url={copyText} subject={title}>
+              <RiMailFill className="text-gray-600 text-3xl" />
+            </EmailShareButton>
+            <TelegramShareButton url={copyText}>
+              <RiTelegramFill className="text-[#1d44f2] text-3xl" />
+            </TelegramShareButton>
+          </div>
+          <div className="flex items-center gap-2 mt-4">
+            <input
+              type="text"
+              value={copyText}
+              readOnly
+              className="  bg-white  border-2 border-solid border-gray-400 rounded-lg p-2 w-full"
+            />
+            <div
+              onClick={handleCopyToClipboard}
+              className="flex items-center gap-1 p-2 bg-white rounded-lg cursor-pointer border-2 border-solid border-gray-400"
+            >
+              {isCopied ? (
+                <>
+                  <RiFileCopyFill className="text-RoyalAmethyst-700" />
+                  <span>Copied</span>
+                </>
+              ) : (
+                <>
+                  <RiFileCopyLine />
+                  <span>Copy</span>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
