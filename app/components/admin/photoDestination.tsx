@@ -16,7 +16,6 @@ const mediumMontserrat = Montserrat({
 });
 
 interface PhotoDestinationProps {
-  setPhotoData: any;
   destinationId: string;
   submitPhotoForm: boolean;
   // finish: () => void;
@@ -25,7 +24,6 @@ interface PhotoDestinationProps {
 
 export default function PhotoDestination({
   destinationId,
-  setPhotoData,
   submitPhotoForm,
 }: PhotoDestinationProps) {
   const router = useRouter();

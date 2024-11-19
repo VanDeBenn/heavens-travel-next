@@ -24,7 +24,7 @@ const smallMontserrat = Montserrat({
 });
 
 interface LocationInfoProps {
-  setLocationDestination: (data: LocationInfo) => void;
+  setLocationHotel: any;
   submitLocationForm: boolean;
 }
 
@@ -37,14 +37,15 @@ type LocationInfo = {
   countryName?: string;
 };
 
-export default function LocationInfoHotel({
-  setLocationDestination,
+export default function LocationInfoDestination({
+  setLocationHotel,
   submitLocationForm,
 }: LocationInfoProps) {
   const [form] = useForm();
+  const [citiesData, setCitiesData] = useState<[string, string][]>([]);
+  const [provincesData, setProvincesData] = useState<[string, string[]][]>([]);
   const [countriesData, setCountriesData] = useState<string[]>([]);
-  const [provincesData, setProvincesData] = useState<string[]>([]);
-  const [citiesData, setCitiesData] = useState<string[]>([]);
+  const [isCityDisabled, setIsCityDisabled] = useState(false);
   const [isProvinceDisabled, setIsProvinceDisabled] = useState(false);
   const [isCountryDisabled, setIsCountryDisabled] = useState(false);
 
@@ -66,7 +67,12 @@ export default function LocationInfoHotel({
   const getAllProvinces = async () => {
     try {
       const res = await provinceRepository.api.getProvinces();
-      setProvincesData(res.data.map((item: any) => item.name));
+      setProvincesData(
+        res.data.map((item: any) => [
+          item.name,
+          item?.cities?.map((city: any) => city.name),
+        ])
+      );
     } catch (error) {
       console.error("Failed to fetch provinces:", error);
     }
@@ -75,7 +81,9 @@ export default function LocationInfoHotel({
   const getAllCities = async () => {
     try {
       const res = await citieRepository.api.getCities();
-      setCitiesData(res.data.map((item: any) => item.name));
+      setCitiesData(
+        res.data.map((item: any) => [item.name, item?.province?.name])
+      );
     } catch (error) {
       console.error("Failed to fetch cities:", error);
     }
@@ -87,27 +95,59 @@ export default function LocationInfoHotel({
     getAllCities();
   }, []);
 
-  useEffect(() => {
-    form.setFieldsValue({
-      provinceName: isProvinceDisabled
-        ? form.getFieldValue("provinceName")
-        : null,
-      countryName: isCountryDisabled
-        ? form.getFieldValue("countryName")
-        : "Indonesia",
-    });
-  }, [isProvinceDisabled, isCountryDisabled, form]);
-
   const onValuesChange = (changedValues: any, allValues: any) => {
+    // city
     if (changedValues.cityName) {
       setIsProvinceDisabled(true);
       setIsCountryDisabled(true);
+
+      const selectedCity = citiesData.find(
+        (x) => x[0] === changedValues.cityName
+      );
+      if (selectedCity) {
+        const provinceName = selectedCity[1];
+        form.setFieldsValue({
+          provinceName: provinceName,
+          countryName: "Indonesia",
+        });
+      }
     } else {
       setIsProvinceDisabled(false);
       setIsCountryDisabled(false);
     }
+
+    // province
+    if (changedValues.provinceName) {
+      setIsCountryDisabled(true);
+
+      const selectedProvince = provincesData.find(
+        (x) => x[0] === changedValues.provinceName
+      );
+      if (selectedProvince) {
+        const cityList = selectedProvince[1];
+        setCitiesData(
+          cityList.map((city) => [city, changedValues.provinceName])
+        );
+      }
+    } else {
+      setIsCountryDisabled(false);
+    }
+
+    // country
+    if (
+      changedValues.countryName &&
+      changedValues.countryName !== "Indonesia"
+    ) {
+      setIsProvinceDisabled(true);
+      setIsCityDisabled(true);
+      form.setFieldsValue({ countryName: form.getFieldValue("countryName") });
+    } else if (changedValues.countryName === "Indonesia") {
+      setIsProvinceDisabled(false);
+      setIsCityDisabled(false);
+    }
   };
 
+  // reset input
   const resetField = (fieldName: string) => {
     form.setFieldsValue({ [fieldName]: undefined });
     if (fieldName === "cityName") {
@@ -118,7 +158,15 @@ export default function LocationInfoHotel({
 
   const onFinish = (values: LocationInfo) => {
     try {
-      setLocationDestination(values);
+      const dataLocationInfo = {
+        address: values.address,
+        pathLocation: values.pathLocation,
+        district: values.district,
+        cityName: values.cityName,
+        provinceName: values.provinceName,
+        countryName: values.countryName,
+      };
+      setLocationHotel(dataLocationInfo);
     } catch (error) {
       console.error("Location info submission failed:", error);
     }
@@ -171,10 +219,11 @@ export default function LocationInfoHotel({
           >
             <Select
               placeholder="Select your city"
+              disabled={isCityDisabled}
               allowClear
               onClear={() => resetField("cityName")}
             >
-              {citiesData.map((cityName) => (
+              {citiesData.map(([cityName]) => (
                 <Option key={cityName} value={cityName}>
                   {cityName}
                 </Option>
@@ -191,7 +240,7 @@ export default function LocationInfoHotel({
               allowClear
               onClear={() => resetField("provinceName")}
             >
-              {provincesData.map((provinceName) => (
+              {provincesData.map(([provinceName]) => (
                 <Option key={provinceName} value={provinceName}>
                   {provinceName}
                 </Option>

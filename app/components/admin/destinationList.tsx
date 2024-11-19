@@ -36,10 +36,10 @@ const DestinationList: React.FC<ComponentsProps> = ({ data }) => {
       key: "name",
       render: (text: string, record: Destinations) => (
         <div className="flex items-center gap-3">
-          {record.pathLocation ? (
+          {record.photodestinations ? (
             <Image
-              src={"/images/illustration/hawaii.jpg"}
-              alt="Destination Image"
+              src={`http://localhost:3222/photo-destinations/${record.photodestinations[0]?.pathPhoto}`}
+              alt={`${record.name}`}
               width={60}
               height={75}
               className="object-cover rounded-xl"

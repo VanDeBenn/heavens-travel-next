@@ -6,7 +6,7 @@ import { RiCamera2Line } from "react-icons/ri";
 import type { RcFile } from "antd/es/upload/interface";
 import { Montserrat } from "next/font/google";
 import Image from "next/image";
-import { destinationRepository } from "#/repository/destinations";
+import { hotelRepository } from "#/repository/hotels";
 import { useRouter } from "next/navigation";
 import Loading from "#/app/loading";
 
@@ -16,16 +16,14 @@ const mediumMontserrat = Montserrat({
 });
 
 interface PhotoDestinationProps {
-  setPhotoData: any;
-  destinationId: string;
+  hotelId: string;
   submitPhotoForm: boolean;
   // finish: () => void;
-  // destinationId: string;
+  // hotelId: string;
 }
 
 export default function PhotoHotel({
-  destinationId,
-  setPhotoData,
+  hotelId,
   submitPhotoForm,
 }: PhotoDestinationProps) {
   const router = useRouter();
@@ -33,20 +31,16 @@ export default function PhotoHotel({
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
 
-  const handleUploadSingleFile = async (
-    file: RcFile,
-    destinationId: string
-  ) => {
+  const handleUploadSingleFile = async (file: RcFile, hotelId: string) => {
     const formData = new FormData();
     formData.append("file", file);
-    const destId = destinationId
-      ? destinationId
-      : localStorage.getItem("_destination") || "";
-    formData.append("destinationId", destId);
+    const destId = hotelId ? hotelId : localStorage.getItem("_hotel") || "";
+    formData.append("hotelId", destId);
+    formData.append("pathPhoto", "");
 
     try {
       setUploading(true);
-      await destinationRepository.api.addPhotoDestination(formData);
+      await hotelRepository.api.addPhotoHotel(formData);
       message.success(`File ${file.name} uploaded successfully!`);
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -63,7 +57,7 @@ export default function PhotoHotel({
     }
 
     for (const file of fileList) {
-      await handleUploadSingleFile(file, destinationId);
+      await handleUploadSingleFile(file, hotelId);
     }
     message.success("All files uploaded successfully.");
   };
@@ -94,10 +88,10 @@ export default function PhotoHotel({
   };
 
   useEffect(() => {
-    if (destinationId) {
+    if (hotelId) {
       handleUploadAllFiles();
     }
-  }, [destinationId]);
+  }, [hotelId]);
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-9">
@@ -164,7 +158,7 @@ export default function PhotoHotel({
 
             setTimeout(() => {
               handleUploadAllFiles();
-              router.push("/admin/destinations/create/result");
+              router.push("/admin/hotels/create/result");
             }, 1000);
           }}
           className="bg-RoyalAmethyst-700 w-32 text-white rounded-xl"

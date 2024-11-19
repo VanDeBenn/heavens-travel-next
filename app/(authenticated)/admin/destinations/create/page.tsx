@@ -52,8 +52,6 @@ export default function Page() {
     address: "",
   });
 
-  const [photoData, setPhotoData] = useState();
-
   const finish = async () => {
     try {
       const finalData = {
@@ -120,7 +118,6 @@ export default function Page() {
           submitLocationForm={submitForms}
         />
         <PhotoDestination
-          setPhotoData={setPhotoData}
           destinationId={destinationId}
           submitPhotoForm={submitForms}
         />

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image"; // Import Image dari next/image
 import {
   largeMontserrat,
@@ -8,7 +8,93 @@ import {
   smallMontserrat,
 } from "#/app/components/user/myBooking";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { hotelRepository } from "#/repository/hotels";
+import Loading from "#/app/loading";
 const ResultHotel: React.FC = () => {
+  const router = useRouter();
+  const [hotelData, setHotelData] = useState<any>();
+  const id: any = localStorage.getItem("_hotel");
+
+  const fetchHotel = async () => {
+    try {
+      if (id == null) {
+        router.push("/admin/hotels");
+      }
+      const res = await hotelRepository.api.getHotel(id);
+      console.log(res);
+      setHotelData(res.data); //
+      // console.log("data:", res.body.data);
+      localStorage.removeItem("_hotel");
+    } catch (error) {
+      console.error("Error fetching hotel:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchHotel();
+  }, []);
+
+  if (!hotelData) {
+    return <Loading />;
+  }
+
+  const guestDetails = [
+    {
+      label: "Name Hotel",
+      value: hotelData.name,
+    },
+    {
+      label: "Rating",
+      value: hotelData.rating,
+    },
+    {
+      label: "Description",
+      value: hotelData.description,
+    },
+  ];
+  const guestDetails2 = [
+    {
+      label: "Address",
+      value: hotelData.address,
+    },
+    {
+      label: "Path Location",
+      value: hotelData.pathLocation,
+    },
+    {
+      label: "District",
+      value: "Unknown",
+    },
+    {
+      label: "City",
+      value: hotelData.city?.name || "Unknown", // Use city name if available
+    },
+    {
+      label: "Province",
+      value: "Unknown",
+    },
+    {
+      label: "Country",
+      value: "Unknown",
+    },
+  ];
+
+  const guestDetails3 = [
+    {
+      value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+    },
+  ];
+
   return (
     <div>
       <div className={`${mediumMontserrat.className} py-6 px-7`}>
@@ -85,15 +171,14 @@ const ResultHotel: React.FC = () => {
           <div
             className={`${mediumMontserrat.className} grid grid-cols-4 gap-4 pt-6`}
           >
-            {guestDetails3.map((detail, index) => (
-              <div key={index}>
+            {hotelData.photohotels.map((photo: any) => (
+              <div key={photo.id}>
                 <div className="w-full">
-                  {/* Menggunakan next/image untuk gambar dengan ukuran w-full h-32 */}
                   <Image
-                    src={detail.value}
+                    src={`http://localhost:3222/photo-hotels/${photo.pathPhoto}`}
                     alt="Location Map"
-                    width={400} // Lebar asli gambar
-                    height={150} // Sesuaikan tinggi
+                    width={400} // Image width
+                    height={150} // Image height
                     className="w-full rounded-lg"
                   />
                 </div>
@@ -369,7 +454,7 @@ const ResultHotel: React.FC = () => {
       </div>
       <div className="pt-7 flex justify-end">
         <Link
-          href={"/admin/destinations"}
+          href={"/admin/hotels"}
           className="bg-RoyalAmethyst-700 border-solid no-underline border transition-all duration-300 text-white
              rounded-xl py-2 px-20   text-center font-semibold"
         >
@@ -380,63 +465,6 @@ const ResultHotel: React.FC = () => {
   );
 };
 export default ResultHotel;
-const guestDetails = [
-  {
-    label: "Name Hotel",
-    value: "Nusa Kambangan Cemara",
-  },
-  {
-    label: "Rating",
-    value: "4",
-  },
-  {
-    label: "Description",
-    value:
-      "Hotel Nusa Kambangan Cemara offers comfortable and beautiful accommodation",
-  },
-];
-const guestDetails2 = [
-  {
-    label: "Address",
-    value:
-      "Jl. Nusa Kambangan No. 123, RT 05/RW 08, Kelurahan Cemara Indah, Kecamatan Pantai Berbisik, Kabupaten Nusa Kambangan, Provinsi Nusa Selatan, 12345.",
-  },
-  {
-    label: "Path Location",
-    value:
-      "https://chatgpt.com/c/6704d134-1684-8002-2321r-2323122332131321321331", // Path gambar
-  },
-  {
-    label: "District",
-    value: "Tomban Timor",
-  },
-  {
-    label: "City",
-    value: "Bekasi Timoer",
-  },
-  {
-    label: "Province",
-    value: "West Java",
-  },
-  {
-    label: "Country",
-    value: "Indonesia",
-  },
-];
-const guestDetails3 = [
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
-  },
-];
 
 const Language = [
   {

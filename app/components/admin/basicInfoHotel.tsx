@@ -19,14 +19,14 @@ const smallMontserrat = Montserrat({
 });
 
 interface BasicInfoProps {
-  setBasicInfoDestination: any;
+  setBasicInfoHotel: any;
   submitBasicInfoForm: any;
   // next: () => void;
   // data: any;
 }
 
 export default function BasicInfoHotel({
-  setBasicInfoDestination,
+  setBasicInfoHotel,
   submitBasicInfoForm, // Tambahkan prop ini
 }: BasicInfoProps) {
   const [form] = useForm();
@@ -42,7 +42,7 @@ export default function BasicInfoHotel({
         // childrenPrice: values.childrenPrice,
       };
 
-      setBasicInfoDestination(dataBasicInfo);
+      setBasicInfoHotel(dataBasicInfo);
     } catch (error) {
       console.error("Basic info failed:", error);
     }
@@ -51,9 +51,12 @@ export default function BasicInfoHotel({
   useEffect(() => {
     if (submitBasicInfoForm) {
       form.submit();
+      onFinish;
     }
   }, [submitBasicInfoForm]);
 
+  // console.log("submit", submitBasicInfoForm);
+  // console.log("data", setBasicInfoHotel);
   return (
     <>
       <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">

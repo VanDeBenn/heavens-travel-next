@@ -12,6 +12,7 @@ export interface Destinations {
   description: string;
   address: string;
   pathLocation: string;
+  photodestinations: any[]; // any
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;

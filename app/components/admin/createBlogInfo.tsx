@@ -38,13 +38,15 @@ const CreateBlogInfo: React.FC = () => {
     photodata.append("file", fileList[0]);
 
     try {
-      const dataBlog = {
-        title: values.blogTitle,
-        description: values.description,
-        pathPhoto: photodata,
-        userId: userId,
-      };
-      const req = await blogRepository.api.create(dataBlog);
+      const formData = new FormData();
+      formData.append("title", values.blogTitle);
+      formData.append("description", values.description);
+      formData.append("userId", userId || "");
+      formData.append("pathPhoto", "");
+      formData.append("file", fileList[0]);
+
+      const req = await blogRepository.api.create(formData);
+
       if (req.status === 201) {
         message.success("Blog created successfully!");
         form.resetFields();
