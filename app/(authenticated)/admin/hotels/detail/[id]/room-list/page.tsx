@@ -14,7 +14,7 @@ export default function page() {
   }
 
   const pathSegments = pathname.split("/");
-  const hotelId = pathSegments[4];
+  const hotelId = pathSegments[4]; // path to array
 
   const getRoomHotels = async () => {
     const res = await hotelRepository.api.getHotel(hotelId);

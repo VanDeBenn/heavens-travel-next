@@ -1,11 +1,110 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image"; // Import Image dari next/image
 
 import { mediumMontserrat } from "#/app/components/user/myBooking";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { roomHotelRepository } from "#/repository/roomHotels";
+import Loading from "#/app/loading";
 
 const ResultRoom: React.FC = () => {
+  const router = useRouter();
+  const [rooomHotelData, setRoomHotelData] = useState<any>();
+  const id: any = localStorage.getItem("_roomHotel");
+
+  const fetchHotel = async () => {
+    try {
+      if (id == null) {
+        // router.push("/admin/hotels");
+      }
+      const res = await roomHotelRepository.api.getRoomHotel(id);
+      console.log(res);
+      setRoomHotelData(res.data); //
+      // console.log("data:", res.body.data);
+      // localStorage.removeItem("_rooomHotel");
+    } catch (error) {
+      console.error("Error fetching rooomHotel:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchHotel();
+  }, []);
+
+  if (!rooomHotelData) {
+    return <Loading />;
+  }
+
+  const basicInfo = [
+    {
+      label: "Room Type",
+      value: rooomHotelData.roomType,
+    },
+    {
+      label: "Price",
+      value: rooomHotelData.price,
+    },
+    {
+      label: "Adult",
+      value: rooomHotelData.adult,
+    },
+    {
+      label: "Childen Allowed",
+      value: rooomHotelData.children,
+    },
+    {
+      label: "Bed Type",
+      value: "2 Double bed and 1 King Bed",
+    },
+    {
+      label: "Number Room",
+      value: "5",
+    },
+  ];
+
+  const photosPreview = [
+    {
+      value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/bedroom-suite.jpg", // Path gambar
+    },
+    {
+      value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
+    },
+  ];
+
+  const facility = [
+    {
+      label: "Air Conditioning",
+      value: "Available",
+    },
+    {
+      label: "Shower",
+      value: "Available",
+    },
+    {
+      label: "Toilettries",
+      value: "Available",
+    },
+    {
+      label: "Towels",
+      value: "Available",
+    },
+    {
+      label: "Telephone",
+      value: "Available",
+    },
+    {
+      label: "Television",
+      value: "Available",
+    },
+  ];
+
   return (
     <div className="">
       <div className={`${mediumMontserrat.className} py-6 px-7`}>
@@ -17,7 +116,6 @@ const ResultRoom: React.FC = () => {
         <div
           className={`bg-white border-solid border-gray-200 border p-7 rounded-xl`}
         >
-          
           <div className={`${mediumMontserrat.className}  pb-6`}>
             <span className="text-xl font-semibold">Room Detail</span>
           </div>
@@ -54,19 +152,17 @@ const ResultRoom: React.FC = () => {
           <div
             className={`${mediumMontserrat.className} grid grid-cols-4 gap-4 pt-6`}
           >
-            {photosPreview.map((detail, index) => (
-              <div key={index}>
+            {rooomHotelData.photoroomhotels.map((photo: any) => (
+              <div key={photo.id}>
                 <div className="w-full">
-                  {/* Menggunakan next/image untuk gambar dengan ukuran w-full h-32 */}
                   <Image
-                    src={detail.value}
+                    src={`http://localhost:3222/photo-room-hotels/${photo.pathPhoto}`}
                     alt="Location Map"
-                    width={400} // Lebar asli gambar
-                    height={150} // Sesuaikan tinggi
+                    width={400} // Image width
+                    height={150} // Image height
                     className="w-full rounded-lg"
                   />
                 </div>
-
                 <div className="h-px bg-gray-300"></div>
               </div>
             ))}
@@ -104,7 +200,7 @@ const ResultRoom: React.FC = () => {
 
       <div className="pt-7 flex justify-end">
         <Link
-          href={"/admin/hotels"}
+          href={"/admin/rooomHotels"}
           className="border-RoyalAmethyst-700 border-solid no-underline border hover:bg-RoyalAmethyst-700 transition-all duration-300 hover:text-white
              rounded-xl py-2 px-20 text-RoyalAmethyst-700 text-center font-semibold"
         >
@@ -116,72 +212,3 @@ const ResultRoom: React.FC = () => {
 };
 
 export default ResultRoom;
-
-const basicInfo = [
-  {
-    label: "Room Type",
-    value: "Deluxe king",
-  },
-  {
-    label: "Price",
-    value: "Rp1,299,000,00",
-  },
-  {
-    label: "Adult",
-    value: "4",
-  },
-  {
-    label: "Childen Allowed",
-    value: "4",
-  },
-  {
-    label: "Bed Type",
-    value: "2 Double bed and 1 King Bed",
-  },
-  {
-    label: "Number Room",
-    value: "5",
-  },
-];
-
-const photosPreview = [
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/bedroom-suite.jpg", // Path gambar
-  },
-  {
-    value: "/images/illustration/luxury-bedroom.jpg", // Path gambar
-  },
-];
-
-const facility = [
-  {
-    label: "Air Conditioning",
-    value: "Available",
-  },
-  {
-    label: "Shower",
-    value: "Available",
-  },
-  {
-    label: "Toilettries",
-    value: "Available",
-  },
-  {
-    label: "Towels",
-    value: "Available",
-  },
-  {
-    label: "Telephone",
-    value: "Available",
-  },
-  {
-    label: "Television",
-    value: "Available",
-  },
-];

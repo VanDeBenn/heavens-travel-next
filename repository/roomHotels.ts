@@ -3,6 +3,7 @@ import { http } from "#/utils/http";
 const url = {
   roomHotels: () => "/room-hotels",
   roomHotel: (id: string) => `/room-hotels/${id}`,
+  photoRoomHotel: () => `/photo-room-hotels/upload`,
 };
 
 const api = {
@@ -20,6 +21,9 @@ const api = {
   },
   deleteRoomHotel(id: string) {
     return http.del(url.roomHotel(id));
+  },
+  addPhotoRoomHotel(data: any) {
+    return http.post(url.photoRoomHotel()).send(data);
   },
 };
 

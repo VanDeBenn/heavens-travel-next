@@ -18,7 +18,7 @@ export default function RoomDetail({ data }: ComponentProps) {
   const basicInfo = [
     {
       label: "Room Type",
-      value: "Deluxe king",
+      value: data.roomType,
     },
     {
       label: "Price",
@@ -34,11 +34,19 @@ export default function RoomDetail({ data }: ComponentProps) {
     },
     {
       label: "Bed Type",
-      value: "2 Double bed and 1 King Bed",
+      value: data?.singleBed
+        ? "single bed"
+        : data?.doubleBed
+        ? "double bed"
+        : data?.queenBed
+        ? "queen bed"
+        : data?.kingBed
+        ? "king bed"
+        : "no bed",
     },
     {
       label: "Number Room",
-      value: "5",
+      value: data.numberRoom,
     },
   ];
 
@@ -158,12 +166,12 @@ export default function RoomDetail({ data }: ComponentProps) {
           <div
             className={`${mediumMontserrat.className} grid grid-cols-4 gap-4 pt-6`}
           >
-            {photosPreview.map((detail, index) => (
-              <div key={index}>
+            {data?.photoroomhotels.map((item: any) => (
+              <div key={item.id}>
                 <div className="w-full">
                   {/* Menggunakan next/image untuk gambar dengan ukuran w-full h-32 */}
                   <Image
-                    src={detail.value}
+                    src={`http://localhost:3222/photo-room-hotels/${item.pathPhoto}`}
                     alt="Location Map"
                     width={400} // Lebar asli gambar
                     height={150} // Sesuaikan tinggi

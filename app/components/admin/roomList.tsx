@@ -41,16 +41,22 @@ export default function RoomList({ data, id }: ComponentProps) {
   useEffect(() => {
     if (data) {
       const generatedData: DataType[] = data.map((item: any) => ({
-        key: item.id,
+        key: item?.id,
         photoRoom: "", // Only image, no text
-        roomType: Math.random() > 0.5 ? "Standard Room" : "Deluxe Room", // Random room type
-        typeBed: `${Math.floor(Math.random() * 3) + 1} Single Bed`, // Random type bed
-        noOfGuest: `${
-          Math.floor(Math.random() * 3) + 1
-        } Adults and ${Math.floor(Math.random() * 3)} Children`, // Random guest numbers
-        numberRoom: `${Math.floor(Math.random() * 10) + 1}`, // Random number of rooms
+        roomType: item?.roomType,
+        typeBed: item?.singleBed
+          ? "single bed"
+          : item?.doubleBed
+          ? "double bed"
+          : item?.queenBed
+          ? "queen bed"
+          : item?.kingBed
+          ? "king bed"
+          : "no bed",
+        noOfGuest: `${item?.adult} Adults and ${item?.children} Children`, // Random guest numbers
+        numberRoom: item?.numberRoom,
         amenities: ["WiFi", "Pool", "Gym"], // Example amenities
-        imageUrl: "/images/illustration/hawaii.jpg", // Placeholder image URL
+        imageUrl: `http://localhost:3222/photo-room-hotels/${item?.photoroomhotels[0]?.pathPhoto}`, // Placeholder image URL
       }));
 
       setDataSource(generatedData);
@@ -72,7 +78,7 @@ export default function RoomList({ data, id }: ComponentProps) {
         <div className="flex items-center gap-3 justify-center">
           <Image
             src={record.imageUrl}
-            alt="Room Image"
+            alt={record.roomType}
             width={135}
             height={75}
             className="object-cover rounded-xl"
@@ -179,7 +185,7 @@ export default function RoomList({ data, id }: ComponentProps) {
   };
 
   const filteredData = dataSource.filter((item) =>
-    item.roomType.toLowerCase().includes(searchValue.toLowerCase())
+    item?.roomType.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   const startEntry = (currentPage - 1) * pageSize + 1;
@@ -229,7 +235,7 @@ export default function RoomList({ data, id }: ComponentProps) {
               </div>
 
               <Link
-                href={"/admin/hotels/detail/room-list/create"}
+                href={`/admin/hotels/detail/${id}/room-list/create`}
                 className="border-RoyalAmethyst-700 border-solid no-underline border hover:bg-RoyalAmethyst-700 transition-all duration-300 hover:text-white text-sm rounded-md py-1 px-16 text-RoyalAmethyst-700 text-center font-semibold"
               >
                 + Create Listing

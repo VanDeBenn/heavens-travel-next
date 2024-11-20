@@ -297,12 +297,12 @@ export default function hotelDetail({ data }: ComponentProps) {
           <div
             className={`${mediumMontserrat.className} grid grid-cols-4 gap-4 pt-6`}
           >
-            {photosPreview.map((detail, index) => (
-              <div key={index}>
+            {data?.photohotels.map((item: any) => (
+              <div key={item.id}>
                 <div className="w-full">
                   {/* Menggunakan next/image untuk gambar dengan ukuran w-full h-32 */}
                   <Image
-                    src={detail.value}
+                    src={`http://localhost:3222/photo-hotels/${item?.pathPhoto}`}
                     alt="Location Map"
                     width={400} // Lebar asli gambar
                     height={150} // Sesuaikan tinggi

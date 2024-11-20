@@ -33,11 +33,11 @@ export default function HotelList({ data }: ComponentProps) {
       dataIndex: "name",
       key: "name",
       align: "center",
-      render: (text: string, record: any) => (
-        <div className="flex items-center gap-3 justify-center">
+      render: (text: string, record: Hotels) => (
+        <div className="flex items-center gap-3">
           <Image
-            src={record.imageUrl || "/images/illustration/hawaii.jpg"}
-            alt="Hotel Image"
+            src={`http://localhost:3222/photo-hotels/${record.photohotels[0]?.pathPhoto}`}
+            alt={record.name}
             width={60}
             height={75}
             className="object-cover rounded-xl"
@@ -72,13 +72,13 @@ export default function HotelList({ data }: ComponentProps) {
       className: "text-center",
       render: (roomhotels: any[]) => roomhotels.length,
     },
-    {
-      title: "Room Type",
-      dataIndex: "roomType",
-      key: "roomType",
-      align: "center",
-      className: "text-center",
-    },
+    // {
+    //   title: "Room Type",
+    //   dataIndex: "roomType",
+    //   key: "roomType",
+    //   align: "center",
+    //   className: "text-center",
+    // },
     {
       title: "Facility",
       dataIndex: "facility",

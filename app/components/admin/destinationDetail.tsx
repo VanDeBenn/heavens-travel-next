@@ -153,7 +153,7 @@ export default function destinationDetail({
               <div key={item.id}>
                 <div className="w-full">
                   <Image
-                    src={`https://a9b3-101-255-119-166.ngrok-free.app/photo-destinations/${item?.pathPhoto}`}
+                    src={`http://localhost:3222/photo-destinations/${item?.pathPhoto}`}
                     alt="Location Map"
                     width={400}
                     height={150}

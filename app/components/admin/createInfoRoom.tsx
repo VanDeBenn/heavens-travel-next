@@ -1,7 +1,8 @@
 "use client";
 import { Montserrat } from "next/font/google";
-import { Select, InputNumber, Button } from "antd";
-import React, { useState } from "react";
+import { Select, InputNumber, Button, Form } from "antd";
+import React, { useEffect, useState } from "react";
+import { useForm } from "antd/es/form/Form";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
@@ -10,14 +11,26 @@ const mediumMontserrat = Montserrat({
 
 const { Option } = Select;
 
-export default function CreateInfoRoom() {
-  const [adults, setAdults] = useState(0); // Start value for adults
-  const [children, setChildren] = useState(0); // Start value for children
-  const [numberOfRooms, setNumberOfRooms] = useState(1); // Start value for number of rooms
-  const [singleBeds, setSingleBeds] = useState(0); // Start value for single beds
-  const [doubleBeds, setDoubleBeds] = useState(0); // Start value for double beds
-  const [queenBeds, setQueenBeds] = useState(0); // Start value for queen beds
-  const [kingBeds, setKingBeds] = useState(0); // Start value for king beds
+interface BasicInfoProps {
+  setBasicInfoRoomHotel: any;
+  submitBasicInfoForm: any;
+  // next: () => void;
+  // data: any;
+}
+
+export default function CreateInfoRoom({
+  setBasicInfoRoomHotel,
+  submitBasicInfoForm,
+}: BasicInfoProps) {
+  const [form] = useForm();
+  const [adult, setAdults] = useState(0);
+  const [children, setChildren] = useState(0);
+  const [numberOfRooms, setNumberOfRooms] = useState(1);
+  const [singleBeds, setSingleBeds] = useState(0);
+  const [doubleBeds, setDoubleBeds] = useState(0);
+  const [queenBeds, setQueenBeds] = useState(0);
+  const [kingBeds, setKingBeds] = useState(0);
+
   const roomTypes = [
     "Superior",
     "Superior Twin",
@@ -29,54 +42,45 @@ export default function CreateInfoRoom() {
     "Deluxe Queen",
   ];
 
-  const handleAdultChange = (value: number) => {
-    if (value >= 0) {
-      setAdults(value);
+  const handleChange = (
+    setter: React.Dispatch<React.SetStateAction<number>>,
+    value: number,
+    min: number = 0
+  ) => {
+    if (value >= min) {
+      setter(value);
     }
   };
 
-  const handleChildrenChange = (value: number) => {
-    if (value >= 0) {
-      setChildren(value);
-    }
+  const onFinish = (values: any) => {
+    try {
+      const basicInfoData = {
+        roomType: values.roomType,
+        price: values.price,
+        adult: adult,
+        children: children,
+        numberRoom: numberOfRooms,
+        singleBed: singleBeds,
+        doubleBed: doubleBeds,
+        queenBed: queenBeds,
+        kingBed: kingBeds,
+      };
+      setBasicInfoRoomHotel(basicInfoData);
+    } catch (error) {}
   };
 
-  const handleRoomChange = (value: number) => {
-    if (value >= 1) {
-      setNumberOfRooms(value);
+  useEffect(() => {
+    if (submitBasicInfoForm) {
+      form.submit();
     }
-  };
-
-  const handleSingleBedChange = (value: number) => {
-    if (value >= 0) {
-      setSingleBeds(value);
-    }
-  };
-
-  const handleDoubleBedChange = (value: number) => {
-    if (value >= 0) {
-      setDoubleBeds(value);
-    }
-  };
-
-  const handleQueenBedChange = (value: number) => {
-    if (value >= 0) {
-      setQueenBeds(value);
-    }
-  };
-
-  const handleKingBedChange = (value: number) => {
-    if (value >= 0) {
-      setKingBeds(value);
-    }
-  };
+  }, [submitBasicInfoForm]);
 
   return (
     <div
       className={`${mediumMontserrat.className} bg-white rounded-xl border-solid border-gray-200 border p-9 flex flex-col`}
     >
       <div
-        className={`${mediumMontserrat.className} pb-4 flex justify-between items-center `}
+        className={`${mediumMontserrat.className} pb-4 flex justify-between items-center`}
       >
         <span className="font-semibold text-lg">Create Room</span>
       </div>
@@ -87,183 +91,165 @@ export default function CreateInfoRoom() {
         options to choose from
       </span>
 
-      <div className="flex justify-between gap-3 items-center pt-5">
-        {/* Room Type Dropdown */}
-        <div className="flex-1">
-          <label className="block text-sm font-semibold mb-1">Room Type</label>
-          <Select
-            showSearch
-            placeholder="Select room type"
-            className="w-full"
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              (option?.children as unknown as string)
-                .toLowerCase()
-                .includes(input.toLowerCase())
-            }
-          >
-            {roomTypes.map((type) => (
-              <Option key={type} value={type}>
-                {type}
-              </Option>
-            ))}
-          </Select>
-        </div>
-
-        {/* Price Input */}
-        <div className="flex-1">
-          <label className="block text-sm font-semibold mb-1">Price</label>
-          <InputNumber
-            className="w-full"
-            formatter={(value) =>
-              `Rp ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            parser={(value) => value?.replace(/\Rp\s?|(\,*)/g, "") as any}
-            min={0}
-            placeholder="Enter price"
-          />
-        </div>
-
-        {/* Adult Input */}
-        <div className="flex-1">
-          <label className="block text-sm font-semibold mb-1">Adults</label>
-          <div className="flex items-center justify-between border-solid border-gray-200 border">
-            <Button
-              onClick={() => handleAdultChange(adults - 1)}
-              disabled={adults <= 0} // Disable button if adults is zero
-            >
-              -
-            </Button>
-            <span className="mx-3">{adults}</span>
-            <Button onClick={() => handleAdultChange(adults + 1)}>+</Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="pt-5 flex items-center gap-3">
-        {/* Children Allowed Input */}
-        <div className="w-[399px]">
-          <label className="block text-sm font-semibold mb-1">
-            Children Allowed
-          </label>
-          <div className="flex items-center justify-between border-solid border-gray-200 border">
-            <Button
-              onClick={() => handleChildrenChange(children - 1)}
-              disabled={children <= 0}
-            >
-              -
-            </Button>
-            <span className="mx-3">{children}</span>
-            <Button onClick={() => handleChildrenChange(children + 1)}>
-              +
-            </Button>
-          </div>
-        </div>
-
-        {/* Number of Rooms Input */}
-        <div className="w-[399px]">
-          <label className="block text-sm font-semibold mb-1">
-            Number of Rooms
-          </label>
-          <div className="flex items-center justify-between border-solid border-gray-200 border">
-            <Button
-              onClick={() => handleRoomChange(numberOfRooms - 1)}
-              disabled={numberOfRooms <= 1}
-            >
-              -
-            </Button>
-            <span className="mx-3">{numberOfRooms}</span>
-            <Button onClick={() => handleRoomChange(numberOfRooms + 1)}>
-              +
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-9 flex flex-col">
-        <span className="font-semibold text-sm">Type of Bed</span>
-        <span className="pt-2 text-gray-400 text-sm">
-          Sleep well in our comfortable rooms with modern amenities.
-        </span>
-
+      <Form form={form} layout="vertical" onFinish={onFinish}>
         <div className="flex justify-between gap-3 items-center pt-5">
-          {/* Single Bed */}
+          {/* Room Type Dropdown */}
           <div className="flex-1">
-            <label className="block text-sm font-semibold mb-1">
-              Single Bed
-            </label>
-            <div className="flex items-center justify-between border-solid border-gray-200 border">
-              <Button
-                onClick={() => handleSingleBedChange(singleBeds - 1)}
-                disabled={singleBeds <= 0}
+            <Form.Item
+              name="roomType"
+              label="Room Type"
+              rules={[{ required: true, message: "Please select a room type" }]}
+            >
+              <Select
+                showSearch
+                placeholder="Select room type"
+                className="w-full"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.children as unknown as string)
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
               >
-                -
-              </Button>
-              <span className="mx-3">{singleBeds}</span>
-              <Button onClick={() => handleSingleBedChange(singleBeds + 1)}>
-                +
-              </Button>
-            </div>
+                {roomTypes.map((type) => (
+                  <Option key={type} value={type}>
+                    {type}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
           </div>
 
-          {/* Double Bed */}
+          {/* Price Input */}
           <div className="flex-1">
-            <label className="block text-sm font-semibold mb-1">
-              Double Bed
-            </label>
-            <div className="flex items-center justify-between border-solid border-gray-200 border">
-              <Button
-                onClick={() => handleDoubleBedChange(doubleBeds - 1)}
-                disabled={doubleBeds <= 0}
-              >
-                -
-              </Button>
-              <span className="mx-3">{doubleBeds}</span>
-              <Button onClick={() => handleDoubleBedChange(doubleBeds + 1)}>
-                +
-              </Button>
-            </div>
+            <Form.Item
+              name="price"
+              label="Price"
+              rules={[{ required: true, message: "Please enter a price" }]}
+            >
+              <InputNumber
+                className="w-full"
+                formatter={(value) =>
+                  `Rp ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value?.replace(/\Rp\s?|(\,*)/g, "") as any}
+                min={0}
+                placeholder="Enter price"
+              />
+            </Form.Item>
           </div>
 
-          {/* Queen Bed */}
+          {/* Adults */}
           <div className="flex-1">
-            <label className="block text-sm font-semibold mb-1">
-              Queen Bed
-            </label>
+            <label className="block text-sm font-semibold mb-1">Adults</label>
             <div className="flex items-center justify-between border-solid border-gray-200 border">
               <Button
-                onClick={() => handleQueenBedChange(queenBeds - 1)}
-                disabled={queenBeds <= 0}
+                onClick={() => handleChange(setAdults, adult - 1)}
+                disabled={adult <= 0}
               >
                 -
               </Button>
-              <span className="mx-3">{queenBeds}</span>
-              <Button onClick={() => handleQueenBedChange(queenBeds + 1)}>
+              <span className="mx-3">{adult}</span>
+              <Button onClick={() => handleChange(setAdults, adult + 1)}>
                 +
               </Button>
             </div>
           </div>
         </div>
 
+        {/* Children and Number of Rooms */}
         <div className="pt-5 flex items-center gap-3">
-          {/* King Bed */}
           <div className="w-[399px]">
-            <label className="block text-sm font-semibold mb-1">King Bed</label>
+            <label className="block text-sm font-semibold mb-1">
+              Children Allowed
+            </label>
             <div className="flex items-center justify-between border-solid border-gray-200 border">
               <Button
-                onClick={() => handleKingBedChange(kingBeds - 1)}
-                disabled={kingBeds <= 0}
+                onClick={() => handleChange(setChildren, children - 1)}
+                disabled={children <= 0}
               >
                 -
               </Button>
-              <span className="mx-3">{kingBeds}</span>
-              <Button onClick={() => handleKingBedChange(kingBeds + 1)}>
+              <span className="mx-3">{children}</span>
+              <Button onClick={() => handleChange(setChildren, children + 1)}>
+                +
+              </Button>
+            </div>
+          </div>
+
+          <div className="w-[399px]">
+            <label className="block text-sm font-semibold mb-1">
+              Number of Rooms
+            </label>
+            <div className="flex items-center justify-between border-solid border-gray-200 border">
+              <Button
+                onClick={() =>
+                  handleChange(setNumberOfRooms, numberOfRooms - 1, 1)
+                }
+                disabled={numberOfRooms <= 1}
+              >
+                -
+              </Button>
+              <span className="mx-3">{numberOfRooms}</span>
+              <Button
+                onClick={() =>
+                  handleChange(setNumberOfRooms, numberOfRooms + 1)
+                }
+              >
                 +
               </Button>
             </div>
           </div>
         </div>
-      </div>
+
+        {/* Bed Types */}
+        <div className="mt-9">
+          <span className="font-semibold text-sm">Type of Bed</span>
+          <span className="pt-2 text-gray-400 text-sm">
+            Sleep well in our comfortable rooms with modern amenities.
+          </span>
+          <div className="pt-5 flex flex-wrap gap-3">
+            {[
+              { label: "Single Bed", setter: setSingleBeds, value: singleBeds },
+              { label: "Double Bed", setter: setDoubleBeds, value: doubleBeds },
+              { label: "Queen Bed", setter: setQueenBeds, value: queenBeds },
+              { label: "King Bed", setter: setKingBeds, value: kingBeds },
+            ].map((bed, idx) => (
+              <div key={idx} className="flex-1">
+                <label className="block text-sm font-semibold mb-1">
+                  {bed.label}
+                </label>
+                <div className="flex items-center justify-between border-solid border-gray-200 border">
+                  <Button
+                    onClick={() => handleChange(bed.setter, bed.value - 1)}
+                    disabled={bed.value <= 0}
+                  >
+                    -
+                  </Button>
+                  <span className="mx-3">{bed.value}</span>
+                  <Button
+                    onClick={() => handleChange(bed.setter, bed.value + 1)}
+                  >
+                    +
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <Form.Item className="pt-5">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="w-full"
+            style={{ display: "none" }}
+          >
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 }
