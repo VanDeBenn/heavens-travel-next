@@ -13,6 +13,7 @@ import Image from "next/image";
 import { ColumnsType } from "antd/es/table";
 
 import { Montserrat } from "next/font/google";
+import Loading from "#/app/loading";
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -40,6 +41,9 @@ interface ComponentsProps {
 }
 
 export default function BlogList({ data }: ComponentsProps) {
+  if (!data) {
+    return <Loading />;
+  }
   const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
@@ -48,11 +52,11 @@ export default function BlogList({ data }: ComponentsProps) {
   useEffect(() => {
     if (data) {
       const generatedData: DataType[] = data.map((item: any) => ({
-        key: item.id, // gunakan 'key' untuk antd table
-        blogTitle: item.title,
-        description: item.description,
-        date: item.createdAt,
-        imageUrl: "/images/illustration/hawaii.jpg",
+        key: item?.id, // gunakan 'key' untuk antd table
+        blogTitle: item?.title,
+        description: item?.description,
+        date: item?.createdAt,
+        imageUrl: item?.pathPhoto,
       }));
       setDataSource(generatedData);
     }
@@ -75,8 +79,8 @@ export default function BlogList({ data }: ComponentsProps) {
       render: (text: string, record: DataType) => (
         <div className="flex items-center gap-3">
           <Image
-            src={record.imageUrl}
-            alt="Blog Image"
+            src={`http://localhost:3222/blogs/image/${record.imageUrl}`}
+            alt={record.blogTitle}
             width={60}
             height={75}
             className="object-cover rounded-xl"

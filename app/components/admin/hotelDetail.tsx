@@ -39,21 +39,21 @@ export default function hotelDetail({ data }: ComponentProps) {
       label: "Path Location",
       value: "/images/illustration/property-map-entry.png", // Path gambar
     },
-    {
-      label: "District",
-      value: "Jatobenong Bawru",
-    },
+    // {
+    //   label: "District",
+    //   value: "Jatobenong Bawru",
+    // },
     {
       label: "City",
-      value: "Bekasi",
+      value: data?.city?.name,
     },
     {
       label: "Province",
-      value: "West Java",
+      value: data?.city?.province?.name,
     },
     {
       label: "Country",
-      value: "Indonesia",
+      value: data?.city?.province?.country?.name,
     },
   ];
   const photosPreview = [

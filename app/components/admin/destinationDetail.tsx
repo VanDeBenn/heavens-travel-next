@@ -9,6 +9,7 @@ import {
 } from "#/app/components/user/myBooking";
 import Link from "next/link";
 import { Destination } from "#/app/types/Destinations";
+import Loading from "#/app/loading";
 
 interface ComponentsProps {
   destinationData: Destination;
@@ -17,6 +18,11 @@ interface ComponentsProps {
 export default function destinationDetail({
   destinationData,
 }: ComponentsProps) {
+  if (!destinationData) {
+    return <Loading />;
+  }
+
+  console.log(destinationData);
   const guestDetails = [
     { label: "Name Destination", value: destinationData?.name },
     { label: "Rating", value: destinationData?.rating },
@@ -28,27 +34,23 @@ export default function destinationDetail({
   const guestDetails2 = [
     { label: "Address", value: destinationData?.address },
     { label: "Path Location", value: destinationData?.pathLocation },
-    {
-      label: "District",
-      value:
-        //  destinationData?.disrict ||
-        "",
-    },
+    // {
+    //   label: "District",
+    //   value:
+    //     //  destinationData?.disrict ||
+    //     "",
+    // },
     {
       label: "City",
-      value: destinationData?.city,
+      value: destinationData?.city?.name,
     },
     {
       label: "Province",
-      value:
-        //  destinationData?.province ||
-        "",
+      value: destinationData?.city?.province?.name || "",
     },
     {
       label: "Country",
-      value:
-        //  destinationData?.country ||
-        "",
+      value: destinationData?.city?.province?.country?.name || "",
     },
   ];
 
@@ -122,7 +124,10 @@ export default function destinationDetail({
                     >
                       {detail.label}
                     </div>
-                    <span className="font-semibold">:</span>
+                    <span className="font-semibold mr-2">: </span>
+                    <div className={`text-base text-black ${mediumMontserrat}`}>
+                      {detail.value}
+                    </div>
                   </div>
                   {detail.label === "Path Location" ? (
                     <div

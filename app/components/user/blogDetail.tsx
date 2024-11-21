@@ -31,14 +31,14 @@ export default function BlogDetail({ data }: ComponentsProps) {
   const [showShareButtons, setShowShareButtons] = useState(false);
   const inputRef = useRef(null); // Ref untuk input teks
 
-  const getAllBlog = async () => {
-    const res = await blogRepository.api.getBlogs();
-    // console.log(res)
-  };
+  // const getAllBlog = async () => {
+  //   const res = await blogRepository.api.getBlogs();
+  //   // console.log(res)
+  // };
 
-  useEffect(() => {
-    getAllBlog();
-  });
+  // useEffect(() => {
+  //   getAllBlog();
+  // });
 
   const handleShareClick = () => {
     setShowShareButtons(true);
@@ -144,7 +144,7 @@ export default function BlogDetail({ data }: ComponentsProps) {
             <div className="relative w-full mb-4">
               <Image
                 alt="News Image"
-                src={"/images/illustration/hawaii-beach.jpg"} // Gambar default jika pathPhoto kosong
+                src={`http://localhost:3222/blogs/image/${data?.pathPhoto}`} // Gambar default jika pathPhoto kosong
                 className="w-full rounded-xl"
                 width={1280}
                 height={500}

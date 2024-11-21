@@ -47,13 +47,7 @@ export interface Destination {
   bookings: any[]; // any
   carts: any[]; // any
   categoriesfaqs: any[]; // any
-  city: {
-    id: string;
-    name: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  } | null;
+  city: any;
   photodestinations: any[]; // any
   wishlists: any[] | null; // any
 }

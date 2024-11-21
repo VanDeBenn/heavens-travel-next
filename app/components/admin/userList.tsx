@@ -97,9 +97,13 @@ export default function UserList({ data }: ComponentProps) {
   // Filtered data based on the search value
   const filteredData = data.filter(
     (item: any) =>
-      item.fullName.toLowerCase().includes(searchValue.toLowerCase()) ||
-      item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
-      item.phoneNumber.toLowerCase().includes(searchValue.toLowerCase())
+      (item.fullName?.toLowerCase() || "").includes(
+        searchValue.toLowerCase()
+      ) ||
+      (item.email?.toLowerCase() || "").includes(searchValue.toLowerCase()) ||
+      (item.phoneNumber?.toLowerCase() || "").includes(
+        searchValue.toLowerCase()
+      )
   );
 
   const handlePageChange = (page: number) => {

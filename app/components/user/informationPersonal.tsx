@@ -6,6 +6,7 @@ import { usersRepository } from "#/repository/users";
 import { countrieRepository } from "#/repository/countries";
 import { provinceRepository } from "#/repository/provinces";
 import { citieRepository } from "#/repository/cities";
+import Loading from "#/app/loading";
 
 const { Option } = Select;
 interface ComponentsProps {
@@ -21,6 +22,10 @@ export default function InformationPersonal({
 }: ComponentsProps) {
   const router = useRouter();
   const [form] = useForm();
+  const [citiesData, setCitiesData] = useState<[string, string][]>([]);
+  const [provincesData, setProvincesData] = useState<[string, string[]][]>([]);
+  const [countriesData, setCountriesData] = useState<string[]>([]);
+  const [isCityDisabled, setIsCityDisabled] = useState(false);
   const [isProvinceDisabled, setIsProvinceDisabled] = useState(false);
   const [isCountryDisabled, setIsCountryDisabled] = useState(false);
 
@@ -31,19 +36,26 @@ export default function InformationPersonal({
         : [null, null, null];
       const [year, month, day] = birthDate;
 
+      const { fullName, email, phoneNumber, gender, district, address, city } =
+        data || {};
+      const { name: cityName, province } = city || {};
+      const { name: provinceName, country } = province || {};
+      const { name: countryName } = country || {};
+
+      // Atur nilai form dengan nilai default jika data tidak tersedia
       form.setFieldsValue({
-        fullName: data.fullName,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-        gender: data.gender,
-        day: day || "day",
-        month: month || "month",
-        year: year || "year",
-        country: data.country,
-        province: data.province,
-        city: data.city,
-        district: data.district,
-        address: data.address,
+        fullName: fullName || null,
+        email: email || null,
+        phoneNumber: phoneNumber || null,
+        gender: gender || null,
+        day: day || null,
+        month: month || null,
+        year: year || null,
+        countryName: countryName || null,
+        provinceName: provinceName || null,
+        cityName: cityName || null,
+        district: district || null,
+        address: address || null,
       });
     }
   }, [data, form]);
@@ -66,8 +78,11 @@ export default function InformationPersonal({
         gender: values.gender,
         birthDate: birthDate,
         address: values.address,
+        cityName: values.cityName,
+        provinceName: values.provinceName,
+        countryName: values.countryName,
       };
-
+      console.log(dataUpdateUser);
       const response = await usersRepository.api.putUser(id, dataUpdateUser);
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -95,30 +110,47 @@ export default function InformationPersonal({
   ];
   const years = Array.from({ length: 100 }, (_, i) => 2024 - i);
 
-  const [countriesData, setCountriesData] = useState<any[]>([]);
-  const [provincesData, setProvincesData] = useState<any[]>([]);
-  const [citiesData, setCitiesData] = useState<any[]>([]);
-
   const getAllCountries = async () => {
-    const res = await countrieRepository.api.getCountries();
-    setCountriesData(res.data);
+    try {
+      const res = await countrieRepository.api.getCountries();
+      setCountriesData(res.data.map((item: any) => item.name));
+    } catch (error) {
+      console.error("Failed to fetch countries:", error);
+    }
   };
+
   const getAllProvinces = async () => {
-    const res = await provinceRepository.api.getProvinces();
-    setProvincesData(res.data);
+    try {
+      const res = await provinceRepository.api.getProvinces();
+      setProvincesData(
+        res.data.map((item: any) => [
+          item.name,
+          item?.cities?.map((city: any) => city.name),
+        ])
+      );
+    } catch (error) {
+      console.error("Failed to fetch provinces:", error);
+    }
   };
+
   const getAllCities = async () => {
-    const res = await citieRepository.api.getCities();
-    setCitiesData(res.data);
+    try {
+      const res = await citieRepository.api.getCities();
+      setCitiesData(
+        res.data.map((item: any) => [item.name, item?.province?.name])
+      );
+    } catch (error) {
+      console.error("Failed to fetch cities:", error);
+    }
   };
 
   useEffect(() => {
     getAllCountries(), getAllProvinces();
     getAllCities();
   }, []);
-  const countries = countriesData.map((item: any) => item.name);
-  const provinces = provincesData.map((item: any) => item.name);
-  const cities = citiesData.map((item: any) => item.name);
+
+  useEffect(() => {}, [countriesData, provincesData, countriesData]);
+
   const districts = ["Cicendo", "Kebayoran", "Serpong"];
 
   let roleUser: string = "";
@@ -133,22 +165,75 @@ export default function InformationPersonal({
   }
 
   const onValuesChange = (changedValues: any, allValues: any) => {
-    if (changedValues.city) {
+    // city
+    if (changedValues.cityName) {
       setIsProvinceDisabled(true);
       setIsCountryDisabled(true);
+
+      const selectedCity = citiesData.find(
+        (x) => x[0] === changedValues.cityName
+      );
+      if (selectedCity) {
+        const provinceName = selectedCity[1];
+        form.setFieldsValue({
+          provinceName: provinceName,
+          countryName: "Indonesia",
+        });
+      }
     } else {
       setIsProvinceDisabled(false);
       setIsCountryDisabled(false);
+    }
+
+    // province
+    if (changedValues.provinceName) {
+      setIsCountryDisabled(true);
+
+      const selectedProvince = provincesData.find(
+        (x) => x[0] === changedValues.provinceName
+      );
+      if (selectedProvince) {
+        const cityList = selectedProvince[1];
+        setCitiesData(
+          cityList.map((city: any) => [city, changedValues.provinceName])
+        );
+      }
+    } else {
+      setIsCountryDisabled(false);
+    }
+
+    // country
+    if (
+      changedValues.countryName &&
+      changedValues.countryName !== "Indonesia"
+    ) {
+      setIsProvinceDisabled(true);
+      setIsCityDisabled(true);
+      form.setFieldsValue({ countryName: form.getFieldValue("countryName") });
+    } else if (changedValues.countryName === "Indonesia") {
+      setIsProvinceDisabled(false);
+      setIsCityDisabled(false);
     }
   };
 
   const resetField = (fieldName: string) => {
     form.setFieldsValue({ [fieldName]: undefined });
-    if (fieldName === "city") {
+    if (fieldName === "cityName") {
       setIsProvinceDisabled(false);
       setIsCountryDisabled(false);
     }
   };
+
+  if (
+    !countriesData ||
+    countriesData.length === 0 ||
+    !provincesData ||
+    provincesData.length === 0 ||
+    !citiesData ||
+    citiesData.length === 0
+  ) {
+    return <Loading />;
+  }
 
   return (
     <div className="bg-white rounded-xl w-full">
@@ -304,22 +389,16 @@ export default function InformationPersonal({
               </Form.Item>
 
               {/* Country */}
-              <Form.Item
-                label="Country"
-                name="country"
-                rules={[
-                  { required: true, message: "Please select your country!" },
-                ]}
-              >
+              <Form.Item label="Country" name="countryName" className="w-full">
                 <Select
                   placeholder="Select your country"
                   disabled={isCountryDisabled}
                   allowClear
-                  onClear={() => resetField("country")}
+                  onClear={() => resetField("countryName")}
                 >
-                  {countries.map((country) => (
-                    <Option key={country} value={country}>
-                      {country}
+                  {countriesData.map((countryName) => (
+                    <Option key={countryName} value={countryName}>
+                      {countryName}
                     </Option>
                   ))}
                 </Select>
@@ -328,20 +407,18 @@ export default function InformationPersonal({
               {/* Province */}
               <Form.Item
                 label="Province"
-                name="province"
-                rules={[
-                  { required: true, message: "Please select your province!" },
-                ]}
+                name="provinceName"
+                className="w-full"
               >
                 <Select
                   placeholder="Select your province"
                   disabled={isProvinceDisabled}
                   allowClear
-                  onClear={() => resetField("province")}
+                  onClear={() => resetField("provinceName")}
                 >
-                  {provinces.map((province) => (
-                    <Option key={province} value={province}>
-                      {province}
+                  {provincesData.map(([provinceName]) => (
+                    <Option key={provinceName} value={provinceName}>
+                      {provinceName}
                     </Option>
                   ))}
                 </Select>
@@ -350,26 +427,28 @@ export default function InformationPersonal({
               {/* City */}
               <Form.Item
                 label="City"
-                name="city"
+                name="cityName"
+                className="w-full"
                 rules={[
                   { required: true, message: "Please select your city!" },
                 ]}
               >
                 <Select
                   placeholder="Select your city"
+                  disabled={isCityDisabled}
                   allowClear
-                  onClear={() => resetField("city")}
+                  onClear={() => resetField("cityName")}
                 >
-                  {cities.map((city) => (
-                    <Option key={city} value={city}>
-                      {city}
+                  {citiesData.map(([cityName]) => (
+                    <Option key={cityName} value={cityName}>
+                      {cityName}
                     </Option>
                   ))}
                 </Select>
               </Form.Item>
 
               {/* District */}
-              <Form.Item
+              {/* <Form.Item
                 label="District"
                 name="district"
                 rules={[
@@ -383,7 +462,7 @@ export default function InformationPersonal({
                     </Option>
                   ))}
                 </Select>
-              </Form.Item>
+              </Form.Item> */}
 
               {/* Street Address */}
               <Form.Item

@@ -17,55 +17,51 @@ export default function UserDetail({ userData }: ComponentsProps) {
   if (!userData) {
     return <Loading />;
   }
-
+  console.log(userData);
   const guestDetails = [
     {
       label: "Full Name",
-      value: userData.fullName || "N/A",
+      value: userData?.fullName || "N/A",
     },
     {
       label: "Email",
-      value: userData.email || "N/A",
+      value: userData?.email || "N/A",
     },
     {
       label: "Phone Number",
-      value: userData.phoneNumber || "N/A",
+      value: userData?.phoneNumber || "N/A",
     },
     {
       label: "Gender",
-      value: userData.gender || "N/A",
+      value: userData?.gender || "N/A",
     },
     {
       label: "Birthdate",
-      value: userData.birthDate
-        ? new Date(userData.birthDate).toLocaleDateString()
-        : "N/A",
+      value: userData?.birthDate || "N/A",
+      // ? new Date(userData?.birthDate).toLocaleDateString()
+      // : "N/A",
     },
-    {
-      label: "District",
-      value:
-        // userData.district ||
-        "N/A",
-    },
+    // {
+    //   label: "District",
+    //   value:
+    //     // userData?.district ||
+    //     "N/A",
+    // },
     {
       label: "City",
-      value: userData.city || "N/A",
+      value: userData?.city?.name || "N/A",
     },
     {
       label: "Province",
-      value:
-        // userData.province ||
-        "N/A",
+      value: userData?.city?.province?.name || "N/A",
     },
     {
       label: "Country",
-      value:
-        // userData.country ||
-        "N/A",
+      value: userData?.city?.province?.country?.name || "N/A",
     },
     {
       label: "Role",
-      value: userData.role?.name || "N/A",
+      value: userData?.role?.name || "N/A",
     },
   ];
 

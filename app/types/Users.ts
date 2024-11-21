@@ -48,7 +48,7 @@ export interface User {
   blogs: any[]; // any
   bookings: any[]; // any
   carts: any[]; // any
-  city: string | null;
+  city: any;
   replyreviews: any[]; // any
   reports: any[]; // any
   reviews: any[]; // any
