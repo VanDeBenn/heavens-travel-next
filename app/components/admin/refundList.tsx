@@ -43,9 +43,7 @@ const RefundList: React.FC = () => {
         bookingId: item.booking?.id || "N/A",
         customer: item.booking?.customerName || "N/A",
         total: item?.booking?.payment?.amount,
-        qtyRoom: item.quantity
-          ? item.quantity.toString()
-          : `${Math.random() > 0.5 ? 1 : 2}`,
+        qtyRoom: item.quantity ? item.quantity.toString() : 0,
         fulfillmentStatus: item.status,
         dateOfOrder: new Date(item.createdAt || Date.now()).toLocaleDateString(
           "id-ID",
@@ -111,12 +109,12 @@ const RefundList: React.FC = () => {
       align: "center",
       render: (text: string) => `Rp${Number(text).toLocaleString("id-ID")}`,
     },
-    {
-      title: "Qty Room",
-      dataIndex: "qtyRoom",
-      key: "qtyRoom",
-      align: "center",
-    },
+    // {
+    //   title: "Qty",
+    //   dataIndex: "qtyRoom",
+    //   key: "qtyRoom",
+    //   align: "center",
+    // },
     {
       title: "Fulfillment Status",
       dataIndex: "fulfillmentStatus",

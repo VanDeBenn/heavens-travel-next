@@ -119,7 +119,15 @@ export default function ReportList({ data }: ComponentProps) {
                         </div>
                         <div className="flex items-center gap-2">
                           <FaRegClock className="text-lg" />
-                          <span className="text-sm">{item.createdAt}</span>
+                          <span className="text-sm">
+                            {new Date(
+                              item.createdAt || Date.now()
+                            ).toLocaleDateString("id-ID", {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                            })}
+                          </span>
                         </div>
                       </div>
                     </div>

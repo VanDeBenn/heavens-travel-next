@@ -48,6 +48,7 @@ interface ComponentProps {
           address: string;
           rating: number;
           description: string;
+          photodestinations: any[];
         };
         roomHotel?: any; // Add proper typing if hotel data structure is provided
       };
@@ -146,7 +147,7 @@ export default function ReportDetail({ data }: ComponentProps) {
             <div className="flex items-center gap-2 py-3">
               {/* Use a placeholder image or proper image path from your data */}
               <Image
-                src="/images/illustration/bedroom-suite.jpg"
+                src={`http://localhost:3222/photo-destinations/${cart?.destination?.photodestinations[0]?.pathPhoto}`}
                 alt={isDestination ? cart.destination?.name || "" : "Hotel"}
                 width={100}
                 height={100}
@@ -210,13 +211,12 @@ export default function ReportDetail({ data }: ComponentProps) {
           </div>
 
           {/* Only show photos section if pathPhoto exists */}
-          {data.pathPhoto && data.pathPhoto.length > 0 && (
-            <div>
-              <div className={`${mediumMontserrat.className} py-6`}>
-                <span className="text-xl font-semibold">Photos</span>
-              </div>
-              <div className="h-px bg-gray-300"></div>
-
+          <div>
+            <div className={`${mediumMontserrat.className} py-6`}>
+              <span className="text-xl font-semibold">Photos</span>
+            </div>
+            <div className="h-px bg-gray-300"></div>
+            {data.pathPhoto && data.pathPhoto.length > 0 && (
               <div
                 className={`${mediumMontserrat.className} grid grid-cols-3 gap-4 pt-6`}
               >
@@ -232,8 +232,8 @@ export default function ReportDetail({ data }: ComponentProps) {
                   </div>
                 ))}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 

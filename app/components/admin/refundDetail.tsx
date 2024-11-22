@@ -6,6 +6,7 @@ import { ColumnsType } from "antd/es/table";
 import { Montserrat } from "next/font/google";
 import Link from "next/link";
 import { RefundRepository } from "#/repository/refund";
+import Loading from "#/app/loading";
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -38,7 +39,11 @@ interface ComponentsProps {
 }
 
 export default function RefundDetail({ data }: ComponentsProps) {
+  if (!data) {
+    return <Loading />;
+  }
   const [dataSource, setDataSource] = useState<DataType[]>([]);
+  const [subtotal, setSubtotal] = useState<any>();
 
   useEffect(() => {
     if (data?.booking?.bookingdetails) {
@@ -55,15 +60,24 @@ export default function RefundDetail({ data }: ComponentsProps) {
           name: destination?.name || roomHotel?.name,
           price,
           category: destination ? "Destination" : "Hotel",
-          guest: "2 adults, 2 children",
+          guest: `${cart?.quantityAdult} adults, ${cart?.quantityChildren} children`,
           qtyRoom,
-          bookingDate: "23/04/2019 - 27/04/2019",
-          orderDate: "20/04/2019",
+          bookingDate: `${new Date(
+            data?.createdAt
+          ).toLocaleDateString()} - ${new Date(
+            data?.deletedAt
+          ).toLocaleDateString()}`,
+          orderDate: new Date(data?.createdAt).toLocaleDateString(),
           total,
-          imageUrl: "/images/illustration/hawaii.jpg",
+          imageUrl: destination?.photodestinations[0]?.pathPhoto,
         };
       });
       setDataSource(generatedData);
+      const calculatedSubtotal = generatedData.reduce(
+        (acc: any, item: any) => acc + item.total,
+        0
+      );
+      setSubtotal(calculatedSubtotal);
     }
   }, [data]);
 
@@ -76,7 +90,7 @@ export default function RefundDetail({ data }: ComponentsProps) {
       render: (text: string, record: DataType) => (
         <div className="flex items-center gap-3">
           <Image
-            src={record.imageUrl}
+            src={`http://localhost:3222/photo-destinations/${record.imageUrl}`}
             alt="Product Image"
             width={60}
             height={75}
@@ -288,23 +302,26 @@ export default function RefundDetail({ data }: ComponentsProps) {
         <div className="pt-4 px-7">
           <span className="font-semibold text-sm">Refund Details</span>
         </div>
+
         <div className="py-4  px-10 flex flex-col gap-3">
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-sm text-gray-500">
-              Total Atlas Concorde (2 Room)
-            </span>
-            <span className="font-semibold text-sm text-black">
-              {/* Rp{atlasTotal.toFixed(0)} */}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-sm text-gray-500">
-              Total Penida Island (2 Ticket)
-            </span>
-            <span className="font-semibold text-sm text-black">
-              {/* Rp{penidaTotal.toFixed(0)} */}
-            </span>
-          </div>
+          {data.booking.bookingdetails.map((item: any, index: number) => {
+            const { cart } = item;
+            const { destination, roomHotel } = cart || {};
+
+            return (
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-sm text-gray-500">
+                  {destination?.name || roomHotel?.name || "Unknown Product"} (
+                  {cart?.quantityAdult || 0} Adults,{" "}
+                  {cart?.quantityChildren || 0} Children)
+                </span>
+                <span className="font-semibold text-sm text-black">
+                  {/* Rp{atlasTotal.toFixed(0)} */}
+                </span>
+              </div>
+            );
+          })}
+
           <div className="flex justify-between items-center">
             <span className="font-semibold text-sm text-gray-500">
               Amounts are subject to change according to refund policies and
@@ -315,7 +332,7 @@ export default function RefundDetail({ data }: ComponentsProps) {
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold"> Total Refunds</span>
             <span className="text-sm font-semibold text-InfernoEcho-500">
-              {/* Rp{totalRefund.toFixed(0)} */}
+              Rp${Number(subtotal).toFixed(0)}
             </span>
           </div>
         </div>

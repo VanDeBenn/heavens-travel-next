@@ -118,7 +118,7 @@ export default function ReviewList({ data }: ComponentProps) {
                   <div className="border-solid border-gray-200 border rounded-xl">
                     <div className="flex flex-col gap-2 p-3">
                       <Link
-                        href={`/admin/review/detail`}
+                        href={`/admin/review/detail/${item.id}`}
                         className="font-semibold text-lg text-black no-underline hover:text-RoyalAmethyst-700 transition-all duration-300"
                       >
                         Booking Review

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ColumnsType } from "antd/es/table";
 import { Montserrat } from "next/font/google";
 import Link from "next/link";
+import Loading from "#/app/loading";
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -37,8 +38,24 @@ interface ComponentProps {
 }
 
 export default function BookingDetail({ data }: ComponentProps) {
+  if (!data) {
+    return <Loading />;
+  }
   const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [subtotal, setSubtotal] = useState<number>(0);
+  const status = data?.payment?.status;
+  let bgColor = "";
+  let textColor = "";
+  if (status === "CANCEL") {
+    bgColor = "bg-[#f6c1bb]";
+    textColor = "text-[#e95555]";
+  } else if (status === "PENDING") {
+    bgColor = "bg-[#f9fac2]";
+    textColor = "text-[#ee931f]";
+  } else if (status === "REFUND") {
+    bgColor = "bg-[#f6c1bb]";
+    textColor = "text-[#e95555]";
+  }
 
   useEffect(() => {
     if (data?.bookingdetails) {
@@ -66,7 +83,7 @@ export default function BookingDetail({ data }: ComponentProps) {
           ).toLocaleDateString()}`,
           orderDate: new Date(item.createdAt).toLocaleDateString(),
           total: total,
-          imageUrl: "/images/illustration/hawaii.jpg",
+          imageUrl: `http://localhost:3222/photo-destinations/${destination?.photodestinations[0]?.pathPhoto}`,
         };
       });
 
@@ -89,7 +106,7 @@ export default function BookingDetail({ data }: ComponentProps) {
         <div className="flex items-center gap-3">
           <Image
             src={record.imageUrl}
-            alt="Hotel Image"
+            alt={record.name}
             width={60}
             height={75}
             className="object-cover rounded-xl"
@@ -221,9 +238,7 @@ export default function BookingDetail({ data }: ComponentProps) {
         <div className="py-4 px-7 flex flex-col gap-2">
           <span className="font-semibold text-sm">Fullfilment Status</span>
           <div className="bg-[#f9fac2] w-max px-5 py-2 rounded-xl">
-            <span className="text-[#ee931f] text-sm">
-              {data?.refund?.status || "N/A"}
-            </span>
+            <span className={`text-sm ${bgColor} ${textColor}`}>{status}</span>
           </div>
         </div>
       </div>

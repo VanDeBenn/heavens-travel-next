@@ -4,6 +4,7 @@ import { Table, Dropdown, Menu, Button, Input } from "antd";
 import { ColumnsType } from "antd/es/table"; // Import the ColumnsType
 import { EllipsisOutlined } from "@ant-design/icons"; // Import icon untuk titik tiga
 import Link from "next/link";
+import Loading from "#/app/loading";
 
 interface DataType {
   key: string;
@@ -20,6 +21,9 @@ interface ComponentProps {
 }
 
 export default function BookingList({ data }: ComponentProps) {
+  if (!data) {
+    return <Loading />;
+  }
   const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
@@ -35,10 +39,8 @@ export default function BookingList({ data }: ComponentProps) {
         bookingId: item.id,
         customer: item?.user?.fullName || "Unknown Customer", // Jika user kosong
         total: item?.payment?.amount ? item.payment.amount.toString() : "0", // Jika payment kosong
-        quantity: `${Math.random() > 0.5 ? 1 : 2}`, // Random qty room number
-        fulfillmentStatus: ["Cancel", "Refund Request", "Refunded"][
-          Math.floor(Math.random() * 3)
-        ],
+        quantity: item?.bookingdetails ? item.bookingdetails.length : "0",
+        fulfillmentStatus: item?.payment?.status || "PENDING",
         dateOfOrder: `${(Math.floor(Math.random() * 28) + 1)
           .toString()
           .padStart(2, "0")}/02/2023`, // Example date
@@ -101,7 +103,7 @@ export default function BookingList({ data }: ComponentProps) {
       align: "center",
     },
     {
-      title: "Fulfillment Status",
+      title: "Status",
       dataIndex: "fulfillmentStatus",
       key: "fulfillmentStatus",
       align: "center",
@@ -110,13 +112,13 @@ export default function BookingList({ data }: ComponentProps) {
         let textColor = "";
 
         // Set styles based on the status value
-        if (status === "Cancel") {
+        if (status === "CANCEL") {
           bgColor = "bg-[#f6c1bb]";
           textColor = "text-[#e95555]";
-        } else if (status === "Refund Request") {
+        } else if (status === "PENDING") {
           bgColor = "bg-[#f9fac2]";
           textColor = "text-[#ee931f]";
-        } else if (status === "Refunded") {
+        } else if (status === "REFUND") {
           bgColor = "bg-[#f6c1bb]";
           textColor = "text-[#e95555]";
         }
