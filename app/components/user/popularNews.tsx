@@ -4,8 +4,28 @@ import Link from "next/link";
 import React from "react";
 import { RiFireLine } from "react-icons/ri";
 import { popularNewsData } from "./news";
+import Loading from "#/app/loading";
+import Item from "antd/es/list/Item";
 
-export default function popularNews() {
+interface dataBlog {
+id: string,
+title: string,
+pathPhoto: string,
+createdAt: string
+}
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+};
+
+export default function popularNews({data}:any) {
+  if (!data) {
+    return <Loading/>
+  }
   return (
     <div className="">
       <div className="flex items-center mb-4">
@@ -13,20 +33,20 @@ export default function popularNews() {
         <span className="text-xl font-semibold">Popular</span>
       </div>
       <div className=" bg-white rounded-xl">
-        {popularNewsData.slice(0, 4).map((news, index) => (
+        {data.slice(0, 4).map((item:dataBlog) => (
           <div
-            key={index}
+            key={item.id}
             className="no-underline"
           >
             {/* Tambahkan Link di sekitar news card */}
             <div className="p-3">
               <Link
-                href={news.link}
+                href={''}
                 className="rounded-lg h-60"
               >
                 <Image
-                  src={news.imageSrc}
-                  alt={news.title}
+                  src={"/images/illustration/hawaii-beach.jpg"}
+                  alt={item.title}
                   width={300}
                   height={300}
                   className="w-full h-28 rounded-lg"
@@ -35,15 +55,15 @@ export default function popularNews() {
 
               <div className="pt-3 flex flex-col ">
                 <Link
-                  href={news.link}
+                  href={''}
                   //yang bener buat abang beckend
                   // href={`/news/popular/${index}`}
                   className="text-base font-semibold mb-1 leading-5 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
                 >
-                  {news.title}
+                  {item.title}
                 </Link>
                 <span className="text-sm text-gray-600 font-medium">
-                  {news.date}
+                  {`${formatDate(item.createdAt)}`}
                 </span>
               </div>
             </div>
