@@ -52,7 +52,8 @@
 //     </main>
 //   );
 // }
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import BannerHotel from "#/app/components/user/bannerHotel";
 import Footer from "#/app/components/user/footer";
 import PromoteSliderHotel from "#/app/components/user/promoteSliderHotel";
@@ -62,8 +63,22 @@ import FindBestDestination from "#/app/components/user/findBestDestination";
 import WhatInterestsYou from "#/app/components/user/whatInterestsYou";
 import Faq from "#/app/components/user/faq";
 import SimpleInfo from "#/app/components/user/simpleInfo";
+import { hotelRepository } from "#/repository/hotels";
 
 export default function page() {
+  const [hotelsData, setHotelsData] = useState<any>();
+
+  const getAllHotels = async () => {
+    try {
+      const hotels = await hotelRepository.api.getHotels();
+      console.log(hotels);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getAllHotels();
+  }, []);
+
   return (
     <div className="bg-Lilac-50">
       <BannerHotel />

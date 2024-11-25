@@ -5,13 +5,38 @@ import { LiaBinocularsSolid } from "react-icons/lia";
 import Image from "next/image";
 import Link from "next/link";
 import { BsSuitcaseLg } from "react-icons/bs";
+import { citieRepository } from "#/repository/cities";
+import { useEffect, useState } from "react";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
 
+const getCityImageUrl = (cityName: string) => {
+  return `https://source.unsplash.com/800x600/?${cityName},city`;
+};
 export default function FindBestDestination() {
+  const [citiesData, setCitiesData] = useState<any>();
+  const getAllCities = async () => {
+    try {
+      const res = await citieRepository.api.getCities();
+      setCitiesData(res.data);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+    }
+  };
+
+  // console.log("hmm", citiesData);
+
+  useEffect(() => {
+    getAllCities();
+  }, []);
+
+  if (!citiesData) {
+    return;
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-2">
@@ -34,26 +59,37 @@ export default function FindBestDestination() {
 
       {/* grid kota */}
       <div className="grid grid-cols-4 gap-4">
-        {HolidayData.map((card) => (
-          <Link key={card.id} href={card.link} className="no-underline ">
-            <div className="flex flex-col items-center justify-end h-60 bg-gray-200 rounded-xl shadow-md relative overflow-hidden p-4 cursor-pointer group">
-              <Image
-                src={card.imgSrc}
-                alt={card.text}
-                layout="fill"
-                objectFit="cover"
-                className="absolute inset-0"
-              />
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-              <span
-                className={`${mediumMontserrat.className} relative z-10 text-center font-semibold text-white text-xl hover:text-RoyalAmethyst-700 transition-all duration-300`}
+        {citiesData
+          .filter((item: any) => !item.name.includes("Kabupaten"))
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 8)
+          .map((card: any) => {
+            const formattedName = card.name.replace(/^Kota\s/, "");
+            return (
+              <Link
+                key={card.id}
+                href={`/hotel/city/${card.id}`}
+                className="no-underline "
               >
-                {card.text}
-              </span>
-            </div>
-          </Link>
-        ))}
+                <div className="flex flex-col items-center justify-end h-60 bg-gray-200 rounded-xl shadow-md relative overflow-hidden p-4 cursor-pointer group">
+                  <Image
+                    src={getCityImageUrl(formattedName)}
+                    alt={" "}
+                    layout="fill"
+                    objectFit="cover"
+                    className="absolute inset-0"
+                  />
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                  <span
+                    className={`${mediumMontserrat.className} relative z-10 text-center font-semibold text-white text-xl hover:text-RoyalAmethyst-700 transition-all duration-300`}
+                  >
+                    {formattedName}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
       </div>
       {/* end grid kota */}
     </div>

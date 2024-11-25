@@ -105,7 +105,7 @@
 "use client";
 
 import { Montserrat } from "next/font/google";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LiaBinocularsSolid } from "react-icons/lia";
 import { FaUmbrellaBeach } from "react-icons/fa";
 
@@ -121,6 +121,8 @@ import {
 } from "react-icons/ri";
 import { Button } from "antd";
 import React from "react";
+import { citieRepository } from "#/repository/cities";
+import { hotelRepository } from "#/repository/hotels";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
@@ -139,36 +141,72 @@ type HotelCard = {
 };
 
 export default function PopularHotelsIn() {
-  const [selectedCity, setSelectedCity] = useState("Bali");
+  const [citiesData, setCitiesData] = useState<string[]>([]);
+  const [selectedCity, setSelectedCity] = useState<string>("Bali");
+  const [hotelsData, setHotelsData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleCityChange = (city: string) => {
-    setSelectedCity(city);
+  const getAllHotels = async () => {
+    const res = await hotelRepository.api.getHotels();
+    setHotelsData(res.data);
   };
 
+  const getAllCities = async () => {
+    try {
+      const res = await citieRepository.api.getCities();
+      const randomCities = res.data
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 8)
+        .map((city: any) => city.name);
+      setCitiesData(randomCities);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+    }
+  };
+
+  useEffect(() => {
+    Promise.all([getAllHotels(), getAllCities()]).finally(() => {
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  // Filter hotels by selected city
+  const filteredHotels = hotelsData.filter(
+    (hotel: any) =>
+      hotel?.city?.name === selectedCity ||
+      hotel?.city?.name === `Kota ${selectedCity}` ||
+      hotel?.city?.name === `Kabupaten ${selectedCity}` ||
+      hotel?.city?.province?.name === selectedCity
+  );
+
+  const citiesList = ["Bali", "Bekasi", "Bandung", "Jakarta"]; // Define the cities explicitly
+
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-4">
+      {/* Header */}
       <div className="flex flex-col gap-2">
-        <div
-          className={`${mediumMontserrat.className} flex items-center gap-2`}
-        >
+        <div className="flex items-center gap-2">
           <FaUmbrellaBeach className="text-3xl text-RoyalAmethyst-700" />
           <span className="text-xl font-semibold">
-            Popular Hotels in Indonesian
+            Popular Hotels in Indonesia
           </span>
         </div>
-        <span className={`${mediumMontserrat.className} text-base text-black`}>
+        <span className="text-base text-black">
           Top Stays for Your Next Adventure
         </span>
       </div>
 
-      <div
-        className={`${mediumMontserrat.className} flex items-center gap-4 py-2 font-semibold`}
-      >
-        {["Bali", "Bekasi", "Bandung", "Jogja"].map((city) => (
+      {/* City Buttons */}
+      <div className="flex items-center gap-4 py-2 font-semibold">
+        {citiesList.map((city) => (
           <Button
             key={city}
             type={selectedCity === city ? "primary" : "default"}
-            onClick={() => handleCityChange(city)}
+            onClick={() => setSelectedCity(city)}
             className={
               selectedCity === city
                 ? "bg-RoyalAmethyst-700 text-white"
@@ -180,39 +218,40 @@ export default function PopularHotelsIn() {
         ))}
       </div>
 
-      {/* Grid cardcuyy */}
+      {/* Hotel Grid */}
       <div className="grid grid-cols-4 gap-4">
-        {cityData[selectedCity] ? (
-          cityData[selectedCity].slice(0, 4).map((card) => (
+        {filteredHotels.length > 0 ? (
+          filteredHotels.slice(0, 4).map((hotel) => (
             <div
-              key={card.id}
+              key={hotel.id}
               className="no-underline border border-gray-300 border-solid rounded-xl flex flex-col gap-3 bg-white"
             >
-              <Link href={card.link} className="flex flex-col items-center">
+              <Link
+                href={`/hotel/detail/${hotel.id}`}
+                className="flex flex-col items-center"
+              >
                 <Image
-                  src={card.imgSrc}
-                  alt={card.text}
+                  src={`http://localhost:3222/photo-hotels/${hotel.image}`}
+                  alt={hotel.name}
                   className="h-52 w-full rounded-t-xl"
                   height={300}
                   width={300}
                 />
               </Link>
-              <div
-                className={`${mediumMontserrat.className} px-4 pb-2 flex flex-col gap-2`}
-              >
+              <div className="px-4 pb-2 flex flex-col gap-2">
                 <div className="flex justify-between gap-1">
                   <Link
-                    href={card.link}
+                    href={`/hotel/detail/${hotel.id}`}
                     className="font-semibold text-black text-base no-underline hover:text-RoyalAmethyst-700 transition-all duration-300"
                   >
-                    {card.text}
+                    {hotel.name}
                   </Link>
                   <div className="flex gap-1 items-center">
                     {[...Array(5)].map((_, index) => (
                       <React.Fragment key={index}>
-                        {index + 0.5 < card.stars ? (
+                        {index + 0.5 < hotel.stars ? (
                           <RiStarFill className="text-[#FFD700] text-lg" />
-                        ) : index < card.stars ? (
+                        ) : index < hotel.stars ? (
                           <RiStarHalfFill className="text-[#FFD700] text-lg" />
                         ) : null}
                       </React.Fragment>
@@ -221,13 +260,15 @@ export default function PopularHotelsIn() {
                 </div>
                 <div className="flex items-center gap-1">
                   <RiMapPin2Fill className="text-lg text-gray-400" />
-                  <span className="text-sm text-gray-400">{card.loc}</span>
+                  <span className="text-sm text-gray-400">
+                    {hotel.city.name}
+                  </span>
                 </div>
                 <Link
-                  href={card.link}
+                  href={`/hotel/detail/${hotel.id}`}
                   className="text-black text-base font-semibold no-underline leading-6"
                 >
-                  {card.desc}
+                  {hotel.description}
                 </Link>
                 <div className="flex justify-end">
                   <div className="flex gap-2 items-center">
@@ -235,10 +276,10 @@ export default function PopularHotelsIn() {
                       Start from
                     </span>
                     <Link
-                      href={card.link}
+                      href={`/hotel/detail/${hotel.id}`}
                       className="text-InfernoEcho-600 text-lg font-semibold no-underline"
                     >
-                      {card.price}
+                      {hotel.price}
                     </Link>
                   </div>
                 </div>
@@ -249,9 +290,8 @@ export default function PopularHotelsIn() {
           <div className="col-span-4 text-center text-gray-500">
             No hotels available for this city.
           </div>
-        )}  
+        )}
       </div>
-      {/* End cardcuyy */}
     </div>
   );
 }
@@ -284,59 +324,53 @@ const cityData: { [key: string]: HotelCard[] } = {
       imgSrc: "/images/illustration/beautiful-church.jpg",
       link: "/kota/bali",
       desc: "A beachside paradise.",
-      loc: "Bali",
+      loc: "Bekasi",
       price: "Rp340.000",
       stars: 2.5,
     },
+  ],
+  Bekasi: [
     {
-      id: 4,
-      text: "Alila Villas Uluwatu",
-      imgSrc: "/images/illustration/nightlife-city-sparkles-light-streets.jpg",
+      id: 1,
+      text: "Ayana Resort and Spa",
+      imgSrc: "/images/illustration/bali-indonesia.jpg",
       link: "/kota/bali",
-      desc: "Enjoy the vibrant Kuta Beach.",
+      desc: "Experience luxury in the heart.",
       loc: "Bali",
-      price: "Rp310.000",
-      stars: 4,
+      price: "Rp290.000",
+      stars: 4.5,
     },
+  ],
+  Bandung: [
     {
-      id: 5,
-      text: "The Legian Seminyak",
-      imgSrc: "/images/illustration/city-with-forest-front.jpg",
+      id: 1,
+      text: "Ayana Resort and Spa",
+      imgSrc: "/images/illustration/bali-indonesia.jpg",
       link: "/kota/bali",
-      desc: "A great stay in Legian.",
+      desc: "Experience luxury in the heart.",
       loc: "Bali",
-      price: "Rp300.000",
-      stars: 3.5,
-    },
-    {
-      id: 6,
-      text: "W Bali - Seminyak",
-      imgSrc: "/images/illustration/religion-historic.jpg",
-      link: "/kota/bali",
-      desc: "A beachside paradise.",
-      loc: "Bali",
-      price: "Rp340.000",
+      price: "Rp290.000",
       stars: 4.5,
     },
     {
-      id: 7,
-      text: "Anvaya Beach Resort",
-      imgSrc: "/images/illustration/high-angle.jpg",
+      id: 2,
+      text: "Four Seasons Resort",
+      imgSrc: "/images/illustration/road-bridge.jpg",
       link: "/kota/bali",
-      desc: "Enjoy the vibrant Kuta Beach.",
+      desc: "Discover tranquility in Ubud.",
       loc: "Bali",
-      price: "Rp310.000",
+      price: "Rp320.000",
       stars: 4,
     },
     {
-      id: 8,
-      text: "Ritz-Carlton Reserve",
-      imgSrc: "/images/illustration/mountainous-landscape-with-fog.jpg",
+      id: 3,
+      text: "Oberoi Beach Resort",
+      imgSrc: "/images/illustration/beautiful-church.jpg",
       link: "/kota/bali",
-      desc: "A great stay in Legian.",
-      loc: "Bali",
-      price: "Rp300.000",
-      stars: 3.5,
+      desc: "A beachside paradise.",
+      loc: "Bekasi",
+      price: "Rp340.000",
+      stars: 2.5,
     },
   ],
   Manila: [

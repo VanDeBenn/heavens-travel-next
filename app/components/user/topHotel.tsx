@@ -1,7 +1,7 @@
 "use client";
 
 import { Montserrat } from "next/font/google";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LiaBinocularsSolid } from "react-icons/lia";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,6 +15,8 @@ import {
 } from "react-icons/ri";
 import { Button } from "antd";
 import React from "react";
+import { hotelRepository } from "#/repository/hotels";
+import { citieRepository } from "#/repository/cities";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
@@ -33,11 +35,49 @@ type HotelCard = {
 };
 
 export default function TopHotel() {
-  const [selectedCity, setSelectedCity] = useState("Bali");
+  const [citiesData, setCitiesData] = useState<string[]>([]);
+  const [selectedCity, setSelectedCity] = useState<string>("Bali");
+  const [hotelsData, setHotelsData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleCityChange = (city: string) => {
-    setSelectedCity(city);
+  const getAllHotels = async () => {
+    const res = await hotelRepository.api.getHotels();
+    setHotelsData(res.data);
   };
+
+  const getAllCities = async () => {
+    try {
+      const res = await citieRepository.api.getCities();
+      const randomCities = res.data
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 8)
+        .map((city: any) => city.name);
+      setCitiesData(randomCities);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+    }
+  };
+
+  useEffect(() => {
+    Promise.all([getAllHotels(), getAllCities()]).finally(() => {
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  // Filter hotels by selected city
+  const filteredHotels = hotelsData.filter(
+    (hotel: any) =>
+      hotel?.city?.name === selectedCity ||
+      hotel?.city?.name === `Kota ${selectedCity}` ||
+      hotel?.city?.name === `Kabupaten ${selectedCity}` ||
+      hotel?.city?.province?.name === selectedCity
+  );
+
+  const citiesList = ["Bali", "Bekasi", "Bandung", "Jakarta"]; // Define the cities explicitly
 
   return (
     <div className="flex flex-col gap-2">
@@ -58,11 +98,11 @@ export default function TopHotel() {
       <div
         className={`${mediumMontserrat.className} flex items-center gap-4 py-2 font-semibold`}
       >
-        {["Bali", "Manila", "Bangkok", "Singapore"].map((city) => (
+        {citiesList.map((city) => (
           <Button
             key={city}
             type={selectedCity === city ? "primary" : "default"}
-            onClick={() => handleCityChange(city)}
+            onClick={() => setSelectedCity(city)}
             className={
               selectedCity === city
                 ? "bg-RoyalAmethyst-700 text-white"
@@ -76,68 +116,77 @@ export default function TopHotel() {
 
       {/* Grid cardcuyy */}
       <div className="grid grid-cols-4 gap-4">
-        {cityData[selectedCity].map((card) => (
-          <div
-            key={card.id}
-            className="no-underline border border-gray-300 border-solid rounded-xl flex flex-col gap-3 bg-white"
-          >
-            <Link href={card.link} className="flex flex-col items-center">
-              <Image
-                src={card.imgSrc}
-                alt={card.text}
-                className="h-52 w-full rounded-t-xl"
-                height={300}
-                width={300}
-              />
-            </Link>
+        {filteredHotels.length > 0 ? (
+          filteredHotels.slice(0, 4).map((hotel) => (
             <div
-              className={`${mediumMontserrat.className} px-4 pb-2 flex flex-col gap-2`}
+              key={hotel.id}
+              className="no-underline border border-gray-300 border-solid rounded-xl flex flex-col gap-3 bg-white"
             >
-              <div className="flex justify-between gap-1">
-                <Link
-                  href={card.link}
-                  className="font-semibold text-black text-base no-underline hover:text-RoyalAmethyst-700 transition-all duration-300"
-                >
-                  {card.text}
-                </Link>
-                <div className="flex gap-1 items-center">
-                  {[...Array(5)].map((_, index) => (
-                    <React.Fragment key={index}>
-                      {index + 0.5 < card.stars ? (
-                        <RiStarFill className="text-[#FFD700] text-lg" />
-                      ) : index < card.stars ? (
-                        <RiStarHalfFill className="text-[#FFD700] text-lg" />
-                      ) : null}
-                    </React.Fragment>
-                  ))}
-                </div>
-              </div>
-              <div className="flex items-center gap-1">
-                <RiMapPin2Fill className="text-lg text-gray-400" />
-                <span className="text-sm text-gray-400">{card.loc}</span>
-              </div>
               <Link
-                href={card.link}
-                className="text-black text-base font-semibold no-underline leading-6"
+                href={`/hotel/detail/${hotel.id}`}
+                className="flex flex-col items-center"
               >
-                {card.desc}
+                <Image
+                  src={`http://localhost:3222/photo-hotels/${hotel.image}`}
+                  alt={hotel.name}
+                  className="h-52 w-full rounded-t-xl"
+                  height={300}
+                  width={300}
+                />
               </Link>
-              <div className="flex justify-end">
-                <div className="flex gap-2 items-center">
-                  <span className="text-gray-400 text-sm align-text-bottom">
-                    Start from
-                  </span>
+              <div className="px-4 pb-2 flex flex-col gap-2">
+                <div className="flex justify-between gap-1">
                   <Link
-                    href={card.link}
-                    className="text-InfernoEcho-600 text-lg font-semibold no-underline"
+                    href={`/hotel/detail/${hotel.id}`}
+                    className="font-semibold text-black text-base no-underline hover:text-RoyalAmethyst-700 transition-all duration-300"
                   >
-                    {card.price}
+                    {hotel.name}
                   </Link>
+                  <div className="flex gap-1 items-center">
+                    {[...Array(5)].map((_, index) => (
+                      <React.Fragment key={index}>
+                        {index + 0.5 < hotel.stars ? (
+                          <RiStarFill className="text-[#FFD700] text-lg" />
+                        ) : index < hotel.stars ? (
+                          <RiStarHalfFill className="text-[#FFD700] text-lg" />
+                        ) : null}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <RiMapPin2Fill className="text-lg text-gray-400" />
+                  <span className="text-sm text-gray-400">
+                    {hotel.city.name}
+                  </span>
+                </div>
+                <Link
+                  href={`/hotel/detail/${hotel.id}`}
+                  className="text-black text-base font-semibold no-underline leading-6"
+                >
+                  {hotel.description}
+                </Link>
+                <div className="flex justify-end">
+                  <div className="flex gap-2 items-center">
+                    <span className="text-gray-400 text-sm align-text-bottom">
+                      Start from
+                    </span>
+                    <Link
+                      href={`/hotel/detail/${hotel.id}`}
+                      className="text-InfernoEcho-600 text-lg font-semibold no-underline"
+                    >
+                      {hotel.price}
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div className="col-span-4 text-center text-gray-500">
+            No hotels available for this city.
           </div>
-        ))}
+        )}
       </div>
       {/* End cardcuyy */}
 

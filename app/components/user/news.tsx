@@ -8,10 +8,10 @@ import PopularNews from "../../components/user/popularNews";
 import Loading from "#/app/loading";
 
 interface dataBlog {
-  id: string,
-  title: string,
-  pathPhoto: string,
-  createdAt: string
+  id: string;
+  title: string;
+  pathPhoto: string;
+  createdAt: string;
 }
 
 const formatDate = (dateString: string) => {
@@ -22,9 +22,9 @@ const formatDate = (dateString: string) => {
   });
 };
 
-export default function News({data}:any) {
+export default function News({ data }: any) {
   if (!data) {
-    return <Loading/>
+    return <Loading />;
   }
   return (
     <div className="py-5 flex flex-col items-center">
@@ -36,7 +36,7 @@ export default function News({data}:any) {
             <span className="text-xl font-semibold">News</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mt-4">
-            {data.slice(0, 8).map((item:dataBlog) => (
+            {data.slice(0, 8).map((item: dataBlog) => (
               <div
                 key={item.id}
                 // href={card.link}
@@ -44,7 +44,7 @@ export default function News({data}:any) {
                 // href={`/news/popular/${index}`}
               >
                 <div className="relative bg-white border border-gray-200 rounded-xl  ">
-                  <Link href={''}>
+                  <Link href={`/blog/list/detail/${item.id}`}>
                     <div className="relative w-full h-[400px]">
                       <Image
                         src={"/images/illustration/hawaii-beach.jpg"}
@@ -61,13 +61,13 @@ export default function News({data}:any) {
                   <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
                     <div className="flex flex-col">
                       <Link
-                        href={''}
+                        href={""}
                         className="text-base font-semibold mb-1 leading-4 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
                       >
                         {item.title}
                       </Link>
                       <span className="text-xs text-gray-600">
-                      {`${formatDate(item.createdAt)}`}
+                        {`${formatDate(item.createdAt)}`}
                       </span>
                     </div>
                   </div>
@@ -98,7 +98,8 @@ export default function News({data}:any) {
 
 export const cardData = [
   {
-    title: "The Ultimate Guide to Experiencing Hawaii’s Natural Beauty and Adventure",
+    title:
+      "The Ultimate Guide to Experiencing Hawaii’s Natural Beauty and Adventure",
     date: "August 25, 2024",
     imageSrc: "/images/illustration/hawaii.jpg",
     description:

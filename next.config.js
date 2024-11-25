@@ -13,6 +13,11 @@ module.exports = nextConfig;
 
 module.exports = {
   images: {
-    domains: ["imgs.search.brave.com", "localhost", "192.168.195.16"],
+    domains: [
+      "localhost",
+      "imgs.search.brave.com",
+      "source.unsplash.com",
+      "search.brave.com",
+    ],
   },
 };
