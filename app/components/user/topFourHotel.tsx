@@ -9,9 +9,11 @@ import {
   RiStarHalfFill,
   RiBuilding3Line,
   RiStarLine,
+  RiBlazeLine,
 } from "react-icons/ri";
 import React from "react";
 import { GiSydneyOperaHouse } from "react-icons/gi";
+import { BsBuildings } from "react-icons/bs";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
@@ -30,16 +32,16 @@ type HotelCard = {
   stars: number;
 };
 
-export default function InstagrammableHotels() {
+export default function TopFourHotel() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
         <div
           className={`${mediumMontserrat.className} flex items-center gap-2`}
         >
-          <RiBuilding3Line className="text-3xl text-RoyalAmethyst-700" />
+          <BsBuildings className="text-3xl text-RoyalAmethyst-700" />
           <span className="text-xl font-semibold">
-            Popular Instagrammable Hotels in Bali 
+            Top 4 4.5-star Select Hotels in Bali
           </span>
         </div>
       </div>

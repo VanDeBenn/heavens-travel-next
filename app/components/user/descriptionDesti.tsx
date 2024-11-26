@@ -41,7 +41,7 @@ export default function DescriptionDesti() {
 
       {/* Container Peta */}
       <div className="bg-white rounded-xl border border-gray-200 border-solid w-1/3 flex-shrink-0 h-auto">
-        <div className={`${mediumMontserrat.className} p-6 h-full`}>
+        <div className={`p-6 h-full cursor-pointer`}>
           {descriptionDes[0].images.map((image, imgIndex) => (
             <Image
               key={imgIndex}

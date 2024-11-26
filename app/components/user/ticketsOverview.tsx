@@ -1,20 +1,31 @@
 "use client";
-import { Button } from "antd";
+import { Button, DatePicker } from "antd";
 import { Montserrat } from "next/font/google";
-import {
-  RiArrowLeftLine,
-  RiArrowRightLine,
-  RiCalendar2Line,
-  RiShareFill,
-} from "react-icons/ri";
+import { Dayjs } from "dayjs";
+import React, { useState } from "react";
+
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
-import React, { useState } from "react";
+import dayjs from "dayjs";
+
 export default function TicketsOverview() {
+  const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs()); // Default hari ini
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const daysOfWeek = Array(7)
+    .fill(0)
+    .map((_, i) => selectedDate.startOf("week").add(i, "day"));
+
+  const handleDatePickerChange = (date: Dayjs | null) => {
+    if (date) {
+      setSelectedDate(date.startOf("week"));
+      setActiveIndex(0);
+    }
+  };
+
   const handleTicket = (value: number) => {
-    // Mengizinkan nilai minimum 0
     if (value >= 0) {
       setNumberOfTicket(value);
     }
@@ -23,72 +34,52 @@ export default function TicketsOverview() {
   const [numberOfTicket, setNumberOfTicket] = useState(0);
 
   const handleChange = (value: number) => {
-    // Mengizinkan nilai minimum 0
     if (value >= 0) {
       setNumberOfDesti(value);
     }
   };
 
   const [numberOfDesti, setNumberOfDesti] = useState(0);
-
   return (
     <div className={`${mediumMontserrat.className} flex flex-col gap-3`}>
-      <div className=" p-6 border-solid border-gray-200 border rounded-xl bg-white">
+      {/* Calendar */}
+      <div className="p-6 border-solid border-gray-200 border rounded-xl bg-white">
         <span className="font-semibold text-lg text-black">
           Available Ticket(s) for You
         </span>
         <div className="flex items-center justify-between gap-5 pt-3">
-          <div className="flex items-center gap-2 border-solid border-gray-300 border rounded-xl p-4">
-            <RiCalendar2Line className="text-2xl" />
-            <span className="text-base font-semibold">See Calender</span>
-          </div>
+          {/* DatePicker Week cuk */}
+          <DatePicker
+            className="border border-gray-300 rounded-xl p-2 text-base font-semibold"
+            picker="week"
+            value={selectedDate}
+            onChange={handleDatePickerChange}
+          />
 
-          <div className="flex flex-col items-center border-solid border-gray-300 border rounded-xl p-3 text-RoyalAmethyst-700">
-            <span className="text-sm font-semibold">Today</span>
-            <span className="text-sm font-semibold">19 Aug</span>
-          </div>
-          <div className="flex flex-col items-center border-solid border-gray-300 border rounded-xl p-3">
-            <span className="text-sm font-semibold">Tue</span>
-            <span className="text-sm font-semibold">20 Aug</span>
-          </div>
-          <div className="flex flex-col items-center border-solid border-gray-300 border rounded-xl p-3">
-            <span className="text-sm font-semibold">Wed</span>
-            <span className="text-sm font-semibold">21 Aug</span>
-          </div>
-          <div className="flex flex-col items-center border-solid border-gray-300 border rounded-xl p-3">
-            <span className="text-sm font-semibold">Thu</span>
-            <span className="text-sm font-semibold">22 Aug</span>
-          </div>
-          <div className="flex flex-col items-center border-solid border-gray-300 border rounded-xl p-3">
-            <span className="text-sm font-semibold">Fri</span>
-            <span className="text-sm font-semibold">23 Aug</span>
-          </div>
-          <div className="flex flex-col items-center border-solid border-gray-300 border rounded-xl p-3">
-            <span className="text-sm font-semibold">Sat</span>
-            <span className="text-sm font-semibold">24 Aug</span>
-          </div>
-          <div className="flex flex-col items-center border-solid border-gray-300 border rounded-xl p-3">
-            <span className="text-sm font-semibold">Sun</span>
-            <span className="text-sm font-semibold">24 Aug</span>
-          </div>
-          <div className="flex flex-col items-center border-solid border-gray-300 border rounded-xl p-3">
-            <span className="text-sm font-semibold">Mon</span>
-            <span className="text-sm font-semibold">25 Aug</span>
-          </div>
-          <div className="flex flex-col items-center border-solid border-gray-300 border rounded-xl p-3">
-            <span className="text-sm font-semibold">Tu</span>
-            <span className="text-sm font-semibold">26 Aug</span>
-          </div>
-          <div className="flex flex-col items-center border-solid border-gray-300 border rounded-xl p-3">
-            <span className="text-sm font-semibold">Wed</span>
-            <span className="text-sm font-semibold">27 Aug</span>
-          </div>
-
-          <div className="h-10 w-10 border-black/60 border-solid border rounded-full cursor-pointer flex items-center justify-center">
-            <RiArrowRightLine className="text-black text-lg" />
-          </div>
+          {/* Days of the week */}
+          {daysOfWeek.map((date, index) => (
+            <div
+              key={index}
+              className={`flex gap-1 items-center border-solid border-gray-300 border rounded-xl p-3 cursor-pointer ${
+                activeIndex === index
+                  ? "text-RoyalAmethyst-700 border-RoyalAmethyst-700"
+                  : ""
+              }`}
+              onClick={() => setActiveIndex(index)}
+            >
+              <span className="text-sm font-semibold">
+                {date.format("ddd")},
+              </span>
+              <span className="text-sm font-semibold">
+                {date.format("DD MMM")}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
+      {/* End Calendar */}
+
+      {/* Ticket */}
       <div className=" p-6 border-solid border-gray-200 border rounded-xl bg-white">
         <span className="font-semibold text-lg text-black">Ticket Qty</span>
         <div className="mt-4 border-solid border-gray-300 border rounded-xl p-5 flex justify-between">
@@ -159,6 +150,7 @@ export default function TicketsOverview() {
           </div>
         </div>
       </div>
+      {/* End Ticket */}
     </div>
   );
 }

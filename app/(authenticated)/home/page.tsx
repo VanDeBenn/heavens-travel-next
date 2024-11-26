@@ -6,7 +6,7 @@ import Banner from "#/app/components/user/banner";
 import Header from "#/app/components/user/header";
 import Footer from "#/app/components/user/footer";
 import HolidayIntroduction from "#/app/components/user/holidayIntroduction";
-import TopHotel from "#/app/components/user/TopHotel.1";
+import TopHotel from "#/app/components/user/topHotel";
 import UnforgettableExperience from "#/app/components/user/unforgettableExperience";
 import ReadAndDiscover from "#/app/components/user/readAndDiscover";
 import WhatInterestsYou from "#/app/components/user/whatInterestsYou";

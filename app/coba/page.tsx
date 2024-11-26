@@ -192,6 +192,8 @@ import ReviewList from "../components/admin/reviewList";
 import Banner from "../components/user/banner";
 import WhatInterestsYou from "../components/user/whatInterestsYou";
 import Faq from "../components/user/faq";
+import BookingDetailUser from "../components/user/bookingDetail";
+import PaymentMethod from "../components/user/paymentMethod";
 
 export default function page() {
   return (
@@ -213,6 +215,8 @@ export default function page() {
 
       {/* <WhatInterestsYou /> */}
       {/* <Faq /> */}
+
+      <BookingDetailUser />
     </div>
   );
 }

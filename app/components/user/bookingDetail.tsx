@@ -1,10 +1,18 @@
 "use client";
 import React, { useState } from "react";
-import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
+import {
+  RiArrowDropDownLine,
+  RiArrowDropUpLine,
+  RiCalendarLine,
+  RiGlassesLine,
+  RiHome3Line,
+  RiTeamLine,
+} from "react-icons/ri";
 import { mediumMontserrat } from "./myBooking";
 import { Modal } from "antd";
 import Image from "next/image";
-
+import { BookingItem, initialBookingItems } from "./myBooking";
+import Link from "next/link";
 // Step item type
 interface StepItem {
   date: string;
@@ -23,6 +31,10 @@ interface detailGuest {
   fullName: string;
   email: string;
   numberPhone: string;
+}
+interface paymentDetailGuest {
+  price: string;
+  fee: string;
 }
 
 export default function BookingDetail() {
@@ -51,6 +63,31 @@ export default function BookingDetail() {
   // Fungsi untuk menutup modal QR code
   const handleCloseQrCode = () => {
     setIsModalVisible(false);
+  };
+
+  const [bookingItems, setBookingItems] = useState(initialBookingItems);
+
+  // Filter hotel dan destinasi untuk menampilkan hanya 1 hotel dan 1 destinasi
+  const filteredBookingItems = [
+    ...bookingItems.filter((item) => item.category === "Hotel").slice(0, 1),
+    ...bookingItems
+      .filter((item) => item.category === "Destination")
+      .slice(0, 1),
+  ];
+
+  const handleDelete = (indexToDelete: number) => {
+    Modal.confirm({
+      title: "Are you sure?",
+      content: "Do you want to remove this item from your cart?",
+      okText: "Remove",
+      cancelText: "Cancel",
+      onOk: () => {
+        const updatedItems = filteredBookingItems.filter(
+          (_, index) => index !== indexToDelete
+        );
+        setBookingItems(updatedItems);
+      },
+    });
   };
 
   return (
@@ -103,7 +140,9 @@ export default function BookingDetail() {
                     <div className="flex flex-col items-center">
                       <div
                         className={`w-4 h-4 rounded-full ${
-                          index <= currentStep ? "bg-RoyalAmethyst-700" : "bg-gray-300"
+                          index <= currentStep
+                            ? "bg-RoyalAmethyst-700"
+                            : "bg-gray-300"
                         }`}
                       />
                       {index < steps.length - 1 && (
@@ -160,9 +199,7 @@ export default function BookingDetail() {
       <div
         className={`${mediumMontserrat.className} py-6 px-9 flex flex-col gap-6`}
       >
-        <span className="font-semibold text-base">
-          Simple Information Guest
-        </span>
+        <span className="font-semibold text-base">Detailed Guest</span>
         <div className={`p-3 border border-solid border-[#DBDBDB] rounded-xl`}>
           {InfoDetailGuest.map((InfoDetail, index) => (
             <div key={index} className="flex flex-col gap-2">
@@ -188,23 +225,201 @@ export default function BookingDetail() {
       </div>
       <div className="h-2 bg-gray-200"></div>
 
-          
+      <div className="bg-white w-full rounded-xl border-solid border-gray-200 border">
+        <div className={`${mediumMontserrat.className} py-6 px-9`}>
+          <span className="text-lg font-semibold">Order</span>
+        </div>
+        <div className="h-px bg-gray-300"></div>
+        <div className="grid grid-cols-1 px-8 py-6 gap-6 w-full ">
+          {filteredBookingItems.slice(0, 1).map((item, index) => {
+            const totalCost = item.HotelPricePerAdult
+              ? Number(item.guests.match(/\d+/)?.[0]) * item.HotelPricePerAdult
+              : 0;
+            const adultsCount =
+              Number(item.guests.match(/(\d+)\s*adult/)?.[1]) || 0;
+            const childrenCount =
+              Number(item.guests.match(/(\d+)\s*child/)?.[1]) || 0;
 
-      {/* Modal untuk menampilkan QR code */}
+            return (
+              <div
+                key={index}
+                className="p-3 border border-solid border-[#DBDBDB] rounded-xl w-full"
+              >
+                <div className="flex justify-between items-center">
+                  <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                    {item.category === "Hotel" ? (
+                      <RiHome3Line size={18} color="#ffff" />
+                    ) : (
+                      <RiGlassesLine size={18} color="#ffff" />
+                    )}
+                    <span className="text-xs font-semibold text-white">
+                      {item.category}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 py-3">
+                  <Link href={item.link}>
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={100}
+                      height={100}
+                      className="rounded-xl w-44"
+                    />
+                  </Link>
+                  <div
+                    className={`${mediumMontserrat.className} flex flex-col gap-1 w-full`}
+                  >
+                    <Link
+                      href={item.link}
+                      className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
+                    >
+                      {item.name}
+                    </Link>
+                    <div className="flex items-center gap-1">
+                      <RiCalendarLine className="text-lg text-black" />
+                      <span className="text-xs text-black">
+                        {item.category === "Hotel"
+                          ? item.HotelSchedule
+                          : item.DestinationSchedule}
+                      </span>
+                    </div>
+                    <div className="flex gap-1 items-center">
+                      <RiTeamLine className="text-lg text-black" />
+                      <span className="text-xs text-black">
+                        Guests: {item.guests}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between w-full">
+                      <div className="flex items-center gap-1 w-full">
+                        <span className="text-sm font-semibold text-[#4F28D9]">
+                          {item.category === "Hotel" && item.HotelRoomType}
+                          {item.category === "Destination" &&
+                            item.DestinationType}
+                        </span>
+                      </div>
+
+                      <div className="flex justify-end w-full gap-1 items-end">
+                        {item.HotelPricePerAdult && (
+                          <div className="text-sm text-black">
+                            {item.guests.match(/\d+/)?.[0]} x
+                            {formatCurrency(item.HotelPricePerAdult)}
+                          </div>
+                        )}
+
+                        {item.DestinationPriceAdults && adultsCount > 0 && (
+                          <div className="text-sm text-black">
+                            {adultsCount} x
+                            {formatCurrency(item.DestinationPriceAdults)}
+                            {childrenCount > 0 &&
+                              item.DestinationPriceChildren && (
+                                <>
+                                  {" - "}
+                                  {childrenCount} x
+                                  {formatCurrency(
+                                    item.DestinationPriceChildren
+                                  )}
+                                </>
+                              )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="h-px bg-gray-300"></div>
+                <div className="pt-5 pb-3 flex justify-end w-full gap-2">
+                  <div
+                    className={`${mediumMontserrat.className} flex flex-col gap-1`}
+                  >
+                    <span className="font-semibold text-xs">Total Price</span>
+                    <span className="text-sm font-semibold text-InfernoEcho-600">
+                      {item.category === "Hotel" &&
+                        formatCurrency(
+                          (Number(item.guests.match(/\d+/)?.[0]) || 1) *
+                            (item.HotelPricePerAdult || 0)
+                        )}
+                      {item.category === "Destination" &&
+                        formatCurrency(
+                          adultsCount * (item.DestinationPriceAdults || 0) +
+                            childrenCount * (item.DestinationPriceChildren || 0)
+                        )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="h-2 bg-gray-200"></div>
+
+      <div
+        className={`${mediumMontserrat.className} py-6 px-9 flex flex-col gap-6`}
+      >
+        <span className="font-semibold text-base">Payment Details</span>
+        <div className={`p-3 `}>
+          {PayDetailGuest.map((pay, index) => (
+            <div key={index} className="flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <span className="text-base text-gray-500">
+                  Mandarin Oriental (2 room)
+                </span>
+                <span className="text-base text-black">{pay.price}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-base text-gray-500">Booking Fees</span>
+                <span className="text-base text-black">{pay.fee}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="font-semibold text-base text-black">
+            Total Price
+          </span>
+          <span className="font-semibold text-base text-InfernoEcho-600">
+            Rp2.000.000
+          </span>
+        </div>
+      </div>
+
+      <div className="h-2 bg-gray-200"></div>
+
+      <div
+        className={`${mediumMontserrat.className} py-8 px-9 flex justify-between items-center`}
+      >
+        <div className="w-max cursor-pointer px-6 py-2 border border-solid rounded-xl border-RoyalAmethyst-700 font-semibold text-sm text-RoyalAmethyst-700">
+          Return
+        </div>
+        <div className="flex gap-4 items-center">
+          <div className="w-max cursor-pointer px-6 py-2 border border-solid rounded-xl border-RoyalAmethyst-700 font-semibold text-sm text-RoyalAmethyst-700">
+            Help
+          </div>
+          <div className="w-max cursor-pointer px-6 py-2 rounded-xl bg-RoyalAmethyst-700 font-semibold text-sm text-white">
+            Review
+          </div>
+        </div>
+      </div>
       <Modal
         visible={isModalVisible}
         onCancel={handleCloseQrCode}
         footer={null}
         centered
-        className="p-4"
+        className="p-4 h-[400px]"
       >
-        <Image
-          src={qrImage}
-          alt="QR Code"
-          width={200}
-          height={200}
-          className="rounded-lg object-cover w-64 h-64"
-        />
+        <div className="flex justify-center items-center">
+          <Image
+            src={qrImage}
+            alt="QR Code"
+            width={200}
+            height={200}
+            className="rounded-lg object-cover"
+          />
+        </div>
       </Modal>
     </div>
   );
@@ -221,6 +436,12 @@ export const InfoDetailGuest: detailGuest[] = [
     fullName: "Douwer Jhonen", // Nomor Invoice
     email: "ucussayursore@gmail.com", // Tanggal Pemesanan
     numberPhone: "08123456789",
+  },
+];
+export const PayDetailGuest: paymentDetailGuest[] = [
+  {
+    price: "Rp1.200.000", // Nomor Invoice
+    fee: "Rp25.000", // Tanggal Pemesanan
   },
 ];
 
@@ -262,3 +483,6 @@ export const steps: StepItem[] = [
     description: "Booking order created",
   },
 ];
+
+const formatCurrency = (amount: number) =>
+  `Rp${amount.toLocaleString("id-ID").replace(",", ".")}`;
