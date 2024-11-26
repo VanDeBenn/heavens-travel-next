@@ -1,3 +1,4 @@
+"use client";
 import NewsFrom from "#/app/components/user/newsFrom";
 import BannerViewDesti from "#/app/components/user/bannerViewDesti";
 import DescriptionDesti from "#/app/components/user/descriptionDesti";
@@ -6,10 +7,24 @@ import GuestReviewDesti from "#/app/components/user/guestReviewDesti";
 import HeaderComponent from "#/app/components/user/header";
 import TicketsOverview from "#/app/components/user/ticketsOverview";
 
-import React from "react";
-import InstagrammableHotels from "#/app/components/user/InstagrammableHotels";
+import React, { useEffect, useState } from "react";
+import InstagrammableHotels from "#/app/components/user/instagrammableHotels";
+import { destinationRepository } from "#/repository/destinations";
 
 export default function page() {
+    const [dataDestinations, setDataDestinations] = useState<any>();
+  
+    const getAllDestination = async () => {
+      try {
+        const destinations = await destinationRepository.api.getDestinations();
+        console.log(destinations);
+      } catch (error) {}
+    };
+  
+    useEffect(() => {
+      getAllDestination();
+    }, []); 
+
   return (
     <div className="bg-Lilac-50">
       <HeaderComponent />

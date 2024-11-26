@@ -168,7 +168,7 @@ export default function BlogDetail({ data }: ComponentsProps) {
 
         {/* Popular News Section */}
         <div className="lg:w-1/5 bg-white rounded-xl p-3">
-          <PopularNews />
+          <PopularNews data={[]} />
         </div>
       </div>
     </div>

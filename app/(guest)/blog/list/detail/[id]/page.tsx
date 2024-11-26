@@ -26,7 +26,7 @@ export default function page({ params }: { params: { id: string } }) {
         <Header />
         <div className=" px-16 pb-8 pt-24">
           <BlogDetail data={datablog} />
-          <RelatedArticles />
+          <RelatedArticles data={datablog}/>
         </div>
         <div>
           <Footer />

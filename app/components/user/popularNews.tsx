@@ -1,17 +1,16 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { RiFireLine } from "react-icons/ri";
-import { popularNewsData } from "./news";
 import Loading from "#/app/loading";
-import Item from "antd/es/list/Item";
+import { blogRepository } from "#/repository/blogs";
 
 interface dataBlog {
-id: string,
-title: string,
-pathPhoto: string,
-createdAt: string
+  id: string;
+  title: string;
+  pathPhoto: string;
+  createdAt: string;
 }
 
 const formatDate = (dateString: string) => {
@@ -22,28 +21,46 @@ const formatDate = (dateString: string) => {
   });
 };
 
-export default function popularNews({data}:any) {
-  if (!data) {
-    return <Loading/>
-  }
+// // Fungsi untuk mengacak array
+// const shuffleArray = (array: any[]) => {
+//   return array
+//     .map((item) => ({ ...item, sortKey: Math.random() }))
+//     .sort((a, b) => a.sortKey - b.sortKey)
+//     .map(({ sortKey, ...rest }) => rest);
+// };
+
+export default function PopularNews({ data }: { data: dataBlog[] }) {
+  const [dataBlog, setDataBlog] = useState<any[]>([]);
+
+  // // Acak data saat pertama kali dirender menggunakan useMemo
+  // const shuffledData = useMemo(() => shuffleArray(data), [data]);
+
+  // if (!data || data.length === 0) {
+  //   return <Loading />;
+  // }
+
+  const fetchAllBlog = async () => {
+    const res = await blogRepository.api.getBlogs();
+    // console.log(res);
+    setDataBlog(res.data);
+  };
+
+  useEffect(() => {
+    fetchAllBlog();
+  }, []);
+
+  console.log("data:", dataBlog);
   return (
     <div className="">
       <div className="flex items-center mb-4">
         <RiFireLine size={26} color="#4F28D9" className="mr-2" />
         <span className="text-xl font-semibold">Popular</span>
       </div>
-      <div className=" bg-white rounded-xl">
-        {data.slice(0, 4).map((item:dataBlog) => (
-          <div
-            key={item.id}
-            className="no-underline"
-          >
-            {/* Tambahkan Link di sekitar news card */}
+      <div className="bg-white rounded-xl">
+      {dataBlog.sort(() => 0.5 - Math.random()).slice(0, 4).map((item: dataBlog) => (
+          <div key={item.id} className="no-underline">
             <div className="p-3">
-              <Link
-                href={''}
-                className="rounded-lg h-60"
-              >
+              <Link href={`/blog/list/detail/${item.id}`} className="rounded-lg h-60">
                 <Image
                   src={"/images/illustration/hawaii-beach.jpg"}
                   alt={item.title}
@@ -53,11 +70,9 @@ export default function popularNews({data}:any) {
                 />
               </Link>
 
-              <div className="pt-3 flex flex-col ">
+              <div className="pt-3 flex flex-col">
                 <Link
-                  href={''}
-                  //yang bener buat abang beckend
-                  // href={`/news/popular/${index}`}
+                  href={`/blog/list/detail/${item.id}`}
                   className="text-base font-semibold mb-1 leading-5 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
                 >
                   {item.title}

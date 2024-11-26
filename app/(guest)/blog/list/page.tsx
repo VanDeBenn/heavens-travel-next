@@ -39,9 +39,9 @@ function page() {
           </a>
         </div>
         <div className="my-5 h-px bg-gray-300"></div>
-        <DestinasitionHighlights data={dataBlog}  />
+        <DestinasitionHighlights data={dataBlog} />
         <HotelHighlights data={dataBlog} />
-        <MoreNews />
+        <MoreNews data={dataBlog}/>
       </div>
       <div>
         <Footer />

@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 import BannerDestination from "#/app/components/user/bannerDestination";
 import BestHotelFinder from "#/app/components/user/bestHotelFinder";
 import Faq from "#/app/components/user/faq";
@@ -10,9 +10,24 @@ import TopHotel from "#/app/components/user/topHotel";
 
 import { destinationRepository } from "#/repository/destinations";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-export default function page() {
+function page() {
+  const [dataDestinations, setDataDestinations] = useState<any[]>([]);
+
+  const fetchAllDestinations = async () => {
+    const res = await destinationRepository.api.getDestinations();
+    // console.log(res)
+    setDataDestinations(res.data)
+  };
+
+  useEffect(() => {
+    fetchAllDestinations();
+  }, []);
+
+  console.log("data:", dataDestinations);
+
+
   // const [dataDestinations, setDataDestinations] = useState<any[]>([]);
   // const [count, setCount] = useState<number>(1);
 
@@ -34,6 +49,7 @@ export default function page() {
   //     setDataDestinations(res.body.data);
   //   } catch (error) {}
   // };
+
 
   // useEffect(() => {
   //   fetchDestinatios();
@@ -77,3 +93,4 @@ export default function page() {
     // </>
   );
 }
+export default page;

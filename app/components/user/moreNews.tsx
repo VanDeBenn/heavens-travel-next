@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { RiPuzzleLine } from "react-icons/ri";
@@ -7,8 +7,40 @@ import { GiNewShoot } from "react-icons/gi";
 
 import { RiStarFill, RiDashboardHorizontalLine } from "react-icons/ri"; // Import ikon yang diinginkan
 import { cardData } from "./news";
+import Loading from "#/app/loading";
 
-export default function moreNews() {
+interface dataBlog {
+  id: string;
+  title: string;
+  pathPhoto: string;
+  description: string;
+  createdAt: string;
+}
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+};
+
+// Fungsi untuk mengacak array
+const shuffleArray = (array: any[]) => {
+  return array
+    .map((item) => ({ ...item, sortKey: Math.random() }))
+    .sort((a, b) => a.sortKey - b.sortKey)
+    .map(({ sortKey, ...rest }) => rest);
+};
+
+export default function moreNews({ data }: {
+  data: dataBlog[] }) {
+  if (!data || data.length === 0) {
+    return <Loading />;
+  }
+
+  const shuffledData = useMemo(() => shuffleArray(data), [data]);
+
   return (
     <div className="pt-5">
       <div className="flex items-center mb-4">
@@ -18,15 +50,15 @@ export default function moreNews() {
 
       <div>
         <div className=" grid grid-cols-2 gap-5">
-          {cardData.slice(0, 8).map((card, index) => (
+          {shuffledData.slice(0, 8).map((item:dataBlog) => (
             <div
-              key={index}
+              key={item.id}
               className="flex gap-4 p-4 items-center bg-white rounded-xl "
             >
-              <Link href={card.link} className="w-full ">
+              <Link href={`/blog/list/detail/${item.id}`} className="w-full ">
                 <Image
                   src={"/images/illustration/hawaii-beach.jpg"}
-                  alt={card.title}
+                  alt={item.title}
                   width={800}
                   height={400}
                   objectFit="cover"
@@ -36,15 +68,17 @@ rounded-xl"
               </Link>
               <div className="w-full flex flex-col">
                 <Link
-                  href={card.link}
+                  href={`/blog/list/detail/${item.id}`}
                   className="text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline text-xl font-semibold leading-6"
                 >
-                  {card.title}
+                  {item.title}
                 </Link>
 
-                <span className="text-sm text-gray-600 my-1">{card.date}</span>
+                <span className="text-sm text-gray-600 pb-3">
+                {`${formatDate(item.createdAt)}`}
+              </span>
                 <span className="text-sm text-gray-600">
-                  {card.description}
+                  {item.description}
                 </span>
               </div>
             </div>
