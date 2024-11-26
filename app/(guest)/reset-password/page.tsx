@@ -11,7 +11,8 @@ const { Text } = Typography;
 
 const ResetPassword: React.FC = () => {
   const router = useRouter();
-  if (!TokenUtil.resetToken) {
+  const token = localStorage.getItem("reset_token");
+  if (!token) {
     router.push("/forgot-password");
   }
 
@@ -26,13 +27,15 @@ const ResetPassword: React.FC = () => {
     try {
       const data = {
         newPassword: values.newPassword,
-        resetToken: TokenUtil.resetToken,
+        resetToken: token,
       };
       const req = await authRepository.api.resetPassword(data);
       if (req.ok) {
         TokenUtil.clearAccessToken;
         TokenUtil.clearRefreshToken;
-        TokenUtil.clearResetToken;
+        localStorage.clear;
+        localStorage.removeItem("email");
+        localStorage.removeItem("reset_token");
         router.push("/login");
       }
     } catch (error) {}

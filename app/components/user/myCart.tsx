@@ -45,7 +45,7 @@ export default function MyCart() {
       const dataCart = carts.filter(
         (cart: any) =>
           !cart.bookingDetail?.booking?.payment?.status ||
-          cart.bookingDetail.booking.payment.status !== "PENDING"
+          cart.bookingDetail?.booking?.payment?.status !== "PENDING"
       );
 
       setDataCart(dataCart);

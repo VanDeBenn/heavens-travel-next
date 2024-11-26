@@ -71,6 +71,10 @@ const Login = () => {
     router.push("/forgot-password");
   };
 
+  const handleLoginGoogle = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
+  };
+
   return (
     <div className="flex flex-col md:flex-row h-screen bg-Lilac-50 px-16">
       <div className="md:w-1/2 w-full flex items-center justify-center">
@@ -102,12 +106,12 @@ const Login = () => {
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              label="Email or Number"
+              label="Email  "
               name="email"
               rules={[
                 {
                   required: true,
-                  message: "Please input your Email or Number!",
+                  message: "Please input your Email  !",
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
@@ -124,7 +128,7 @@ const Login = () => {
                       !phonePattern.test(value)
                     ) {
                       return Promise.reject(
-                        new Error("Please enter a valid Email or Number!")
+                        new Error("Please enter a valid Email  !")
                       );
                     }
 
@@ -164,7 +168,11 @@ const Login = () => {
           </Form>
           <Divider>Or continue with</Divider>
           <Space size="large" className="flex justify-center my-4">
-            <Button icon={<GoogleOutlined />} shape="circle" />
+            <Button
+              onClick={handleLoginGoogle}
+              icon={<GoogleOutlined />}
+              shape="circle"
+            />
             <Button icon={<FacebookOutlined />} shape="circle" />
             <Button icon={<AppleOutlined />} shape="circle" />
           </Space>

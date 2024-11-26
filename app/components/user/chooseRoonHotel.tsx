@@ -33,7 +33,7 @@ const mediumMontserrat = Montserrat({
 function ChooseRoonHotel() {
   const [adults, setAdults] = useState(0); // Start value for adults
   const [children, setChildren] = useState(0); // Start value for children
-  const [numberOfRooms, setNumberOfRooms] = useState(1); // Start value for number of rooms
+  const [numberOfRooms, setNumberOfRooms] = useState(1); // Start value f  of rooms
   const [singleBeds, setSingleBeds] = useState(0); // Start value for single beds
   const [doubleBeds, setDoubleBeds] = useState(0); // Start value for double beds
   const [queenBeds, setQueenBeds] = useState(0); // Start value for queen beds
@@ -46,7 +46,7 @@ function ChooseRoonHotel() {
   };
 
   return (
-    <div  className={`${mediumMontserrat.className} flex flex-col gap-4`}>
+    <div className={`${mediumMontserrat.className} flex flex-col gap-4`}>
       <div className="p-6 border-solid border-gray-200 border rounded-xl bg-white ">
         <div className="flex items-center gap-2 ">
           {/* <RiUserSettingsLine className="text-2xl" /> */}
@@ -181,7 +181,7 @@ function ChooseRoonHotel() {
           </div>
         </div>
       </div>
-      
+
       <div className="p-6 border-solid border-gray-200 border rounded-xl bg-white flex items-start gap-4 w-full h-60">
         <div className="flex gap-2 items-center">
           <Image

@@ -65,6 +65,7 @@ export default function FindBestDestination() {
           .slice(0, 8)
           .map((card: any) => {
             const formattedName = card.name.replace(/^Kota\s/, "");
+            console.log(citiesData);
             return (
               <Link
                 key={card.id}
@@ -73,7 +74,9 @@ export default function FindBestDestination() {
               >
                 <div className="flex flex-col items-center justify-end h-60 bg-gray-200 rounded-xl shadow-md relative overflow-hidden p-4 cursor-pointer group">
                   <Image
-                    src={getCityImageUrl(formattedName)}
+                    src={
+                      "https://imgs.search.brave.com/5UqWhGgspBC66Dh1Hx2Vk5AZ74VDIQslE5LpxmlvlbE/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9naXJs/ZWF0d29ybGQubmV0/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDE4/LzA0L251c2EtcGVu/aWRhLWtlbGluZ2tp/bmctMS5qcGc"
+                    }
                     alt={" "}
                     layout="fill"
                     objectFit="cover"

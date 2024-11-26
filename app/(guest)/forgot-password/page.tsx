@@ -2,7 +2,16 @@
 
 import React, { SyntheticEvent, useState } from "react";
 import Image from "next/image";
-import { Form, Input, Button, Card, Typography, Divider, Space } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Card,
+  Typography,
+  Divider,
+  Space,
+  message,
+} from "antd";
 import {
   GoogleOutlined,
   FacebookOutlined,
@@ -28,11 +37,11 @@ const ForgotPassword: React.FC = () => {
       };
       const req = await authRepository.api.forgotPassword(data);
       if (req.ok) {
-        TokenUtil.setResetToken(req.body.data.resetToken);
-        TokenUtil.persistToken();
+        // TokenUtil.setResetToken(req.body.data.resetToken);
+        // TokenUtil.persistToken();
         localStorage.setItem("email", values.email);
 
-        router.push("/authenticator");
+        message.success("Check Email!");
       }
     } catch (error) {}
   };
@@ -75,12 +84,12 @@ const ForgotPassword: React.FC = () => {
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              label={<span>Please enter Email or Number </span>}
+              label={<span>Please enter Email </span>}
               name="email"
               rules={[
                 {
                   required: true,
-                  message: "Please input your Email or Number!",
+                  message: "Please input your Email  !",
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
@@ -97,7 +106,7 @@ const ForgotPassword: React.FC = () => {
                       !phonePattern.test(value)
                     ) {
                       return Promise.reject(
-                        new Error("Please enter a valid Email or Number!")
+                        new Error("Please enter a valid Email  !")
                       );
                     }
 

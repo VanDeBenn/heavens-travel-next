@@ -8,11 +8,13 @@ import React, { useEffect, useState } from "react";
 
 export default function page({ params }: { params: { id: string } }) {
   const [datablog, setDataBlog] = useState<any[]>([]);
+  const [x, setx] = useState<any>();
 
   const fetchAllBlog = async () => {
     const res = await blogRepository.api.getBlog(params.id);
-    // console.log(res);
+    console.log("ini res", res);
     setDataBlog(res.data);
+    setx(res.data.hotel.name);
   };
 
   useEffect(() => {
@@ -26,7 +28,7 @@ export default function page({ params }: { params: { id: string } }) {
         <Header />
         <div className=" px-16 pb-8 pt-24">
           <BlogDetail data={datablog} />
-          <RelatedArticles data={datablog}/>
+          <RelatedArticles data={datablog} x={x} />
         </div>
         <div>
           <Footer />

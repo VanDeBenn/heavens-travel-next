@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Montserrat } from "next/font/google";
+import Loading from "#/app/loading";
 
 export const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -27,7 +28,14 @@ export const smallMontserrat = Montserrat({
   weight: ["400"],
 });
 
-export default function MyBooking() {
+interface ComponentsProps {
+  data: any;
+}
+
+export default function MyBooking({ data }: ComponentsProps) {
+  if (!data) {
+    return <Loading />;
+  }
   const [bookingItems, setBookingItems] =
     useState<BookingItem[]>(initialBookingItems);
 

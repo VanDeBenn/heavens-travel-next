@@ -19,17 +19,32 @@ import {
   FacebookOutlined,
   AppleOutlined,
 } from "@ant-design/icons";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { TokenUtil } from "#/utils/token";
 import { authRepository } from "#/repository/auth";
 
-const { Text, Link } = Typography;
+const { Text } = Typography;
 
 const Authenticator: React.FC = () => {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [form] = Form.useForm();
   const [timer, setTimer] = useState<number>(60);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+
+  const code = searchParams?.get("code");
+  const resetToken = searchParams?.get("token");
+  localStorage.setItem("reset_token", resetToken || "");
+
+  useEffect(() => {
+    if (code) {
+      // Set field value in the form
+      form.setFieldsValue({ code });
+
+      // Automatically call onFinish after setting the value
+      onFinish({ code });
+    }
+  }, [code]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -48,26 +63,34 @@ const Authenticator: React.FC = () => {
       const email = localStorage.getItem("email");
       await authRepository.api.sendOtp(email);
       setTimer(60);
-    } catch (error) {}
+    } catch (error) {
+      message.error("Failed to resend code.");
+    }
   };
+
   const onFinish = async (values: any) => {
     try {
       const otp = values.code.split("").join("");
       const data = {
-        token: TokenUtil.resetToken,
+        token: resetToken,
         otp,
       };
       const req = await authRepository.api.verifyOtp(data);
+
       if (req.ok) {
+        message.success("OTP verified successfully!");
         router.push("/reset-password");
       } else {
+        message.error("Invalid OTP. Try again.");
         router.push("/authenticator");
       }
-    } catch (error) {}
+    } catch (error) {
+      message.error("Something went wrong. Please try again.");
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log("Failed:", errorInfo);
+    message.error("Please input the code!");
   };
 
   const handleInputChange = (
@@ -77,7 +100,6 @@ const Authenticator: React.FC = () => {
     const value = e.target.value;
 
     if (value.length === 1 && index < inputRefs.current.length - 1) {
-      // Automatically move to the next input box if one character is entered
       inputRefs.current[index + 1]?.focus();
     }
   };
@@ -87,7 +109,6 @@ const Authenticator: React.FC = () => {
     index: number
   ) => {
     if (e.key === "Backspace") {
-      // Clear the current input box before moving to the previous one
       if (index > 0 && inputRefs.current[index]?.value === "") {
         inputRefs.current[index - 1]?.focus();
       }
@@ -117,14 +138,9 @@ const Authenticator: React.FC = () => {
               Two Factor Authentication
             </Typography.Title>
             <Text type="secondary">
-              We have to send a
+              We have sent a
               <Text style={{ color: "#4F28D9", margin: "0 4px" }}>code</Text>
-              to
-              <Text style={{ color: "#4F28D9", margin: "0 4px" }}>
-                example@gmail.com
-              </Text>
-              or
-              <Text style={{ color: "#4F28D9", margin: "0 4px" }}>SMS</Text>.
+              to your email.
             </Text>
           </div>
 
@@ -132,7 +148,6 @@ const Authenticator: React.FC = () => {
             form={form}
             name="authenticator"
             layout="vertical"
-            initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
           >
@@ -166,14 +181,14 @@ const Authenticator: React.FC = () => {
               </Row>
             </Form.Item>
             <div className="text-center my-5 flex justify-between">
-              <Text type="secondary">Dont get a code?</Text>
+              <Text type="secondary">Didn't get a code?</Text>
               <div className="flex items-center">
                 <Button
                   type="link"
                   onClick={handleResendCode}
                   disabled={timer > 0}
                 >
-                  Click to resend code
+                  Resend code
                 </Button>
                 {timer > 0 && (
                   <Text className="" type="secondary">

@@ -14,6 +14,10 @@ interface dataBlog {
   createdAt: string;
 }
 
+interface ComponentProps {
+  x: any;
+}
+
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("id-ID", {
     day: "numeric",
@@ -22,31 +26,40 @@ const formatDate = (dateString: string) => {
   });
 };
 
-export default function RelatedArticles({ data }:{
-  data: dataBlog[] }) {
-    if (!data || data.length === 0) {
-      return <Loading />;
-    }
-    const [dataBlog, setDataBlog] = useState<any[]>([]);
+export default function RelatedArticles({
+  data,
+  x,
+}: {
+  data: dataBlog[];
+  x: ComponentProps;
+}) {
+  if (!data || data.length === 0) {
+    return <Loading />;
+  }
+  const [dataBlog, setDataBlog] = useState<any[]>([]);
 
-    const fetchAllBlog = async () => {
-      const res = await blogRepository.api.getBlogs();
-      // console.log(res);
-      setDataBlog(res.data);
-    };
-  
-    useEffect(() => {
-      fetchAllBlog();
-    }, []);
+  const fetchAllBlog = async () => {
+    const res = await blogRepository.api.getBlogs();
+    // console.log(res);
+    setDataBlog(res.data);
+  };
 
+  useEffect(() => {
+    fetchAllBlog();
+  }, []);
 
-  
-    if (!dataBlog.length) {
-      return <Loading />;
-    }
-  
-    console.log("data:", dataBlog);
-  
+  if (!dataBlog.length) {
+    return <Loading />;
+  }
+
+  console.log("data:", dataBlog);
+  console.log(x);
+  const RelatedArticles = dataBlog.filter(
+    (item: any) => item.hotel?.name === x
+  );
+
+  console.log("related", RelatedArticles);
+
   return (
     <div className="pt-9">
       {/* Header Section */}
@@ -59,34 +72,36 @@ export default function RelatedArticles({ data }:{
 
       {/* Card Section */}
       <div className="grid grid-cols-3 gap-5">
-      {dataBlog.sort(() => 0.5 - Math.random()).slice(0, 6).map((item: dataBlog) => (
-          <div
-            key={item.id}
-            className="bg-white rounded-xl border-solid border-gray-200 border overflow-hidden"
-          >
-            <div className="p-3 flex flex-col gap-2">
-              <Link href={`/blog/list/detail/${item.id}`}>
-                <Image
-                  src={"/images/illustration/hawaii-beach.jpg"}
-                  alt={item.title}
-                  width={300}
-                  height={300}
-                  className="w-full rounded-xl"
-                />
-              </Link>
+        {RelatedArticles.sort(() => 0.5 - Math.random())
+          .slice(0, 6)
+          .map((item: dataBlog) => (
+            <div
+              key={item.id}
+              className="bg-white rounded-xl border-solid border-gray-200 border overflow-hidden"
+            >
+              <div className="p-3 flex flex-col gap-2">
+                <Link href={`/blog/list/detail/${item.id}`}>
+                  <Image
+                    src={"/images/illustration/hawaii-beach.jpg"}
+                    alt={item.title}
+                    width={300}
+                    height={300}
+                    className="w-full rounded-xl"
+                  />
+                </Link>
 
-              <Link
-                href={""}
-                className="text-lg font-semibold text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline leading-6"
-              >
-                {item.title}
-              </Link>
-              <span className="text-sm text-gray-600 font-medium">
+                <Link
+                  href={""}
+                  className="text-lg font-semibold text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline leading-6"
+                >
+                  {item.title}
+                </Link>
+                <span className="text-sm text-gray-600 font-medium">
                   {`${formatDate(item.createdAt)}`}
                 </span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
@@ -98,4 +113,3 @@ function setFilteredData(dataBlog: any[]) {
 function filterArticles(arg0: string) {
   throw new Error("Function not implemented.");
 }
-
