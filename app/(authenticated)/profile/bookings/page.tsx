@@ -12,7 +12,6 @@ export default function booking() {
     const res = await usersRepository.api.getUser(id || "");
     setBookingsData(res.body.data.bookings);
   };
-
   useEffect(() => {
     getAllBooking();
   }, []);

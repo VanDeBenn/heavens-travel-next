@@ -68,51 +68,42 @@ export default function MyBooking({ data }: ComponentsProps) {
 
       {/* grid */}
       <div className="px-8 py-6 grid grid-cols-1 gap-6">
-        {bookingItems.map((item, index) => {
-          const totalCost = item.HotelPricePerAdult
-            ? Number(item.guests.match(/\d+/)?.[0]) * item.HotelPricePerAdult
-            : 0;
-
-          const adultsCount =
-            Number(item.guests.match(/(\d+)\s*adult/)?.[1]) || 0;
-          const childrenCount =
-            Number(item.guests.match(/(\d+)\s*child/)?.[1]) || 0;
-
+        {data.map((booking: any) => {
           return (
             <div
-              key={index}
-              className={`p-3 border border-solid border-[#DBDBDB] rounded-xl`}
+              key={booking.id}
+              className="p-3 border border-solid border-[#DBDBDB] rounded-xl"
             >
               <div className="flex justify-between items-center">
-                {/* title and icon */}
+                {/* Title and Icon */}
                 <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                  {item.category === "Hotel" ? (
+                  {booking.bookingdetails[0]?.cart?.destination ? (
                     <RiHome3Line size={18} color="#ffff" />
                   ) : (
                     <RiGlassesLine size={18} color="#ffff" />
                   )}
                   <span className="text-xs font-semibold text-white">
-                    {item.category}
+                    {booking.bookingdetails[0]?.cart?.destination
+                      ? "Destination"
+                      : "Hotel"}
                   </span>
                 </div>
-                <div
-                  className={`${mediumMontserrat.className} flex items-center`}
-                >
+                <div className="flex items-center">
                   <div
                     className={`border-2 border-solid border-[#DBDBDB] ${
-                      item.status === "waiting for payment"
+                      booking.payment?.status === "PENDING"
                         ? "bg-[#FFD600] border-[#FFD600]"
                         : "bg-[#cbbef4] border-[#DBDBDB]"
                     } rounded-xl py-1 px-5 w-max mr-2`}
                   >
                     <span
                       className={`text-xs font-semibold ${
-                        item.status === "waiting for payment"
+                        booking.payment?.status === "PENDING"
                           ? "text-InfernoEcho-600"
                           : "text-RoyalAmethyst-700"
                       }`}
                     >
-                      {item.status === "waiting for payment"
+                      {booking.payment?.status === "PENDING"
                         ? "Waiting for Payment"
                         : "Done"}
                     </span>
@@ -130,91 +121,105 @@ export default function MyBooking({ data }: ComponentsProps) {
               </div>
 
               <div className="py-3 flex items-center gap-2">
-                <Link href={item.link}>
+                <Link href={`${booking.id}`}>
+                  {/* <Image
+                    src={
+                      booking.bookingdetails[0]?.cart?.destination
+                        ?.pathLocation || ""
+                    }
+                    alt={
+                      booking.bookingdetails[0]?.cart?.destination?.name ||
+                      "Destination"
+                    }
+                    width={100}
+                    height={100}
+                    className="rounded-xl w-44"
+                  /> */}
                   <Image
-                    src={item.image}
-                    alt={item.name}
+                    src={
+                      "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                    }
+                    alt={""}
                     width={100}
                     height={100}
                     className="rounded-xl w-44"
                   />
                 </Link>
-                <div
-                  className={`${mediumMontserrat.className} flex flex-col gap-1 w-full`}
-                >
+                <div className="flex flex-col gap-1 w-full">
                   <Link
-                    href={item.link}
+                    href={`/`}
                     className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                   >
-                    {item.name}
+                    {booking.bookingdetails[0]?.cart?.destination?.name ||
+                      "No Name"}
                   </Link>
                   <div className="flex items-center gap-1">
                     <RiCalendarLine size={16} color="#6b7280 " />
                     <span className="text-xs text-gray-500">
-                      {item.category === "Hotel"
-                        ? item.HotelSchedule
-                        : item.category === "Destination"
-                        ? item.DestinationSchedule
+                      {booking.bookingdetails[0]?.cart?.startDate
+                        ? `${new Date(
+                            booking.bookingdetails[0].cart.startDate
+                          ).toLocaleDateString()} - ${new Date(
+                            booking.bookingdetails[0].cart.endDate
+                          ).toLocaleDateString()}`
                         : "No Schedule"}
                     </span>
                   </div>
 
-                  <div
-                    className={`${mediumMontserrat.className} flex justify-between`}
-                  >
+                  <div className="flex justify-between">
                     <div className="flex gap-1">
                       <RiTeamLine size={16} color="#6b7280" />
                       <span className="text-xs text-gray-500">
-                        Guests: {item.guests}
+                        Guests:{" "}
+                        {`${
+                          booking.bookingdetails[0]?.cart?.quantityAdult || 0
+                        } Adult - ${
+                          booking.bookingdetails[0]?.cart?.quantityChildren || 0
+                        } Children`}
                       </span>
                     </div>
 
-                    <div className={`flex flex-col items-center gap-1`}>
-                      {item.DestinationPriceAdults && adultsCount > 0 && (
+                    <div className="flex flex-col items-center gap-1">
+                      {booking.bookingdetails[0]?.cart?.destination
+                        ?.priceAdult && (
                         <span className="text-sm text-gray-500">
-                          {adultsCount} x
-                          {formatCurrency(item.DestinationPriceAdults)}
+                          {booking.bookingdetails[0]?.cart?.quantityAdult || 0}{" "}
+                          x{" "}
+                          {formatCurrency(
+                            booking.bookingdetails[0]?.cart?.destination
+                              ?.priceAdult
+                          )}
                         </span>
                       )}
-                      {item.DestinationPriceChildren && childrenCount > 0 && (
+                      {booking.bookingdetails[0]?.cart?.destination
+                        ?.priceChildren && (
                         <span className="text-sm text-gray-500">
-                          {childrenCount} x
-                          {formatCurrency(item.DestinationPriceChildren)}
+                          {booking.bookingdetails[0]?.cart?.quantityChildren ||
+                            0}{" "}
+                          x{" "}
+                          {formatCurrency(
+                            booking.bookingdetails[0]?.cart?.destination
+                              ?.priceChildren
+                          )}
                         </span>
                       )}
                     </div>
-                  </div>
-
-                  {/* Harga hotel sama Type room */}
-                  <div
-                    className={`${mediumMontserrat.className} flex justify-between`}
-                  >
-                    {item.HotelRoomType && (
-                      <span className="text-sm font-semibold text-gray-500">
-                        {item.HotelRoomType}
-                      </span>
-                    )}
-                    {item.HotelPricePerAdult && (
-                      <span className="text-sm text-gray-500">
-                        {item.guests.match(/\d+/)?.[0]} x
-                        {formatCurrency(item.HotelPricePerAdult)}
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
+
               <div className="h-px bg-gray-300"></div>
               <div className="pt-5 pb-3 flex justify-end w-full gap-2">
                 <Link
-                  href={"/"}
-                  className="border border-solid border-RoyalAmethyst-700 rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-RoyalAmethyst-700 no-underline font-semibold"
+                  href={`/`}
+                  className="border border-solid border-RoyalAmethyst-700 rounded-xl py-2 px-5 w-max flex items-center gap-1 text-xs text-RoyalAmethyst-700 no-underline font-semibold"
                 >
                   See booking details
                 </Link>
-                {item.status !== "waiting for payment" && (
+                {booking.payment?.status !== "PENDING" && (
                   <Link
-                    href={"/profile/review"}
-                    className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-2 px-5 w-max flex items-center gap-1 2xl:gap-2 text-xs text-white no-underline font-semibold"
+                    href={`/profile/review`}
+                    className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-2 px-5 w-max flex items-center gap-1 text-xs text-white no-underline font-semibold"
                   >
                     Review
                   </Link>

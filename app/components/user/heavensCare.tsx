@@ -31,7 +31,11 @@ const smallMontserrat = Montserrat({
   weight: ["400"],
 });
 
-export default function HeavensCare() {
+interface ComponentsProps {
+  data: any;
+}
+
+export default function HeavensCare({ data }: ComponentsProps) {
   // State untuk menyimpan data booking
   const [bookingItems, setBookingItems] =
     useState<BookingItem[]>(initialBookingItems);
@@ -94,29 +98,30 @@ export default function HeavensCare() {
         <h1 className="text-xl font-semibold">Related Issue</h1>
         {/* Bagian review item */}
         <div className="grid grid-cols-1">
-          {bookingItems.slice(0, 1).map((item, index) => {
+          {data?.cart?.destination.slice(0, 1).map((item: any) => {
+            const {destination, roomHotel} = item?.cart
             return (
               <div
-                key={index}
+                key={item.id}
                 className={`p-3 border border-solid border-[#DBDBDB] rounded-xl`}
               >
                 {/* Bagian atas: kategori dan status */}
                 <div className="flex justify-between items-center">
                   <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                    {item.category === "Hotel" ? (
+                    {roomHotel === "Hotel" ? (
                       <RiHome3Line size={18} color="#ffff" />
                     ) : (
                       <RiGlassesLine size={18} color="#ffff" />
                     )}
                     <span className="text-xs font-semibold text-white">
-                      {item.category}
+                      {destination ? 'Destination' : 'Hotel'}
                     </span>
                   </div>
 
                   <div
                     className={`${mediumMontserrat.className} flex items-center`}
                   >
-                    <div
+                    {/* <div
                       className={`border-2 border-solid border-[#DBDBDB] ${
                         item.status === "waiting for payment"
                           ? "bg-[#FFD600] border-[#FFD600]"
@@ -134,60 +139,60 @@ export default function HeavensCare() {
                           ? "Waiting for Payment"
                           : "Done"}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
                 {/* Bagian tengah: gambar dan detail hotel/destinasi */}
                 <div className="flex items-center gap-2 py-3">
-                  <Link href={item.link}>
-                    <Image
+                  <Link href={''}>
+                    {/* <Image
                       src={item.image}
                       alt={item.name}
                       width={100}
                       height={100}
                       className="rounded-xl w-44"
-                    />
+                    /> */}
                   </Link>
 
                   <div
                     className={`${mediumMontserrat.className} flex flex-col gap-1`}
                   >
                     <Link
-                      href={item.link}
+                      href={''}
                       className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                     >
                       {item.name}
                     </Link>
 
-                    {item.category === "Hotel" ? (
+                    {roomHotel === "Hotel" ? (
                       <div className="flex items-center gap-1">
                         <RiMapPin2Line size={16} color="#6b7280 " />
                         <span className="text-xs text-gray-500">
-                          {item.HotelLocation}
+                          {item.address}
                         </span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-1">
                         <RiMapPin2Line size={16} color="#6b7280 " />
                         <span className="text-xs text-gray-500">
-                          {item.DestinationLocation}
+                          {item.address}
                         </span>
                       </div>
                     )}
 
-                    {item.category === "Hotel" ? (
+                    {roomHotel === "Hotel" ? (
                       <div className="flex items-center gap-1">
                         <LuFeather size={16} color="#6b7280 " />
                         <span className="text-xs text-gray-500">
-                          {item.HotelTotalReviews} reviews
+                          {/* {item.HotelTotalReviews} reviews */}
                         </span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-1">
                         <LuFeather size={16} color="#6b7280 " />
                         <span className="text-xs text-gray-500">
-                          {item.DestinationTotalReviews} reviews
+                          {/* {item.DestinationTotalReviews} reviews */}
                         </span>
                       </div>
                     )}
@@ -197,29 +202,29 @@ export default function HeavensCare() {
                 <div
                   className={`${mediumMontserrat.className} flex flex-col gap-1`}
                 >
-                  {item.category === "Hotel" && item.HotelRoomType && (
+                  {roomHotel === "Hotel" && item.HotelRoomType && (
                     <span className="text-sm font-semibold text-RoyalAmethyst-700">
-                      {item.HotelRoomType}
+                      {/* {item.HotelRoomType} */}
                     </span>
                   )}
 
                   <div className="flex items-center gap-1">
                     <RiCalendarLine size={16} color="black " />
                     <span className="text-xs text-black">
-                      {item.category === "Hotel"
+                      {/* {roomHotel === "Hotel"
                         ? item.HotelSchedule
-                        : item.DestinationSchedule}
+                        : item.DestinationSchedule} */}
                     </span>
                   </div>
 
-                  {item.category === "Hotel" && (
+                  {roomHotel === "Hotel" && (
                     <div
                       className={`${mediumMontserrat.className} flex justify-between`}
                     >
                       <div className="flex gap-1">
                         <RiTeamLine size={16} color="black" />
                         <span className="text-xs text-black">
-                          Guests: {item.guests}
+                          {/* Guests: {item.guests} */}
                         </span>
                       </div>
                     </div>
