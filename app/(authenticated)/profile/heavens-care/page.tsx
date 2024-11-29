@@ -9,12 +9,11 @@ import { bookingDetailRepository } from "#/repository/bookingDetail";
 function page() {
   const [bookingData, setBookingData] = useState<any>();
 
+  const id = "a18bdf76-85f0-4959-947a-3addebe58536";
   const getBooking = async () => {
-    const res = await bookingDetailRepository.api.getBookingDetail(
-      "dec35f2d-40e2-48ce-a39b-0efc1d0e1661"
-    );
+    const res = await bookingDetailRepository.api.getBookingDetail(id);
     setBookingData(res.data);
-    console.log(res.data);
+    // console.log(res.data);
   };
 
   useEffect(() => {
@@ -28,7 +27,7 @@ function page() {
       </div>
 
       <div className=" px-16 pb-8 pt-24">
-        <HeavensCare data={bookingData} />
+        <HeavensCare id={id} data={bookingData} />
       </div>
     </main>
   );

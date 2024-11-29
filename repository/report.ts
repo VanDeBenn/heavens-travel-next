@@ -3,6 +3,7 @@ import { http } from "#/utils/http";
 const url = {
   reports: () => "/reports",
   report: (id: string) => `/reports/${id}`,
+  photoReport: () => `/photo-reports/upload`,
 };
 
 const api = {
@@ -20,6 +21,9 @@ const api = {
   },
   deleteReport(id: string) {
     return http.del(url.report(id));
+  },
+  addPhotoReport(data: any) {
+    return http.post(url.photoReport()).send(data);
   },
 };
 
