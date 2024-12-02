@@ -4,6 +4,10 @@ import { Montserrat } from "next/font/google";
 import { RiStore2Line, RiBusFill } from "react-icons/ri";
 import { FaRegHospital } from "react-icons/fa";
 
+
+
+
+
 export default function AboutNearbyLocation() {
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border">
