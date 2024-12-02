@@ -13,7 +13,6 @@ import { CiCamera } from "react-icons/ci";
 import Image from "next/image";
 import Link from "next/link";
 
-import { BookingItem, initialBookingItems } from "./myBooking";
 import { Montserrat } from "next/font/google";
 import { Rate, Input, Upload, message, Form, Button } from "antd";
 import { useForm } from "antd/es/form/Form";
@@ -36,16 +35,20 @@ const smallMontserrat = Montserrat({
 
 interface ComponentProps {
   data: any;
-  id: string;
+  bookingsId: any;
+  bookingDetailId: any;
 }
 
-export default function HeavensCare({ data, id }: ComponentProps) {
-  if (!data && !id) {
+export default function HeavensCare({
+  data,
+  bookingsId,
+  bookingDetailId,
+}: ComponentProps) {
+  if (!data) {
     return;
   }
   const [form] = useForm();
   const user = localStorage.getItem("_id");
-  console.log(id);
   const [reportId, setReportId] = useState<any>();
 
   const onFinish = async (values: any) => {
@@ -55,7 +58,8 @@ export default function HeavensCare({ data, id }: ComponentProps) {
         description: values.description,
         email: values.email,
         userId: user,
-        bookingDetailId: id,
+        bookingDetailId: bookingDetailId || null,
+        bookingId: bookingsId || null,
       };
 
       console.log(dataBasicInfo);
@@ -161,9 +165,16 @@ export default function HeavensCare({ data, id }: ComponentProps) {
   //   return false; // Prevent auto-upload
   // };
 
-  const { destination, roomHotel } = data?.cart || {};
-  const { payment } = data?.booking || {};
+  const { destination, roomHotel } =
+    data?.cart || data?.bookingdetails?.cart || {};
+  const { payment } = data?.booking || { data };
 
+  data?.bookingdetails?.map((item: any) => {
+    console.log(item?.id);
+    console.log(item?.cart?.destination?.name);
+  });
+
+  console.log(data);
   return (
     <div className="bg-white rounded-xl">
       {/* Header section dengan judul 'Heavens Care' */}
@@ -179,147 +190,311 @@ export default function HeavensCare({ data, id }: ComponentProps) {
       <div className="py-6 px-9 flex flex-col gap-6">
         <h1 className="text-xl font-semibold">Related Issue</h1>
         {/* Bagian review item */}
-        <div className="grid grid-cols-1">
-          <div
-            className={`p-3 border border-solid border-[#DBDBDB] rounded-xl`}
-          >
-            {/* Bagian atas: kategori dan status */}
-            <div className="flex justify-between items-center">
-              <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                {roomHotel ? (
-                  <RiHome3Line size={18} color="#ffff" />
-                ) : (
-                  <RiGlassesLine size={18} color="#ffff" />
-                )}
-                <span className="text-xs font-semibold text-white">
-                  {roomHotel ? "Hotel" : "Destination"}
-                </span>
-              </div>
-
-              <div
-                className={`${mediumMontserrat.className} flex items-center`}
-              >
-                <div
-                  className={`border-2 border-solid border-[#DBDBDB] ${
-                    payment?.status === "PENDING"
-                      ? "bg-[#FFD600] border-[#FFD600]"
-                      : "bg-[#cbbef4] border-[#DBDBDB]"
-                  } rounded-xl py-1 px-5 w-max mr-2`}
-                >
-                  <span
-                    className={`text-xs font-semibold ${
-                      payment?.status === "PENDING"
-                        ? "text-[#DC143C]"
-                        : "text-[#4F28D9]"
-                    }`}
-                  >
-                    {payment?.status === "PENDING"
-                      ? "Waiting for Payment"
-                      : "Done"}
+        <div className="grid grid-cols-1 gap-2">
+          {destination || roomHotel ? (
+            <div
+              className={`p-3 border border-solid border-[#DBDBDB] rounded-xl`}
+            >
+              {/* Bagian atas: kategori dan status */}
+              <div className="flex justify-between items-center">
+                <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                  {roomHotel ? (
+                    <RiHome3Line size={18} color="#ffff" />
+                  ) : (
+                    <RiGlassesLine size={18} color="#ffff" />
+                  )}
+                  <span className="text-xs font-semibold text-white">
+                    {roomHotel ? "Hotel" : "Destination"}
                   </span>
                 </div>
-              </div>
-            </div>
 
-            {/* Bagian tengah: gambar dan detail hotel/destinasi */}
-            <div className="flex items-center gap-2 py-3">
-              <Link href={`/profile/bookings/detail/${data?.booking?.id}`}>
-                <Image
-                  src={
-                    "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
-                  }
-                  alt={destination?.name || roomHotel?.name}
-                  width={100}
-                  height={100}
-                  className="rounded-xl w-44"
-                />
-              </Link>
+                <div
+                  className={`${mediumMontserrat.className} flex items-center`}
+                >
+                  <div
+                    className={`border-2 border-solid border-[#DBDBDB] ${
+                      payment?.status === "PENDING"
+                        ? "bg-[#FFD600] border-[#FFD600]"
+                        : "bg-[#cbbef4] border-[#DBDBDB]"
+                    } rounded-xl py-1 px-5 w-max mr-2`}
+                  >
+                    <span
+                      className={`text-xs font-semibold ${
+                        payment?.status === "PENDING"
+                          ? "text-[#DC143C]"
+                          : "text-[#4F28D9]"
+                      }`}
+                    >
+                      {payment?.status === "PENDING"
+                        ? "Waiting for Payment"
+                        : "Done"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bagian tengah: gambar dan detail hotel/destinasi */}
+              <div className="flex items-center gap-2 py-3">
+                <Link href={`/profile/bookings/detail/${data?.booking?.id}`}>
+                  <Image
+                    src={
+                      "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                    }
+                    alt={destination?.name || roomHotel?.name}
+                    width={100}
+                    height={100}
+                    className="rounded-xl w-44"
+                  />
+                </Link>
+
+                <div
+                  className={`${mediumMontserrat.className} flex flex-col gap-1`}
+                >
+                  <Link
+                    href={`/profile/bookings/detail/${data?.booking?.id}`}
+                    className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
+                  >
+                    {destination?.name || roomHotel?.name}
+                  </Link>
+
+                  {roomHotel === "Hotel" ? (
+                    <div className="flex items-center gap-1">
+                      <RiMapPin2Line size={16} color="#6b7280 " />
+                      <span className="text-xs text-gray-500">
+                        {roomHotel?.address}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1">
+                      <RiMapPin2Line size={16} color="#6b7280 " />
+                      <span className="text-xs text-gray-500">
+                        {destination?.address}
+                      </span>
+                    </div>
+                  )}
+
+                  {roomHotel === "Hotel" ? (
+                    <div className="flex items-center gap-1">
+                      <LuFeather size={16} color="#6b7280 " />
+                      <span className="text-xs text-gray-500">
+                        {/* {item.HotelTotalReviews} */}0 reviews
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1">
+                      <LuFeather size={16} color="#6b7280 " />
+                      <span className="text-xs text-gray-500">
+                        {/* {item.DestinationTotalReviews} */}0 reviews
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
 
               <div
                 className={`${mediumMontserrat.className} flex flex-col gap-1`}
               >
-                <Link
-                  href={`/profile/bookings/detail/${data?.booking?.id}`}
-                  className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
-                >
-                  {destination?.name || roomHotel?.name}
-                </Link>
-
-                {roomHotel === "Hotel" ? (
-                  <div className="flex items-center gap-1">
-                    <RiMapPin2Line size={16} color="#6b7280 " />
-                    <span className="text-xs text-gray-500">
-                      {roomHotel?.address}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1">
-                    <RiMapPin2Line size={16} color="#6b7280 " />
-                    <span className="text-xs text-gray-500">
-                      {destination?.address}
-                    </span>
-                  </div>
-                )}
-
-                {roomHotel === "Hotel" ? (
-                  <div className="flex items-center gap-1">
-                    <LuFeather size={16} color="#6b7280 " />
-                    <span className="text-xs text-gray-500">
-                      {/* {item.HotelTotalReviews} */}0 reviews
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1">
-                    <LuFeather size={16} color="#6b7280 " />
-                    <span className="text-xs text-gray-500">
-                      {/* {item.DestinationTotalReviews} */}0 reviews
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div
-              className={`${mediumMontserrat.className} flex flex-col gap-1`}
-            >
-              {roomHotel === "Hotel" && (
-                // && item.HotelRoomType
-                <span className="text-sm font-semibold text-[#4F28D9]">
-                  {/* {item.HotelRoomType} */}
-                  Room Type
-                </span>
-              )}
-
-              <div className="flex items-center gap-1">
-                <RiCalendarLine size={16} color="black " />
-                <span className="text-xs text-black">
-                  {roomHotel === "Hotel"
-                    ? `${new Date(
-                        data?.cart?.startDate
-                      ).toLocaleDateString()} - ${new Date(
-                        data?.cart?.endDate
-                      ).toLocaleDateString()}`
-                    : `${new Date(
-                        data?.cart?.startDate
-                      ).toLocaleDateString()} - ${new Date(
-                        data?.cart?.endDate
-                      ).toLocaleDateString()}`}
-                </span>
-              </div>
-
-              <div
-                className={`${mediumMontserrat.className} flex justify-between`}
-              >
-                <div className="flex gap-1">
-                  <RiTeamLine size={16} color="black" />
-                  <span className="text-xs text-black">
-                    Guests:{" "}
-                    {`${data?.cart?.quantityAdult} Adult - ${data?.cart?.quantityChildren} Children`}
+                {roomHotel === "Hotel" && (
+                  // && item.HotelRoomType
+                  <span className="text-sm font-semibold text-[#4F28D9]">
+                    {/* {item.HotelRoomType} */}
+                    Room Type
                   </span>
+                )}
+
+                <div className="flex items-center gap-1">
+                  <RiCalendarLine size={16} color="black " />
+                  <span className="text-xs text-black">
+                    {roomHotel === "Hotel"
+                      ? `${new Date(
+                          data?.cart?.startDate
+                        ).toLocaleDateString()} - ${new Date(
+                          data?.cart?.endDate
+                        ).toLocaleDateString()}`
+                      : `${new Date(
+                          data?.cart?.startDate
+                        ).toLocaleDateString()} - ${new Date(
+                          data?.cart?.endDate
+                        ).toLocaleDateString()}`}
+                  </span>
+                </div>
+
+                <div
+                  className={`${mediumMontserrat.className} flex justify-between`}
+                >
+                  <div className="flex gap-1">
+                    <RiTeamLine size={16} color="black" />
+                    <span className="text-xs text-black">
+                      Guests:{" "}
+                      {`${data?.cart?.quantityAdult} Adult - ${data?.cart?.quantityChildren} Children`}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            data?.bookingdetails?.map((item: any) => (
+              <div
+                className={`p-3 border border-solid border-[#DBDBDB] rounded-xl`}
+              >
+                {/* Bagian atas: kategori dan status */}
+                <div className="flex justify-between items-center">
+                  <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                    {roomHotel || item?.cart?.roomHotel ? (
+                      <RiHome3Line size={18} color="#ffff" />
+                    ) : (
+                      <RiGlassesLine size={18} color="#ffff" />
+                    )}
+                    <span className="text-xs font-semibold text-white">
+                      {roomHotel || item?.cart?.roomHotel
+                        ? "Hotel"
+                        : "Destination"}
+                    </span>
+                  </div>
+
+                  <div
+                    className={`${mediumMontserrat.className} flex items-center`}
+                  >
+                    <div
+                      className={`border-2 border-solid border-[#DBDBDB] ${
+                        payment?.status || item?.payment?.status === "PENDING"
+                          ? "bg-[#FFD600] border-[#FFD600]"
+                          : "bg-[#cbbef4] border-[#DBDBDB]"
+                      } rounded-xl py-1 px-5 w-max mr-2`}
+                    >
+                      <span
+                        className={`text-xs font-semibold ${
+                          payment?.status || item?.payment?.status === "PENDING"
+                            ? "text-[#DC143C]"
+                            : "text-[#4F28D9]"
+                        }`}
+                      >
+                        {payment?.status || item?.payment?.status === "PENDING"
+                          ? "Waiting for Payment"
+                          : "Done"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bagian tengah: gambar dan detail hotel/destinasi */}
+                <div className="flex items-center gap-2 py-3">
+                  <Link
+                    href={`/profile/bookings/detail/${
+                      data?.booking?.id || item?.id
+                    }`}
+                  >
+                    <Image
+                      src={
+                        "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                      }
+                      alt={destination?.name || roomHotel?.name}
+                      width={100}
+                      height={100}
+                      className="rounded-xl w-44"
+                    />
+                  </Link>
+
+                  <div
+                    className={`${mediumMontserrat.className} flex flex-col gap-1`}
+                  >
+                    <Link
+                      href={`/profile/bookings/detail/${
+                        data?.booking?.id || item?.id
+                      }`}
+                      className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
+                    >
+                      {destination?.name ||
+                        roomHotel?.name ||
+                        item?.cart?.destination?.name ||
+                        item?.cart?.roomHotel?.name}
+                    </Link>
+
+                    {roomHotel || item?.cart?.roomHotel === "Hotel" ? (
+                      <div className="flex items-center gap-1">
+                        <RiMapPin2Line size={16} color="#6b7280 " />
+                        <span className="text-xs text-gray-500">
+                          {roomHotel?.address || item?.cart?.roomHotel?.address}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        <RiMapPin2Line size={16} color="#6b7280 " />
+                        <span className="text-xs text-gray-500">
+                          {destination?.address ||
+                            item?.cart?.destination?.address}
+                        </span>
+                      </div>
+                    )}
+
+                    {roomHotel || item?.cart?.roomHotel === "Hotel" ? (
+                      <div className="flex items-center gap-1">
+                        <LuFeather size={16} color="#6b7280 " />
+                        <span className="text-xs text-gray-500">
+                          {/* {item.HotelTotalReviews} */}0 reviews
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        <LuFeather size={16} color="#6b7280 " />
+                        <span className="text-xs text-gray-500">
+                          {/* {item.DestinationTotalReviews} */}0 reviews
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div
+                  className={`${mediumMontserrat.className} flex flex-col gap-1`}
+                >
+                  {roomHotel ||
+                    (item?.cart?.roomHotel === "Hotel" && (
+                      // && item.HotelRoomType
+                      <span className="text-sm font-semibold text-[#4F28D9]">
+                        {/* {item.HotelRoomType} */}
+                        Room Type
+                      </span>
+                    ))}
+
+                  <div className="flex items-center gap-1">
+                    <RiCalendarLine size={16} color="black " />
+                    <span className="text-xs text-black">
+                      {roomHotel === "Hotel" ||
+                      item?.cart?.roomHotel === "Hotel"
+                        ? `${new Date(
+                            item?.cart?.startDate
+                          ).toLocaleDateString()} - ${new Date(
+                            item?.cart?.endDate
+                          ).toLocaleDateString()}`
+                        : `${new Date(
+                            item?.cart?.startDate || data?.cart?.startDate
+                          ).toLocaleDateString()} - ${new Date(
+                            item?.cart?.endDate || data?.cart?.endDate
+                          ).toLocaleDateString()}`}
+                    </span>
+                  </div>
+
+                  <div
+                    className={`${mediumMontserrat.className} flex justify-between`}
+                  >
+                    <div className="flex gap-1">
+                      <RiTeamLine size={16} color="black" />
+                      <span className="text-xs text-black">
+                        Guests:{" "}
+                        {`${
+                          data?.cart?.quantityAdult || item?.cart?.quantityAdult
+                        } Adult - ${
+                          data?.cart?.quantityChildren ||
+                          item?.cart?.quantityChildren
+                        } Children`}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
         {/* Form Title */}
         <Form

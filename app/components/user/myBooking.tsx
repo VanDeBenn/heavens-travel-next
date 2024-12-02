@@ -41,25 +41,6 @@ export default function MyBooking({ data }: ComponentsProps) {
 
   const formatCurrency = (amount: number) => `Rp${amount.toLocaleString()}`;
 
-  // Dropdown menu
-  const menu = (
-    <Menu
-      items={[
-        {
-          key: "help",
-          label: (
-            <Link
-              href="/help"
-              className="no-underline hover:text-RoyalAmethyst-700 duration-300 transition-all"
-            >
-              Help
-            </Link>
-          ),
-        },
-      ]}
-    />
-  );
-
   return (
     <div className={`bg-white rounded-xl`}>
       {/* title */}
@@ -69,6 +50,24 @@ export default function MyBooking({ data }: ComponentsProps) {
       {/* grid */}
       <div className="px-8 py-6 grid grid-cols-1 gap-6">
         {data.map((booking: any) => {
+          // Dropdown menu
+          const menu = (
+            <Menu
+              items={[
+                {
+                  key: "help",
+                  label: (
+                    <Link
+                      href={`/profile/heavens-care?books=${booking?.id}`}
+                      className="no-underline hover:text-RoyalAmethyst-700 duration-300 transition-all"
+                    >
+                      Help
+                    </Link>
+                  ),
+                },
+              ]}
+            />
+          );
           return (
             <div
               key={booking.id}
@@ -121,7 +120,7 @@ export default function MyBooking({ data }: ComponentsProps) {
               </div>
 
               <div className="py-3 flex items-center gap-2">
-                <Link href={`${booking.id}`}>
+                <Link href={`bookings/detail/${booking.id}`}>
                   {/* <Image
                     src={
                       booking.bookingdetails[0]?.cart?.destination
@@ -147,7 +146,7 @@ export default function MyBooking({ data }: ComponentsProps) {
                 </Link>
                 <div className="flex flex-col gap-1 w-full">
                   <Link
-                    href={`/`}
+                    href={`bookings/detail/${booking.id}`}
                     className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                   >
                     {booking.bookingdetails[0]?.cart?.destination?.name ||
@@ -211,7 +210,7 @@ export default function MyBooking({ data }: ComponentsProps) {
               <div className="h-px bg-gray-300"></div>
               <div className="pt-5 pb-3 flex justify-end w-full gap-2">
                 <Link
-                  href={`/`}
+                  href={`bookings/detail/${booking.id}`}
                   className="border border-solid border-RoyalAmethyst-700 rounded-xl py-2 px-5 w-max flex items-center gap-1 text-xs text-RoyalAmethyst-700 no-underline font-semibold"
                 >
                   See booking details
