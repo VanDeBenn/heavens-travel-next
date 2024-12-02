@@ -1,32 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Project by PKL Team SMKN 6 Bekasi  
 
-## Getting Started
+## 📚 About This Project  
+This project was developed during our **Praktik Kerja Lapangan (PKL)** at **PT Bangun Kreatif Abadi**. The project showcases the implementation of **Next.js** in building modern web applications. The PKL was conducted from **July 1, 2024** to **December 27, 2024** by a team of students from **SMKN 6 Bekasi**.  
 
-First, run the development server:
+## 🚀 Getting Started  
+To run this project locally, clone the repository, install dependencies using `yarn install`, and start the development server with `yarn dev`. Once the server is running, open [http://localhost:3000](http://localhost:3000) in your browser to view the application.  
 
-```bash
-yarn dev
-```
+This project leverages the power of **Next.js** for building modern web interfaces and includes API routes located in the `pages/api` directory for handling server-side logic.  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🌐 Learn More  
+Explore the documentation of the technologies used in this project: 
+- [Next.js Documentation](https://nextjs.org/docs)  
+- [Learn Next.js](https://nextjs.org/learn)  
+- [Next.js GitHub Repository](https://github.com/vercel/next.js/)
+- [Ant Design Documentation](https://ant.design/docs/react/introduce)  
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📦 Deployment  
+The application can be deployed seamlessly using [Vercel](https://vercel.com/). Push the code to a GitHub repository, link it to Vercel, and deploy with just a few clicks.  
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+For detailed instructions, refer to the [Next.js Deployment Documentation](https://nextjs.org/docs/deployment).  
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## 👥 Team Members  
+This project was built by the PKL team from **SMKN 6 Bekasi**:  
+- **Bento**  
+- **Adi**  
+- **Adit**  
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Thank you for visiting our project! Feedback and contributions are always welcome.  
