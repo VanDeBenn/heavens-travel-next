@@ -16,7 +16,7 @@ const Page = () => {
   //   const { data, error, isLoading } = sampleRepository.hooks.useJoke();
   return (
     <div className="bg-Lilac-50 flex flex-col ">
-      {/* <Header /> */}
+      <Header />
 
       <div className="flex flex-col">
         <Banner />

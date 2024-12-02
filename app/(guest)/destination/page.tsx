@@ -4,6 +4,7 @@ import BestHotelFinder from "#/app/components/user/bestHotelFinder";
 import Faq from "#/app/components/user/faq";
 import FindBestDestination from "#/app/components/user/findBestDestination";
 import Footer from "#/app/components/user/footer";
+import HeaderComponent from "#/app/components/user/header";
 import HolidayIntroduction from "#/app/components/user/holidayIntroduction";
 import PromoteSliderDesti from "#/app/components/user/promoteSliderDesti";
 import TopHotel from "#/app/components/user/topHotel";
@@ -18,7 +19,7 @@ function page() {
   const fetchAllDestinations = async () => {
     const res = await destinationRepository.api.getDestinations();
     // console.log(res)
-    setDataDestinations(res.data)
+    setDataDestinations(res.data);
   };
 
   useEffect(() => {
@@ -26,7 +27,6 @@ function page() {
   }, []);
 
   console.log("data:", dataDestinations);
-
 
   // const [dataDestinations, setDataDestinations] = useState<any[]>([]);
   // const [count, setCount] = useState<number>(1);
@@ -50,7 +50,6 @@ function page() {
   //   } catch (error) {}
   // };
 
-
   // useEffect(() => {
   //   fetchDestinatios();
   // }, []);
@@ -58,7 +57,8 @@ function page() {
   // console.log("data desti:", dataDestinations);
   //  // console.log("desti:", dataDestinations[0].name);
   return (
-    <div className="bg-Lilac-50">
+    <div className="bg-Lilac-50 flex flex-col">
+      <HeaderComponent />
       <BannerDestination />
       <div className="px-28 2xl:px-48 pb-16 flex flex-col gap-16">
         <PromoteSliderDesti />

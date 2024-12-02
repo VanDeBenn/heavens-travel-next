@@ -64,6 +64,7 @@ import WhatInterestsYou from "#/app/components/user/whatInterestsYou";
 import Faq from "#/app/components/user/faq";
 import SimpleInfo from "#/app/components/user/simpleInfo";
 import { hotelRepository } from "#/repository/hotels";
+import HeaderComponent from "#/app/components/user/header";
 
 export default function page() {
   const [hotelsData, setHotelsData] = useState<any>();
@@ -80,7 +81,8 @@ export default function page() {
   }, []);
 
   return (
-    <div className="bg-Lilac-50">
+    <div className="bg-Lilac-50 flex flex-col">
+      <HeaderComponent />
       <BannerHotel />
       <div className="px-28 2xl:px-48 pb-16 flex flex-col gap-16">
         <PromoteSliderHotel />

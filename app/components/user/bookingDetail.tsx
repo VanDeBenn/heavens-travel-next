@@ -231,7 +231,7 @@ export default function BookingDetail() {
         </div>
         <div className="h-px bg-gray-300"></div>
         <div className="grid grid-cols-1 px-8 py-6 gap-6 w-full ">
-          {filteredBookingItems.slice(0, 1).map((item, index) => {
+          {filteredBookingItems.map((item, index) => {
             const totalCost = item.HotelPricePerAdult
               ? Number(item.guests.match(/\d+/)?.[0]) * item.HotelPricePerAdult
               : 0;
