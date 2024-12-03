@@ -12,23 +12,26 @@ function Page() {
   const [bookingId, setBookingId] = useState<any>();
   const [bookingDetailId, setBookingDetailId] = useState<any>();
   const searchParams = useSearchParams();
-  const bookings = searchParams?.get("books");
-  setBookingDetailId(bookings);
-  const bookdetail = searchParams?.get("book");
-  setBookingId(bookdetail);
   const [bookingData, setBookingData] = useState(null);
   const [bookingDetailData, setBookingDetailData] = useState(null);
 
   useEffect(() => {
+    const bookings = searchParams?.get("books");
+    const bookdetail = searchParams?.get("book");
+    setBookingId(bookings);
+    setBookingDetailId(bookdetail);
+  }, [searchParams]);
+
+  useEffect(() => {
     const fetchBookingData = async () => {
       try {
-        if (bookings) {
-          const res = await bookingRepository.api.getBooking(bookings);
+        if (bookingId) {
+          const res = await bookingRepository.api.getBooking(bookingId);
           setBookingData(res.data);
           console.log("bookings", res);
-        } else if (bookdetail) {
+        } else if (bookingDetailId) {
           const res = await bookingDetailRepository.api.getBookingDetail(
-            bookdetail
+            bookingDetailId
           );
           setBookingDetailData(res.data);
           console.log("detail", res);
@@ -39,8 +42,9 @@ function Page() {
     };
 
     fetchBookingData();
-  }, [bookings, bookdetail]);
+  }, [bookingId, bookingDetailId]);
 
+  console.log("ini ", bookingData || bookingDetailData);
   return (
     <main className="bg-Lilac-50">
       <Header />

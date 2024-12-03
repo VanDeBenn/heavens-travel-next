@@ -37,7 +37,14 @@ interface paymentDetailGuest {
   fee: string;
 }
 
-export default function BookingDetail() {
+interface ComponentProps {
+  data: any;
+}
+
+export default function BookingDetail({ data }: ComponentProps) {
+  if (!data) {
+    return;
+  }
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false); // State untuk modal QR code
@@ -100,7 +107,7 @@ export default function BookingDetail() {
       <div
         className={`${mediumMontserrat.className} py-6 px-9 flex flex-col gap-6`}
       >
-        <div className="">
+        {/* <div className="">
           <div className="flex items-center justify-between">
             <span className="font-semibold text-base">Order Completed</span>
             <div
@@ -118,7 +125,6 @@ export default function BookingDetail() {
             </div>
           </div>
 
-          {/* Step-by-step tracking with dates and descriptions */}
           <div
             className={`transition-all duration-300 ease-in-out overflow-hidden ${
               isDropdownVisible
@@ -161,37 +167,38 @@ export default function BookingDetail() {
               </div>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Bagian untuk menampilkan invoice */}
         <div>
-          {invoiceInfo.map((invoice, index) => (
-            <div key={index} className="mt-6 flex flex-col gap-2">
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500  ">No.Invoice</span>
-                <span className="text-base text-RoyalAmethyst-700 font-semibold">
-                  {invoice.invoiceNumber}
-                </span>
-              </div>
-
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500  ">Data of Order</span>
-                <span className="text-base text-gray-500  ">
-                  {invoice.orderDate} - {invoice.time}
-                </span>
-              </div>
-
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500  ">Ticket Code</span>
-                <span
-                  className="text-base text-RoyalAmethyst-700 font-semibold cursor-pointer"
-                  onClick={() => handleOpenQrCode(invoice.qrCodeImage)}
-                >
-                  See QR Code
-                </span>
-              </div>
+          {/* {invoiceInfo.map((invoice, index) => ( */}
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <span className="text-base text-gray-500  ">No.Invoice</span>
+              <span className="text-base text-RoyalAmethyst-700 font-semibold">
+                {/* {invoice.invoiceNumber} */} {data?.payment?.externalId}
+              </span>
             </div>
-          ))}
+
+            <div className="flex justify-between items-center">
+              <span className="text-base text-gray-500  ">Data of Order</span>
+              <span className="text-base text-gray-500  ">
+                {/* {invoice.orderDate} - {invoice.time} */}{" "}
+                {new Date(data?.payment?.createdAt).toLocaleDateString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-base text-gray-500  ">Ticket Code</span>
+              <span
+                className="text-base text-RoyalAmethyst-700 font-semibold cursor-pointer"
+                // onClick={() => handleOpenQrCode(invoice.qrCodeImage)}
+              >
+                See QR Code
+              </span>
+            </div>
+          </div>
+          {/* ))} */}
         </div>
       </div>
       {/* Garis pemisah */}
@@ -201,26 +208,28 @@ export default function BookingDetail() {
       >
         <span className="font-semibold text-base">Detailed Guest</span>
         <div className={`p-3 border border-solid border-[#DBDBDB] rounded-xl`}>
-          {InfoDetailGuest.map((InfoDetail, index) => (
-            <div key={index} className="flex flex-col gap-2">
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500">Full Name</span>
-                <span className="text-base text-black">
-                  {InfoDetail.fullName}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500">Email</span>
-                <span className="text-base text-black">{InfoDetail.email}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500">Phone Number</span>
-                <span className="text-base text-black">
-                  {InfoDetail.numberPhone}
-                </span>
-              </div>
+          {/* {InfoDetailGuest.map((InfoDetail, index) => ( */}
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <span className="text-base text-gray-500">Full Name</span>
+              <span className="text-base text-black">
+                {/* {InfoDetail.fullName} */} {data?.customerName}
+              </span>
             </div>
-          ))}
+            <div className="flex justify-between items-center">
+              <span className="text-base text-gray-500">Email</span>
+              <span className="text-base text-black">
+                {/* {InfoDetail.email} */} {data?.customerEmail}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-base text-gray-500">Phone Number</span>
+              <span className="text-base text-black">
+                {/* {InfoDetail.numberPhone} */} {data?.customerPhoneNumber}
+              </span>
+            </div>
+          </div>
+          {/* ))} */}
         </div>
       </div>
       <div className="h-2 bg-gray-200"></div>
@@ -231,38 +240,42 @@ export default function BookingDetail() {
         </div>
         <div className="h-px bg-gray-300"></div>
         <div className="grid grid-cols-1 px-8 py-6 gap-6 w-full ">
-          {filteredBookingItems.map((item, index) => {
+          {/* {filteredBookingItems.map((item, index) => {
             const totalCost = item.HotelPricePerAdult
               ? Number(item.guests.match(/\d+/)?.[0]) * item.HotelPricePerAdult
               : 0;
             const adultsCount =
               Number(item.guests.match(/(\d+)\s*adult/)?.[1]) || 0;
             const childrenCount =
-              Number(item.guests.match(/(\d+)\s*child/)?.[1]) || 0;
-
+              Number(item.guests.match(/(\d+)\s*child/)?.[1]) || 0; */}
+          {data?.bookingdetails.map((item: any) => {
+            const { cart } = item;
+            const { destination, roomHotel } = cart;
             return (
               <div
-                key={index}
+                key={item.id}
                 className="p-3 border border-solid border-[#DBDBDB] rounded-xl w-full"
               >
                 <div className="flex justify-between items-center">
                   <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                    {item.category === "Hotel" ? (
+                    {roomHotel ? (
                       <RiHome3Line size={18} color="#ffff" />
                     ) : (
                       <RiGlassesLine size={18} color="#ffff" />
                     )}
                     <span className="text-xs font-semibold text-white">
-                      {item.category}
+                      {roomHotel ? "Hotel" : "Destination"}
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 py-3">
-                  <Link href={item.link}>
+                  <Link href={""}>
                     <Image
-                      src={item.image}
-                      alt={item.name}
+                      src={
+                        "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                      }
+                      alt={roomHotel?.name || destination?.name}
                       width={100}
                       height={100}
                       className="rounded-xl w-44"
@@ -272,44 +285,45 @@ export default function BookingDetail() {
                     className={`${mediumMontserrat.className} flex flex-col gap-1 w-full`}
                   >
                     <Link
-                      href={item.link}
+                      href={""}
                       className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
                     >
-                      {item.name}
+                      {roomHotel?.name || destination?.name}
                     </Link>
                     <div className="flex items-center gap-1">
                       <RiCalendarLine className="text-lg text-black" />
                       <span className="text-xs text-black">
-                        {item.category === "Hotel"
-                          ? item.HotelSchedule
-                          : item.DestinationSchedule}
+                        {new Date(cart.startDate).toLocaleDateString()} -{" "}
+                        {new Date(cart.endDate).toLocaleDateString()}
                       </span>
                     </div>
                     <div className="flex gap-1 items-center">
                       <RiTeamLine className="text-lg text-black" />
                       <span className="text-xs text-black">
-                        Guests: {item.guests}
+                        Guests: {cart.quantityAdult} adults,{" "}
+                        {cart.quantityChildren} children
                       </span>
                     </div>
 
                     <div className="flex justify-between w-full">
                       <div className="flex items-center gap-1 w-full">
                         <span className="text-sm font-semibold text-[#4F28D9]">
-                          {item.category === "Hotel" && item.HotelRoomType}
-                          {item.category === "Destination" &&
-                            item.DestinationType}
+                          {/* {roomHotel && item.HotelRoomType} */}
+                          {destination && destination.name} Tour
                         </span>
                       </div>
 
                       <div className="flex justify-end w-full gap-1 items-end">
-                        {item.HotelPricePerAdult && (
-                          <div className="text-sm text-black">
-                            {item.guests.match(/\d+/)?.[0]} x
-                            {formatCurrency(item.HotelPricePerAdult)}
-                          </div>
-                        )}
+                        {/* {item.HotelPricePerAdult && ( */}
+                        <div className="text-sm text-black">
+                          {/* {item.guests.match(/\d+/)?.[0]} */}
+                          Rp{cart?.quantityAdult * destination?.priceAdult} - Rp
+                          {cart?.quantityChildren * destination?.priceChildren}
+                          {/* {formatCurrency(item.HotelPricePerAdult)} */}
+                        </div>
+                        {/* )} */}
 
-                        {item.DestinationPriceAdults && adultsCount > 0 && (
+                        {/* {item.DestinationPriceAdults && adultsCount > 0 && (
                           <div className="text-sm text-black">
                             {adultsCount} x
                             {formatCurrency(item.DestinationPriceAdults)}
@@ -324,7 +338,7 @@ export default function BookingDetail() {
                                 </>
                               )}
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -337,16 +351,19 @@ export default function BookingDetail() {
                   >
                     <span className="font-semibold text-xs">Total Price</span>
                     <span className="text-sm font-semibold text-InfernoEcho-600">
-                      {item.category === "Hotel" &&
+                      Rp
+                      {cart?.quantityAdult * destination?.priceAdult +
+                        cart?.quantityChildren * destination?.priceChildren}
+                      {/* {roomHotel &&
                         formatCurrency(
                           (Number(item.guests.match(/\d+/)?.[0]) || 1) *
                             (item.HotelPricePerAdult || 0)
                         )}
-                      {item.category === "Destination" &&
+                      {destination &&
                         formatCurrency(
                           adultsCount * (item.DestinationPriceAdults || 0) +
                             childrenCount * (item.DestinationPriceChildren || 0)
-                        )}
+                        )} */}
                     </span>
                   </div>
                 </div>
@@ -362,27 +379,42 @@ export default function BookingDetail() {
       >
         <span className="font-semibold text-base">Payment Details</span>
         <div className={`p-3 `}>
-          {PayDetailGuest.map((pay, index) => (
-            <div key={index} className="flex flex-col gap-2">
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500">
-                  Mandarin Oriental (2 room)
-                </span>
-                <span className="text-base text-black">{pay.price}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500">Booking Fees</span>
-                <span className="text-base text-black">{pay.fee}</span>
-              </div>
+          {/* {PayDetailGuest.map((pay, index) => ( */}
+          <div className="flex flex-col gap-2">
+            {data?.bookingdetails?.map((item: any) => {
+              const { cart } = item;
+              const { destination, roomHotel } = cart;
+              return (
+                <div
+                  key={item.id}
+                  className="flex justify-between items-center"
+                >
+                  <span className="text-base text-gray-500">
+                    {/* Mandarin Oriental */}
+                    {destination?.name}
+                    {/* <span>(2 room)</span> */}
+                  </span>
+                  <span className="text-base text-black">
+                    Rp
+                    {cart?.quantityAdult * destination?.priceAdult +
+                      cart?.quantityChildren * destination?.priceChildren}
+                  </span>
+                </div>
+              );
+            })}
+            <div className="flex justify-between items-center">
+              <span className="text-base text-gray-500">Booking Fees</span>
+              <span className="text-base text-black">Free</span>
             </div>
-          ))}
+          </div>
+          {/* ))} */}
         </div>
         <div className="flex justify-between items-center">
           <span className="font-semibold text-base text-black">
             Total Price
           </span>
           <span className="font-semibold text-base text-InfernoEcho-600">
-            Rp2.000.000
+            Rp{data?.payment?.amount}
           </span>
         </div>
       </div>
@@ -396,12 +428,16 @@ export default function BookingDetail() {
           Return
         </div>
         <div className="flex gap-4 items-center">
-          <div className="w-max cursor-pointer px-6 py-2 border border-solid rounded-xl border-RoyalAmethyst-700 font-semibold text-sm text-RoyalAmethyst-700">
-            Help
-          </div>
-          <div className="w-max cursor-pointer px-6 py-2 rounded-xl bg-RoyalAmethyst-700 font-semibold text-sm text-white">
-            Review
-          </div>
+          <Link href={`/profile/heavens-care?books=${data.id}`}>
+            <div className="w-max cursor-pointer px-6 py-2 border border-solid rounded-xl border-RoyalAmethyst-700 font-semibold text-sm text-RoyalAmethyst-700">
+              Help
+            </div>
+          </Link>
+          <Link href={`/profile/bookings/detail/${data.id}/review`}>
+            <div className="w-max cursor-pointer px-6 py-2 rounded-xl bg-RoyalAmethyst-700 font-semibold text-sm text-white">
+              Review
+            </div>
+          </Link>
         </div>
       </div>
       <Modal

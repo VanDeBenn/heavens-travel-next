@@ -10,15 +10,16 @@ export default function page({ params }: { params: { id: string } }) {
 
   const getBooking = async () => {
     const res = await bookingRepository.api.getBooking(params.id);
-    console.log(res);
+    setBookingData(res.data);
   };
 
   useEffect(() => {
     getBooking();
-  });
+  }, []);
+
   return (
     <>
-      <BookingDetail />
+      <BookingDetail data={bookingData} />
     </>
   );
 }

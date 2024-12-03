@@ -18,6 +18,8 @@ import { Rate, Input, Upload, message, Form, Button } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { RcFile } from "antd/es/upload";
 import { reportRepository } from "#/repository/report";
+import { Router } from "next/router";
+import { useRouter } from "next/navigation";
 
 // Mengimpor font Montserrat dari Google Fonts
 const largeMontserrat = Montserrat({
@@ -48,6 +50,7 @@ export default function HeavensCare({
     return;
   }
   const [form] = useForm();
+  const router = useRouter();
   const user = localStorage.getItem("_id");
   const [reportId, setReportId] = useState<any>();
 
@@ -623,6 +626,11 @@ export default function HeavensCare({
               type="primary"
               htmlType="submit"
               className="bg-[#4F28D9] border-[#DBDBDB] rounded-xl py-2 px-5 text-white text-xs font-semibold"
+              onClick={() => {
+                setTimeout(() => {
+                  router.push("/profile/bookings");
+                }, 5000);
+              }}
             >
               Submit your report
             </Button>
