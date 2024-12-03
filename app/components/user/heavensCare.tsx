@@ -135,6 +135,7 @@ export default function HeavensCare({
   useEffect(() => {
     if (reportId) {
       handleUploadAllFiles();
+      router.push("/profile/bookings");
     }
   }, [reportId]);
 
@@ -626,11 +627,6 @@ export default function HeavensCare({
               type="primary"
               htmlType="submit"
               className="bg-[#4F28D9] border-[#DBDBDB] rounded-xl py-2 px-5 text-white text-xs font-semibold"
-              onClick={() => {
-                setTimeout(() => {
-                  router.push("/profile/bookings");
-                }, 5000);
-              }}
             >
               Submit your report
             </Button>

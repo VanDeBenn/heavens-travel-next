@@ -19,7 +19,7 @@ export default function booking() {
   return (
     <>
       <MyBooking data={bookingsData} />
-      <BookingDetail />
+      {/* <BookingDetail data={undefined} /> */}
     </>
   );
 }

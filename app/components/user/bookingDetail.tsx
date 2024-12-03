@@ -8,6 +8,7 @@ import {
   RiHome3Line,
   RiTeamLine,
 } from "react-icons/ri";
+import { SlOptionsVertical } from "react-icons/sl";
 import { mediumMontserrat } from "./myBooking";
 import { Modal } from "antd";
 import Image from "next/image";
@@ -267,6 +268,9 @@ export default function BookingDetail({ data }: ComponentProps) {
                       {roomHotel ? "Hotel" : "Destination"}
                     </span>
                   </div>
+                  <Link href={`/profile/bookings/detail/${item.id}/review`}>
+                    <SlOptionsVertical />
+                  </Link>
                 </div>
 
                 <div className="flex items-center gap-2 py-3">
