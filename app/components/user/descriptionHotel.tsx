@@ -3,7 +3,14 @@ import React from "react";
 import { Montserrat } from "next/font/google";
 import Image from "next/image";
 
-export default function DescriptionHotel() {
+interface ComponentProps {
+  data: any;
+}
+
+export default function DescriptionHotel({ data }: ComponentProps) {
+  if (!data) {
+    return;
+  }
   return (
     <div className="flex justify-between gap-4">
       {/* Container Deskripsi */}
@@ -15,9 +22,7 @@ export default function DescriptionHotel() {
             </div>
             <div className="border border-gray-300 border-dashed"></div>
             <div className="pt-6 text-sm">
-              {hotelDescriptions.map((description, index) => (
-                <p key={index}>{description}</p>
-              ))}
+              <p>{data?.description}</p>
             </div>
           </div>
         </div>

@@ -85,11 +85,15 @@ const hotelDetails: Hotel[] = [
   },
 ];
 
-const BannerViewHotel = ({
-  scrollToChooseRoom,
-}: {
+interface ComponentProps {
+  data: any;
   scrollToChooseRoom: () => void;
-}) => {
+}
+
+const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
+  if (!data) {
+    return;
+  }
   const [copyText, setCopyText] = useState(
     "https://htrip.com/hotel/detail/673c0710-15f8-c0ddf3df7be9"
   );
@@ -115,12 +119,13 @@ const BannerViewHotel = ({
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 3000); // Reset status setelah 3 detik
   };
+
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border">
       <div className={`${mediumMontserrat.className} p-6`}>
         {/* title and address */}
         <div className="flex gap-1 items-center">
-          <span className="font-semibold text-lg">{hotelDetails[0].title}</span>
+          <span className="font-semibold text-lg">{data.name}</span>
           <div className="flex gap-1">
             {/* Render 5 stars: filled for rating, empty for unfilled */}
             {Array.from({ length: 5 }, (_, index) =>
@@ -137,7 +142,8 @@ const BannerViewHotel = ({
         {/* deal */}
         <div className="flex justify-between items-center">
           <span className="text-xs">
-            {hotelDetails[0].address} -
+            {`${data.address}, ${data?.city?.name}, ${data?.city?.province?.name}, ${data?.city?.province?.country?.name}`}{" "}
+            -
             <Link
               href={hotelDetails[0].mapLink}
               className="text-RoyalAmethyst-700 no-underline"
@@ -149,7 +155,7 @@ const BannerViewHotel = ({
           <div className="flex gap-2 items-center">
             <span className="text-xs ">Start from</span>
             <span className="text-InfernoEcho-600 text-base font-semibold">
-              {hotelDetails[0].price}
+              Rp{data?.roomhotels[0]?.price}
             </span>
 
             <div

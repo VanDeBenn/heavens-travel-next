@@ -30,7 +30,15 @@ const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
-function ChooseRoonHotel() {
+
+interface ComponentProps {
+  data: any;
+}
+
+export default function ChooseRoonHotel({ data }: ComponentProps) {
+  if (!data) {
+    return;
+  }
   const [adults, setAdults] = useState(0); // Start value for adults
   const [children, setChildren] = useState(0); // Start value for children
   const [numberOfRooms, setNumberOfRooms] = useState(1); // Start value f  of rooms
@@ -71,342 +79,127 @@ function ChooseRoonHotel() {
         </div>
       </div>
 
-      <div className="p-6 border-solid border-gray-200 border rounded-xl bg-white flex items-start gap-4 w-full h-60">
-        <div className="flex gap-2 items-center">
-          <Image
-            src={"/images/illustration/luxury-bedroom.jpg"}
-            alt="Room Image"
-            height={200}
-            width={300}
-            className="w-64 h-48 rounded-l-xl"
-          />
-          <div className="flex flex-col gap-2">
+      {data?.roomhotels.map((item: any) => (
+        <div
+          key={item.id}
+          className="p-6 border-solid border-gray-200 border rounded-xl bg-white flex items-start gap-4 w-full h-60"
+        >
+          <div className="flex gap-2 items-center">
             <Image
               src={"/images/illustration/luxury-bedroom.jpg"}
               alt="Room Image"
               height={200}
               width={300}
-              className="w-40 h-[92px] rounded-tr-xl"
-            />{" "}
-            <Image
-              src={"/images/illustration/luxury-bedroom.jpg"}
-              alt="Room Image"
-              height={200}
-              width={300}
-              className="w-40 h-[92px] rounded-br-xl"
+              className="w-64 h-48 rounded-l-xl"
             />
+            <div className="flex flex-col gap-2">
+              <Image
+                src={"/images/illustration/luxury-bedroom.jpg"}
+                alt="Room Image"
+                height={200}
+                width={300}
+                className="w-40 h-[92px] rounded-tr-xl"
+              />{" "}
+              <Image
+                src={"/images/illustration/luxury-bedroom.jpg"}
+                alt="Room Image"
+                height={200}
+                width={300}
+                className="w-40 h-[92px] rounded-br-xl"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="w-1/2 h-full ">
-          <span className="font-semibold text-base">Superior</span>
-          <div className="grid grid-cols-2 gap-2 pt-2">
-            {servicesAmenitiesData.facilities
-              .slice(0, 12)
-              .map((item, index) => (
-                <div key={index} className="flex items-center ">
-                  {item.icon}
-                  <span className="pl-2 text-xs sm:text-sm text-black">
-                    {item.text}
+          <div className="w-1/2 h-full ">
+            <span className="font-semibold text-base">{item.roomType}</span>
+            <div className="grid grid-cols-2 gap-2 pt-2">
+              {servicesAmenitiesData.facilities
+                .slice(0, 12)
+                .map((item, index) => (
+                  <div key={index} className="flex items-center ">
+                    {item.icon}
+                    <span className="pl-2 text-xs sm:text-sm text-black">
+                      {item.text}
+                    </span>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          <div className="p-3 border-solid border-gray-200 border rounded-xl flex flex-col justify-between h-full gap-1 w-1/4">
+            <span className="text-base font-semibold">Sleeps</span>
+            <Image
+              src={"/images/illustration/icon people.png"}
+              alt="ho"
+              height={300}
+              width={400}
+              className="w-16 h-9"
+            />
+
+            <div className=" flex flex-col gap-2 ">
+              <span className="text-xs text-gray-400">
+                Includes 1 room for {item.adult} adults, {item.children} kids
+                (0-6).
+              </span>
+              <div className="border border-gray-300 border-dashed"></div>
+
+              <span className="text-xs text-gray-400">
+                This offer fits your travel group.
+              </span>
+            </div>
+          </div>
+
+          <div className="p-3 border-solid border-gray-200 border rounded-xl flex flex-col gap-1 w-1/2 h-full">
+            <div className="flex justify-between gap-2 h-full">
+              <div className="flex flex-col justify-between w-1/2">
+                <span className="text-base font-semibold">Per-Night</span>
+                <div className="flex flex-col gap-1">
+                  <span className="text-gray-400 text-xs">
+                    Subject to Cashback Terms
+                  </span>
+                  <span className="text-InfernoEcho-600 text-xl font-semibold">
+                    Rp{item.price}
+                  </span>{" "}
+                  <span className="text-gray-400 text-xs">
+                    Per night before taxes and fees
                   </span>
                 </div>
-              ))}
-          </div>
-        </div>
-
-        <div className="p-3 border-solid border-gray-200 border rounded-xl flex flex-col justify-between h-full gap-1 w-1/4">
-          <span className="text-base font-semibold">Sleeps</span>
-          <Image
-            src={"/images/illustration/icon people.png"}
-            alt="ho"
-            height={300}
-            width={400}
-            className="w-16 h-9"
-          />
-
-          <div className=" flex flex-col gap-2 ">
-            <span className="text-xs text-gray-400">
-              Includes 1 room for 2 adults, 2 kids (0-6).
-            </span>
-            <div className="border border-gray-300 border-dashed"></div>
-
-            <span className="text-xs text-gray-400">
-              This offer fits your travel group.
-            </span>
-          </div>
-        </div>
-
-        <div className="p-3 border-solid border-gray-200 border rounded-xl flex flex-col gap-1 w-1/2 h-full">
-          <div className="flex justify-between gap-2 h-full">
-            <div className="flex flex-col justify-between w-1/2">
-              <span className="text-base font-semibold">Per-Night</span>
-              <div className="flex flex-col gap-1">
-                <span className="text-gray-400 text-xs">
-                  Subject to Cashback Terms
-                </span>
-                <span className="text-InfernoEcho-600 text-xl font-semibold">
-                  Rp560.000
-                </span>{" "}
-                <span className="text-gray-400 text-xs">
-                  Per night before taxes and fees
-                </span>
               </div>
-            </div>
-            <div className="flex flex-col justify-end w-1/2">
-              <div className="flex flex-col gap-2">
-                {/* Number of Rooms Input */}
-                <div className="w-full">
-                  <div className="flex items-center justify-between border-solid border-gray-200 border rounded-xl">
-                    <Button
-                      onClick={() => handleRoomChange(numberOfRooms - 1)}
-                      disabled={numberOfRooms <= 1}
-                    >
-                      -
-                    </Button>
-                    <span className="mx-3">{numberOfRooms}</span>
-                    <Button onClick={() => handleRoomChange(numberOfRooms + 1)}>
-                      +
-                    </Button>
+              <div className="flex flex-col justify-end w-1/2">
+                <div className="flex flex-col gap-2">
+                  {/* Number of Rooms Input */}
+                  <div className="w-full">
+                    <div className="flex items-center justify-between border-solid border-gray-200 border rounded-xl">
+                      <Button
+                        onClick={() => handleRoomChange(numberOfRooms - 1)}
+                        disabled={numberOfRooms <= 1}
+                      >
+                        -
+                      </Button>
+                      <span className="mx-3">{numberOfRooms}</span>
+                      <Button
+                        onClick={() => handleRoomChange(numberOfRooms + 1)}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </div>
+                  {/* Number of Rooms Input */}
+                  <div className="border-solid border-RoyalAmethyst-700 border rounded-xl text-center text-RoyalAmethyst-700 text-sm p-3 cursor-pointer">
+                    Add cart
+                  </div>
+                  <div className="bg-RoyalAmethyst-700 text-white text-sm rounded-xl text-center p-3 cursor-pointer">
+                    Book now
                   </div>
                 </div>
-                {/* Number of Rooms Input */}
-                <div className="border-solid border-RoyalAmethyst-700 border rounded-xl text-center text-RoyalAmethyst-700 text-sm p-3 cursor-pointer">
-                  Add cart
-                </div>
-                <div className="bg-RoyalAmethyst-700 text-white text-sm rounded-xl text-center p-3 cursor-pointer">
-                  Book now
-                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="p-6 border-solid border-gray-200 border rounded-xl bg-white flex items-start gap-4 w-full h-60">
-        <div className="flex gap-2 items-center">
-          <Image
-            src={"/images/illustration/luxury-bedroom.jpg"}
-            alt="Room Image"
-            height={200}
-            width={300}
-            className="w-64 h-48 rounded-l-xl"
-          />
-          <div className="flex flex-col gap-2">
-            <Image
-              src={"/images/illustration/luxury-bedroom.jpg"}
-              alt="Room Image"
-              height={200}
-              width={300}
-              className="w-40 h-[92px] rounded-tr-xl"
-            />{" "}
-            <Image
-              src={"/images/illustration/luxury-bedroom.jpg"}
-              alt="Room Image"
-              height={200}
-              width={300}
-              className="w-40 h-[92px] rounded-br-xl"
-            />
-          </div>
-        </div>
-
-        <div className="w-1/2 h-full ">
-          <span className="font-semibold text-base">King Bed</span>
-          <div className="grid grid-cols-2 gap-2 pt-2">
-            {servicesAmenitiesData.facilities
-              .slice(0, 12)
-              .map((item, index) => (
-                <div key={index} className="flex items-center ">
-                  {item.icon}
-                  <span className="pl-2 text-xs sm:text-sm text-black">
-                    {item.text}
-                  </span>
-                </div>
-              ))}
-          </div>
-        </div>
-
-        <div className="p-3 border-solid border-gray-200 border rounded-xl flex flex-col justify-between h-full gap-1 w-1/4">
-          <span className="text-base font-semibold">Sleeps</span>
-          <Image
-            src={"/images/illustration/icon people.png"}
-            alt="ho"
-            height={300}
-            width={400}
-            className="w-16 h-9"
-          />
-
-          <div className=" flex flex-col gap-2 ">
-            <span className="text-xs text-gray-400">
-              Includes 1 room for 2 adults, 2 kids (0-6).
-            </span>
-            <div className="border border-gray-300 border-dashed"></div>
-
-            <span className="text-xs text-gray-400">
-              This offer fits your travel group.
-            </span>
-          </div>
-        </div>
-
-        <div className="p-3 border-solid border-gray-200 border rounded-xl flex flex-col gap-1 w-1/2 h-full">
-          <div className="flex justify-between gap-2 h-full">
-            <div className="flex flex-col justify-between w-1/2">
-              <span className="text-base font-semibold">Per-Night</span>
-              <div className="flex flex-col gap-1">
-                <span className="text-gray-400 text-xs">
-                  Subject to Cashback Terms
-                </span>
-                <span className="text-InfernoEcho-600 text-xl font-semibold">
-                  Rp560.000
-                </span>{" "}
-                <span className="text-gray-400 text-xs">
-                  Per night before taxes and fees
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col justify-end w-1/2">
-              <div className="flex flex-col gap-2">
-                {/* Number of Rooms Input */}
-                <div className="w-full">
-                  <div className="flex items-center justify-between border-solid border-gray-200 border rounded-xl">
-                    <Button
-                      onClick={() => handleRoomChange(numberOfRooms - 1)}
-                      disabled={numberOfRooms <= 1}
-                    >
-                      -
-                    </Button>
-                    <span className="mx-3">{numberOfRooms}</span>
-                    <Button onClick={() => handleRoomChange(numberOfRooms + 1)}>
-                      +
-                    </Button>
-                  </div>
-                </div>
-                {/* Number of Rooms Input */}
-                <div className="border-solid border-RoyalAmethyst-700 border rounded-xl text-center text-RoyalAmethyst-700 text-sm p-3 cursor-pointer">
-                  Add cart
-                </div>
-                <div className="bg-RoyalAmethyst-700 text-white text-sm rounded-xl text-center p-3 cursor-pointer">
-                  Book now
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="p-6 border-solid border-gray-200 border rounded-xl bg-white flex items-start gap-4 w-full h-60">
-        <div className="flex gap-2 items-center">
-          <Image
-            src={"/images/illustration/luxury-bedroom.jpg"}
-            alt="Room Image"
-            height={200}
-            width={300}
-            className="w-64 h-48 rounded-l-xl"
-          />
-          <div className="flex flex-col gap-2">
-            <Image
-              src={"/images/illustration/luxury-bedroom.jpg"}
-              alt="Room Image"
-              height={200}
-              width={300}
-              className="w-40 h-[92px] rounded-tr-xl"
-            />{" "}
-            <Image
-              src={"/images/illustration/luxury-bedroom.jpg"}
-              alt="Room Image"
-              height={200}
-              width={300}
-              className="w-40 h-[92px] rounded-br-xl"
-            />
-          </div>
-        </div>
-
-        <div className="w-1/2 h-full ">
-          <span className="font-semibold text-base">King Bed</span>
-          <div className="grid grid-cols-2 gap-2 pt-2">
-            {servicesAmenitiesData.facilities
-              .slice(0, 12)
-              .map((item, index) => (
-                <div key={index} className="flex items-center ">
-                  {item.icon}
-                  <span className="pl-2 text-xs sm:text-sm text-black">
-                    {item.text}
-                  </span>
-                </div>
-              ))}
-          </div>
-        </div>
-
-        <div className="p-3 border-solid border-gray-200 border rounded-xl flex flex-col justify-between h-full gap-1 w-1/4">
-          <span className="text-base font-semibold">Sleeps</span>
-          <Image
-            src={"/images/illustration/icon people.png"}
-            alt="ho"
-            height={300}
-            width={400}
-            className="w-16 h-9"
-          />
-
-          <div className=" flex flex-col gap-2 ">
-            <span className="text-xs text-gray-400">
-              Includes 1 room for 2 adults, 2 kids (0-6).
-            </span>
-            <div className="border border-gray-300 border-dashed"></div>
-
-            <span className="text-xs text-gray-400">
-              This offer fits your travel group.
-            </span>
-          </div>
-        </div>
-
-        <div className="p-3 border-solid border-gray-200 border rounded-xl flex flex-col gap-1 w-1/2 h-full">
-          <div className="flex justify-between gap-2 h-full">
-            <div className="flex flex-col justify-between w-1/2">
-              <span className="text-base font-semibold">Per-Night</span>
-              <div className="flex flex-col gap-1">
-                <span className="text-gray-400 text-xs">
-                  Subject to Cashback Terms
-                </span>
-                <span className="text-InfernoEcho-600 text-xl font-semibold">
-                  Rp560.000
-                </span>{" "}
-                <span className="text-gray-400 text-xs">
-                  Per night before taxes and fees
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col justify-end w-1/2">
-              <div className="flex flex-col gap-2">
-                {/* Number of Rooms Input */}
-                <div className="w-full">
-                  <div className="flex items-center justify-between border-solid border-gray-200 border rounded-xl">
-                    <Button
-                      onClick={() => handleRoomChange(numberOfRooms - 1)}
-                      disabled={numberOfRooms <= 1}
-                    >
-                      -
-                    </Button>
-                    <span className="mx-3">{numberOfRooms}</span>
-                    <Button onClick={() => handleRoomChange(numberOfRooms + 1)}>
-                      +
-                    </Button>
-                  </div>
-                </div>
-                {/* Number of Rooms Input */}
-                <div className="border-solid border-RoyalAmethyst-700 border rounded-xl text-center text-RoyalAmethyst-700 text-sm p-3 cursor-pointer">
-                  Add cart
-                </div>
-                <div className="bg-RoyalAmethyst-700 text-white text-sm rounded-xl text-center p-3 cursor-pointer">
-                  Book now
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
-
-export default ChooseRoonHotel;
 
 const servicesAmenitiesData = {
   facilities: [

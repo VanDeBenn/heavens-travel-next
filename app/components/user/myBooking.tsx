@@ -217,7 +217,7 @@ export default function MyBooking({ data }: ComponentsProps) {
                 </Link>
                 {booking.payment?.status !== "PENDING" && (
                   <Link
-                    href={`/profile/review`}
+                    href={`/profile/bookings/detail/${booking.id}`}
                     className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-2 px-5 w-max flex items-center gap-1 text-xs text-white no-underline font-semibold"
                   >
                     Review
