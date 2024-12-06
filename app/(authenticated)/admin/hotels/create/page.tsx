@@ -128,10 +128,10 @@ export default function page() {
           setLocationHotel={setLocationHotel}
           submitLocationForm={submitForms}
         />
-        <PhotoHotel hotelId={hotelId} submitPhotoForm={submitForms} />
+        <PhotoHotel hotelId={hotelId} />
         {/* <FacilityInfoHotel /> */}
         {/* <NearbyLocationHotel /> */}
-        <PoliciesHotel />
+        <PoliciesHotel hotelId={hotelId} />
         {/* <SomeHelpfulFactsHotel /> */}
         {/* <FaqsHotel /> */}
       </div>

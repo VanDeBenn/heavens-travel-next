@@ -18,7 +18,7 @@ const ResultHotel: React.FC = () => {
 
   const fetchHotel = async () => {
     try {
-      if (id == null) {
+      if (!id) {
         router.push("/admin/hotels");
       }
       const res = await hotelRepository.api.getHotel(id);

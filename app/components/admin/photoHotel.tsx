@@ -17,15 +17,11 @@ const mediumMontserrat = Montserrat({
 
 interface PhotoDestinationProps {
   hotelId: string;
-  submitPhotoForm: boolean;
   // finish: () => void;
   // hotelId: string;
 }
 
-export default function PhotoHotel({
-  hotelId,
-  submitPhotoForm,
-}: PhotoDestinationProps) {
+export default function PhotoHotel({ hotelId }: PhotoDestinationProps) {
   const router = useRouter();
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);

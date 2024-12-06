@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Form, Input, InputNumber, Button } from "antd";
+import { Form, Input, InputNumber, Button, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { Montserrat } from "next/font/google";
 
@@ -25,6 +25,8 @@ interface BasicInfoProps {
   // data: any;
 }
 
+const { Option } = Select;
+
 export default function BasicInfoHotel({
   setBasicInfoHotel,
   submitBasicInfoForm, // Tambahkan prop ini
@@ -35,8 +37,7 @@ export default function BasicInfoHotel({
     try {
       const dataBasicInfo = {
         name: values.name,
-        roomType: values.roomType,
-        rating: values.rating,
+        rating: 5,
         description: values.description,
         // adultPrice: values.adultPrice,
         // childrenPrice: values.childrenPrice,
@@ -70,7 +71,7 @@ export default function BasicInfoHotel({
             <Form.Item
               label="Name Hotel"
               name="name"
-              className="w-full"
+              className="w-10/12"
               rules={[
                 { required: true, message: "Please input destination name!" },
               ]}
@@ -78,7 +79,7 @@ export default function BasicInfoHotel({
               <Input placeholder="Enter destination name" />
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
               label="Room Type"
               name="roomType"
               className="w-full"
@@ -90,19 +91,24 @@ export default function BasicInfoHotel({
                 placeholder="Enter room type"
                 className="w-full"
               />
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item
               label="Rating"
               name="rating"
-              className="w-full"
-              rules={[{ required: true, message: "Please input rating!" }]}
+              className="w-2/12"
+              initialValue={5}
+              // rules={[{ required: true, message: "Please input rating!" }]}
             >
               <InputNumber
-                min={1}
+                // min={1}
+                disabled={true}
                 placeholder="Enter rating"
                 className="w-full"
               />
+              {/* <Select placeholder="Select your rating">
+                <Option value={5}>5</Option>
+              </Select> */}
             </Form.Item>
           </div>
 

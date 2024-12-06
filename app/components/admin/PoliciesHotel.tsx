@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Montserrat } from "next/font/google";
 import { FaTrash } from "react-icons/fa";
-import { Modal, Input } from "antd";
+import { Modal, Input, message } from "antd";
+import { title } from "process";
+import { propertyPoliciesRepository } from "#/repository/propertyPolicies";
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -18,7 +20,11 @@ const smallMontserrat = Montserrat({
   weight: ["400"],
 });
 
-const PoliciesHotel: React.FC = () => {
+interface ComponentProps {
+  hotelId: any;
+}
+
+export default function PoliciesHotel({ hotelId }: ComponentProps) {
   const [policies, setPolicies] = useState<string[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [policyToRemove, setPolicyToRemove] = useState<number | null>(null);
@@ -48,6 +54,33 @@ const PoliciesHotel: React.FC = () => {
     setPolicyToRemove(null);
     setIsModalVisible(false);
   };
+
+  const handleUpload = async () => {
+    if (policies.length === 0) {
+      message.error("Please add at least one file.");
+      return;
+    }
+
+    for (const policy of policies) {
+      try {
+        const data = {
+          title: policy,
+          hotelId: hotelId,
+        };
+        console.log(data);
+        const req = await propertyPoliciesRepository.api.create(data);
+      } catch (error) {}
+      // await handleUploadSingleFile(policy, hotelId);
+    }
+
+    message.success("Success.");
+  };
+
+  useEffect(() => {
+    if (hotelId) {
+      handleUpload();
+    }
+  }, [hotelId]);
 
   return (
     <>
@@ -102,6 +135,4 @@ const PoliciesHotel: React.FC = () => {
       </Modal>
     </>
   );
-};
-
-export default PoliciesHotel;
+}

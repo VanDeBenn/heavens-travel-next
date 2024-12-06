@@ -158,14 +158,24 @@ export default function LocationInfoDestination({
 
   const onFinish = (values: LocationInfo) => {
     try {
+      const iframeCode = values.pathLocation;
+      const srcMatch = iframeCode.match(/src="([^"]+)"/);
+      const srcURL = srcMatch ? srcMatch[1] : null;
+
+      if (!srcURL) {
+        console.error("Invalid iframe code provided.");
+        alert("Please provide a valid iframe code with a src attribute.");
+        return;
+      }
+
       const dataLocationInfo = {
         address: values.address,
-        pathLocation: values.pathLocation,
-        district: values.district,
+        pathLocation: srcURL,
         cityName: values.cityName,
         provinceName: values.provinceName,
         countryName: values.countryName,
       };
+
       setLocationHotel(dataLocationInfo);
     } catch (error) {
       console.error("Location info submission failed:", error);
@@ -198,30 +208,38 @@ export default function LocationInfoDestination({
           className="w-full"
           rules={[{ required: true, message: "Please input path location!" }]}
         >
-          <Input.TextArea rows={7} placeholder="Enter path location" />
+          <Input.TextArea
+            rows={7}
+            placeholder="Paste the entire iframe code here (e.g., <iframe src='...'></iframe>)"
+          />
         </Form.Item>
 
         <div className="flex justify-between gap-5">
-          <Form.Item
+          {/* <Form.Item
             label="District"
             name="district"
             className="w-full"
             rules={[{ required: true, message: "Please input district!" }]}
           >
             <Input placeholder="Enter district" className="w-full" />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             label="City"
             name="cityName"
             className="w-full"
-            rules={[{ required: true, message: "Please select your city!" }]}
+            rules={[
+              { required: true, message: "Please select or input your city!" },
+            ]}
           >
             <Select
-              placeholder="Select your city"
+              placeholder="Select or input your city"
               disabled={isCityDisabled}
-              allowClear
-              onClear={() => resetField("cityName")}
+              // allowClear
+              showSearch
+              filterOption={(input, option: any) =>
+                option?.children?.toLowerCase().includes(input.toLowerCase())
+              }
             >
               {citiesData.map(([cityName]) => (
                 <Option key={cityName} value={cityName}>
@@ -230,15 +248,16 @@ export default function LocationInfoDestination({
               ))}
             </Select>
           </Form.Item>
-        </div>
 
-        <div className="flex justify-between gap-5">
           <Form.Item label="Province" name="provinceName" className="w-full">
             <Select
-              placeholder="Select your province"
+              placeholder="Select or input your province"
               disabled={isProvinceDisabled}
               allowClear
-              onClear={() => resetField("provinceName")}
+              showSearch
+              filterOption={(input, option: any) =>
+                option?.children?.toLowerCase().includes(input.toLowerCase())
+              }
             >
               {provincesData.map(([provinceName]) => (
                 <Option key={provinceName} value={provinceName}>
@@ -250,10 +269,13 @@ export default function LocationInfoDestination({
 
           <Form.Item label="Country" name="countryName" className="w-full">
             <Select
-              placeholder="Select your country"
+              placeholder="Select or input your country"
               disabled={isCountryDisabled}
               allowClear
-              onClear={() => resetField("countryName")}
+              showSearch
+              filterOption={(input, option: any) =>
+                option?.children?.toLowerCase().includes(input.toLowerCase())
+              }
             >
               {countriesData.map((countryName) => (
                 <Option key={countryName} value={countryName}>
@@ -263,6 +285,8 @@ export default function LocationInfoDestination({
             </Select>
           </Form.Item>
         </div>
+
+        {/* <div className="flex justify-between gap-5"></div> */}
 
         <Button type="primary" htmlType="submit" style={{ display: "none" }}>
           Submit

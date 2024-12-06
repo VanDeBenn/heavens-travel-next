@@ -129,7 +129,7 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
           <div className="flex gap-1">
             {/* Render 5 stars: filled for rating, empty for unfilled */}
             {Array.from({ length: 5 }, (_, index) =>
-              index < hotelDetails[0].rating ? (
+              index < data?.rating ? (
                 <RiStarFill key={index} className="text-[#FFD700]" />
               ) : (
                 <RiStarLine key={index} className="text-[#FFD700]" />
@@ -196,7 +196,7 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
           <div className="w-3/6 rounded-xl">
             <Image.PreviewGroup>
               <Image
-                src={hotelDetails[0].images[0].src}
+                src={`http://localhost:3222/photo-hotels/${data.photohotels[0].pathPhoto}`}
                 alt={hotelDetails[0].images[0].alt}
                 className="rounded-xl w-full h-auto"
               />
@@ -206,14 +206,32 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
           {/* Additional Images */}
           <div className="grid grid-cols-2 gap-2 w-3/6">
             <Image.PreviewGroup>
-              {hotelDetails[0].images.slice(1, 5).map((image, index) => (
-                <Image
-                  key={index}
-                  src={image.src}
-                  alt={image.alt}
-                  className="rounded-xl w-full h-auto"
-                />
-              ))}
+              {/* {hotelDetails[0].images.slice(1, 5).map((image, index) => ( */}
+              <Image
+                // key={index}
+                src={`http://localhost:3222/photo-hotels/${data.photohotels[0].pathPhoto}`}
+                alt={"alt"}
+                className="rounded-xl w-full h-auto"
+              />
+              <Image
+                // key={index}
+                src={`http://localhost:3222/photo-hotels/${data.photohotels[1].pathPhoto}`}
+                alt={"alt"}
+                className="rounded-xl w-full h-auto"
+              />
+              <Image
+                // key={index}
+                src={`http://localhost:3222/photo-hotels/${data.photohotels[1].pathPhoto}`}
+                alt={"alt"}
+                className="rounded-xl w-full h-auto"
+              />
+              <Image
+                // key={index}
+                src={`http://localhost:3222/photo-hotels/${data.photohotels[0].pathPhoto}`}
+                alt={"alt"}
+                className="rounded-xl w-full h-auto"
+              />
+              {/* ))} */}
             </Image.PreviewGroup>
           </div>
         </div>

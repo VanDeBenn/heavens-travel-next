@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 export default function Page() {
   const chooseRoomRef = useRef<HTMLDivElement>(null);
   const [hotelData, setHotelData] = useState<any>();
-  const id = "a84a2d2c-c1dd-4c83-8795-a22387e943d2";
+  const id = "2d3d4ccb-3ff7-4687-9742-887e02f4a88f";
 
   const getHotel = async () => {
     const res = await hotelRepository.api.getHotel(id);
@@ -39,7 +39,7 @@ export default function Page() {
         <div ref={chooseRoomRef}>
           <ChooseRoonHotel data={hotelData} />
         </div>
-        <PropertyPoliciesHotel />
+        <PropertyPoliciesHotel data={hotelData} />
         <SomeHelpfulFacts />
         <RecommendedDestiNearby data={hotelData} />
         <GuestReview />

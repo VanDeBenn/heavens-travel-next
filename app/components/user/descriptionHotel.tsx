@@ -32,16 +32,29 @@ export default function DescriptionHotel({ data }: ComponentProps) {
       <div className="bg-white rounded-xl border border-gray-200 border-solid w-1/3 flex-shrink-0 h-auto">
         <div className={`${mediumMontserrat.className} p-6 h-full`}>
           <div className="w-full h-full cursor-pointer">
-            {hotelImages.map((image, index) => (
-              <Image
-                key={index}
-                src={image.src}
-                alt={image.alt}
-                height={400} // Nilai tinggi yang lebih besar agar dapat menyesuaikan tinggi deskripsi
-                width={300}
-                className="w-full h-full object-cover rounded-xl"
+            {data.pathLocation ? (
+              <iframe
+                src={data.pathLocation}
+                width="100%"
+                height="400"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="rounded-xl"
               />
-            ))}
+            ) : (
+              hotelImages.map((image, index) => (
+                <Image
+                  key={index}
+                  src={image.src}
+                  alt={image.alt}
+                  height={400}
+                  width={300}
+                  className="w-full h-full object-cover rounded-xl"
+                />
+              ))
+            )}
           </div>
         </div>
       </div>

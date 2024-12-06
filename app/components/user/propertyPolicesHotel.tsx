@@ -19,7 +19,15 @@ const policyList: string[] = [
   "Children 6-11 get 50% off restaurant breakfast.",
 ];
 
-export default function PropertyPoliciesHotel() {
+interface ComponentProps {
+  data: any;
+}
+
+export default function PropertyPoliciesHotel({ data }: ComponentProps) {
+  if (!data) {
+    return;
+  }
+
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border">
       <div className={`${mediumMontserrat.className} p-6`}>
@@ -31,8 +39,8 @@ export default function PropertyPoliciesHotel() {
           </span>
         </div>
         <div className="  flex flex-col gap-2 text-xs sm:text-sm text-black">
-          {policyList.map((policy, index) => (
-            <span key={index}>• {policy}</span>
+          {data.propertypolicies.map((item: any) => (
+            <span key={item.id}>• {item.title}</span>
           ))}
         </div>
       </div>
