@@ -1,4 +1,70 @@
 "use client";
+
+import { useRouter } from "next/navigation";
+// import { useState } from "react";
+// import { Input, Select, Button } from "antd";
+// import { RiSearchLine } from "react-icons/ri";
+
+// const { Option } = Select;
+
+// const BannerDestination = () => {
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [selectedLocation, setSelectedLocation] = useState<string | undefined>(
+//     undefined
+//   );
+//   const router = useRouter();
+
+//   const popularLocations = [
+//     "Bali",
+//     "Jakarta",
+//     "Yogyakarta",
+//     "Bandung",
+//     "Lombok",
+//   ];
+
+//   const handleSearch = () => {
+//     if (selectedLocation) {
+//       router.push(`/destination/list/${selectedLocation.toLowerCase()}`);
+//     } else {
+//       alert("Please select a location.");
+//     }
+//   };
+
+//   return (
+//     <div className="flex items-center gap-3">
+//       <Input
+//         placeholder="Search destination"
+//         value={searchQuery}
+//         onChange={(e) => setSearchQuery(e.target.value)}
+//         onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+//         className="w-full border rounded-lg"
+//       />
+//       <Select
+//         placeholder="Location"
+//         value={selectedLocation}
+//         onChange={(value) => setSelectedLocation(value)}
+//         className="w-36"
+//         showSearch
+//       >
+//         {popularLocations.map((location) => (
+//           <Option key={location} value={location}>
+//             {location}
+//           </Option>
+//         ))}
+//       </Select>
+//       <Button
+//         type="primary"
+//         onClick={handleSearch}
+//         className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg"
+//       >
+//         <RiSearchLine />
+//       </Button>
+//     </div>
+//   );
+// };
+
+// export default BannerDestination;
+
 import { Julee } from "next/font/google";
 import { Montserrat } from "next/font/google";
 import { RiSearchLine } from "react-icons/ri";
@@ -22,6 +88,7 @@ export default function BannerDestination() {
   const [selectedLocation, setSelectedLocation] = useState<string | undefined>(
     undefined
   );
+  const router = useRouter();
 
   const popularLocations = [
     "Bali",
@@ -32,8 +99,11 @@ export default function BannerDestination() {
   ];
 
   const handleSearch = () => {
-    console.log("Search Query:", searchQuery);
-    console.log("Selected Location:", selectedLocation);
+    if (selectedLocation) {
+      router.push(`/destination/list/${selectedLocation.toLowerCase()}`);
+    } else {
+      alert("Please select a location.");
+    }
   };
 
   return (
@@ -85,36 +155,28 @@ export default function BannerDestination() {
                   placeholder="Search destination"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full border-solid border-gray-200 border rounded-lg text-sm"
+                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                  className="w-full border rounded-lg"
                 />
-
-                {/* Location Dropdown */}
                 <Select
                   placeholder="Location"
                   value={selectedLocation}
                   onChange={(value) => setSelectedLocation(value)}
-                  className="w-36 "
+                  className="w-36"
                   showSearch
-                  filterOption={(input, option) =>
-                    (option?.label as string)
-                      ?.toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
                 >
                   {popularLocations.map((location) => (
-                    <Option key={location} value={location} label={location}>
+                    <Option key={location} value={location}>
                       {location}
                     </Option>
                   ))}
                 </Select>
-
-                {/* Button Enter Search */}
                 <Button
                   type="primary"
                   onClick={handleSearch}
-                  className="bg-RoyalAmethyst-700 px-7 py-3 cursor-pointer rounded-lg flex items-center"
+                  className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg"
                 >
-                  <RiSearchLine className="text-white text-xl" />
+                  <RiSearchLine />
                 </Button>
               </div>
             </div>
