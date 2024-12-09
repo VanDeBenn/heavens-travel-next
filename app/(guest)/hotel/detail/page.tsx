@@ -37,7 +37,7 @@ export default function Page() {
         <ServicesAmenities />
         <AboutNearbyLocation />
         <div ref={chooseRoomRef}>
-          <ChooseRoonHotel data={hotelData} />
+          <ChooseRoonHotel data={hotelData} id={undefined} />
         </div>
         <PropertyPoliciesHotel data={hotelData} />
         <SomeHelpfulFacts />

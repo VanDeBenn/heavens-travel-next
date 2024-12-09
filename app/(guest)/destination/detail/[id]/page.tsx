@@ -31,6 +31,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const handleDate: DatePickerProps["onChange"] = (date, dateString) => {
     setDate(dateString);
   };
+  console.log(`${startDate} - ${endDate}`);
 
   const handleRangeDate = (
     dates: [Dayjs | null, Dayjs | null] | null,

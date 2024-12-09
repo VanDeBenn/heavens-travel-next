@@ -25,6 +25,11 @@ import { TbAirConditioning, TbBed } from "react-icons/tb";
 import { AiOutlineReconciliation } from "react-icons/ai";
 import { GiHighGrass, GiBroom } from "react-icons/gi";
 import { LuMonitorDot } from "react-icons/lu";
+import { cartRepository } from "#/repository/carts";
+import { DatePicker, Space } from "antd";
+import dayjs from "dayjs";
+
+const { RangePicker } = DatePicker;
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
@@ -33,9 +38,10 @@ const mediumMontserrat = Montserrat({
 
 interface ComponentProps {
   data: any;
+  id: any;
 }
 
-export default function ChooseRoonHotel({ data }: ComponentProps) {
+export default function ChooseRoonHotel({ data, id }: ComponentProps) {
   if (!data) {
     return;
   }
@@ -46,11 +52,83 @@ export default function ChooseRoonHotel({ data }: ComponentProps) {
   const [doubleBeds, setDoubleBeds] = useState(0); // Start value for double beds
   const [queenBeds, setQueenBeds] = useState(0); // Start value for queen beds
   const [kingBeds, setKingBeds] = useState(0); // Start value for king beds
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const handleRoomChange = (value: number) => {
     if (value >= 1) {
       setNumberOfRooms(value);
     }
+  };
+
+  const handleDateChange = (dates: any, dateStrings: any) => {
+    if (dates) {
+      setStartDate(dateStrings[0]); // Format string untuk API
+      setEndDate(dateStrings[1]);
+    } else {
+      setStartDate(null);
+      setEndDate(null);
+    }
+  };
+  console.log(`${startDate} - ${endDate}`);
+
+  const handleAddToCart = async () => {
+    try {
+      const data = {
+        userId: localStorage.getItem("_id"),
+        roomHotelId: id,
+        quantityPerNight: numberOfRooms,
+        startDate: startDate,
+        endDate: endDate,
+      };
+      await cartRepository.api.addToCart(data);
+      console.log("Cart added successfully!", data);
+    } catch (error) {
+      console.error("Failed to add to cart", error);
+    }
+  };
+
+  const servicesAmenitiesData = {
+    facilities: [
+      {
+        icon: <FaHeadset className="text-lg text-RoyalAmethyst-700" />,
+        text: "Private bath",
+      },
+      {
+        icon: <PiOvenFill className="text-lg text-RoyalAmethyst-700" />,
+        text: "Air conditioning",
+      },
+      {
+        icon: <FaSwimmingPool className="text-lg text-RoyalAmethyst-700" />,
+        text: "Shower",
+      },
+      {
+        icon: <FaShower className="text-lg text-RoyalAmethyst-700" />,
+        text: "Toiletries",
+      },
+      {
+        icon: <FaDumbbell className="text-lg text-RoyalAmethyst-700" />,
+        text: "Towels",
+      },
+      {
+        icon: (
+          <PiCigaretteSlashDuotone className="text-lg text-RoyalAmethyst-700" />
+        ),
+        text: "Telephone",
+      },
+      {
+        icon: <FaSwimmingPool className="text-lg text-RoyalAmethyst-700" />,
+        text: "Outdoor view",
+      },
+      {
+        icon: <FaShower className="text-lg text-RoyalAmethyst-700" />,
+        text: "Slippers",
+      },
+      {
+        icon: <FaDumbbell className="text-lg text-RoyalAmethyst-700" />,
+        text: "Sofa",
+      },
+    ],
   };
 
   return (
@@ -73,8 +151,9 @@ export default function ChooseRoonHotel({ data }: ComponentProps) {
           </div>
           <div className="flex items-center gap-2 border-solid border-gray-300 border rounded-xl p-3">
             <RiCalendarScheduleLine className="text-xl" />
-            <span className="text-sm font-semibold">6 Nov, 2024</span> -
-            <span className="text-sm font-semibold">26 Nov, 2024</span>
+            <Space direction="vertical" size={12}>
+              <RangePicker format="YYYY-MM-DD" onChange={handleDateChange} />
+            </Space>
           </div>
         </div>
       </div>
@@ -86,7 +165,7 @@ export default function ChooseRoonHotel({ data }: ComponentProps) {
         >
           <div className="flex gap-2 items-center">
             <Image
-              src={"/images/illustration/luxury-bedroom.jpg"}
+              src={`http://localhost:3222/photo-room-hotels/${item.photoroomhotels[0].pathPhoto}`}
               alt="Room Image"
               height={200}
               width={300}
@@ -94,14 +173,14 @@ export default function ChooseRoonHotel({ data }: ComponentProps) {
             />
             <div className="flex flex-col gap-2">
               <Image
-                src={"/images/illustration/luxury-bedroom.jpg"}
+                src={`http://localhost:3222/photo-room-hotels/${item.photoroomhotels[1].pathPhoto}`}
                 alt="Room Image"
                 height={200}
                 width={300}
                 className="w-40 h-[92px] rounded-tr-xl"
               />{" "}
               <Image
-                src={"/images/illustration/luxury-bedroom.jpg"}
+                src={`http://localhost:3222/photo-room-hotels/${item.photoroomhotels[3].pathPhoto}`}
                 alt="Room Image"
                 height={200}
                 width={300}
@@ -113,6 +192,20 @@ export default function ChooseRoonHotel({ data }: ComponentProps) {
           <div className="w-1/2 h-full ">
             <span className="font-semibold text-base">{item.roomType}</span>
             <div className="grid grid-cols-2 gap-2 pt-2">
+              <div className="flex items-center ">
+                <TbBed className="text-lg text-RoyalAmethyst-700" />
+                <span className="pl-2 text-xs sm:text-sm text-black">
+                  {item.singleBed
+                    ? "single bed"
+                    : item.doubleBed
+                    ? "double bed"
+                    : item.queenBed
+                    ? "queen bed"
+                    : item.kingBed
+                    ? "king bed"
+                    : ""}
+                </span>
+              </div>
               {servicesAmenitiesData.facilities
                 .slice(0, 12)
                 .map((item, index) => (
@@ -185,9 +278,12 @@ export default function ChooseRoonHotel({ data }: ComponentProps) {
                     </div>
                   </div>
                   {/* Number of Rooms Input */}
-                  <div className="border-solid border-RoyalAmethyst-700 border rounded-xl text-center text-RoyalAmethyst-700 text-sm p-3 cursor-pointer">
-                    Add cart
-                  </div>
+                  <Button
+                    onClick={handleAddToCart}
+                    className="border-solid border-RoyalAmethyst-700 border rounded-xl text-center text-RoyalAmethyst-700 text-sm  cursor-pointer"
+                  >
+                    <span className="m-3">Add cart</span>
+                  </Button>
                   <div className="bg-RoyalAmethyst-700 text-white text-sm rounded-xl text-center p-3 cursor-pointer">
                     Book now
                   </div>
@@ -200,50 +296,3 @@ export default function ChooseRoonHotel({ data }: ComponentProps) {
     </div>
   );
 }
-
-const servicesAmenitiesData = {
-  facilities: [
-    {
-      icon: <FaHeadset className="text-lg text-RoyalAmethyst-700" />,
-      text: "Private bath",
-    },
-    {
-      icon: <PiOvenFill className="text-lg text-RoyalAmethyst-700" />,
-      text: "Air conditioning",
-    },
-    {
-      icon: <FaSwimmingPool className="text-lg text-RoyalAmethyst-700" />,
-      text: "Shower",
-    },
-    {
-      icon: <FaShower className="text-lg text-RoyalAmethyst-700" />,
-      text: "Toiletries",
-    },
-    {
-      icon: <FaDumbbell className="text-lg text-RoyalAmethyst-700" />,
-      text: "Towels",
-    },
-    {
-      icon: (
-        <PiCigaretteSlashDuotone className="text-lg text-RoyalAmethyst-700" />
-      ),
-      text: "Telephone",
-    },
-    {
-      icon: <TbBed className="text-lg text-RoyalAmethyst-700" />,
-      text: "Television",
-    },
-    {
-      icon: <FaSwimmingPool className="text-lg text-RoyalAmethyst-700" />,
-      text: "Outdoor view",
-    },
-    {
-      icon: <FaShower className="text-lg text-RoyalAmethyst-700" />,
-      text: "Slippers",
-    },
-    {
-      icon: <FaDumbbell className="text-lg text-RoyalAmethyst-700" />,
-      text: "Sofa",
-    },
-  ],
-};

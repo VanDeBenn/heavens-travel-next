@@ -1,56 +1,74 @@
-// "use client";
-// import { cartRepository } from "#/repository/carts";
-// import { hotelRepository } from "#/repository/hotels";
-// import { wishlistRepository } from "#/repository/wishlists";
-// import React, { useEffect, useState } from "react";
+"use client";
+import React, { useEffect, useRef, useState } from "react";
 
-// export default async function page({ params }: { params: { id: string } }) {
-//   const [data, setData] = useState<any[]>([]);
+export default function Page() {
+  const pathname = usePathname();
 
-//   const fetchHotel = async () => {
-//     try {
-//       const res = await hotelRepository.api.getHotel(params.id);
-//       setData(res.body.data);
-//     } catch (error) {}
-//   };
+  if (!pathname) {
+    return <Loading />;
+  }
 
-//   const handleWishlist = async (values: any) => {
-//     try {
-//       const data = {
-//         userId: localStorage.getItem("_id"),
-//         hotelId: params.id,
-//       };
-//       const req = await wishlistRepository.api.create(data);
-//     } catch (error: any) {
-//       const errorMessage = error.response;
-//       // console.log(errorMessage);
-//     }
-//   };
+  const pathSegments = pathname.split("/");
+  const hotelId = pathSegments[3];
+  const chooseRoomRef = useRef<HTMLDivElement>(null);
+  const [hotelData, setHotelData] = useState<any>();
 
-//   const handleCart = async () => {
-//     try {
-//       const data = {
-//         userId: localStorage.getItem("_id"),
-//         hotelId: params.id,
-//       };
-//       const req = await cartRepository.api.create(data);
-//     } catch (error) {}
-//   };
+  const getHotel = async () => {
+    const res = await hotelRepository.api.getHotel(hotelId);
+    setHotelData(res.data);
+  };
 
-//   useEffect(() => {
-//     fetchHotel();
-//   }, []);
-//   return (
-//     <>
-//       <div>page {params.id} </div>
-//       <div>page {params.id} </div>
-//       <button onClick={handleWishlist} className="">
-//         wishlist
-//       </button>
-//       <br />
-//       <button onClick={handleCart} className="">
-//         cart
-//       </button>
-//     </>
-//   );
-// }
+  useEffect(() => {
+    getHotel();
+  }, []);
+
+  const scrollToChooseRoom = () => {
+    if (chooseRoomRef.current) {
+      chooseRoomRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
+  //   console.log(hotelData);
+  return (
+    <div className="bg-Lilac-50">
+      <HeaderComponent />
+      <div className="px-28 2xl:px-48 pb-16 flex flex-col gap-4 pt-20">
+        <BannerViewHotel
+          scrollToChooseRoom={scrollToChooseRoom}
+          data={hotelData}
+        />
+        <DescriptionHotel data={hotelData} />
+        <ServicesAmenities />
+        <AboutNearbyLocation />
+        <div ref={chooseRoomRef}>
+          <ChooseRoonHotel data={hotelData} id={hotelId} />
+        </div>
+        <PropertyPoliciesHotel data={hotelData} />
+        <SomeHelpfulFacts />
+        <RecommendedDestiNearby data={hotelData} />
+        <GuestReview />
+        <SimpleInfo />
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+import Footer from "#/app/components/user/footer";
+import HeaderComponent from "#/app/components/user/header";
+import BannerViewHotel from "#/app/components/user/bannerViewHotel";
+import ChooseRoonHotel from "#/app/components/user/chooseRoonHotel";
+import DescriptionHotel from "#/app/components/user/descriptionHotel";
+import ServicesAmenities from "#/app/components/user/servicesAmenities";
+import AboutNearbyLocation from "#/app/components/user/aboutNearbyLocation";
+import PropertyPoliciesHotel from "#/app/components/user/propertyPolicesHotel";
+import SomeHelpfulFacts from "#/app/components/user/someHelpfulFacts";
+import RecommendedDestiNearby from "#/app/components/user/recommendedDestiNearby";
+import SimpleInfo from "#/app/components/user/simpleInfo";
+import GuestReview from "#/app/components/user/guestReview";
+import { hotelRepository } from "#/repository/hotels";
+import Loading from "#/app/loading";
+import { usePathname } from "next/navigation";
