@@ -1,13 +1,32 @@
 "use client";
-
+import { useState } from "react";
 import { Montserrat } from "next/font/google";
-import { GB, ID, MY } from "country-flag-icons/react/3x2";
-import Link from "next/link";
-import { RiArrowDownSLine, RiSpeakLine, RiWifiFill } from "react-icons/ri";
-import { Disclosure, Transition } from "@headlessui/react";
-import { GiKnifeFork } from "react-icons/gi";
-import { TbHeadset } from "react-icons/tb";
 import { Switch as AntSwitch } from "antd";
+import { Disclosure, Transition } from "@headlessui/react";
+import { RiArrowDownSLine, RiSpeakLine, RiWifiFill } from "react-icons/ri";
+import { GiKnifeFork } from "react-icons/gi";
+import { TbHeadset, TbAirConditioning } from "react-icons/tb";
+import GBFlagIcon from "country-flag-icons/react/3x2/GB";
+import IDFlagIcon from "country-flag-icons/react/3x2/ID";
+import MYFlagIcon from "country-flag-icons/react/3x2/MY";
+import {
+  MdOutlineSettingsInputAntenna,
+  MdOutlineMicrowave,
+  MdOutlineBathtub,
+  MdDeck,
+  MdCleaningServices,
+  MdRouter,
+} from "react-icons/md";
+import { IoIosCellular } from "react-icons/io";
+import {
+  FaHeadset,
+  FaSwimmingPool,
+  FaDumbbell,
+  FaSpa,
+  FaUserTie,
+} from "react-icons/fa";
+import { PiCigarette } from "react-icons/pi";
+import { BsCurrencyExchange } from "react-icons/bs";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
@@ -19,55 +38,65 @@ const sections = [
     title: "Language Spoken",
     icon: <RiSpeakLine className="text-2xl text-RoyalAmethyst-700" />,
     content: [
-      { country: GB, name: "English" },
-      { country: ID, name: "Indonesian" },
-      { country: MY, name: "Malay" },
+      { id: 1, icons: GBFlagIcon, name: "English" },
+      { id: 2, icons: IDFlagIcon, name: "Indonesian" },
+      { id: 3, icons: MYFlagIcon, name: "Malay" },
     ],
   },
   {
     title: "Internet",
     icon: <RiWifiFill className="text-2xl text-RoyalAmethyst-700" />,
     content: [
-      { country: GB, name: "Free Wi-Fi" },
-      { country: ID, name: "High-speed Internet" },
-      { country: MY, name: "Internet Kiosk" },
+      { id: 4, icons: RiWifiFill, name: "Internet" },
+      {
+        id: 5,
+        icons: MdOutlineSettingsInputAntenna,
+        name: "Free Wi-Fi in all rooms!",
+      },
+      { id: 6, icons: IoIosCellular, name: "Wi-Fi in public areas" },
     ],
   },
   {
     title: "Facility",
     icon: <GiKnifeFork className="text-2xl text-RoyalAmethyst-700" />,
     content: [
-      { country: GB, name: "Restaurant" },
-      { country: ID, name: "Gym" },
-      { country: MY, name: "Swimming Pool" },
+      { id: 7, icons: FaHeadset, name: "Receptionist 24h" },
+      { id: 8, icons: MdOutlineMicrowave, name: "Kitchen" },
+      { id: 9, icons: FaSwimmingPool, name: "Swimming Pool" },
+      { id: 10, icons: FaDumbbell, name: "Gym" },
+      { id: 11, icons: MdOutlineBathtub, name: "Shower" },
+      { id: 12, icons: PiCigarette, name: "Smoking Room" },
+      { id: 13, icons: FaSpa, name: "SPA Room" },
     ],
   },
   {
     title: "Service and Convenience",
     icon: <TbHeadset className="text-2xl text-RoyalAmethyst-700" />,
     content: [
-      { country: GB, name: "24-hour Front Desk" },
-      { country: ID, name: "Room Service" },
-      { country: MY, name: "Concierge" },
+      { id: 14, icons: TbAirConditioning, name: "Air conditioning" },
+      { id: 15, icons: FaUserTie, name: "Concierge" },
+      { id: 16, icons: MdDeck, name: "Terrace" },
+      { id: 17, icons: MdCleaningServices, name: "Daily housekeeping" },
+      { id: 18, icons: BsCurrencyExchange, name: "Currency exchange" },
+      { id: 19, icons: MdRouter, name: "Internet Service" },
     ],
   },
 ];
 
 export default function FacilityInfoHotel() {
+  const [switchStates, setSwitchStates] = useState<Record<number, boolean>>({});
+
+  const toggleSwitch = (id: number) => {
+    setSwitchStates((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
+
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">
-      <div
-        className={`${mediumMontserrat.className} pb-6 flex justify-between items-center `}
-      >
+      <div className={`${mediumMontserrat.className} pb-6`}>
         <span className="text-lg font-semibold">Facility Information</span>
-        <div>
-          <Link
-            href={"/admin/hotels"}
-            className="border-gray-300 hover:border-white border-solid no-underline border hover:bg-RoyalAmethyst-700 transition-all duration-300 rounded-xl py-2 px-12 text-black hover:text-white text-center"
-          >
-            Edit Facility Information
-          </Link>
-        </div>
       </div>
       <div className="h-px bg-gray-300"></div>
       <div className="flex flex-col gap-5 pt-5">
@@ -102,7 +131,7 @@ export default function FacilityInfoHotel() {
                   </Disclosure.Button>
                   <Transition
                     enter="transition ease-out duration-300"
-                    enterFrom="opacity -0"
+                    enterFrom="opacity-0"
                     enterTo="opacity-100"
                     leave="transition ease-in duration-200"
                     leaveFrom="opacity-100"
@@ -111,24 +140,26 @@ export default function FacilityInfoHotel() {
                     <Disclosure.Panel
                       className={`${mediumMontserrat.className} text-gray-500 mt-3 ml-16 flex flex-col gap-3`}
                     >
-                      {section.content.map((item, idx) => (
+                      {section.content.map((item) => (
                         <div
-                          key={idx}
+                          key={item.id}
                           className="px-3 py-3 border-solid border rounded-lg border-gray-300 flex justify-between items-center"
                         >
-                          <div className="flex flex-col gap-2 ">
-                            <div className="flex items-center ">
-                              <item.country
-                                title="Country"
-                                className="w-5 h-5"
-                              />
+                          <div className="flex flex-col gap-2">
+                            <div className="flex items-center">
+                              {item.icons && (
+                                <item.icons className="text-RoyalAmethyst-700 w-5 h-5" />
+                              )}
                               <span className="pl-2 text-xs sm:text-sm text-black font-semibold">
                                 {item.name}
                               </span>
                             </div>
                           </div>
                           <div>
-                            <AntSwitch />
+                            <AntSwitch
+                              checked={switchStates[item.id] || false}
+                              onChange={() => toggleSwitch(item.id)}
+                            />
                           </div>
                         </div>
                       ))}
@@ -140,7 +171,6 @@ export default function FacilityInfoHotel() {
           </div>
         ))}
       </div>
-
     </div>
   );
 }
