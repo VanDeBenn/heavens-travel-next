@@ -28,6 +28,7 @@ import { LuMonitorDot } from "react-icons/lu";
 import { cartRepository } from "#/repository/carts";
 import { DatePicker, Space } from "antd";
 import dayjs from "dayjs";
+import { bookingRepository } from "#/repository/bookings";
 
 const { RangePicker } = DatePicker;
 
@@ -72,17 +73,31 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
   };
   console.log(`${startDate} - ${endDate}`);
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (roomHotelId: string) => {
     try {
       const data = {
         userId: localStorage.getItem("_id"),
-        roomHotelId: id,
+        roomHotelId: roomHotelId,
         quantityPerNight: numberOfRooms,
         startDate: startDate,
         endDate: endDate,
       };
       await cartRepository.api.addToCart(data);
-      console.log("Cart added successfully!", data);
+    } catch (error) {
+      console.error("Failed to add to cart", error);
+    }
+  };
+
+  const handleBookNow = async (roomHotelId: string) => {
+    try {
+      const data = {
+        userId: localStorage.getItem("_id"),
+        roomHotelId: roomHotelId,
+        quantityPerNight: numberOfRooms,
+        startDate: startDate,
+        endDate: endDate,
+      };
+      await bookingRepository.api.create(data);
     } catch (error) {
       console.error("Failed to add to cart", error);
     }
@@ -279,14 +294,21 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
                   </div>
                   {/* Number of Rooms Input */}
                   <Button
-                    onClick={handleAddToCart}
+                    onClick={() => {
+                      handleAddToCart(item.id);
+                    }}
                     className="border-solid border-RoyalAmethyst-700 border rounded-xl text-center text-RoyalAmethyst-700 text-sm  cursor-pointer"
                   >
                     <span className="m-3">Add cart</span>
                   </Button>
-                  <div className="bg-RoyalAmethyst-700 text-white text-sm rounded-xl text-center p-3 cursor-pointer">
+                  <Button
+                    onClick={() => {
+                      handleBookNow(item.id);
+                    }}
+                    className="bg-RoyalAmethyst-700 text-white text-sm rounded-xl text-center p-3 cursor-pointer"
+                  >
                     Book now
-                  </div>
+                  </Button>
                 </div>
               </div>
             </div>

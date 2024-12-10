@@ -39,17 +39,18 @@ export default function MyCart() {
     const id: any = localStorage.getItem("_id");
     try {
       const res = await usersRepository.api.getUser(id);
-      const carts = res?.body?.data?.carts || []; // Pastikan carts ada dan merupakan array
+      const carts = res?.body?.data?.carts || [];
+      console.log("Received cart items:", carts);
 
-      // Filter cart untuk hanya item yang tidak memiliki status 'PAID'
       const dataCart = carts.filter(
         (cart: any) =>
           !cart.bookingDetail?.booking?.payment?.status ||
           cart.bookingDetail?.booking?.payment?.status !== "PENDING"
       );
+      console.log("Filtered cart items:", dataCart);
 
       setDataCart(dataCart);
-      setSelectedItems(new Array(carts.length).fill(false)); // Set selected items berdasarkan panjang array carts
+      setSelectedItems(new Array(dataCart.length).fill(false));
     } catch (error) {
       console.error(error);
     }
@@ -58,10 +59,19 @@ export default function MyCart() {
   const getTotalPrice = () => {
     return dataCart.reduce((total, item, index) => {
       if (selectedItems[index]) {
-        const priceForAdults = item.quantityAdult * item.destination.priceAdult;
-        const priceForChildren =
-          item.quantityChildren * item.destination.priceChildren;
-        total += priceForAdults + priceForChildren;
+        if (item.destination) {
+          const priceForAdults =
+            item.quantityAdult * item.destination.priceAdult;
+          const priceForChildren =
+            item.quantityChildren * item.destination.priceChildren;
+          total += priceForAdults + priceForChildren;
+        }
+
+        if (item.roomHotel) {
+          const priceForRoomHotel =
+            item.quantityPerNight * item.roomHotel.price;
+          total += priceForRoomHotel;
+        }
       }
       return total;
     }, 0);
@@ -86,6 +96,12 @@ export default function MyCart() {
   };
 
   const handleCheckboxChange = (index: number, id: string) => {
+    // Ensure the index is valid
+    if (index < 0 || index >= dataCart.length) {
+      console.error("Invalid index:", index);
+      return;
+    }
+
     const updatedSelectedItems = [...selectedItems];
     const updatedSelectedItemsId = [...selectedItemsId];
 
@@ -155,10 +171,16 @@ export default function MyCart() {
     } catch (error) {}
   };
 
+  console.log(selectedItemsId);
+
   // bookingDetailId.push(id);
   // const bookingDetailId = [];
   // setBookingDetailId(bookingDetailId);
   // localStorage.setItem('_details', bookingDetailId)
+
+  if (!dataCart) {
+    return;
+  }
 
   return (
     <div className="w-full">
@@ -170,131 +192,129 @@ export default function MyCart() {
           <div className="h-px bg-gray-300"></div>
 
           <div className="grid grid-cols-1 px-8 py-6 gap-6 w-full">
-            {dataCart.map(
-              (
-                {
-                  roomhotel,
-                  destination,
-                  id,
-                  startDate,
-                  endDate,
-                  quantityAdult,
-                  quantityChildren,
-                }: any,
-                index: number
-              ) => {
-                const isSelected = selectedItems[index];
-                const totalPrice =
-                  quantityAdult * destination.priceAdult +
-                  quantityChildren * destination.priceChildren;
+            {dataCart.map((item: any, index: number) => {
+              const {
+                id,
+                roomHotel,
+                destination,
+                startDate,
+                endDate,
+                quantityPerNight,
+                quantityAdult,
+                quantityChildren,
+              } = item;
+              const isSelected = selectedItems[index];
 
-                return (
-                  <div
-                    key={id}
-                    className="p-3 border border-solid border-[#DBDBDB] rounded-xl w-full"
-                  >
-                    <div className="flex justify-between items-center">
-                      <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                        {roomhotel ? (
-                          <RiHome3Line size={18} color="#ffff" />
-                        ) : (
-                          <RiGlassesLine size={18} color="#ffff" />
-                        )}
-                        <span className="text-xs font-semibold text-white">
-                          {roomhotel ? "Hotel" : "Destination"}
+              const totalPrice = destination
+                ? quantityAdult * destination?.priceAdult +
+                  quantityChildren * destination?.priceChildren
+                : quantityPerNight * roomHotel?.price;
+
+              return (
+                <div
+                  key={id}
+                  className="p-3 border border-solid border-[#DBDBDB] rounded-xl w-full"
+                >
+                  <div className="flex justify-between items-center">
+                    <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                      {roomHotel ? (
+                        <RiHome3Line size={18} color="#ffff" />
+                      ) : (
+                        <RiGlassesLine size={18} color="#ffff" />
+                      )}
+                      <span className="text-xs font-semibold text-white">
+                        {roomHotel ? "Hotel" : "Destination"}
+                      </span>
+                    </div>
+
+                    <RiDeleteBin6Line
+                      size={24}
+                      color="#DC143C"
+                      className="cursor-pointer"
+                      onClick={() => hanndleDelete(id)}
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2 py-3">
+                    <Image
+                      src={
+                        "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                      }
+                      alt={destination?.name || roomHotel?.roomType}
+                      width={100}
+                      height={100}
+                      className="rounded-xl w-44"
+                    />
+
+                    <div className="flex flex-col gap-1 w-full">
+                      <div className="font-semibold">
+                        {destination?.name || roomHotel?.roomType}
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <RiCalendarLine className="text-lg text-black" />
+                        <span className="text-xs text-gray-400">
+                          {new Date(startDate).toLocaleDateString()} -{" "}
+                          {new Date(endDate).toLocaleDateString()}
                         </span>
                       </div>
 
-                      <RiDeleteBin6Line
-                        size={24}
-                        color="#DC143C"
-                        className="cursor-pointer"
-                        onClick={() => hanndleDelete(id)}
-                      />
-                    </div>
-
-                    <div className="flex items-center gap-2 py-3">
-                      <Image
-                        src={
-                          "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
-                        }
-                        alt={destination.name || roomhotel.name}
-                        width={100}
-                        height={100}
-                        className="rounded-xl w-44"
-                      />
-
-                      <div className="flex flex-col gap-1 w-full">
-                        <div className="font-semibold">
-                          {destination.name || roomhotel.name}
-                        </div>
-
-                        <div className="flex items-center gap-1">
-                          <RiCalendarLine className="text-lg text-black" />
-                          <span className="text-xs text-gray-400">
-                            {startDate} - {endDate}
-                          </span>
-                        </div>
-
-                        <div className="flex gap-1">
-                          <RiTeamLine size={16} color="#6b7280" />
-                          <span className="text-xs text-gray-500">
-                            Guests: {quantityAdult} Adult, {quantityChildren}
-                            Children
-                          </span>
-                        </div>
-
-                        <div className="flex justify-between w-full">
-                          <div
-                            className="flex gap-1 cursor-pointer"
-                            onClick={() => handleCheckboxChange(index, id)}
-                          >
-                            {isSelected ? (
-                              <RiCheckboxFill className="text-RoyalAmethyst-700 text-lg" />
-                            ) : (
-                              <RiCheckboxBlankLine className="text-gray-400 text-lg" />
-                            )}
-                            <span
-                              className={`text-sm font-semibold ${
-                                isSelected
-                                  ? "text-RoyalAmethyst-700"
-                                  : "text-gray-400"
-                              }`}
-                            >
-                              {destination.name || roomhotel.name}
-                            </span>
-                          </div>
-
-                          <div className="flex items-end gap-1">
-                            {quantityAdult} x Rp
-                            {destination.priceAdult ||
-                              roomhotel.priceAdult} - {quantityChildren} x Rp
-                            {destination.priceChildren ||
-                              roomhotel.priceChildren}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="h-px bg-gray-300"></div>
-
-                    <div className="pt-5 pb-3 flex justify-end w-full gap-2">
-                      <div className="flex flex-col gap-1">
-                        <span className="font-semibold text-xs">
-                          Total Price
+                      <div className="flex gap-1">
+                        <RiTeamLine size={16} color="#6b7280" />
+                        <span className="text-xs text-gray-500">
+                          Guests: {quantityAdult} Adult, {quantityChildren}
+                          Children
+                          {roomHotel ? `Room: ${quantityPerNight}` : ""}
                         </span>
-                        <span
-                          className={`text-sm font-semibold ${
-                            isSelected ? "text-[#DC143C]" : "text-gray-400"
-                          }`}
+                      </div>
+
+                      <div className="flex justify-between w-full">
+                        <div
+                          className="flex gap-1 cursor-pointer"
+                          onClick={() => handleCheckboxChange(index, id)}
                         >
-                          {formatCurrency(totalPrice)}
-                        </span>
+                          {isSelected ? (
+                            <RiCheckboxFill className="text-RoyalAmethyst-700 text-lg" />
+                          ) : (
+                            <RiCheckboxBlankLine className="text-gray-400 text-lg" />
+                          )}
+                          <span
+                            className={`text-sm font-semibold ${
+                              isSelected
+                                ? "text-RoyalAmethyst-700"
+                                : "text-gray-400"
+                            }`}
+                          >
+                            {destination?.name || roomHotel?.roomType}
+                          </span>
+                        </div>
+
+                        <div className="flex items-end gap-1">
+                          {quantityAdult || quantityPerNight} x Rp
+                          {destination?.priceAdult || roomHotel?.price} -{" "}
+                          {quantityChildren} x Rp
+                          {destination?.priceChildren}
+                        </div>
                       </div>
                     </div>
                   </div>
-                );
-              }
-            )}
+                  <div className="h-px bg-gray-300"></div>
+
+                  <div className="pt-5 pb-3 flex justify-end w-full gap-2">
+                    <div className="flex flex-col gap-1">
+                      <span className="font-semibold text-xs">Total Price</span>
+                      <span
+                        className={`text-sm font-semibold ${
+                          isSelected ? "text-[#DC143C]" : "text-gray-400"
+                        }`}
+                      >
+                        {formatCurrency(totalPrice)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
