@@ -129,8 +129,10 @@ export default function page() {
           submitLocationForm={submitForms}
         />
         <PhotoHotel hotelId={hotelId} />
-        {/* <FacilityInfoHotel /> */}
-        {/* <NearbyLocationHotel /> */}
+
+        <FacilityInfoHotel />
+        <NearbyLocationHotel />
+
         <PoliciesHotel hotelId={hotelId} />
         {/* <SomeHelpfulFactsHotel /> */}
         {/* <FaqsHotel /> */}

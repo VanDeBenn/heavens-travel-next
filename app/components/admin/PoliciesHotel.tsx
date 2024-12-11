@@ -82,6 +82,7 @@ export default function PoliciesHotel({ hotelId }: ComponentProps) {
     }
   }, [hotelId]);
 
+  console.log(policies);
   return (
     <>
       <div

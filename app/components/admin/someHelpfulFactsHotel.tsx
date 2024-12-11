@@ -1,19 +1,15 @@
 "use client";
+import { useState } from "react";
 import { Montserrat } from "next/font/google";
-
-import Link from "next/link";
-import {
-  RiArrowDownSLine,
-  RiBus2Line,
-  RiStore2Line,
-  RiWifiFill,
-} from "react-icons/ri";
 import { Disclosure, Transition } from "@headlessui/react";
-import { GiKnifeFork } from "react-icons/gi";
-import { TbHeadset, TbMapPins } from "react-icons/tb";
-import { Switch as AntSwitch } from "antd";
-import { CiHospital1 } from "react-icons/ci";
+import { RiArrowDownSLine } from "react-icons/ri";
+import { FaUserTie } from "react-icons/fa";
+import { MdDeck, MdCleaningServices } from "react-icons/md";
+import { BsCurrencyExchange } from "react-icons/bs";
+import { MdRouter } from "react-icons/md";
+import { Form, Input } from "antd";
 import { GoPeople } from "react-icons/go";
+import { TbAirConditioning, TbMapPins } from "react-icons/tb";
 import { FaBuildingColumns } from "react-icons/fa6";
 import { LuBird } from "react-icons/lu";
 
@@ -27,54 +23,60 @@ const sections = [
     title: "Check-in/Check-out",
     icon: <GoPeople className="text-2xl text-RoyalAmethyst-700" />,
     content: [
-      { icons: GoPeople, name: "14:20 " },
-      { icons: GoPeople, name: " 20:00" },
+      { id: 1, icon: TbAirConditioning, name: "Air conditioning" },
+      { id: 2, icon: FaUserTie, name: "Concierge" },
+      { id: 3, icon: MdDeck, name: "Terrace" },
+      { id: 4, icon: MdCleaningServices, name: "Daily housekeeping" },
+      { id: 5, icon: BsCurrencyExchange, name: "Currency exchange" },
+      { id: 6, icon: MdRouter, name: "Internet Service" },
     ],
   },
   {
     title: "Getting around",
     icon: <TbMapPins className="text-2xl text-RoyalAmethyst-700" />,
     content: [
-      { icons: TbMapPins, name: "Free Wi-Fi" },
-      { icons: TbMapPins, name: "High-speed Internet" },
+      { id: 1, icon: TbAirConditioning, name: "Air conditioning" },
+      { id: 2, icon: FaUserTie, name: "Concierge" },
+      { id: 3, icon: MdDeck, name: "Terrace" },
+      { id: 4, icon: MdCleaningServices, name: "Daily housekeeping" },
+      { id: 5, icon: BsCurrencyExchange, name: "Currency exchange" },
+      { id: 6, icon: MdRouter, name: "Internet Service" },
     ],
   },
   {
     title: "The Property",
     icon: <FaBuildingColumns className="text-2xl text-RoyalAmethyst-700" />,
     content: [
-      { icons: FaBuildingColumns, name: "Restaurant" },
-      { icons: FaBuildingColumns, name: "Gym" },
+      { id: 1, icon: TbAirConditioning, name: "Air conditioning" },
+      { id: 2, icon: FaUserTie, name: "Concierge" },
+      { id: 3, icon: MdDeck, name: "Terrace" },
+      { id: 4, icon: MdCleaningServices, name: "Daily housekeeping" },
+      { id: 5, icon: BsCurrencyExchange, name: "Currency exchange" },
+      { id: 6, icon: MdRouter, name: "Internet Service" },
     ],
   },
   {
     title: "Extra",
     icon: <LuBird className="text-2xl text-RoyalAmethyst-700" />,
     content: [
-      { icons: LuBird, name: "Restaurant" },
-      { icons: LuBird, name: "Gym" },
+      { id: 1, icon: TbAirConditioning, name: "Air conditioning" },
+      { id: 2, icon: FaUserTie, name: "Concierge" },
+      { id: 3, icon: MdDeck, name: "Terrace" },
+      { id: 4, icon: MdCleaningServices, name: "Daily housekeeping" },
+      { id: 5, icon: BsCurrencyExchange, name: "Currency exchange" },
+      { id: 6, icon: MdRouter, name: "Internet Service" },
     ],
   },
 ];
 
-const someHelpfulFacts: React.FC = () => {
+export default function SomeHelpfulFacts() {
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">
-      <div
-        className={`${mediumMontserrat.className} pb-6 flex justify-between items-center `}
-      >
+      <div className={`${mediumMontserrat.className} pb-6`}>
         <span className="text-lg font-semibold">Some Helpful Facts</span>
-        <div>
-          <Link
-            href={"/admin/hotels"}
-            className="border-gray-300 hover:border-white border-solid no-underline border hover:bg-RoyalAmethyst-700 transition-all duration-300 rounded-xl py-2 px-12 text-black hover:text-white text-center"
-          >
-            Edit Helpful Facts
-          </Link>
-        </div>
       </div>
-      <div className="h-px bg-gray-300"></div>
-      <div className="flex flex-col gap-5 pt-5">
+      <div className="h-px bg-gray-300 mb-5"></div>
+      <div className="flex flex-col gap-5">
         {sections.map((section, index) => (
           <div key={index}>
             <Disclosure>
@@ -106,36 +108,41 @@ const someHelpfulFacts: React.FC = () => {
                   </Disclosure.Button>
                   <Transition
                     enter="transition ease-out duration-300"
-                    enterFrom="opacity -0"
+                    enterFrom="opacity-0"
                     enterTo="opacity-100"
                     leave="transition ease-in duration-200"
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Disclosure.Panel
-                      className={`${mediumMontserrat.className} text-gray-500 mt-3 ml-16 flex flex-col gap-3`}
-                    >
-                      {section.content.map((item, idx) => (
-                        <div
-                          key={idx}
-                          className="px-3 py-3 border-solid border rounded-lg border-gray-300 flex justify-between items-center"
-                        >
-                          <div className="flex flex-col gap-2 ">
-                            <div className="flex items-center ">
-                              <item.icons
-                                title="Country"
-                                className="w-5 h-5 text-RoyalAmethyst-700"
+                    <Disclosure.Panel className="mt-3 ml-16 flex flex-col gap-5">
+                      <Form
+                        layout="vertical"
+                        className="space-y-5"
+                        initialValues={{ remember: true }}
+                      >
+                        {section.content.map((item) => {
+                          const Icon = item.icon;
+                          return (
+                            <Form.Item
+                              key={item.id}
+                              label={
+                                <div className="flex items-center gap-2">
+                                  <Icon className="text-RoyalAmethyst-700 text-xl" />
+                                  <span className="font-medium">
+                                    {item.name}
+                                  </span>
+                                </div>
+                              }
+                              name={item.name.toLowerCase().replace(" ", "_")}
+                            >
+                              <Input
+                                placeholder={`Enter ${item.name.toLowerCase()}`}
+                                className="rounded-md"
                               />
-                              <span className="pl-2 text-xs sm:text-sm text-black font-semibold">
-                                {item.name}
-                              </span>
-                            </div>
-                          </div>
-                          <div>
-                            <AntSwitch />
-                          </div>
-                        </div>
-                      ))}
+                            </Form.Item>
+                          );
+                        })}
+                      </Form>
                     </Disclosure.Panel>
                   </Transition>
                 </>
@@ -146,6 +153,4 @@ const someHelpfulFacts: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default someHelpfulFacts;
+}

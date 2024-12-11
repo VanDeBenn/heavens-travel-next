@@ -5,7 +5,10 @@ import { Switch as AntSwitch } from "antd";
 import { Disclosure, Transition } from "@headlessui/react";
 import { RiArrowDownSLine, RiSpeakLine, RiWifiFill } from "react-icons/ri";
 import { GiKnifeFork } from "react-icons/gi";
-import { TbHeadset, TbAirConditioning } from "react-icons/tb";
+import { GoPeople } from "react-icons/go";
+import { FaBuildingColumns } from "react-icons/fa6";
+import { LuBird } from "react-icons/lu";
+import { TbHeadset, TbAirConditioning, TbMapPins } from "react-icons/tb";
 import GBFlagIcon from "country-flag-icons/react/3x2/GB";
 import IDFlagIcon from "country-flag-icons/react/3x2/ID";
 import MYFlagIcon from "country-flag-icons/react/3x2/MY";
@@ -35,8 +38,8 @@ const mediumMontserrat = Montserrat({
 
 const sections = [
   {
-    title: "Language Spoken",
-    icon: <RiSpeakLine className="text-2xl text-RoyalAmethyst-700" />,
+    title: "Check-in/Check-out",
+    icon: <GoPeople className="text-2xl text-RoyalAmethyst-700" />,
     content: [
       { id: 1, icons: GBFlagIcon, name: "English" },
       { id: 2, icons: IDFlagIcon, name: "Indonesian" },
@@ -44,8 +47,8 @@ const sections = [
     ],
   },
   {
-    title: "Internet",
-    icon: <RiWifiFill className="text-2xl text-RoyalAmethyst-700" />,
+    title: "Getting around",
+    icon: <TbMapPins className="text-2xl text-RoyalAmethyst-700" />,
     content: [
       { id: 4, icons: RiWifiFill, name: "Internet" },
       {
@@ -57,8 +60,8 @@ const sections = [
     ],
   },
   {
-    title: "Facility",
-    icon: <GiKnifeFork className="text-2xl text-RoyalAmethyst-700" />,
+    title: "The Property",
+    icon: <FaBuildingColumns className="text-2xl text-RoyalAmethyst-700" />,
     content: [
       { id: 7, icons: FaHeadset, name: "Receptionist 24h" },
       { id: 8, icons: MdOutlineMicrowave, name: "Kitchen" },
@@ -70,8 +73,8 @@ const sections = [
     ],
   },
   {
-    title: "Service and Convenience",
-    icon: <TbHeadset className="text-2xl text-RoyalAmethyst-700" />,
+    title: "Extra",
+    icon: <LuBird className="text-2xl text-RoyalAmethyst-700" />,
     content: [
       { id: 14, icons: TbAirConditioning, name: "Air conditioning" },
       { id: 15, icons: FaUserTie, name: "Concierge" },
@@ -83,7 +86,7 @@ const sections = [
   },
 ];
 
-export default function FacilityInfoHotel() {
+export default function SomeHelpfulFacts() {
   const [switchStates, setSwitchStates] = useState<Record<number, boolean>>({});
 
   const toggleSwitch = (id: number) => {
@@ -96,7 +99,7 @@ export default function FacilityInfoHotel() {
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">
       <div className={`${mediumMontserrat.className} pb-6`}>
-        <span className="text-lg font-semibold">Facility Information</span>
+        <span className="text-lg font-semibold">Some Helpful Facts</span>
       </div>
       <div className="h-px bg-gray-300"></div>
       <div className="flex flex-col gap-5 pt-5">

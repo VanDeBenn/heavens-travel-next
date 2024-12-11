@@ -194,6 +194,10 @@ import WhatInterestsYou from "../components/user/whatInterestsYou";
 import Faq from "../components/user/faq";
 import BookingDetailUser from "../components/user/bookingDetail";
 import PaymentMethod from "../components/user/paymentMethod";
+import BookingRefund from "../components/user/bookingRefund";
+import FacilityInfoHotel from "../components/admin/facilityInfoHotel";
+import NearbyLocationHotel from "../components/admin/nearbyLocationHotel";
+import SomeHelpfulFacts from "../components/admin/someHelpfulFactsHotel";
 
 export default function page() {
   return (
@@ -216,7 +220,13 @@ export default function page() {
       {/* <WhatInterestsYou /> */}
       {/* <Faq /> */}
 
-      <BookingDetailUser />
+      {/* <BookingDetailUser /> */}
+
+      {/* <BookingRefund /> */}
+
+      {/* <FacilityInfoHotel /> */}
+      {/* <NearbyLocationHotel /> */}
+      <SomeHelpfulFacts />
     </div>
   );
 }
