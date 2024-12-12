@@ -226,7 +226,7 @@ export default function page() {
 
       {/* <FacilityInfoHotel /> */}
       {/* <NearbyLocationHotel /> */}
-      <SomeHelpfulFacts />
+      {/* <SomeHelpfulFacts /> */}
     </div>
   );
 }
