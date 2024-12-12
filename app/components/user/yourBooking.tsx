@@ -31,13 +31,9 @@ const smallMontserrat = Montserrat({
 
 interface ComponentsProps {
   dataBookingDetail: any;
-  setSubmit: any;
 }
 
-export default function YourBooking({
-  dataBookingDetail,
-  setSubmit,
-}: ComponentsProps) {
+export default function YourBooking({ dataBookingDetail }: ComponentsProps) {
   // const [bookingItems, setBookingItems] = useState(initialBookingItems);
   // setSubmit(false);
   // Filter hotel dan destinasi untuk menampilkan hanya 1 hotel dan 1 destinasi
@@ -175,8 +171,8 @@ export default function YourBooking({
                         <span className="text-xs text-black">
                           Guests:{" "}
                           {destination
-                            ? cart?.quantityAdult + cart?.quantityChildren
-                            : cart?.quantityPerNight}
+                            ? `${cart?.quantityAdult} Adult, ${cart?.quantityChildren} Children`
+                            : `${roomHotel?.adult} Adult, ${roomHotel?.children} Children`}
                         </span>
                       </div>
 
@@ -192,7 +188,7 @@ export default function YourBooking({
                         <div className="flex justify-end w-full gap-1 items-end">
                           {roomHotel?.price && (
                             <div className="text-sm text-black">
-                              {cart?.quantityPerNight}x
+                              {cart?.quantityRoom} Room x
                               {formatCurrency(roomHotel?.price)}
                             </div>
                           )}
@@ -235,8 +231,7 @@ export default function YourBooking({
                           )}
                         {roomHotel &&
                           formatCurrency(
-                            (cart?.quantityPerNight || 0) *
-                              (roomHotel?.price || 0)
+                            (cart?.quantityRoom || 0) * (roomHotel?.price || 0)
                           )}
                       </span>
                     </div>

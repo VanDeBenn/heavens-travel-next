@@ -78,7 +78,7 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
       const data = {
         userId: localStorage.getItem("_id"),
         roomHotelId: roomHotelId,
-        quantityPerNight: numberOfRooms,
+        quantityRoom: numberOfRooms,
         startDate: startDate,
         endDate: endDate,
       };
@@ -93,7 +93,7 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
       const data = {
         userId: localStorage.getItem("_id"),
         roomHotelId: roomHotelId,
-        quantityPerNight: numberOfRooms,
+        quantityRoom: numberOfRooms,
         startDate: startDate,
         endDate: endDate,
       };

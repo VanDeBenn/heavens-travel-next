@@ -68,8 +68,7 @@ export default function MyCart() {
         }
 
         if (item.roomHotel) {
-          const priceForRoomHotel =
-            item.quantityPerNight * item.roomHotel.price;
+          const priceForRoomHotel = item.quantityRoom * item.roomHotel.price;
           total += priceForRoomHotel;
         }
       }
@@ -199,7 +198,7 @@ export default function MyCart() {
                 destination,
                 startDate,
                 endDate,
-                quantityPerNight,
+                quantityRoom,
                 quantityAdult,
                 quantityChildren,
               } = item;
@@ -208,7 +207,7 @@ export default function MyCart() {
               const totalPrice = destination
                 ? quantityAdult * destination?.priceAdult +
                   quantityChildren * destination?.priceChildren
-                : quantityPerNight * roomHotel?.price;
+                : quantityRoom * roomHotel?.price;
 
               return (
                 <div
@@ -264,7 +263,7 @@ export default function MyCart() {
                         <span className="text-xs text-gray-500">
                           Guests: {quantityAdult} Adult, {quantityChildren}
                           Children
-                          {roomHotel ? `Room: ${quantityPerNight}` : ""}
+                          {roomHotel ? `Room: ${quantityRoom}` : ""}
                         </span>
                       </div>
 
@@ -290,7 +289,7 @@ export default function MyCart() {
                         </div>
 
                         <div className="flex items-end gap-1">
-                          {quantityAdult || quantityPerNight} x Rp
+                          {quantityAdult || quantityRoom} x Rp
                           {destination?.priceAdult || roomHotel?.price} -{" "}
                           {quantityChildren} x Rp
                           {destination?.priceChildren}

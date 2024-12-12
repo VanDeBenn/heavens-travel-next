@@ -35,6 +35,7 @@ export default function NextStep() {
   const [dataBooking, setDataBooking] = useState<any>({});
   const [dataUser, setDataUser] = useState<any>(null);
   const [submitForms, setSubmitForms] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState<any>();
 
   const redirectXendit = localStorage.getItem("_xendit");
   const bookingId = localStorage.getItem("_booking");
@@ -59,12 +60,14 @@ export default function NextStep() {
 
   const next = () => {
     setLoading(true);
+    setSubmitForms(true);
+
     setTimeout(() => {
       setCompletedSteps((prev) => [...prev, current]);
       setCurrent((prev) => prev + 1);
       setLoading(false);
+      setSubmitForms(false);
     }, 2000);
-    setSubmitForms(true);
   };
 
   const prev = () => {
@@ -83,20 +86,40 @@ export default function NextStep() {
   };
 
   useEffect(() => {
+    if (!paymentStatus) {
+      const getPaymentStatus = async () => {
+        try {
+          const res = await bookingRepository.api.getInvoice(
+            dataBooking?.payment?.invoiceId
+          );
+          console.log(res);
+          setPaymentStatus(res?.data?.status);
+        } catch (error) {
+          console.error("Error fetching payment status:", error);
+        }
+      };
+
+      getPaymentStatus();
+    }
+  }, [dataBooking?.payment?.invoiceId]);
+
+  console.log(paymentStatus);
+  useEffect(() => {
+    if (paymentStatus === "PAID") {
+      localStorage.setItem("_xendit", "success");
+    }
+  }, [paymentStatus]);
+
+  useEffect(() => {
     if (redirectXendit === "success") {
-      setCurrent(3); // Langsung ke langkah terakhir
+      setCurrent(3);
       localStorage.removeItem("_xendit");
     }
   }, [redirectXendit]);
 
   const steps = [
     {
-      content: (
-        <YourBooking
-          dataBookingDetail={dataBookingDetail}
-          setSubmit={setSubmitForms}
-        />
-      ),
+      content: <YourBooking dataBookingDetail={dataBookingDetail} />,
       icon:
         loading && current === 0 ? (
           <Spin size="small" />
@@ -110,14 +133,7 @@ export default function NextStep() {
         ),
     },
     {
-      content: (
-        <GuestForm
-          dataUser={dataUser}
-          next={next}
-          submit={submitForms}
-          setSubmit={setSubmitForms}
-        />
-      ),
+      content: <GuestForm dataUser={dataUser} submit={submitForms} />,
       icon:
         loading && current === 1 ? (
           <Spin size="small" />
@@ -135,7 +151,6 @@ export default function NextStep() {
         <PaymentMethod
           dataBooking={dataBooking}
           dataBookingDetail={dataBookingDetail}
-          setSubmit={setSubmitForms}
         />
       ),
       icon:
@@ -165,6 +180,28 @@ export default function NextStep() {
         ),
     },
   ];
+
+  const totalDestinationPrice = dataBookingDetail.reduce(
+    (total: number, item: any) => {
+      const cart = item.cart || {};
+      const destinationPrice =
+        (cart.quantityAdult * cart.destination?.priceAdult || 0) +
+        (cart.quantityChildren * cart.destination?.priceChildren || 0);
+      return total + destinationPrice;
+    },
+    0
+  );
+
+  const totalRoomPrice = dataBookingDetail.reduce(
+    (total: number, item: any) => {
+      const cart = item.cart || {};
+      const roomPrice = cart.quantityRoom * cart.roomHotel?.price || 0;
+      return total + roomPrice;
+    },
+    0
+  );
+
+  const totalPrice = totalDestinationPrice + totalRoomPrice;
 
   return (
     <div className="w-full">
@@ -201,7 +238,7 @@ export default function NextStep() {
                     {dataBookingDetail.length} item
                   </span>
                   <span className="text-base font-semibold text-InfernoEcho-600">
-                    Rp1.299.000
+                    Rp{totalPrice.toLocaleString("id-ID")}
                   </span>
                 </div>
 
@@ -226,7 +263,11 @@ export default function NextStep() {
                             <span className="text-black text-base font-semibold">
                               {cart?.destination?.name}
                             </span>
-                            <span className="text-sm">(Bali, indonesian)</span>
+                            <span className="text-sm">
+                              ({cart?.destination?.city?.name},{" "}
+                              {cart?.destination?.city?.province?.country?.name}
+                              )
+                            </span>
                           </div>
                           <div
                             className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
@@ -301,7 +342,14 @@ export default function NextStep() {
                             <span className="text-black text-base font-semibold">
                               {cart?.roomHotel?.hotel?.name}
                             </span>
-                            <span className="text-sm">(Bali, indonesian)</span>
+                            <span className="text-sm">
+                              ({cart?.roomHotel?.hotel?.city?.name},{" "}
+                              {
+                                cart?.roomHotel?.hotel?.city?.province?.country
+                                  ?.name
+                              }
+                              )
+                            </span>
                           </div>
                           <div
                             className={`${mediumMontserrat.className} flex gap-1 items-center pt-1 justify-between`}
@@ -309,18 +357,33 @@ export default function NextStep() {
                             <span className="text-black text-sm font-semibold">
                               {cart?.roomHotel?.roomType}
                             </span>
-                            <span className="text-sm font-semibold">X2</span>
+                            <span className="text-sm font-semibold">
+                              X{cart?.quantityRoom}
+                            </span>
                           </div>
                           <div
                             className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
                           >
                             <RiCalendarLine className="text-lg text-black" />
-                            <div className=" flex gap-1 w-full justify-between">
+                            <div className="flex gap-1 w-full justify-between">
                               <span className="text-xs text-black font-semibold">
                                 {new Date(cart?.startDate).toLocaleDateString()}{" "}
                                 - {new Date(cart?.endDate).toLocaleDateString()}
                               </span>
-                              <span className="text-xs">(3 day, 2 night)</span>
+                              <span className="text-xs">
+                                {(() => {
+                                  const start = new Date(
+                                    cart?.startDate
+                                  ).getTime();
+                                  const end = new Date(cart?.endDate).getTime();
+                                  const days = Math.ceil(
+                                    (end - start) / (1000 * 60 * 60 * 24)
+                                  );
+                                  return `(${days} day${days > 1 ? "s" : ""}, ${
+                                    days - 1
+                                  } night${days - 1 > 1 ? "s" : ""})`;
+                                })()}
+                              </span>
                             </div>
                           </div>
                           <div
@@ -329,11 +392,13 @@ export default function NextStep() {
                             <RiTeamLine className="text-black text-lg" />
                             <div className=" flex gap-1 w-full justify-between  items-center">
                               <span className="text-xs font-semibold">
-                                Guest : 2 adults, 3 child
+                                {/* Room: {cart?.quantityRoom} */}
+                                Guest : {cart?.roomHotel?.adult} adults,{" "}
+                                {cart?.roomHotel?.children} child
                               </span>
 
                               <span className="text-sm font-semibold text-InfernoEcho-600">
-                                Rp2.555.000
+                                {cart?.roomHotel?.price}
                               </span>
                             </div>
                           </div>
@@ -344,12 +409,26 @@ export default function NextStep() {
                               Total Room Price
                             </span>
                             <span className="text-sm font-semibold text-InfernoEcho-600">
-                              Rp2.555.000
+                              {/* Rp2.555.000 */}
+                              {cart?.quantityRoom * cart?.roomHotel?.price}
                             </span>
                           </div>
                           <div className={`${mediumMontserrat.className}  `}>
                             <span className="text-xs">
-                              2 room (3 day, 2 night)
+                              {cart?.quantityRoom} room (
+                              {(() => {
+                                const start = new Date(
+                                  cart?.startDate
+                                ).getTime();
+                                const end = new Date(cart?.endDate).getTime();
+                                const days = Math.ceil(
+                                  (end - start) / (1000 * 60 * 60 * 24)
+                                );
+                                return `(${days} day${days > 1 ? "s" : ""}, ${
+                                  days - 1
+                                } night${days - 1 > 1 ? "s" : ""})`;
+                              })()}
+                              )
                             </span>
                           </div>
                         </>
@@ -374,7 +453,7 @@ export default function NextStep() {
               >
                 <span className="text-sm font-semibold text-black">Total</span>
                 <span className="text-sm text-InfernoEcho-600  font-semibold">
-                  Rp12.344.000
+                  Rp{totalPrice.toLocaleString("id-ID")}
                 </span>
               </div>
               <div className="pt-4">
@@ -393,7 +472,6 @@ export default function NextStep() {
                       onClick={() => {
                         next();
                         if (current === steps.length - 2) {
-                          localStorage.setItem("_xendit", "success");
                           router.push(redirectXendit || "");
                         }
                       }}

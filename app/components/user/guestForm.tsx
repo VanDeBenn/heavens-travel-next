@@ -14,23 +14,17 @@ const mediumMontserrat = Montserrat({
 
 interface ComponentsProps {
   dataUser: any;
-  next: () => void;
-  submit: boolean;
-  setSubmit: any;
+  submit: any;
 }
 
-export default function GuestForm({
-  dataUser,
-  next,
-  submit,
-  setSubmit,
-}: ComponentsProps) {
+export default function GuestForm({ dataUser, submit }: ComponentsProps) {
   const router = useRouter();
   const [form] = Form.useForm();
   const [isBookingForAnotherPerson, setIsBookingForAnotherPerson] =
     useState(false); // State to track selected option
   const bookingId = localStorage.getItem("_booking");
   const userId = localStorage.getItem("_id");
+  const xendit = localStorage.getItem("_xendit");
 
   useEffect(() => {
     if (dataUser) {
@@ -43,8 +37,9 @@ export default function GuestForm({
     if (submit) {
       form.submit();
       onFinish;
-      setSubmit(false);
-      handleCheckout();
+      if (!xendit) {
+        handleCheckout();
+      }
     }
   }, [dataUser, form, submit]);
 
@@ -243,7 +238,6 @@ export default function GuestForm({
               </Row>
               <Form.Item className="flex justify-end">
                 <Button
-                  onClick={next}
                   type="primary"
                   htmlType="submit"
                   style={{ display: "none" }}

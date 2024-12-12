@@ -32,16 +32,13 @@ const smallMontserrat = Montserrat({
 interface ComponentsProps {
   dataBooking: any;
   dataBookingDetail: any;
-  setSubmit: any;
 }
 
 export default function PaymentMethod({
   dataBooking,
   dataBookingDetail,
-  setSubmit,
 }: ComponentsProps) {
   const [bookingItems, setBookingItems] = useState(initialBookingItems);
-  setSubmit(false);
 
   // Filter hotel dan destinasi untuk menampilkan hanya 1 hotel dan 1 destinasi
   const filteredBookingItems = [
@@ -166,7 +163,7 @@ export default function PaymentMethod({
                     )}
                     <span className="text-xs font-semibold text-white">
                       {/* {roomHotel?. ? "Hotel" : "Destination"} */}
-                      {roomHotel?.name || destination?.name}
+                      {roomHotel?.roomType || destination?.name}
                     </span>
                   </div>
                   {/* <div className="flex items-center">
@@ -185,7 +182,7 @@ export default function PaymentMethod({
                       src={
                         "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
                       }
-                      alt={roomHotel?.name || destination?.name}
+                      alt={roomHotel?.roomType || destination?.name}
                       width={100}
                       height={100}
                       className="rounded-xl w-44"
@@ -198,7 +195,7 @@ export default function PaymentMethod({
                       href={""}
                       className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                     >
-                      {roomHotel?.name || destination?.name}
+                      {roomHotel?.roomType || destination?.name}
                     </Link>
                     <div className="flex items-center gap-1">
                       <RiCalendarLine className="text-lg text-black" />
@@ -213,36 +210,38 @@ export default function PaymentMethod({
                     <div className="flex gap-1 items-center">
                       <RiTeamLine className="text-lg text-black" />
                       <span className="text-xs text-black">
-                        Guests: {cart?.quantityAdult + cart?.quantityChildren}
+                        Guests:{" "}
+                        {destination
+                          ? `${cart?.quantityAdult} Adult, ${cart?.quantityChildren} Children`
+                          : `${roomHotel?.adult} Adult, ${roomHotel?.children} Children`}
                       </span>
                     </div>
 
                     <div className="flex justify-between w-full">
                       <div className="flex gap-1 w-full">
                         <span className="text-sm font-semibold text-RoyalAmethyst-700">
-                          {roomHotel ||
-                            (destination && `${destination?.name} Tour`)}
+                          {destination
+                            ? `${destination?.name} Tour`
+                            : `${roomHotel?.roomType} Tour`}
                         </span>
                       </div>
 
                       <div className="flex justify-end w-full gap-1 items-end">
-                        {roomHotel?.priceAdult && (
+                        {roomHotel?.price && (
                           <div className="text-sm text-black">
-                            {cart?.quantityAdult + cart?.quantityChildren ||
-                              cart?.quantityAdult +
-                                cart?.quantityChildren.match(/\d+/)?.[0]} 
-                            x{formatCurrency(roomHotel?.priceAdult)}
+                            {cart?.quantityRoom} Room x
+                            {formatCurrency(roomHotel?.price)}
                           </div>
                         )}
 
                         {destination?.priceAdult && cart?.quantityAdult > 0 && (
                           <div className="text-sm text-black">
-                            {cart?.quantityAdult} {"Adult"} x 
+                            {cart?.quantityAdult} {"Adult"} x
                             {formatCurrency(destination?.priceAdult)} <br />
                             {cart?.quantityChildren > 0 &&
                               destination?.priceChildren && (
                                 <>
-                                  {cart?.quantityChildren} {"Children"} x 
+                                  {cart?.quantityChildren} {"Children"} x
                                   {formatCurrency(destination?.priceChildren)}
                                 </>
                               )}
@@ -270,9 +269,7 @@ export default function PaymentMethod({
                         )}
                       {roomHotel &&
                         formatCurrency(
-                          ((cart?.quantityAdult || 0) +
-                            (cart?.quantityChildren || 0) || 1) *
-                            (roomHotel?.priceAdult || 0)
+                          (cart?.quantityRoom || 0) * (roomHotel?.price || 0)
                         )}
                     </span>
                   </div>

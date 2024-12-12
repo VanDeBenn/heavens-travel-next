@@ -10,6 +10,7 @@ export default function DoneOrder() {
     if (storedBookingId) {
       setBookingId(storedBookingId);
       localStorage.removeItem("_booking");
+      localStorage.removeItem("_xendit");
     }
   }, []);
 

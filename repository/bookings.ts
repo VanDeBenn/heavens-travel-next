@@ -4,6 +4,7 @@ const url = {
   bookings: () => "/bookings",
   booking: (id: string) => `/bookings/${id}`,
   checkout: () => "/bookings/checkout",
+  invoice: (invoiceId: string) => `/bookings/invoice/${invoiceId}`,
 };
 
 const api = {
@@ -15,6 +16,9 @@ const api = {
   },
   getBooking(id: string) {
     return http.fetcher(url.booking(id));
+  },
+  getInvoice(invoiceId: string) {
+    return http.fetcher(url.invoice(invoiceId));
   },
   updateBooking(id: string, data: any) {
     return http.put(url.booking(id)).send(data);
