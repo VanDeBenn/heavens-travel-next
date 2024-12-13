@@ -235,7 +235,7 @@ export default function LocationInfoDestination({
             <Select
               placeholder="Select or input your city"
               disabled={isCityDisabled}
-              // allowClear
+              allowClear
               showSearch
               filterOption={(input, option: any) =>
                 option?.children?.toLowerCase().includes(input.toLowerCase())

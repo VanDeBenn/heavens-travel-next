@@ -4,7 +4,6 @@ import BestHotelFinder from "#/app/components/user/bestHotelFinder";
 import Faq from "#/app/components/user/faq";
 import FindBestDestination from "#/app/components/user/findBestDestination";
 import Footer from "#/app/components/user/footer";
-import HeaderComponent from "#/app/components/user/header";
 import HolidayIntroduction from "#/app/components/user/holidayIntroduction";
 import PromoteSliderDesti from "#/app/components/user/promoteSliderDesti";
 import TopHotel from "#/app/components/user/topHotel";
@@ -14,19 +13,21 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 function page() {
-  const [dataDestinations, setDataDestinations] = useState<any[]>([]);
+  const [dataDestination, setDataDestinations] = useState<any[]>([]);
 
-  const fetchAllDestinations = async () => {
-    const res = await destinationRepository.api.getDestinations();
-    // console.log(res)
-    setDataDestinations(res.data);
+  const fetchAllDestination = async () => {
+    try {
+      const destination = await destinationRepository.api.getDestinations();
+      console.log(destination);
+    } catch (error) {}
   };
 
   useEffect(() => {
-    fetchAllDestinations();
+    fetchAllDestination();
   }, []);
 
-  console.log("data:", dataDestinations);
+  console.log("data:", dataDestination);
+
 
   // const [dataDestinations, setDataDestinations] = useState<any[]>([]);
   // const [count, setCount] = useState<number>(1);
@@ -50,6 +51,7 @@ function page() {
   //   } catch (error) {}
   // };
 
+
   // useEffect(() => {
   //   fetchDestinatios();
   // }, []);
@@ -57,8 +59,7 @@ function page() {
   // console.log("data desti:", dataDestinations);
   //  // console.log("desti:", dataDestinations[0].name);
   return (
-    <div className="bg-Lilac-50 flex flex-col">
-      <HeaderComponent />
+    <div className="bg-Lilac-50">
       <BannerDestination />
       <div className="px-28 2xl:px-48 pb-16 flex flex-col gap-16">
         <PromoteSliderDesti />

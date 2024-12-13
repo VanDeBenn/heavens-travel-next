@@ -20,21 +20,26 @@ import {
   EmailShareButton,
   TelegramShareButton,
 } from "react-share";
+import Loading from "#/app/loading";
 
-export default function BannerViewDesti() {
+interface dataDestination {
+  data: {
+    photodestinations: string[]; 
+  };
+  scrollToChooseRoom: () => void;
+}
+
+export default function BannerViewDesti({ data, scrollToChooseRoom }: dataDestination) {
+  if (!data) {
+    return <Loading />;
+  }
+
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const copyText =
-    "https://htrip.com/destination/detail/673c0710-15f8-c0ddf3df7be9";
+    "https://htrip.com/destination/detail/f7b03e0e-7823-4d1f-bd63-27ed8d81844e";
   const title = "Check out this amazing destination!";
-
-  const images = [
-    "/images/illustration/ocean-4076551_1920.jpg",
-    "/images/illustration/surfing-2686450_1920.jpg",
-    "/images/illustration/bird-9078403_1920.jpg",
-    "/images/illustration/shipwreck-7334280_1920.jpg",
-  ];
 
   const handleShareClick = () => {
     setIsModalVisible(true);
@@ -50,16 +55,18 @@ export default function BannerViewDesti() {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
+  console.log(data);
+
   return (
     <div className="w-full relative">
       <Carousel autoplay dots className="rounded-xl overflow-hidden h-[500px]">
-        {images.map((src, index) => (
-          <div key={index}>
+        {data.photodestinations.map((data) => (
+          <div key={data}>
             <Image
-              src={src}
-              alt={`Slide ${index + 1}`}
+              src={`http://localhost:3222/photo-destinations/${data}`}
+              alt={`Slide ${data + 1}`}
               preview={{
-                src,
+                src: `http://localhost:3222/photo-destinations/${data}`,
               }}
               className="w-full object-cover"
             />

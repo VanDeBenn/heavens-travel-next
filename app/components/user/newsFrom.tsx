@@ -1,16 +1,73 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import { RiArrowRightSLine, RiNewspaperLine } from "react-icons/ri";
+import Loading from "#/app/loading";
+import { destinationRepository } from "#/repository/destinations";
+import { title } from "process";
+
+interface dataDestination {
+  id: string;
+  blogs: dataBlog[];
+  name: string;
+  pathPhoto: string;
+  createdAt: string;
+}
+
+interface dataBlog {
+  id: string;
+  title: string;
+  pathPhoto: string;
+  createdAt: string;
+}
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+};
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
 
-export default function NewsFrom() {
+export default function NewsFrom({ data }: { data: dataDestination }) {
+  const [blogs, setBlogs] = useState<dataBlog[]>([]);
+
+  useEffect(() => {
+    // Set blogs data from the destination data
+    if (data?.blogs) {
+      setBlogs(data.blogs);
+    }
+  }, [data]);
+
+  if (!data) {
+    return <Loading />;
+  }
+
+  // const [dataDestination, setDataDestinations] = useState<any[]>([]);
+
+  // const fetchAllDestination = async () => {
+  //   const res = await destinationRepository.api.getDestinations();
+  // };
+
+  // useEffect (() => {
+  //   fetchAllDestination()
+  // }, []);
+
+  console.log("data:", data);
+  // console.log(blog);
+  // const NewsFrom = dataDestination.filter(
+  //   (item: any) => item.blog?.title == blog
+  // );
+
+  console.log("news", NewsFrom);
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between items-center">
@@ -20,7 +77,7 @@ export default function NewsFrom() {
           >
             <RiNewspaperLine className="text-3xl text-RoyalAmethyst-700" />
             <span className="text-xl font-semibold">
-              Exciting News from Bali
+              Exciting News from {data.name}
             </span>
           </div>
           <span
@@ -32,11 +89,11 @@ export default function NewsFrom() {
 
         <div className={`${mediumMontserrat.className} `}>
           <Link
-            href="/ "
+            href="/blog/list"
             className="border-solid border-RoyalAmethyst-700 border hover:bg-RoyalAmethyst-700 hover:border-gray-300 transition-all duration-300 px-7 py-2 rounded-xl no-underline group flex items-center "
           >
             <span className="text-RoyalAmethyst-700 text-sm font-semibold group-hover:text-white transition-all duration-300 ">
-              Read Inspiring Articles
+              Read Inspiring Articles 
             </span>
             <RiArrowRightSLine className="text-2xl text-RoyalAmethyst-700 group-hover:text-white transition-all duration-300 " />
           </Link>
@@ -45,19 +102,21 @@ export default function NewsFrom() {
 
       {/* Card News */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mt-4">
-        {DiscoverData.slice(0, 4).map((card, index) => (
+      {blogs.sort(() => 0.5 - Math.random())
+          .slice(0, 4)
+          .map((item: dataBlog) => (
           <div
-            key={index}
+            key={item.id}
             // href={card.link}
             //yang bener buat abang beckend
             // href={`/news/popular/${index}`}
           >
             <div className="relative bg-white border border-gray-200 rounded-xl  ">
-              <Link href={card.link}>
+              <Link href={`/blog/list/detail/${item.id}`}>
                 <div className="relative w-full h-[440px]">
                   <Image
-                    src={card.imageSrc}
-                    alt={card.title}
+                    src={"/images/illustration/hawaii-beach.jpg"}
+                    alt={item.title}
                     // width={300}
                     // height={300}
                     layout="fill"
@@ -70,12 +129,14 @@ export default function NewsFrom() {
               <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
                 <div className="flex flex-col">
                   <Link
-                    href={card.link}
+                    href={''}
                     className="text-base font-semibold mb-1 leading-5 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
                   >
-                    {card.title}
+                    {item.title}
                   </Link>
-                  <span className="text-xs text-gray-600">{card.date}</span>
+                  <span className="text-xs text-gray-600">
+                  {`${formatDate(item.createdAt)}`}
+                  </span>
                 </div>
               </div>
             </div>

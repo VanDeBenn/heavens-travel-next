@@ -9,30 +9,54 @@ import {
   RiStarHalfFill,
   RiBuilding3Line,
   RiStarLine,
-  RiBlazeLine,
 } from "react-icons/ri";
+import Loading from "#/app/loading";
 import React from "react";
-import { GiSydneyOperaHouse } from "react-icons/gi";
 import { BsBuildings } from "react-icons/bs";
+
+interface dataDestination {
+  id: string;
+  name: string;
+  pathPhoto: string;
+  createdAt: string;
+  city: dataCity;
+}
+
+interface dataCity {
+  id: string;
+  name: string;
+  hotels: dataHotel[];
+}
+
+interface dataHotel {
+  id: string;
+  name: string;
+  rating: number;
+  photohotels: dataPhotoHotel[];
+  description: string;
+  price: dataRoomHotel;
+}
+
+interface dataRoomHotel {
+  id: string;
+  price: number;
+}
+
+interface dataPhotoHotel {
+  id: string;
+  pathPhoto: string;
+}
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
 
-// Define the HotelCard type
-type HotelCard = {
-  id: number;
-  text: string;
-  imgSrc: string;
-  link: string;
-  desc: string;
-  loc: string;
-  price: string;
-  stars: number;
-};
+export default function TopFourHotel({ data }: { data: dataDestination }) {
+  if (!data || !data.city.hotels || data.city.hotels.length === 0) {
+    return <Loading />;
+  }
 
-export default function TopFourHotel() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
@@ -41,138 +65,107 @@ export default function TopFourHotel() {
         >
           <BsBuildings className="text-3xl text-RoyalAmethyst-700" />
           <span className="text-xl font-semibold">
-            Top 4 4.5-star Select Hotels in Bali
+            Top 4 4.5-star Select Hotels in {data.city.name || "Unknown City"}
           </span>
         </div>
       </div>
 
       {/* Grid card */}
       <div className="grid grid-cols-4 gap-4">
-        {cityData["Asia"].slice(0, 4).map((card) => (
-          <div
-            key={card.id}
-            className="no-underline border border-gray-300 border-solid rounded-xl flex flex-col gap-3 bg-white"
-          >
-            <Link href={card.link} className="flex flex-col items-center">
-              <Image
-                src={card.imgSrc}
-                alt={card.text}
-                className="h-52 w-full rounded-t-xl"
-                height={300}
-                width={300}
-              />
-            </Link>
+        {data.city.hotels
+          .sort((a, b) => b.rating - a.rating)
+          .slice(0, 4) 
+          .map((hotel) => (
             <div
-              className={`${mediumMontserrat.className} px-4 pb-2 flex flex-col gap-2`}
+              key={hotel.id}
+              className="no-underline border border-gray-300 border-solid rounded-xl flex flex-col gap-3 bg-white"
             >
-              <div className="flex justify-between gap-1">
-                <Link
-                  href={card.link}
-                  className="font-semibold text-black text-base no-underline hover:text-RoyalAmethyst-700 transition-all duration-300"
-                >
-                  {card.text}
-                </Link>
-                <div className="flex gap-1 items-center">
-                  {/* Render rating with stars */}
-                  {Array.from({ length: 5 }, (_, index) => {
-                    if (index < Math.floor(card.stars)) {
-                      return (
-                        <RiStarFill
-                          key={index}
-                          className="text-[#FFD700] text-lg"
-                        />
-                      );
-                    } else if (index < card.stars) {
-                      return (
-                        <RiStarHalfFill
-                          key={index}
-                          className="text-[#FFD700] text-lg"
-                        />
-                      );
-                    } else {
-                      return (
-                        <RiStarLine
-                          key={index}
-                          className="text-[#FFD700] text-lg"
-                        />
-                      );
-                    }
-                  })}
-                </div>
-              </div>
-              <div className="flex items-center gap-1">
-                <RiMapPin2Fill className="text-lg text-gray-400" />
-                <span className="text-sm text-gray-400">{card.loc}</span>
-              </div>
               <Link
-                href={card.link}
-                className="text-black text-base font-semibold no-underline leading-6"
+                href={`/hotel/detail/${hotel.id}`}
+                className="flex flex-col items-center"
               >
-                {card.desc}
+                <Image
+                  src={
+                    hotel.photohotels && hotel.photohotels.length > 0
+                      ? hotel.photohotels[0].pathPhoto
+                      : "/images/placeholder.png"
+                  }
+                  alt={hotel.name}
+                  className="h-52 w-full rounded-t-xl object-cover"
+                  height={300}
+                  width={300}
+                />
               </Link>
-              <div className="flex justify-end">
-                <div className="flex gap-2 items-center">
-                  <span className="text-gray-400 text-sm align-text-bottom">
-                    Start from
-                  </span>
+              <div
+                className={`${mediumMontserrat.className} px-4 pb-2 flex flex-col gap-2`}
+              >
+                <div className="flex justify-between gap-1">
                   <Link
-                    href={card.link}
-                    className="text-InfernoEcho-600 text-lg font-semibold no-underline"
+                    href={`/hotel/detail/${hotel.id}`}
+                    className="font-semibold text-black text-base no-underline hover:text-RoyalAmethyst-700 transition-all duration-300"
                   >
-                    {card.price}
+                    {hotel.name}
                   </Link>
+                  <div className="flex gap-1 items-center">
+                    {/* Render rating with stars */}
+                    {Array.from({ length: 5 }, (_, index) => {
+                      if (index < Math.floor(hotel.rating)) {
+                        return (
+                          <RiStarFill
+                            key={index}
+                            className="text-[#FFD700] text-lg"
+                          />
+                        );
+                      } else if (index < hotel.rating) {
+                        return (
+                          <RiStarHalfFill
+                            key={index}
+                            className="text-[#FFD700] text-lg"
+                          />
+                        );
+                      } else {
+                        return (
+                          <RiStarLine
+                            key={index}
+                            className="text-[#FFD700] text-lg"
+                          />
+                        );
+                      }
+                    })}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <RiMapPin2Fill className="text-lg text-gray-400" />
+                  <span className="text-sm text-gray-400">
+                    {data.city.name || "No description available"}
+                  </span>
+                </div>
+                <Link
+                  href={`/hotel/detail/${hotel.id}`}
+                  className="text-black text-base font-semibold no-underline leading-6"
+                >
+                  {hotel?.description}
+                </Link>
+                <div className="flex justify-end">
+                  <div className="flex gap-2 items-center">
+                    <span className="text-gray-400 text-sm align-text-bottom">
+                      Start from
+                    </span>
+                    <Link
+                      href={`/hotel/detail/${hotel.id}`}
+                      className="text-InfernoEcho-600 text-lg font-semibold no-underline"
+                    >
+                      {hotel.price && hotel.price.price
+                        ? `Rp${hotel.price.price.toLocaleString()}`
+                        : "Price not available"}
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
       {/* End card */}
     </div>
   );
 }
-
-const cityData: { [key: string]: HotelCard[] } = {
-  Asia: [
-    {
-      id: 1,
-      text: "Ayana Resort ",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/bali",
-      desc: "Experience luxury in the heart.",
-      loc: "Ciledug",
-      price: "Rp290.000",
-      stars: 4.5,
-    },
-    {
-      id: 2,
-      text: " Seasons Resort",
-      imgSrc: "/images/illustration/road-bridge.jpg",
-      link: "/kota/bali",
-      desc: "Discover tranquility in Ubud.",
-      loc: "Kuala Lumpur",
-      price: "Rp320.000",
-      stars: 4,
-    },
-    {
-      id: 3,
-      text: "Oberoi Beach Resort",
-      imgSrc: "/images/illustration/beautiful-church.jpg",
-      link: "/kota/bali",
-      desc: "A beachside paradise.",
-      loc: "Hongkong",
-      price: "Rp340.000",
-      stars: 2.5,
-    },
-    {
-      id: 4,
-      text: "Alila Villas Uluwatu",
-      imgSrc: "/images/illustration/nightlife-city-sparkles-light-streets.jpg",
-      link: "/kota/bali",
-      desc: "Enjoy the vibrant Kuta Beach.",
-      loc: "Bali",
-      price: "Rp310.000",
-      stars: 4,
-    },
-  ],
-};

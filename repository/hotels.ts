@@ -3,6 +3,7 @@ import { http } from "#/utils/http";
 const url = {
   hotels: () => "/hotels",
   hotel: (id: string) => `/hotels/${id}`,
+  hotelByCityName: () => `/destinations/city`,
   photoHotel: () => `/photo-hotels/upload`,
 };
 
@@ -15,6 +16,9 @@ const api = {
   },
   getHotel(id: string) {
     return http.fetcher(url.hotel(id));
+  },
+  getHotelByCityName(cityName: any) {
+    return http.post(url.hotelByCityName()).send(cityName);
   },
   updateHotel(id: string, data: any) {
     return http.put(url.hotel(id)).send(data);

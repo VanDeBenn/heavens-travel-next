@@ -1,150 +1,83 @@
 "use client";
-
-import { cartRepository } from "#/repository/carts";
+import NewsFrom from "#/app/components/user/newsFrom";
+import BannerViewDesti from "#/app/components/user/bannerViewDesti";
+import DescriptionDesti from "#/app/components/user/descriptionDesti";
+import Footer from "#/app/components/user/footer";
+import GuestReviewDesti from "#/app/components/user/guestReviewDesti";
+import HeaderComponent from "#/app/components/user/header";
+import TicketsOverview from "#/app/components/user/ticketsOverview";
+import TopFourHotel from "#/app/components/user/topFourHotel";
+import OtherRecommendedCities from "#/app/components/user/otherRecommendedCities";
+import Faq from "#/app/components/user/faq";
+import React, { useEffect, useReducer, useRef, useState } from "react";
+import InstagrammableHotels from "#/app/components/user/instagrammableHotels";
 import { destinationRepository } from "#/repository/destinations";
-import { wishlistRepository } from "#/repository/wishlists";
-import React, { useEffect, useState } from "react";
-import type { DatePickerProps } from "antd";
-import { DatePicker, Space } from "antd";
-import type { Dayjs } from "dayjs";
+import { blogRepository } from "#/repository/blogs";
 
-export default function Page({ params }: { params: { id: string } }) {
-  const [dataDestinations, setDataDestinations] = useState<any[]>([]);
-  const [count, setCount] = useState({ adult: 1, children: 0 });
-  const [destinationId, setDestinationId] = useState<string>("");
-  const [date, setDate] = useState<string>("");
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
+function page({ params }: { params: {id: string } }) { 
+  const [dataDestination, setDataDestinations] = useState<any>();
+  const [x, setx] = useState<any>();
+  const chooseRoomRef = useRef<HTMLDivElement>(null);
 
-  const fetchDestinations = async () => {
+  const fetchAllDestination = async () => {
     try {
-      const res: any = await destinationRepository.api.getDestination(
-        params.id
-      );
-      setDataDestinations([res.body.data]);
-      setDestinationId(res.body.data.id);
-    } catch (error) {
-      console.error("Failed to fetch destination", error);
-    }
-  };
-
-  const handleDate: DatePickerProps["onChange"] = (date, dateString) => {
-    setDate(dateString);
-  };
-  console.log(`${startDate} - ${endDate}`);
-
-  const handleRangeDate = (
-    dates: [Dayjs | null, Dayjs | null] | null,
-    dateStrings: [string, string]
-  ) => {
-    setStartDate(dateStrings[0]);
-    setEndDate(dateStrings[1]);
-  };
-  // console.log("startdate:", startDate);
-  // console.log("endate:", endDate);
-
-  const { RangePicker } = DatePicker;
-
-  const handleCountChange = (
-    type: "adult" | "children",
-    operation: "increment" | "decrement"
-  ) => {
-    setCount((prevCount) => ({
-      ...prevCount,
-      [type]:
-        operation === "increment"
-          ? Math.min(prevCount[type] + 1, 20)
-          : Math.max(prevCount[type] - 1, type === "adult" ? 1 : 0),
-    }));
-  };
-
-  const handleWishlist = async () => {
-    try {
-      const data = {
-        userId: localStorage.getItem("_id"),
-        destinationId: destinationId,
-      };
-      await wishlistRepository.api.create(data);
+      const res = await destinationRepository.api.getDestination(params.id);
+      console.log(res.body.data);
+      setDataDestinations(res.body.data)
+       setx(res.body.blog.name);
     } catch (error) {}
   };
 
-  // const cartId = localStorage.getItem("_carts");
-  const handleCart = async () => {
-    try {
-      const data = {
-        userId: localStorage.getItem("_id"),
-        destinationId: destinationId,
-        quantityAdult: count.adult,
-        quantityChildren: count.children,
-        startDate: startDate,
-        endDate: endDate,
-        // carts: cartId,
-      };
-      // console.log(data);
-      await cartRepository.api.addToCart(data);
-    } catch (error) {
-      console.error("Failed to add to cart", error);
+  useEffect(() => {
+    fetchAllDestination();
+  }, []);
+
+  
+  const scrollToChooseRoom = () => {
+    if (chooseRoomRef.current) {
+      chooseRoomRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   };
 
-  useEffect(() => {
-    fetchDestinations();
-  }, []);
+  // console.log("data:", dataDestination);
+
+  // const [datablog, setDataBlog] = useState<any[]>([]);
+
+  // const fetchAllBlog = async () => {
+  //   const res = await blogRepository.api.getBlogs();
+  //   // console.log(res);
+  //   setDataBlog(res.data);
+  // };
+
+  // useEffect(() => {
+  //   fetchAllBlog();
+  // }, []);
+
+  // console.log("data:", dataBlog);
 
   return (
-    <div>
-      {dataDestinations.map((item) => (
-        <div key={item.id}>
-          <div>{item.name}</div>
-          <div>{item.address}</div>
-          <div>{item.description}</div>
-          <div>Max Capacity: {item.maxCapacity}</div>
-          <div>Price (Adult): {item.priceAdult}</div>
-          <div>Price (Children): {item.priceChildren}</div>
-
-          <div>
-            <br />
-            <div>
-              Adult:
-              <button onClick={() => handleCountChange("adult", "decrement")}>
-                -
-              </button>
-              {count.adult}
-              <button onClick={() => handleCountChange("adult", "increment")}>
-                +
-              </button>
-            </div>
-            <br />
-            <div>
-              Children:
-              <button
-                onClick={() => handleCountChange("children", "decrement")}
-              >
-                -
-              </button>
-              {count.children}
-              <button
-                onClick={() => handleCountChange("children", "increment")}
-              >
-                +
-              </button>
-            </div>
-            <br />
-            <button onClick={handleCart}>Add to Cart</button>
-            <button onClick={handleWishlist}>Add to Wishlist</button>
-            <br />
-            <br />
-            <Space>
-              <div>
-                Date: <DatePicker onChange={handleDate} />
-              </div>
-              <div>
-                Date Range: <RangePicker onChange={handleRangeDate} />
-              </div>
-            </Space>
-          </div>
-        </div>
-      ))}
+    <div className="bg-Lilac-50">
+      <HeaderComponent />
+      <div className="px-28 2xl:px-48 pb-16 flex flex-col gap-5 pt-20">
+        <BannerViewDesti
+        scrollToChooseRoom={scrollToChooseRoom}
+        data={dataDestination}/>
+        <DescriptionDesti data={dataDestination}/>
+        <TicketsOverview />
+        <GuestReviewDesti />
+        <NewsFrom data={dataDestination} />
+        <InstagrammableHotels data={dataDestination} />
+        <TopFourHotel data={dataDestination}/>
+        <OtherRecommendedCities />
+        <Faq />
+      </div>
+      <Footer />
     </div>
   );
 }
+
+export default page
+
