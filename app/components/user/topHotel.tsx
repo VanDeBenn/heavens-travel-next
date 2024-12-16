@@ -37,7 +37,6 @@ type HotelCard = {
 export default function TopHotel() {
   const [selectedCity, setSelectedCity] = useState<string>("Bali");
   const [hotelsData, setHotelsData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const getAllHotels = async () => {
     const res = await hotelRepository.api.getHotels();
@@ -57,14 +56,8 @@ export default function TopHotel() {
   };
 
   useEffect(() => {
-    Promise.all([getAllHotels(), getAllCities()]).finally(() => {
-      setLoading(false);
-    });
+    getAllHotels(), getAllCities();
   }, []);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
 
   // Filter hotels by selected city
   const filteredHotels = hotelsData.filter(
@@ -75,8 +68,6 @@ export default function TopHotel() {
       hotel?.city?.province?.name === selectedCity
   );
 
-  console.log("city", selectedCity);
-  console.log("hotel", filteredHotels);
   const citiesList = ["Bali", "Bekasi", "Bandung", "Daerah Khusus Jakarta"]; // Define the cities explicitly
 
   return (

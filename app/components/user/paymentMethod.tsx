@@ -62,7 +62,7 @@ export default function PaymentMethod({
       },
     });
   };
-  //  // console.log(dataBooking);
+  //  // // console.log(dataBooking);
   const guestDetails = [
     {
       label: "Full Name",

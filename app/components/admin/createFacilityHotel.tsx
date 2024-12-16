@@ -111,7 +111,7 @@ export default function CreateFacilityHotel() {
 
   const handleSaveChanges = () => {
     // Implement save logic here
-    // console.log("Changes saved");
+    // // console.log("Changes saved");
   };
 
   return (

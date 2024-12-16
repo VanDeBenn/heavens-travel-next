@@ -56,8 +56,8 @@ export default function BasicInfoHotel({
     }
   }, [submitBasicInfoForm]);
 
-  // console.log("submit", submitBasicInfoForm);
-  // console.log("data", setBasicInfoHotel);
+  // // console.log("submit", submitBasicInfoForm);
+  // // console.log("data", setBasicInfoHotel);
   return (
     <>
       <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">

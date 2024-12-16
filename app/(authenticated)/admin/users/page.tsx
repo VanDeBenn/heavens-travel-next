@@ -16,13 +16,13 @@ const UserPage = () => {
       setAllUsersData(res.body.data);
     } catch (error) {}
   };
-  // console.log(allUsersData);
+  // // console.log(allUsersData);
 
   useEffect(() => {
     getAllUsers();
   }, []);
 
-  // console.log(allUsersData);
+  // // console.log(allUsersData);
   return (
     <div className="flex flex-col gap-5">
       <UserList data={allUsersData} />

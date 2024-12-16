@@ -26,7 +26,7 @@ export default function Coba() {
   // const [isLoading, setIsLoading] = useState(false);
 
   // const onBtnClick = (e: any) => {
-  //    // console.log("ajg");
+  //    // // console.log("ajg");
   //   setIsLoading(true);
   //   setTimeout(() => {
   //     setIsLoading(false);
@@ -36,7 +36,7 @@ export default function Coba() {
   // const [ShowAlert, setShowAlert] = useState(false);
 
   // const onSelesai = (e: any) => {
-  //    // console.log(e);
+  //    // // console.log(e);
   //   setTimeout(() => {
   //     setShowAlert(true);
   //   }, 1000);

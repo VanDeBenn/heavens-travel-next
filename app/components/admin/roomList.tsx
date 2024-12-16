@@ -64,7 +64,7 @@ export default function RoomList({ data, id }: ComponentProps) {
   }, []);
 
   const handleMenuClick = (e: any) => {
-    // console.log("Menu item clicked:", e);
+    // // console.log("Menu item clicked:", e);
   };
 
   // Define the columns with the correct type ColumnsType<DataType>

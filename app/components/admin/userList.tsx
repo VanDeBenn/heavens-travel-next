@@ -14,7 +14,7 @@ import { Users } from "#/app/types/Users";
 import Loading from "#/app/loading";
 
 const handleMenuClick = (e: any) => {
-  // console.log("Menu item clicked:", e);
+  // // console.log("Menu item clicked:", e);
 };
 
 const columns = [

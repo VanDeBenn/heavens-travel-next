@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import { RiArrowRightSLine, RiNewspaperLine } from "react-icons/ri";
+import { blogRepository } from "#/repository/blogs";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
@@ -11,6 +12,19 @@ const mediumMontserrat = Montserrat({
 });
 
 export default function ReadAndDiscover() {
+  const [blogsData, setBlogsData] = useState<any>();
+
+  const getAllBlogs = async () => {
+    try {
+      const res = await blogRepository.api.getBlogs();
+      setBlogsData(res.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getAllBlogs();
+  }, []);
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between items-center">
@@ -45,42 +59,47 @@ export default function ReadAndDiscover() {
 
       {/* Card News */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mt-4">
-        {DiscoverData.slice(0, 4).map((card, index) => (
-          <div
-            key={index}
-            // href={card.link}
-            //yang bener buat abang beckend
-            // href={`/news/popular/${index}`}
-          >
-            <div className="relative bg-white border border-gray-200 rounded-xl  ">
-              <Link href={card.link}>
-                <div className="relative w-full h-[440px]">
-                  <Image
-                    src={card.imageSrc}
-                    alt={card.title}
-                    // width={300}
-                    // height={300}
-                    layout="fill"
-                    objectFit="cover"
-                    className="absolute inset-0  rounded-xl "
-                  />
-                </div>
-              </Link>
+        {blogsData
+          ?.sort(() => 0.5 - Math.random())
+          .slice(0, 4)
+          .map((card: any) => (
+            <div
+              key={card?.id}
+              // href={card.link}
+              //yang bener buat abang beckend
+              // href={`/news/popular/${index}`}
+            >
+              <div className="relative bg-white border border-gray-200 rounded-xl  ">
+                <Link href={""}>
+                  <div className="relative w-full h-[440px]">
+                    <Image
+                      src={`http://localhost:3222/photo-blogs/${card?.pathPhoto}`}
+                      alt={card.title}
+                      // width={300}
+                      // height={300}
+                      layout="fill"
+                      objectFit="cover"
+                      className="absolute inset-0  rounded-xl "
+                    />
+                  </div>
+                </Link>
 
-              <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
-                <div className="flex flex-col">
-                  <Link
-                    href={card.link}
-                    className="text-base font-semibold mb-1 leading-5 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
-                  >
-                    {card.title}
-                  </Link>
-                  <span className="text-xs text-gray-600">{card.date}</span>
+                <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
+                  <div className="flex flex-col">
+                    <Link
+                      href={""}
+                      className="text-base font-semibold mb-1 leading-5 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
+                    >
+                      {card.title}
+                    </Link>
+                    <span className="text-xs text-gray-600">
+                      {new Date(card.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

@@ -437,11 +437,11 @@ export default function BookingDetail({ data }: ComponentProps) {
               Help
             </div>
           </Link>
-          <Link href={`/profile/bookings/detail/${data.id}/review`}>
+          {/* <Link href={`/profile/bookings/detail/${data.id}/review`}>
             <div className="w-max cursor-pointer px-6 py-2 rounded-xl bg-RoyalAmethyst-700 font-semibold text-sm text-white">
               Review
             </div>
-          </Link>
+          </Link> */}
         </div>
       </div>
       <Modal

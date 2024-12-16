@@ -62,7 +62,7 @@ export default function GuestForm({ dataUser, submit }: ComponentsProps) {
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log("Failed:", errorInfo);
+    // // console.log("Failed:", errorInfo);
   };
 
   const handleCheckout = async () => {
@@ -72,7 +72,7 @@ export default function GuestForm({ dataUser, submit }: ComponentsProps) {
         userId: userId,
       };
       const req = await bookingRepository.api.checkout(data);
-      // console.log(req);
+      // // console.log(req);
       localStorage.setItem("_xendit", req.body.redirect);
     } catch (error) {}
   };

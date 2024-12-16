@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Form, Input, Button, Card, Typography, Divider, Space } from "antd";
 import {
@@ -17,12 +17,13 @@ const { Text, Link } = Typography;
 const Register = () => {
   const router = useRouter();
   const [form] = Form.useForm();
+  const [isRegistered, setIsRegistered] = useState(false);
 
-  if (TokenUtil.accessToken && TokenUtil.refreshToken) {
-    router.push("/profile");
-  } else {
-    router.push("/register");
-  }
+  useEffect(() => {
+    if (isRegistered) {
+      router.push("/profile");
+    }
+  }, [isRegistered, router]);
 
   type RegisterForm = {
     fullName: string;
@@ -46,14 +47,14 @@ const Register = () => {
       const { confirmPassword, ...data } = dataRegister;
 
       await authRepository.api.register(data);
-      router.push("/login");
+      setIsRegistered(true);
     } catch (error) {
       console.error("Registration failed:", error);
     }
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log("Failed:", errorInfo);
+    console.log("Validation Failed:", errorInfo);
   };
 
   const handleLoginGoogle = () => {

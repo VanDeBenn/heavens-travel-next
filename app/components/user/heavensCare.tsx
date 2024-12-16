@@ -65,7 +65,7 @@ export default function HeavensCare({
         bookingId: bookingsId || null,
       };
 
-      console.log(dataBasicInfo);
+      // console.log(dataBasicInfo);
       const req = await reportRepository.api.create(dataBasicInfo);
       setReportId(req?.body?.data?.id);
       // setBasicInfoDestination(dataBasicInfo);
@@ -174,11 +174,11 @@ export default function HeavensCare({
   const { payment } = data?.booking || { data };
 
   data?.bookingdetails?.map((item: any) => {
-    console.log(item?.id);
-    console.log(item?.cart?.destination?.name);
+    // console.log(item?.id);
+    // console.log(item?.cart?.destination?.name);
   });
 
-  console.log(data);
+  // console.log(data);
   return (
     <div className="bg-white rounded-xl">
       {/* Header section dengan judul 'Heavens Care' */}

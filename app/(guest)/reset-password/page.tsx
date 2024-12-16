@@ -31,18 +31,15 @@ const ResetPassword: React.FC = () => {
       };
       const req = await authRepository.api.resetPassword(data);
       if (req.ok) {
-        TokenUtil.clearAccessToken;
-        TokenUtil.clearRefreshToken;
-        localStorage.clear;
-        localStorage.removeItem("email");
-        localStorage.removeItem("reset_token");
+        // error localStorage is not defined
+        localStorage.clear();
         router.push("/login");
       }
     } catch (error) {}
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log("Failed:", errorInfo);
+    // // console.log("Failed:", errorInfo);
   };
 
   return (

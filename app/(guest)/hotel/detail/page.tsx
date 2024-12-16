@@ -24,7 +24,7 @@ export default function Page() {
     }
   };
 
-  console.log(hotelData);
+  // console.log(hotelData);
   return (
     <div className="bg-Lilac-50">
       <HeaderComponent />

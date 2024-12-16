@@ -22,7 +22,7 @@ export default function destinationDetail({
     return <Loading />;
   }
 
-  console.log(destinationData);
+  // console.log(destinationData);
   const guestDetails = [
     { label: "Name Destination", value: destinationData?.name },
     { label: "Rating", value: destinationData?.rating },
@@ -71,7 +71,7 @@ export default function destinationDetail({
 
   const photos: any[] = destinationData?.photodestinations;
 
-  //  // console.log(photos);
+  //  // // console.log(photos);
   return (
     <div>
       <div className={`${mediumMontserrat.className} py-6 px-7`}>

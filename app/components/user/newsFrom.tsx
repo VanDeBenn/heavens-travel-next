@@ -60,13 +60,13 @@ export default function NewsFrom({ data }: { data: dataDestination }) {
   //   fetchAllDestination()
   // }, []);
 
-  console.log("data:", data);
-  // console.log(blog);
+  // console.log("data:", data);
+  // // console.log(blog);
   // const NewsFrom = dataDestination.filter(
   //   (item: any) => item.blog?.title == blog
   // );
 
-  console.log("news", NewsFrom);
+  // console.log("news", NewsFrom);
 
   return (
     <div className="flex flex-col gap-2">
@@ -93,7 +93,7 @@ export default function NewsFrom({ data }: { data: dataDestination }) {
             className="border-solid border-RoyalAmethyst-700 border hover:bg-RoyalAmethyst-700 hover:border-gray-300 transition-all duration-300 px-7 py-2 rounded-xl no-underline group flex items-center "
           >
             <span className="text-RoyalAmethyst-700 text-sm font-semibold group-hover:text-white transition-all duration-300 ">
-              Read Inspiring Articles 
+              Read Inspiring Articles
             </span>
             <RiArrowRightSLine className="text-2xl text-RoyalAmethyst-700 group-hover:text-white transition-all duration-300 " />
           </Link>
@@ -102,46 +102,47 @@ export default function NewsFrom({ data }: { data: dataDestination }) {
 
       {/* Card News */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mt-4">
-      {blogs.sort(() => 0.5 - Math.random())
+        {blogs
+          .sort(() => 0.5 - Math.random())
           .slice(0, 4)
           .map((item: dataBlog) => (
-          <div
-            key={item.id}
-            // href={card.link}
-            //yang bener buat abang beckend
-            // href={`/news/popular/${index}`}
-          >
-            <div className="relative bg-white border border-gray-200 rounded-xl  ">
-              <Link href={`/blog/list/detail/${item.id}`}>
-                <div className="relative w-full h-[440px]">
-                  <Image
-                    src={"/images/illustration/hawaii-beach.jpg"}
-                    alt={item.title}
-                    // width={300}
-                    // height={300}
-                    layout="fill"
-                    objectFit="cover"
-                    className="absolute inset-0  rounded-xl "
-                  />
-                </div>
-              </Link>
+            <div
+              key={item.id}
+              // href={card.link}
+              //yang bener buat abang beckend
+              // href={`/news/popular/${index}`}
+            >
+              <div className="relative bg-white border border-gray-200 rounded-xl  ">
+                <Link href={`/blog/list/detail/${item.id}`}>
+                  <div className="relative w-full h-[440px]">
+                    <Image
+                      src={"/images/illustration/hawaii-beach.jpg"}
+                      alt={item.title}
+                      // width={300}
+                      // height={300}
+                      layout="fill"
+                      objectFit="cover"
+                      className="absolute inset-0  rounded-xl "
+                    />
+                  </div>
+                </Link>
 
-              <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
-                <div className="flex flex-col">
-                  <Link
-                    href={''}
-                    className="text-base font-semibold mb-1 leading-5 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
-                  >
-                    {item.title}
-                  </Link>
-                  <span className="text-xs text-gray-600">
-                  {`${formatDate(item.createdAt)}`}
-                  </span>
+                <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
+                  <div className="flex flex-col">
+                    <Link
+                      href={""}
+                      className="text-base font-semibold mb-1 leading-5 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
+                    >
+                      {item.title}
+                    </Link>
+                    <span className="text-xs text-gray-600">
+                      {`${formatDate(item.createdAt)}`}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

@@ -13,7 +13,6 @@ import WhatInterestsYou from "#/app/components/user/whatInterestsYou";
 import Faq from "#/app/components/user/faq";
 
 const Page = () => {
-  //   const { data, error, isLoading } = sampleRepository.hooks.useJoke();
   return (
     <div className="bg-Lilac-50 flex flex-col ">
       <Header />
@@ -39,6 +38,7 @@ const Page = () => {
       </div>
 
       <Footer />
+
       {/* <div>
             home: {store.ui.title}
         </div>

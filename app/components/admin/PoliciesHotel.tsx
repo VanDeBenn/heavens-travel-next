@@ -67,7 +67,7 @@ export default function PoliciesHotel({ hotelId }: ComponentProps) {
           title: policy,
           hotelId: hotelId,
         };
-        console.log(data);
+        // console.log(data);
         const req = await propertyPoliciesRepository.api.create(data);
       } catch (error) {}
       // await handleUploadSingleFile(policy, hotelId);
@@ -82,7 +82,7 @@ export default function PoliciesHotel({ hotelId }: ComponentProps) {
     }
   }, [hotelId]);
 
-  console.log(policies);
+  // console.log(policies);
   return (
     <>
       <div

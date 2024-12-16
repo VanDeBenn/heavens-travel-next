@@ -69,7 +69,7 @@ export default function YourBooking({ dataBookingDetail }: ComponentsProps) {
     return;
   }
 
-  console.log("com", dataBookingDetail);
+  // console.log("com", dataBookingDetail);
 
   return (
     <div className="w-full">
@@ -242,7 +242,7 @@ export default function YourBooking({ dataBookingDetail }: ComponentsProps) {
             {/* {dataBookingDetail.map((item: any) => {
               const { cart } = item;
               const { destination, roomHotel } = cart;
-              //  // console.log(item.id);
+              //  // // console.log(item.id);
               return (
                 <div className="" key={item.id}>
                   <div className="">{destination?.name}</div>

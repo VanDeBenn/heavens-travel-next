@@ -31,7 +31,10 @@ export default function Page() {
     }
   };
 
-  //   console.log(hotelData);
+  //   // console.log(hotelData);
+  if (!hotelData) {
+    return;
+  }
   return (
     <div className="bg-Lilac-50">
       <HeaderComponent />

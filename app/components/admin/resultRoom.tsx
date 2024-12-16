@@ -19,9 +19,9 @@ const ResultRoom: React.FC = () => {
         // router.push("/admin/hotels");
       }
       const res = await roomHotelRepository.api.getRoomHotel(id);
-      console.log(res);
+      // console.log(res);
       setRoomHotelData(res.data); //
-      // console.log("data:", res.body.data);
+      // // console.log("data:", res.body.data);
       // localStorage.removeItem("_rooomHotel");
     } catch (error) {
       console.error("Error fetching rooomHotel:", error);

@@ -43,7 +43,7 @@ export default function BannerDestinationList() {
     return;
   }
   const pathSegments = pathname.split("/");
-  console.log(pathSegments);
+  // console.log(pathSegments);
   const destinationName = pathSegments[3];
 
   const [currentPage, setCurrentPage] = useState(1);

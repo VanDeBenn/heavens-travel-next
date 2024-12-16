@@ -17,7 +17,7 @@ export default function UserDetail({ userData }: ComponentsProps) {
   if (!userData) {
     return <Loading />;
   }
-  console.log(userData);
+  // console.log(userData);
   const guestDetails = [
     {
       label: "Full Name",

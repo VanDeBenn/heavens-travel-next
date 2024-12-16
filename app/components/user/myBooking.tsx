@@ -7,6 +7,7 @@ import {
   RiMore2Fill,
   RiGlassesLine,
 } from "react-icons/ri";
+import { FiBookOpen } from "react-icons/fi";
 import { Modal, Button, Dropdown, Menu } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,6 +37,7 @@ export default function MyBooking({ data }: ComponentsProps) {
   if (!data) {
     return <Loading />;
   }
+  // console.log("data /booking:", data);
   const [bookingItems, setBookingItems] =
     useState<BookingItem[]>(initialBookingItems);
 
@@ -49,7 +51,7 @@ export default function MyBooking({ data }: ComponentsProps) {
 
       {/* grid */}
       <div className="px-8 py-6 grid grid-cols-1 gap-6">
-        {data.map((booking: any) => {
+        {data.map((booking: any, index: number) => {
           // Dropdown menu
           const menu = (
             <Menu
@@ -76,15 +78,17 @@ export default function MyBooking({ data }: ComponentsProps) {
               <div className="flex justify-between items-center">
                 {/* Title and Icon */}
                 <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                  {booking.bookingdetails[0]?.cart?.destination ? (
+                  {/* {booking.bookingdetails[0]?.cart?.destination ? (
                     <RiHome3Line size={18} color="#ffff" />
                   ) : (
                     <RiGlassesLine size={18} color="#ffff" />
-                  )}
+                  )} */}
+                  <FiBookOpen size={18} color="#ffff" />
                   <span className="text-xs font-semibold text-white">
-                    {booking.bookingdetails[0]?.cart?.destination
+                    {/* {booking.bookingdetails[0]?.cart?.destination
                       ? "Destination"
-                      : "Hotel"}
+                      : "Hotel"} */}
+                    Booking #{index + 1}
                   </span>
                 </div>
                 <div className="flex items-center">
@@ -150,7 +154,8 @@ export default function MyBooking({ data }: ComponentsProps) {
                     className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                   >
                     {booking.bookingdetails[0]?.cart?.destination?.name ||
-                      "No Name"}
+                      booking?.payment?.externalId?.slice(0, 10)}
+                    ...{booking?.payment?.externalId?.slice(-3)}
                   </Link>
                   <div className="flex items-center gap-1">
                     <RiCalendarLine size={16} color="#6b7280 " />
@@ -166,7 +171,7 @@ export default function MyBooking({ data }: ComponentsProps) {
                   </div>
 
                   <div className="flex justify-between">
-                    <div className="flex gap-1">
+                    {/* <div className="flex gap-1">
                       <RiTeamLine size={16} color="#6b7280" />
                       <span className="text-xs text-gray-500">
                         Guests:{" "}
@@ -176,7 +181,7 @@ export default function MyBooking({ data }: ComponentsProps) {
                           booking.bookingdetails[0]?.cart?.quantityChildren || 0
                         } Children`}
                       </span>
-                    </div>
+                    </div> */}
 
                     <div className="flex flex-col items-center gap-1">
                       {booking.bookingdetails[0]?.cart?.destination
@@ -215,14 +220,14 @@ export default function MyBooking({ data }: ComponentsProps) {
                 >
                   See booking details
                 </Link>
-                {booking.payment?.status !== "PENDING" && (
+                {/* {booking.payment?.status !== "PENDING" && (
                   <Link
                     href={`/profile/bookings/detail/${booking.id}`}
                     className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-2 px-5 w-max flex items-center gap-1 text-xs text-white no-underline font-semibold"
                   >
                     Review
                   </Link>
-                )}
+                )} */}
               </div>
             </div>
           );

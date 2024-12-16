@@ -33,7 +33,7 @@ export default function BlogDetail({ data }: ComponentsProps) {
 
   // const getAllBlog = async () => {
   //   const res = await blogRepository.api.getBlogs();
-  //   // console.log(res)
+  //   // // console.log(res)
   // };
 
   // useEffect(() => {

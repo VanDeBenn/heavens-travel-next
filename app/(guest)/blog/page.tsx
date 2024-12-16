@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import Footer from "#/app/components/user/footer";
 import HighlightBlog from "#/app/components/user/highlightBlog";
@@ -14,7 +14,7 @@ function page() {
 
   const fetchAllBlog = async () => {
     const res = await blogRepository.api.getBlogs();
-    // console.log(res);
+    // // console.log(res);
     setDataBlog(res.data);
   };
 
@@ -22,14 +22,14 @@ function page() {
     fetchAllBlog();
   }, []);
 
-  console.log("data:", dataBlog);
+  // console.log("data:", dataBlog);
 
   return (
     <div>
       <main className="bg-Lilac-50">
         <Header />
         <div className=" px-16 pb-8 pt-24">
-          <HighlightBlog data={dataBlog}/>
+          <HighlightBlog data={dataBlog} />
           <News data={dataBlog} />
           <NewsHighlight data={dataBlog} />
         </div>

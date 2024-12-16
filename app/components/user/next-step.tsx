@@ -92,7 +92,7 @@ export default function NextStep() {
           const res = await bookingRepository.api.getInvoice(
             dataBooking?.payment?.invoiceId
           );
-          console.log(res);
+          // console.log(res);
           setPaymentStatus(res?.data?.status);
         } catch (error) {
           console.error("Error fetching payment status:", error);
@@ -103,7 +103,7 @@ export default function NextStep() {
     }
   }, [dataBooking?.payment?.invoiceId]);
 
-  console.log(paymentStatus);
+  // console.log(paymentStatus);
   useEffect(() => {
     if (paymentStatus === "PAID") {
       localStorage.setItem("_xendit", "success");

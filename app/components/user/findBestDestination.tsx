@@ -27,7 +27,7 @@ export default function FindBestDestination() {
     }
   };
 
-  // console.log("hmm", citiesData);
+  // // console.log("hmm", citiesData);
 
   useEffect(() => {
     getAllCities();
@@ -65,7 +65,7 @@ export default function FindBestDestination() {
           .slice(0, 8)
           .map((card: any) => {
             const formattedName = card.name.replace(/^Kota\s/, "");
-            console.log(citiesData);
+            // console.log(citiesData);
             return (
               <Link
                 key={card.id}

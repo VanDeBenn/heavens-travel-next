@@ -35,9 +35,9 @@ export default function BannerHotel() {
   ];
 
   const handleSearch = () => {
-    console.log("Search Query:", searchQuery);
-    console.log("Selected Location:", selectedLocation);
-    console.log("Selected Dates:", dates);
+    // console.log("Search Query:", searchQuery);
+    // console.log("Selected Location:", selectedLocation);
+    // console.log("Selected Dates:", dates);
   };
 
   return (

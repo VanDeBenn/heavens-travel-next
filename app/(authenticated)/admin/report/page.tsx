@@ -15,7 +15,7 @@ export default function page() {
     getAllReports();
   }, []);
 
-  // console.log(reportsData);
+  // // console.log(reportsData);
   return (
     <div>
       <ReportList data={reportsData} />

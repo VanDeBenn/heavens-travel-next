@@ -52,11 +52,11 @@ export default function InformationAdmin({ id, data }: ComponentsProps) {
   }, [data, form]);
 
   const onFinish = async (values: InitialValues) => {
-    // console.log("Form submitted with values:", values);
+    // // console.log("Form submitted with values:", values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log("Failed:", errorInfo);
+    // // console.log("Failed:", errorInfo);
   };
 
   // Generate options for days, months, and years

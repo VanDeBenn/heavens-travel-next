@@ -79,11 +79,11 @@ export default function BasicInfoDestination({
               label="Rating"
               name="rating"
               className="w-full"
+              initialValue={5}
               rules={[{ required: true, message: "Please input rating!" }]}
             >
               <InputNumber
-                min={1}
-                max={5}
+                disabled={true}
                 placeholder="Enter rating"
                 className="w-full"
               />

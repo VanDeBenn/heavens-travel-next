@@ -72,7 +72,7 @@ export default function page() {
   const getAllHotels = async () => {
     try {
       const hotels = await hotelRepository.api.getHotels();
-      console.log(hotels);
+      // console.log(hotels);
     } catch (error) {}
   };
 

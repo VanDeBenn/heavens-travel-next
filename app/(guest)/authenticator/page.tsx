@@ -34,14 +34,15 @@ const Authenticator: React.FC = () => {
 
   const code = searchParams?.get("code");
   const resetToken = searchParams?.get("token");
-  localStorage.setItem("reset_token", resetToken || "");
+  if (!resetToken) {
+    return;
+  }
+  localStorage.setItem("reset_token", resetToken);
 
   useEffect(() => {
     if (code) {
-      // Set field value in the form
       form.setFieldsValue({ code });
 
-      // Automatically call onFinish after setting the value
       onFinish({ code });
     }
   }, [code]);
@@ -54,7 +55,7 @@ const Authenticator: React.FC = () => {
         setTimer((prev) => prev - 1);
       }, 1000);
     }
-
+    // error localStorage is not defined
     return () => clearInterval(interval);
   }, [timer]);
 

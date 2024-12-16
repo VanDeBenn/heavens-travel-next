@@ -45,7 +45,6 @@ export default function UnforgettableExperience() {
   const getAllDestinations = async () => {
     const res = await destinationRepository.api.getDestinations();
     setDestinationsData(res.body.data);
-    console.log(res.body.data);
   };
 
   const getAllCities = async () => {
@@ -64,15 +63,6 @@ export default function UnforgettableExperience() {
     getAllDestinations();
     getAllCities();
   }, []);
-  // useEffect(() => {
-  //   Promise.all([getAllHotels(), getAllCities()]).finally(() => {
-  //     setLoading(false);
-  //   });
-  // }, []);
-
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
 
   // Filter hotels by selected city
   const filteredHotels = destinationsData?.filter(
@@ -83,8 +73,6 @@ export default function UnforgettableExperience() {
       destination?.city?.province?.name === selectedCity
   );
 
-  // console.log("city", selectedCity);
-  // console.log("hotel", filteredHotels);
   const citiesList = ["Bali", "Bekasi", "Bandung", "Daerah Khusus Jakarta"]; // Define the cities explicitly
 
   return (
@@ -125,7 +113,7 @@ export default function UnforgettableExperience() {
 
       {/* Grid cardcuyy */}
       <div className="grid grid-cols-4 gap-4">
-        {filteredHotels.length > 0 ? (
+        {filteredHotels?.length > 0 ? (
           filteredHotels.slice(0, 4).map((card: any) => (
             <div
               key={card?.id}
@@ -133,7 +121,7 @@ export default function UnforgettableExperience() {
             >
               <Link href={""} className="flex flex-col items-center">
                 <Image
-                  src={""}
+                  src={`http://localhost:3222/photo-destinations/${card?.photodestinations[0]?.pathPhoto}`}
                   alt={card?.name}
                   className="h-52 w-full rounded-t-xl"
                   height={300}

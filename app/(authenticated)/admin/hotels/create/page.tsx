@@ -68,7 +68,7 @@ export default function page() {
         // !locationHotel.cityName ||
         // !locationHotel.provinceName
       ) {
-        console.log("Data tidak lengkap!");
+        // console.log("Data tidak lengkap!");
         return;
       }
 
@@ -84,7 +84,7 @@ export default function page() {
         pathLocation: locationHotel.pathLocation,
       };
 
-      console.log("Final data:", finalData);
+      // console.log("Final data:", finalData);
 
       const res = await hotelRepository.api.create(finalData);
       const idHotel = res.body.data?.id;
@@ -136,7 +136,6 @@ export default function page() {
         <PoliciesHotel hotelId={hotelId} />
 
         <SomeHelpfulFactsHotel />
-        
       </div>
       <div className="flex justify-end mt-5">
         <Button
@@ -224,7 +223,7 @@ export default function page() {
 //         // !locationHotel.cityName ||
 //         // !locationHotel.provinceName
 //       ) {
-//         console.log("Data tidak lengkap!");
+//         // console.log("Data tidak lengkap!");
 //         return;
 //       }
 
@@ -240,7 +239,7 @@ export default function page() {
 //         pathLocation: locationHotel.pathLocation,
 //       };
 
-//       console.log("Final data:", finalData);
+//       // console.log("Final data:", finalData);
 
 //       const res = await hotelRepository.api.create(finalData);
 //       const idHotel = res.body.data?.id;
@@ -255,7 +254,7 @@ export default function page() {
 //     }
 //   };
 
-//   console.log("basic", basicInfoHotel);
+//   // console.log("basic", basicInfoHotel);
 //   return (
 //     <>
 //       <div

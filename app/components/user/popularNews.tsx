@@ -41,7 +41,7 @@ export default function PopularNews({ data }: { data: dataBlog[] }) {
 
   const fetchAllBlog = async () => {
     const res = await blogRepository.api.getBlogs();
-    // console.log(res);
+    // // console.log(res);
     setDataBlog(res.data);
   };
 
@@ -49,7 +49,7 @@ export default function PopularNews({ data }: { data: dataBlog[] }) {
     fetchAllBlog();
   }, []);
 
-  console.log("data:", dataBlog);
+  // console.log("data:", dataBlog);
   return (
     <div className="">
       <div className="flex items-center mb-4">
@@ -57,33 +57,39 @@ export default function PopularNews({ data }: { data: dataBlog[] }) {
         <span className="text-xl font-semibold">Popular</span>
       </div>
       <div className="bg-white rounded-xl">
-      {dataBlog.sort(() => 0.5 - Math.random()).slice(0, 4).map((item: dataBlog) => (
-          <div key={item.id} className="no-underline">
-            <div className="p-3">
-              <Link href={`/blog/list/detail/${item.id}`} className="rounded-lg h-60">
-                <Image
-                  src={"/images/illustration/hawaii-beach.jpg"}
-                  alt={item.title}
-                  width={300}
-                  height={300}
-                  className="w-full h-28 rounded-lg"
-                />
-              </Link>
-
-              <div className="pt-3 flex flex-col">
+        {dataBlog
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 4)
+          .map((item: dataBlog) => (
+            <div key={item.id} className="no-underline">
+              <div className="p-3">
                 <Link
                   href={`/blog/list/detail/${item.id}`}
-                  className="text-base font-semibold mb-1 leading-5 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
+                  className="rounded-lg h-60"
                 >
-                  {item.title}
+                  <Image
+                    src={"/images/illustration/hawaii-beach.jpg"}
+                    alt={item.title}
+                    width={300}
+                    height={300}
+                    className="w-full h-28 rounded-lg"
+                  />
                 </Link>
-                <span className="text-sm text-gray-600 font-medium">
-                  {`${formatDate(item.createdAt)}`}
-                </span>
+
+                <div className="pt-3 flex flex-col">
+                  <Link
+                    href={`/blog/list/detail/${item.id}`}
+                    className="text-base font-semibold mb-1 leading-5 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
+                  >
+                    {item.title}
+                  </Link>
+                  <span className="text-sm text-gray-600 font-medium">
+                    {`${formatDate(item.createdAt)}`}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

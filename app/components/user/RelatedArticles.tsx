@@ -40,7 +40,7 @@ export default function RelatedArticles({
 
   const fetchAllBlog = async () => {
     const res = await blogRepository.api.getBlogs();
-    // console.log(res);
+    // // console.log(res);
     setDataBlog(res.data);
   };
 
@@ -52,13 +52,13 @@ export default function RelatedArticles({
     return <Loading />;
   }
 
-  console.log("data:", dataBlog);
-  console.log(x);
+  // console.log("data:", dataBlog);
+  // console.log(x);
   const RelatedArticles = dataBlog.filter(
     (item: any) => item.hotel?.name === x
   );
 
-  console.log("related", RelatedArticles);
+  // console.log("related", RelatedArticles);
 
   return (
     <div className="pt-9">

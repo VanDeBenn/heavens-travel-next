@@ -215,35 +215,19 @@ export default function LocationInfoDestination({
         </Form.Item>
 
         <div className="flex justify-between gap-5">
-          {/* <Form.Item
-            label="District"
-            name="district"
-            className="w-full"
-            rules={[{ required: true, message: "Please input district!" }]}
-          >
-            <Input placeholder="Enter district" className="w-full" />
-          </Form.Item> */}
-
-          <Form.Item
-            label="City"
-            name="cityName"
-            className="w-full"
-            rules={[
-              { required: true, message: "Please select or input your city!" },
-            ]}
-          >
+          <Form.Item label="Country" name="countryName" className="w-full">
             <Select
-              placeholder="Select or input your city"
-              disabled={isCityDisabled}
+              placeholder="Select or input your country"
+              disabled={isCountryDisabled}
               allowClear
               showSearch
               filterOption={(input, option: any) =>
                 option?.children?.toLowerCase().includes(input.toLowerCase())
               }
             >
-              {citiesData.map(([cityName]) => (
-                <Option key={cityName} value={cityName}>
-                  {cityName}
+              {countriesData.map((countryName) => (
+                <Option key={countryName} value={countryName}>
+                  {countryName}
                 </Option>
               ))}
             </Select>
@@ -267,19 +251,26 @@ export default function LocationInfoDestination({
             </Select>
           </Form.Item>
 
-          <Form.Item label="Country" name="countryName" className="w-full">
+          <Form.Item
+            label="City"
+            name="cityName"
+            className="w-full"
+            rules={[
+              { required: true, message: "Please select or input your city!" },
+            ]}
+          >
             <Select
-              placeholder="Select or input your country"
-              disabled={isCountryDisabled}
+              placeholder="Select or input your city"
+              disabled={isCityDisabled}
               allowClear
               showSearch
               filterOption={(input, option: any) =>
                 option?.children?.toLowerCase().includes(input.toLowerCase())
               }
             >
-              {countriesData.map((countryName) => (
-                <Option key={countryName} value={countryName}>
-                  {countryName}
+              {citiesData.map(([cityName]) => (
+                <Option key={cityName} value={cityName}>
+                  {cityName}
                 </Option>
               ))}
             </Select>

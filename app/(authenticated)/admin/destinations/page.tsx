@@ -18,7 +18,7 @@ const DestinationPage = () => {
       setAllDestinationsData(res.body.data);
     } catch (error) {}
   };
-  // console.log(allDestinationsData);
+  // // console.log(allDestinationsData);
 
   useEffect(() => {
     getAllDestinations();

@@ -12,7 +12,7 @@ export default function page() {
       setBookingsData(res.data);
     } catch (error) {}
   };
-  // console.log(bookingsData);
+  // // console.log(bookingsData);
 
   useEffect(() => {
     getAllBookings();

@@ -94,7 +94,6 @@ const ForgotPassword: React.FC = () => {
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value) {
-                      // Jangan jalankan validasi custom jika input kosong
                       return Promise.resolve();
                     }
 

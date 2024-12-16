@@ -22,9 +22,9 @@ const ResultHotel: React.FC = () => {
         router.push("/admin/hotels");
       }
       const res = await hotelRepository.api.getHotel(id);
-      console.log(res);
+      // console.log(res);
       setHotelData(res.data); //
-      // console.log("data:", res.body.data);
+      // // console.log("data:", res.body.data);
       localStorage.removeItem("_hotel");
     } catch (error) {
       console.error("Error fetching hotel:", error);

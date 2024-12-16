@@ -50,7 +50,7 @@ export default function page() {
   const finish = async () => {
     try {
       if (!basicInfoRoomHotel.roomType || !basicInfoRoomHotel.price) {
-        console.log("data tidak lengkap!");
+        // console.log("data tidak lengkap!");
         return;
       }
 
@@ -66,11 +66,11 @@ export default function page() {
         kingBed: basicInfoRoomHotel.kingBed,
         hotelId: hotelId,
       };
-      console.log(finalData);
+      // console.log(finalData);
 
       const res = await roomHotelRepository.api.create(finalData);
       const idRoomHotel = res.body.data.id;
-      console.log(res);
+      // console.log(res);
 
       if (idRoomHotel) {
         localStorage.setItem("_roomHotel", idRoomHotel);

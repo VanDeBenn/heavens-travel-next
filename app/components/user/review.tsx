@@ -62,10 +62,10 @@ export default function Review() {
         bookingDetailId: bookingDetailId,
       };
 
-      console.log("Submitted Data:", dataBasicInfo);
+      // console.log("Submitted Data:", dataBasicInfo);
       // Call the API to submit the form data
       const req = await reviewRepository.api.create(dataBasicInfo);
-      console.log(req);
+      // console.log(req);
       setReviewId(req?.body?.data?.id);
     } catch (error) {
       console.error("Submission failed:", error);

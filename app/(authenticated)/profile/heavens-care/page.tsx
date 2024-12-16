@@ -28,13 +28,13 @@ function Page() {
         if (bookingId) {
           const res = await bookingRepository.api.getBooking(bookingId);
           setBookingData(res.data);
-          console.log("bookings", res);
+          // console.log("bookings", res);
         } else if (bookingDetailId) {
           const res = await bookingDetailRepository.api.getBookingDetail(
             bookingDetailId
           );
           setBookingDetailData(res.data);
-          console.log("detail", res);
+          // console.log("detail", res);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -44,7 +44,7 @@ function Page() {
     fetchBookingData();
   }, [bookingId, bookingDetailId]);
 
-  console.log("ini ", bookingData || bookingDetailData);
+  // console.log("ini ", bookingData || bookingDetailData);
   return (
     <main className="bg-Lilac-50">
       <Header />

@@ -64,9 +64,9 @@ export default function BlogList({ data }: ComponentsProps) {
 
   const handleMenuClick = (e: any, id: string) => {
     if (e.key === "1") {
-      // console.log(`View details of blog ID: ${id}`);
+      // // console.log(`View details of blog ID: ${id}`);
     } else if (e.key === "2") {
-      // console.log(`Delete blog ID: ${id}`);
+      // // console.log(`Delete blog ID: ${id}`);
     }
   };
 

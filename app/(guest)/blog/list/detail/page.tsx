@@ -12,7 +12,7 @@ export default function page({ params }: { params: { id: string } }) {
 
   const fetchAllBlog = async () => {
     const res = await blogRepository.api.getBlog(params.id);
-    console.log("ini res", res);
+    // console.log("ini res", res);
     setDataBlog(res.data);
     setx(res.data.hotel.name);
   };
@@ -21,7 +21,7 @@ export default function page({ params }: { params: { id: string } }) {
     fetchAllBlog();
   }, []);
 
-  // console.log("data:", datablog);
+  // // console.log("data:", datablog);
   return (
     <>
       <main className="bg-Lilac-50">

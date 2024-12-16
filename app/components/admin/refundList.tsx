@@ -57,7 +57,7 @@ const RefundList: React.FC = () => {
       setDataSource(generatedData);
     }
   }, [dataRefund]);
-  // console.log(dataRefund[0]?.booking?.payment?.amount);
+  // // console.log(dataRefund[0]?.booking?.payment?.amount);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -175,7 +175,7 @@ const RefundList: React.FC = () => {
   ];
 
   const handleDelete = (bookingId: string) => {
-    // console.log(`Delete booking ID: ${bookingId}`);
+    // // console.log(`Delete booking ID: ${bookingId}`);
     setDataSource((prevData) =>
       prevData.filter((item) => item.bookingId !== bookingId)
     );

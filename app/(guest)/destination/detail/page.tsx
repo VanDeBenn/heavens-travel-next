@@ -14,7 +14,7 @@ import InstagrammableHotels from "#/app/components/user/instagrammableHotels";
 import { destinationRepository } from "#/repository/destinations";
 import { blogRepository } from "#/repository/blogs";
 
-function page({ params }: { params: {id: string } }) { 
+function page({ params }: { params: { id: string } }) {
   const [dataDestination, setDataDestinations] = useState<any>();
   const [x, setx] = useState<any>();
   const chooseRoomRef = useRef<HTMLDivElement>(null);
@@ -22,9 +22,9 @@ function page({ params }: { params: {id: string } }) {
   const fetchAllDestination = async () => {
     try {
       const res = await destinationRepository.api.getDestination(params.id);
-      console.log(res.body.data);
-      setDataDestinations(res.body.data)
-       setx(res.body.blog.name);
+      // console.log(res.body.data);
+      setDataDestinations(res.body.data);
+      setx(res.body.blog.name);
     } catch (error) {}
   };
 
@@ -32,7 +32,6 @@ function page({ params }: { params: {id: string } }) {
     fetchAllDestination();
   }, []);
 
-  
   const scrollToChooseRoom = () => {
     if (chooseRoomRef.current) {
       chooseRoomRef.current.scrollIntoView({
@@ -42,13 +41,13 @@ function page({ params }: { params: {id: string } }) {
     }
   };
 
-  // console.log("data:", dataDestination);
+  // // console.log("data:", dataDestination);
 
   // const [datablog, setDataBlog] = useState<any[]>([]);
 
   // const fetchAllBlog = async () => {
   //   const res = await blogRepository.api.getBlogs();
-  //   // console.log(res);
+  //   // // console.log(res);
   //   setDataBlog(res.data);
   // };
 
@@ -56,21 +55,22 @@ function page({ params }: { params: {id: string } }) {
   //   fetchAllBlog();
   // }, []);
 
-  // console.log("data:", dataBlog);
+  // // console.log("data:", dataBlog);
 
   return (
     <div className="bg-Lilac-50">
       <HeaderComponent />
       <div className="px-28 2xl:px-48 pb-16 flex flex-col gap-5 pt-20">
         <BannerViewDesti
-        scrollToChooseRoom={scrollToChooseRoom}
-        data={dataDestination}/>
-        <DescriptionDesti data={dataDestination}/>
+          scrollToChooseRoom={scrollToChooseRoom}
+          data={dataDestination}
+        />
+        <DescriptionDesti data={dataDestination} />
         <TicketsOverview />
         <GuestReviewDesti />
         <NewsFrom data={dataDestination} />
         <InstagrammableHotels data={dataDestination} />
-        <TopFourHotel data={dataDestination}/>
+        <TopFourHotel data={dataDestination} />
         <OtherRecommendedCities />
         <Faq />
       </div>
@@ -79,5 +79,4 @@ function page({ params }: { params: {id: string } }) {
   );
 }
 
-export default page
-
+export default page;

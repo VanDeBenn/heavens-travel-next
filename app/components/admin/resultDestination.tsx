@@ -19,7 +19,7 @@ const ResultDestination: React.FC = () => {
       }
       const res = await destinationRepository.api.getDestination(id);
       setDestinationData(res.body.data); // Save data to state
-      // console.log("data:", res.body.data); // Log to confirm
+      // // console.log("data:", res.body.data); // Log to confirm
       localStorage.removeItem("_destination");
     } catch (error) {
       console.error("Error fetching destination:", error);

@@ -7,13 +7,6 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
-
-  useEffect(() => {
-    if (router) {
-      
-      router.push("/home");
-    }
-  }, [router]);
-
-  return <div style={{}}></div>;
+  router.push("/home");
+  return <div></div>;
 }

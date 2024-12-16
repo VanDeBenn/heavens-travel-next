@@ -18,7 +18,7 @@ function page() {
   const fetchAllDestination = async () => {
     try {
       const destination = await destinationRepository.api.getDestinations();
-      console.log(destination);
+      // console.log(destination);
     } catch (error) {}
   };
 
@@ -26,8 +26,7 @@ function page() {
     fetchAllDestination();
   }, []);
 
-  console.log("data:", dataDestination);
-
+  // console.log("data:", dataDestination);
 
   // const [dataDestinations, setDataDestinations] = useState<any[]>([]);
   // const [count, setCount] = useState<number>(1);
@@ -51,13 +50,12 @@ function page() {
   //   } catch (error) {}
   // };
 
-
   // useEffect(() => {
   //   fetchDestinatios();
   // }, []);
 
-  // console.log("data desti:", dataDestinations);
-  //  // console.log("desti:", dataDestinations[0].name);
+  // // console.log("data desti:", dataDestinations);
+  //  // // console.log("desti:", dataDestinations[0].name);
   return (
     <div className="bg-Lilac-50">
       <BannerDestination />

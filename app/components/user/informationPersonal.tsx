@@ -82,7 +82,7 @@ export default function InformationPersonal({
         provinceName: values.provinceName,
         countryName: values.countryName,
       };
-      console.log(dataUpdateUser);
+      // console.log(dataUpdateUser);
       const response = await usersRepository.api.putUser(id, dataUpdateUser);
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -90,7 +90,7 @@ export default function InformationPersonal({
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    // console.log("Failed:", errorInfo);
+    // // console.log("Failed:", errorInfo);
   };
 
   const days = Array.from({ length: 31 }, (_, i) => i + 1);

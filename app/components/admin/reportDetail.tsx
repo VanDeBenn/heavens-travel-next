@@ -88,7 +88,7 @@ export default function ReportDetail({ data }: ComponentProps) {
   };
 
   const handleSubmit = (values: any) => {
-    // console.log("Form values:", values);
+    // // console.log("Form values:", values);
     message.success("Report replied successfully!");
     form.resetFields();
   };
