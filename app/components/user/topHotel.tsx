@@ -35,7 +35,6 @@ type HotelCard = {
 };
 
 export default function TopHotel() {
-  const [citiesData, setCitiesData] = useState<string[]>([]);
   const [selectedCity, setSelectedCity] = useState<string>("Bali");
   const [hotelsData, setHotelsData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,7 +51,6 @@ export default function TopHotel() {
         .sort(() => 0.5 - Math.random())
         .slice(0, 8)
         .map((city: any) => city.name);
-      setCitiesData(randomCities);
     } catch (error) {
       console.error("Error fetching cities:", error);
     }
@@ -77,7 +75,9 @@ export default function TopHotel() {
       hotel?.city?.province?.name === selectedCity
   );
 
-  const citiesList = ["Bali", "Bekasi", "Bandung", "Jakarta"]; // Define the cities explicitly
+  console.log("city", selectedCity);
+  console.log("hotel", filteredHotels);
+  const citiesList = ["Bali", "Bekasi", "Bandung", "Daerah Khusus Jakarta"]; // Define the cities explicitly
 
   return (
     <div className="flex flex-col gap-2">
@@ -127,7 +127,7 @@ export default function TopHotel() {
                 className="flex flex-col items-center"
               >
                 <Image
-                  src={`http://localhost:3222/photo-hotels/${hotel.image}`}
+                  src={`http://localhost:3222/photo-hotels/${hotel?.photohotels[0]?.pathPhoto}`}
                   alt={hotel.name}
                   className="h-52 w-full rounded-t-xl"
                   height={300}
@@ -175,7 +175,7 @@ export default function TopHotel() {
                       href={`/hotel/detail/${hotel.id}`}
                       className="text-InfernoEcho-600 text-lg font-semibold no-underline"
                     >
-                      {hotel.price}
+                      {hotel?.roomhotels[0]?.price}
                     </Link>
                   </div>
                 </div>
@@ -206,264 +206,3 @@ export default function TopHotel() {
     </div>
   );
 }
-
-const cityData: { [key: string]: HotelCard[] } = {
-  Bali: [
-    {
-      id: 1,
-      text: "Ayana Resort and Spa",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/bali",
-      desc: "Experience luxury in the heart.",
-      loc: "Bali",
-      price: "Rp290.000",
-      stars: 4.5,
-    },
-    {
-      id: 2,
-      text: "Four Seasons Resort",
-      imgSrc: "/images/illustration/road-bridge.jpg",
-      link: "/kota/bali",
-      desc: "Discover tranquility in Ubud.",
-      loc: "Bali",
-      price: "Rp320.000",
-      stars: 4,
-    },
-    {
-      id: 3,
-      text: "Oberoi Beach Resort",
-      imgSrc: "/images/illustration/beautiful-church.jpg",
-      link: "/kota/bali",
-      desc: "A beachside paradise.",
-      loc: "Bali",
-      price: "Rp340.000",
-      stars: 2.5,
-    },
-    {
-      id: 4,
-      text: "Alila Villas Uluwatu",
-      imgSrc: "/images/illustration/nightlife-city-sparkles-light-streets.jpg",
-      link: "/kota/bali",
-      desc: "Enjoy the vibrant Kuta Beach.",
-      loc: "Bali",
-      price: "Rp310.000",
-      stars: 4,
-    },
-    {
-      id: 5,
-      text: "The Legian Seminyak",
-      imgSrc: "/images/illustration/city-with-forest-front.jpg",
-      link: "/kota/bali",
-      desc: "A great stay in Legian.",
-      loc: "Bali",
-      price: "Rp300.000",
-      stars: 3.5,
-    },
-    {
-      id: 6,
-      text: "W Bali - Seminyak",
-      imgSrc: "/images/illustration/religion-historic.jpg",
-      link: "/kota/bali",
-      desc: "A beachside paradise.",
-      loc: "Bali",
-      price: "Rp340.000",
-      stars: 4.5,
-    },
-    {
-      id: 7,
-      text: "Anvaya Beach Resort",
-      imgSrc: "/images/illustration/high-angle.jpg",
-      link: "/kota/bali",
-      desc: "Enjoy the vibrant Kuta Beach.",
-      loc: "Bali",
-      price: "Rp310.000",
-      stars: 4,
-    },
-    {
-      id: 8,
-      text: "Ritz-Carlton Reserve",
-      imgSrc: "/images/illustration/mountainous-landscape-with-fog.jpg",
-      link: "/kota/bali",
-      desc: "A great stay in Legian.",
-      loc: "Bali",
-      price: "Rp300.000",
-      stars: 3.5,
-    },
-  ],
-  Manila: [
-    {
-      id: 1,
-      text: "Manila Hotel",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/manila",
-      desc: "Experience the vibrant culture of Manila.",
-      loc: "Manila",
-      price: "Rp320.000",
-      stars: 4,
-    },
-    {
-      id: 2,
-      text: "Rizal Park Hotel",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/manila",
-      desc: "Stay near Rizal Park.",
-      loc: "Manila",
-      price: "Rp340.000",
-      stars: 4.2,
-    },
-    {
-      id: 3,
-      text: "New World Manila Bay Hotel",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/manila",
-      desc: "Luxury at Manila Bay.",
-      loc: "Manila",
-      price: "Rp400.000",
-      stars: 4.8,
-    },
-    {
-      id: 4,
-      text: "Sofitel Manila",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/manila",
-      desc: "Elegance by the bay.",
-      loc: "Manila",
-      price: "Rp370.000",
-      stars: 4.3,
-    },
-    {
-      id: 5,
-      text: "Red Planet Manila",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/manila",
-      desc: "Affordable stays in Manila.",
-      loc: "Manila",
-      price: "Rp250.000",
-      stars: 3.9,
-    },
-    {
-      id: 6,
-      text: "Okada Manila",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/manila",
-      desc: "Experience luxury at Okada.",
-      loc: "Manila",
-      price: "Rp480.000",
-      stars: 5,
-    },
-  ],
-  Bangkok: [
-    {
-      id: 1,
-      text: "Bangkok Marriott Hotel",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/bangkok",
-      desc: "Luxury and culture in the heart of Bangkok.",
-      loc: "Bangkok",
-      price: "Rp310.000",
-      stars: 4.5,
-    },
-    {
-      id: 2,
-      text: "Mandarin Oriental Bangkok",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/bangkok",
-      desc: "Heritage meets luxury.",
-      loc: "Bangkok",
-      price: "Rp550.000",
-      stars: 5,
-    },
-    {
-      id: 3,
-      text: "Chatrium Hotel Riverside",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/bangkok",
-      desc: "Riverside luxury.",
-      loc: "Bangkok",
-      price: "Rp450.000",
-      stars: 4.6,
-    },
-    {
-      id: 4,
-      text: "The Peninsula Bangkok",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/bangkok",
-      desc: "Stay by the river.",
-      loc: "Bangkok",
-      price: "Rp530.000",
-      stars: 4.9,
-    },
-    {
-      id: 5,
-      text: "Siam Kempinski Hotel",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/bangkok",
-      desc: "Luxury near Siam.",
-      loc: "Bangkok",
-      price: "Rp500.000",
-      stars: 4.8,
-    },
-  ],
-  Singapore: [
-    {
-      id: 1,
-      text: "Marina Bay Sands",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/singapore",
-      desc: "The iconic luxury resort in Singapore.",
-      loc: "Singapore",
-      price: "Rp450.000",
-      stars: 5,
-    },
-    {
-      id: 2,
-      text: "Raffles Singapore",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/singapore",
-      desc: "Historic luxury in Singapore.",
-      loc: "Singapore",
-      price: "Rp600.000",
-      stars: 5,
-    },
-    {
-      id: 3,
-      text: "Shangri-La Hotel",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/singapore",
-      desc: "An oasis of serenity.",
-      loc: "Singapore",
-      price: "Rp420.000",
-      stars: 4.7,
-    },
-    {
-      id: 4,
-      text: "Fullerton Bay Hotel",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/singapore",
-      desc: "Luxury by the bay.",
-      loc: "Singapore",
-      price: "Rp480.000",
-      stars: 4.9,
-    },
-    {
-      id: 5,
-      text: "Hotel Jen Orchardgateway",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/singapore",
-      desc: "Convenient and stylish.",
-      loc: "Singapore",
-      price: "Rp300.000",
-      stars: 4.2,
-    },
-    {
-      id: 6,
-      text: "Crowne Plaza Changi Airport",
-      imgSrc: "/images/illustration/bali-indonesia.jpg",
-      link: "/kota/singapore",
-      desc: "Convenient for travelers.",
-      loc: "Singapore",
-      price: "Rp390.000",
-      stars: 4.5,
-    },
-  ],
-};

@@ -63,7 +63,6 @@ export default function HolidayIntroduction() {
   );
 }
 
-
 const HolidayData = [
   {
     id: 1,
@@ -73,21 +72,21 @@ const HolidayData = [
   },
   {
     id: 2,
-    text: "Bekasi",
+    text: "Nusa Tenggara Barat",
     imgSrc: "/images/illustration/road-bridge.jpg",
-    link: "/kota/bekasi",
+    link: "/kota/nusatenggarabarat",
   },
   {
     id: 3,
-    text: "Banten",
+    text: "Sumatra Utara",
     imgSrc: "/images/illustration/beautiful-church.jpg",
-    link: "/kota/banten",
+    link: "/kota/sumatrautara",
   },
   {
     id: 4,
-    text: "Balikpapan",
+    text: "Jawa Timur",
     imgSrc: "/images/illustration/nightlife-city-sparkles-light-streets.jpg",
-    link: "/kota/balikpapan",
+    link: "/kota/jawatimur",
   },
   {
     id: 5,
@@ -103,14 +102,14 @@ const HolidayData = [
   },
   {
     id: 7,
-    text: "Bandung",
+    text: "Papua Barat Daya",
     imgSrc: "/images/illustration/high-angle.jpg",
-    link: "/kota/bandung",
+    link: "/kota/papuabaratdaya",
   },
   {
     id: 8,
-    text: "Lampung",
+    text: "Sulawesi Selatan",
     imgSrc: "/images/illustration/mountainous-landscape-with-fog.jpg",
-    link: "/kota/lampung",
+    link: "/kota/sulawesiselatan",
   },
 ];
