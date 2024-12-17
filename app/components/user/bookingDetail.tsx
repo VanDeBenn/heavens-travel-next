@@ -236,10 +236,10 @@ export default function BookingDetail({ data }: ComponentProps) {
       <div className="h-2 bg-gray-200"></div>
 
       <div className="bg-white w-full rounded-xl border-solid border-gray-200 border">
-        <div className={`${mediumMontserrat.className} py-6 px-9`}>
+        <div className={`${mediumMontserrat.className} pt-6 px-9`}>
           <span className="text-lg font-semibold">Order</span>
         </div>
-        <div className="h-px bg-gray-300"></div>
+     
         <div className="grid grid-cols-1 px-8 py-6 gap-6 w-full ">
           {/* {filteredBookingItems.map((item, index) => {
             const totalCost = item.HotelPricePerAdult
@@ -382,7 +382,7 @@ export default function BookingDetail({ data }: ComponentProps) {
         className={`${mediumMontserrat.className} py-6 px-9 flex flex-col gap-6`}
       >
         <span className="font-semibold text-base">Payment Details</span>
-        <div className={`p-3 `}>
+        <div className={`px-3 `}>
           {/* {PayDetailGuest.map((pay, index) => ( */}
           <div className="flex flex-col gap-2">
             {data?.bookingdetails?.map((item: any) => {
