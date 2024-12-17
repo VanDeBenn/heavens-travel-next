@@ -3,16 +3,30 @@ import { Button, DatePicker } from "antd";
 import { Montserrat } from "next/font/google";
 import { Dayjs } from "dayjs";
 import React, { useState } from "react";
+import dayjs from "dayjs";
+import { bookingRepository } from "#/repository/bookings";
+import { cartRepository } from "#/repository/carts";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
-import dayjs from "dayjs";
 
-export default function TicketsOverview() {
+interface dataDestination {
+  data: any;
+}
+
+export default function TicketsOverview({ data }: dataDestination) {
+  if (!data) {
+    return null;
+  }
+
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs()); // Default hari ini
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
+  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs()); // Samakan endDate dengan startDate
+  const [numberOfTicket, setNumberOfTicket] = useState(0); // Adult ticket count
+  const [numberOfDesti, setNumberOfDesti] = useState(0); // Children ticket count
 
   const daysOfWeek = Array(7)
     .fill(0)
@@ -22,6 +36,8 @@ export default function TicketsOverview() {
     if (date) {
       setSelectedDate(date.startOf("week"));
       setActiveIndex(0);
+      setStartDate(date); // Set startDate
+      setEndDate(date); // Set endDate sama dengan startDate
     }
   };
 
@@ -31,15 +47,69 @@ export default function TicketsOverview() {
     }
   };
 
-  const [numberOfTicket, setNumberOfTicket] = useState(0);
-
   const handleChange = (value: number) => {
     if (value >= 0) {
       setNumberOfDesti(value);
     }
   };
 
-  const [numberOfDesti, setNumberOfDesti] = useState(0);
+  const handleAddToCart = async () => {
+    const userId = localStorage.getItem("_id");
+
+    if (!userId) {
+      alert("Please login to continue.");
+      return;
+    }
+
+    if (!startDate || !endDate) {
+      alert("Please select a start and end date.");
+      return;
+    }
+
+    const data = {
+      userId,
+      quantityAdult: numberOfTicket,
+      quantityChildren: numberOfDesti,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+    };
+
+    try {
+      await cartRepository.api.addToCart(data);
+      alert("Added to cart!");
+    } catch (error) {
+      console.error("Failed to add to cart", error);
+    }
+  };
+
+  const handleBookNow = async () => {
+    const userId = localStorage.getItem("_id");
+
+    if (!userId) {
+      alert("Please login to continue.");
+      return;
+    }
+
+    if (!startDate || !endDate) {
+      alert("Please select a start and end date.");
+      return;
+    }
+
+    const data = {
+      userId,
+      quantityRoom: numberOfTicket + numberOfDesti, // Total rooms based on number of tickets
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+    };
+
+    try {
+      await bookingRepository.api.create(data);
+      alert("Booking Successful!");
+    } catch (error) {
+      console.error("Failed to book now", error);
+    }
+  };
+
   return (
     <div className={`${mediumMontserrat.className} flex flex-col gap-3`}>
       {/* Calendar */}
@@ -48,7 +118,7 @@ export default function TicketsOverview() {
           Available Ticket(s) for You
         </span>
         <div className="flex items-center justify-between gap-5 pt-3">
-          {/* DatePicker Week cuk */}
+          {/* DatePicker Week */}
           <DatePicker
             className="border border-gray-300 rounded-xl p-2 text-base font-semibold"
             picker="week"
@@ -65,14 +135,14 @@ export default function TicketsOverview() {
                   ? "text-RoyalAmethyst-700 border-RoyalAmethyst-700"
                   : ""
               }`}
-              onClick={() => setActiveIndex(index)}
+              onClick={() => {
+                setActiveIndex(index);
+                setStartDate(date);
+                setEndDate(date); // Set endDate sama dengan startDate
+              }}
             >
-              <span className="text-sm font-semibold">
-                {date.format("ddd")},
-              </span>
-              <span className="text-sm font-semibold">
-                {date.format("DD MMM")}
-              </span>
+              <span className="text-sm font-semibold">{date.format("ddd")},</span>
+              <span className="text-sm font-semibold">{date.format("DD MMM")}</span>
             </div>
           ))}
         </div>
@@ -80,7 +150,7 @@ export default function TicketsOverview() {
       {/* End Calendar */}
 
       {/* Ticket */}
-      <div className=" p-6 border-solid border-gray-200 border rounded-xl bg-white">
+      <div className="p-6 border-solid border-gray-200 border rounded-xl bg-white">
         <span className="font-semibold text-lg text-black">Ticket Qty</span>
         <div className="mt-4 border-solid border-gray-300 border rounded-xl p-5 flex justify-between">
           <div className="text-base text-black">
@@ -90,7 +160,7 @@ export default function TicketsOverview() {
 
           <div className="flex gap-3 items-center">
             <span className="text-lg font-semibold text-InfernoEcho-600">
-              Rp2.000.000
+              Rp{data.priceAdult}
             </span>
 
             {/* Input Ticket */}
@@ -118,7 +188,7 @@ export default function TicketsOverview() {
 
           <div className="flex gap-3 items-center">
             <span className="text-lg font-semibold text-InfernoEcho-600">
-              Rp200.000
+              Rp{data.priceChildren}
             </span>
 
             {/* Input Children */}
@@ -141,11 +211,17 @@ export default function TicketsOverview() {
 
         <div className="mt-5 justify-end flex">
           <div className="flex gap-4 items-center">
-            <div className="px-6 py-2 cursor-pointer border border-solid border-RoyalAmethyst-700 text-RoyalAmethyst-700 text-base rounded-xl">
-              Add Cart
+            <div
+              onClick={handleAddToCart}
+              className="px-6 py-2 cursor-pointer border border-solid border-RoyalAmethyst-700 text-RoyalAmethyst-700 text-base rounded-xl"
+            >
+              Add to Cart
             </div>
-            <div className="px-6 py-2 cursor-pointer border bg-RoyalAmethyst-700 text-white text-base rounded-xl">
-              Book now
+            <div
+              onClick={handleBookNow}
+              className="px-6 py-2 cursor-pointer border bg-RoyalAmethyst-700 text-white text-base rounded-xl"
+            >
+              Book Now
             </div>
           </div>
         </div>

@@ -198,6 +198,7 @@ import BookingRefund from "../components/user/bookingRefund";
 import FacilityInfoHotel from "../components/admin/facilityInfoHotel";
 import NearbyLocationHotel from "../components/admin/nearbyLocationHotel";
 import SomeHelpfulFacts from "../components/admin/someHelpfulFactsHotel";
+Choose
 
 export default function page() {
   return (
@@ -227,6 +228,8 @@ export default function page() {
       {/* <FacilityInfoHotel /> */}
       {/* <NearbyLocationHotel /> */}
       {/* <SomeHelpfulFacts /> */}
+
+
     </div>
   );
 }

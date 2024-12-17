@@ -146,8 +146,14 @@ export default function InstagrammableHotels({
                     {data.city.name || "No description available"}
                   </span>
                 </div>
-                <div className="text-sm text-gray-400">
-                  {hotel?.description}
+                <div className="text-black text-base font-semibold no-underline leading-6">
+                {hotel?.description
+                    ? hotel.description
+                        .replace(/[.,]/g, "")
+                        .split(" ")
+                        .slice(0, 12)
+                        .join(" ")
+                    : "No description available"}
                 </div>
                 <div className="flex justify-end">
                   <div className="flex gap-2 items-center">

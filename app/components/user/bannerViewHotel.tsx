@@ -125,7 +125,7 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
       <div className={`${mediumMontserrat.className} p-6`}>
         {/* title and address */}
         <div className="flex gap-1 items-center">
-          <span className="font-semibold text-lg">{data.name}</span>
+          <span className="font-semibold text-lg">{data?.name}</span>
           <div className="flex gap-1">
             {/* Render 5 stars: filled for rating, empty for unfilled */}
             {Array.from({ length: 5 }, (_, index) =>
@@ -142,7 +142,7 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
         {/* deal */}
         <div className="flex justify-between items-center">
           <span className="text-xs">
-            {`${data.address}, ${data?.city?.name}, ${data?.city?.province?.name}, ${data?.city?.province?.country?.name}`}{" "}
+            {`${data?.address}, ${data?.city?.name}, ${data?.city?.province?.name}, ${data?.city?.province?.country?.name}`}{" "}
             -
             <Link
               href={hotelDetails[0].mapLink}
@@ -196,7 +196,7 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
           <div className="w-3/6 rounded-xl">
             <Image.PreviewGroup>
               <Image
-                src={`http://localhost:3222/photo-hotels/${data.photohotels[0].pathPhoto}`}
+                src={`http://localhost:3222/photo-hotels/${data?.photohotels[0]?.pathPhoto}`}
                 alt={hotelDetails[0].images[0].alt}
                 className="rounded-xl w-full h-auto"
               />
@@ -209,25 +209,25 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
               {/* {hotelDetails[0].images.slice(1, 5).map((image, index) => ( */}
               <Image
                 // key={index}
-                src={`http://localhost:3222/photo-hotels/${data.photohotels[0].pathPhoto}`}
+                src={`http://localhost:3222/photo-hotels/${data?.photohotels[0]?.pathPhoto}`}
                 alt={"alt"}
                 className="rounded-xl w-full h-auto"
               />
               <Image
                 // key={index}
-                src={`http://localhost:3222/photo-hotels/${data.photohotels[1].pathPhoto}`}
+                src={`http://localhost:3222/photo-hotels/${data?.photohotels[1]?.pathPhoto}`}
                 alt={"alt"}
                 className="rounded-xl w-full h-auto"
               />
               <Image
                 // key={index}
-                src={`http://localhost:3222/photo-hotels/${data.photohotels[1].pathPhoto}`}
+                src={`http://localhost:3222/photo-hotels/${data?.photohotels[1]?.pathPhoto}`}
                 alt={"alt"}
                 className="rounded-xl w-full h-auto"
               />
               <Image
                 // key={index}
-                src={`http://localhost:3222/photo-hotels/${data.photohotels[0].pathPhoto}`}
+                src={`http://localhost:3222/photo-hotels/${data?.photohotels[0]?.pathPhoto}`}
                 alt={"alt"}
                 className="rounded-xl w-full h-auto"
               />

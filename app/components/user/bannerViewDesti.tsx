@@ -24,9 +24,13 @@ import Loading from "#/app/loading";
 
 interface dataDestination {
   data: {
-    photodestinations: string[]; 
+    photodestinations: dataPhotodestinations[];
   };
   scrollToChooseRoom: () => void;
+}
+
+interface dataPhotodestinations{
+  pathPhoto: string;
 }
 
 export default function BannerViewDesti({ data, scrollToChooseRoom }: dataDestination) {
@@ -37,8 +41,8 @@ export default function BannerViewDesti({ data, scrollToChooseRoom }: dataDestin
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
-  const copyText =
-    "https://htrip.com/destination/detail/f7b03e0e-7823-4d1f-bd63-27ed8d81844e";
+
+  const currentUrl = typeof window !== "undefined" ? window.location.href : ""; // Mendapatkan URL saat ini
   const title = "Check out this amazing destination!";
 
   const handleShareClick = () => {
@@ -50,7 +54,7 @@ export default function BannerViewDesti({ data, scrollToChooseRoom }: dataDestin
   };
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(copyText);
+    navigator.clipboard.writeText(currentUrl); // Menyalin URL saat ini
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
@@ -61,12 +65,12 @@ export default function BannerViewDesti({ data, scrollToChooseRoom }: dataDestin
     <div className="w-full relative">
       <Carousel autoplay dots className="rounded-xl overflow-hidden h-[500px]">
         {data.photodestinations.map((data) => (
-          <div key={data}>
+          <div key={data.pathPhoto}>
             <Image
-              src={`http://localhost:3222/photo-destinations/${data}`}
-              alt={`Slide ${data + 1}`}
+              src={`http://192.168.195.16:3222/photo-destinations/${data}`}
+              alt={`Slide ${data.pathPhoto + 1}`}
               preview={{
-                src: `http://localhost:3222/photo-destinations/${data}`,
+                src: `http://192.168.195.16:3222/photo-destinations/${data}`,
               }}
               className="w-full object-cover"
             />
@@ -104,26 +108,26 @@ export default function BannerViewDesti({ data, scrollToChooseRoom }: dataDestin
       >
         <div className="flex flex-col">
           <div className="flex gap-4">
-            <FacebookShareButton url={copyText}>
+            <FacebookShareButton url={currentUrl}>
               <RiFacebookFill className="text-[#4267B2] text-3xl" />
             </FacebookShareButton>
-            <TwitterShareButton url={copyText} title={title}>
+            <TwitterShareButton url={currentUrl} title={title}>
               <RiTwitterFill className="text-[#1DA1F2] text-3xl" />
             </TwitterShareButton>
-            <WhatsappShareButton url={copyText} title={title}>
+            <WhatsappShareButton url={currentUrl} title={title}>
               <RiWhatsappFill className="text-[#25D366] text-3xl" />
             </WhatsappShareButton>
-            <EmailShareButton url={copyText} subject={title}>
+            <EmailShareButton url={currentUrl} subject={title}>
               <RiMailFill className="text-gray-600 text-3xl" />
             </EmailShareButton>
-            <TelegramShareButton url={copyText}>
+            <TelegramShareButton url={currentUrl}>
               <RiTelegramFill className="text-[#1d44f2] text-3xl" />
             </TelegramShareButton>
           </div>
           <div className="flex items-center gap-2 mt-4">
             <input
               type="text"
-              value={copyText}
+              value={currentUrl} // Menampilkan URL saat ini
               readOnly
               className="bg-white border-2 border-solid border-gray-400 rounded-lg p-2 w-full"
             />

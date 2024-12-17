@@ -142,9 +142,14 @@ export default function TopFourHotel({ data }: { data: dataDestination }) {
                 </div>
                 <Link
                   href={`/hotel/detail/${hotel.id}`}
-                  className="text-black text-base font-semibold no-underline leading-6"
-                >
-                  {hotel?.description}
+                  className="text-black text-base font-semibold no-underline leading-6">
+                  {hotel?.description
+                      ? hotel.description
+                          .replace(/[.,]/g, "")
+                          .split(" ")
+                          .slice(0, 12)
+                          .join(" ")
+                      : "No description available"}
                 </Link>
                 <div className="flex justify-end">
                   <div className="flex gap-2 items-center">

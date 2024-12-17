@@ -1,10 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Montserrat } from "next/font/google";
 import Image from "next/image";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 import Loading from "#/app/loading";
-import { destinationRepository } from "#/repository/destinations";
 
 interface DataDestination {
   data: {
@@ -17,13 +16,10 @@ interface DataDestination {
 
 export default function DescriptionDesti({ data }: DataDestination) {
   const [loading, setLoading] = useState(false);
-  const [fallbackImages, setFallbackImages] = useState(descriptionDes[0].images || []);
 
   if (!data) {
     return <Loading />;
   }
-
-  console.log("Data received:", data);
 
   return (
     <div className="flex justify-between gap-4">
@@ -68,16 +64,9 @@ export default function DescriptionDesti({ data }: DataDestination) {
                 className="rounded-xl"
               />
             ) : (
-              fallbackImages.map((image, index) => (
-                <Image
-                  key={index}
-                  src={image.src}
-                  alt={image.alt}
-                  height={400}
-                  width={300}
-                  className="w-full h-full object-cover rounded-xl"
-                />
-              ))
+              <div className="h-64 flex items-center justify-center text-lg text-gray-500 border-2 border-gray-300 rounded-xl">
+                Not Found
+              </div>
             )}
           </div>
         </div>
@@ -90,21 +79,3 @@ const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
-
-const descriptionDes = [
-  {
-    name: "Angel's Billabong",
-    rating: 3,
-    descriptions: [
-      "Angel’s Billabong is one of the most iconic destinations in Nusa Penida, Bali.",
-    ],
-    images: [
-      {
-        src: "/images/illustration/property-map-entry.png",
-        alt: "Property Map Entry",
-        height: 200,
-        width: 300,
-      },
-    ],
-  },
-];

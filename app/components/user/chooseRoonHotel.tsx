@@ -293,22 +293,22 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
                     </div>
                   </div>
                   {/* Number of Rooms Input */}
-                  <Button
+                  <div
                     onClick={() => {
                       handleAddToCart(item.id);
                     }}
-                    className="border-solid border-RoyalAmethyst-700 border rounded-xl text-center text-RoyalAmethyst-700 text-sm  cursor-pointer"
+                    className="border-solid border-RoyalAmethyst-700 border rounded-xl text-center text-RoyalAmethyst-700 text-sm cursor-pointer  p-3"
                   >
-                    <span className="m-3">Add cart</span>
-                  </Button>
-                  <Button
+                   Add cart 
+                  </div>
+                  <div
                     onClick={() => {
                       handleBookNow(item.id);
                     }}
                     className="bg-RoyalAmethyst-700 text-white text-sm rounded-xl text-center p-3 cursor-pointer"
                   >
                     Book now
-                  </Button>
+                  </div>
                 </div>
               </div>
             </div>

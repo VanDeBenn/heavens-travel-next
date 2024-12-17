@@ -66,7 +66,7 @@ function page({ params }: { params: {id: string } }) {
         scrollToChooseRoom={scrollToChooseRoom}
         data={dataDestination}/>
         <DescriptionDesti data={dataDestination}/>
-        <TicketsOverview />
+        <TicketsOverview data={dataDestination} />
         <GuestReviewDesti />
         <NewsFrom data={dataDestination} />
         <InstagrammableHotels data={dataDestination} />

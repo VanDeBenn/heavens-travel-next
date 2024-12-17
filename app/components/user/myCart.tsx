@@ -56,25 +56,21 @@ export default function MyCart() {
     }
   };
 
-  const getTotalPrice = () => {
-    return dataCart.reduce((total, item, index) => {
-      if (selectedItems[index]) {
-        if (item.destination) {
-          const priceForAdults =
-            item.quantityAdult * item.destination.priceAdult;
-          const priceForChildren =
-            item.quantityChildren * item.destination.priceChildren;
-          total += priceForAdults + priceForChildren;
-        }
-
-        if (item.roomHotel) {
-          const priceForRoomHotel = item.quantityRoom * item.roomHotel.price;
-          total += priceForRoomHotel;
-        }
+const getTotalPrice = () => {
+  return dataCart.reduce((total, item, index) => {
+    if (selectedItems[index]) {
+      if (item.destination) {
+        total +=
+          item.quantityAdult * item.destination.priceAdult +
+          item.quantityChildren * item.destination.priceChildren;
+      } else if (item.roomHotel) {
+        total += item.quantityRoom * item.roomHotel.price;
       }
-      return total;
-    }, 0);
-  };
+    }
+    return total;
+  }, 0);
+};
+
 
   useEffect(() => {
     fetchCart();
