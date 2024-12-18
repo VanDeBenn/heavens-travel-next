@@ -57,7 +57,7 @@ export default function PoliciesHotel({ hotelId }: ComponentProps) {
 
   const handleUpload = async () => {
     if (policies.length === 0) {
-      message.error("Please add at least one file.");
+      message.error("Please add at least one policies.");
       return;
     }
 

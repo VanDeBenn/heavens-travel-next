@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Montserrat } from "next/font/google";
 import { Switch as AntSwitch } from "antd";
 import { Disclosure, Transition } from "@headlessui/react";
@@ -27,71 +27,179 @@ import {
 } from "react-icons/fa";
 import { PiCigarette } from "react-icons/pi";
 import { BsCurrencyExchange } from "react-icons/bs";
+import { facilitieRepository } from "#/repository/facilities";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
 
-const sections = [
-  {
-    title: "Language Spoken",
-    icon: <RiSpeakLine className="text-2xl text-RoyalAmethyst-700" />,
-    content: [
-      { id: 1, icons: GBFlagIcon, name: "English" },
-      { id: 2, icons: IDFlagIcon, name: "Indonesian" },
-      { id: 3, icons: MYFlagIcon, name: "Malay" },
-    ],
-  },
-  {
-    title: "Internet",
-    icon: <RiWifiFill className="text-2xl text-RoyalAmethyst-700" />,
-    content: [
-      { id: 4, icons: RiWifiFill, name: "Internet" },
-      {
-        id: 5,
-        icons: MdOutlineSettingsInputAntenna,
-        name: "Free Wi-Fi in all rooms!",
-      },
-      { id: 6, icons: IoIosCellular, name: "Wi-Fi in public areas" },
-    ],
-  },
-  {
-    title: "Facility",
-    icon: <GiKnifeFork className="text-2xl text-RoyalAmethyst-700" />,
-    content: [
-      { id: 7, icons: FaHeadset, name: "Receptionist 24h" },
-      { id: 8, icons: MdOutlineMicrowave, name: "Kitchen" },
-      { id: 9, icons: FaSwimmingPool, name: "Swimming Pool" },
-      { id: 10, icons: FaDumbbell, name: "Gym" },
-      { id: 11, icons: MdOutlineBathtub, name: "Shower" },
-      { id: 12, icons: PiCigarette, name: "Smoking Room" },
-      { id: 13, icons: FaSpa, name: "SPA Room" },
-    ],
-  },
-  {
-    title: "Service and Convenience",
-    icon: <TbHeadset className="text-2xl text-RoyalAmethyst-700" />,
-    content: [
-      { id: 14, icons: TbAirConditioning, name: "Air conditioning" },
-      { id: 15, icons: FaUserTie, name: "Concierge" },
-      { id: 16, icons: MdDeck, name: "Terrace" },
-      { id: 17, icons: MdCleaningServices, name: "Daily housekeeping" },
-      { id: 18, icons: BsCurrencyExchange, name: "Currency exchange" },
-      { id: 19, icons: MdRouter, name: "Internet Service" },
-    ],
-  },
-];
+interface ComponentProps {
+  data: any;
+  hotelId: any;
+}
 
-export default function FacilityInfoHotel() {
-  const [switchStates, setSwitchStates] = useState<Record<number, boolean>>({});
+export default function FacilityInfoHotel({ data, hotelId }: ComponentProps) {
+  if (!data) {
+    return;
+  }
 
-  const toggleSwitch = (id: number) => {
+  const sections = [
+    {
+      title: data[0]?.title,
+      icon: <RiSpeakLine className="text-2xl text-RoyalAmethyst-700" />,
+      content: [
+        {
+          id: data[0]?.serviceamenities[0]?.id,
+          icons: GBFlagIcon,
+          name: data[0]?.serviceamenities[0]?.title,
+        },
+        {
+          id: data[0]?.serviceamenities[1]?.id,
+          icons: IDFlagIcon,
+          name: data[0]?.serviceamenities[1]?.title,
+        },
+        {
+          id: data[0]?.serviceamenities[2]?.id,
+          icons: MYFlagIcon,
+          name: data[0]?.serviceamenities[2]?.title,
+        },
+      ],
+    },
+    {
+      title: data[1]?.title,
+      icon: <RiWifiFill className="text-2xl text-RoyalAmethyst-700" />,
+      content: [
+        {
+          id: data[1]?.serviceamenities[0]?.id,
+          icons: RiWifiFill,
+          name: data[1]?.serviceamenities[0]?.title,
+        },
+        {
+          id: data[1]?.serviceamenities[1]?.id,
+          icons: MdOutlineSettingsInputAntenna,
+          name: data[1]?.serviceamenities[1]?.title,
+        },
+        {
+          id: data[1]?.serviceamenities[2]?.id,
+          icons: IoIosCellular,
+          name: data[1]?.serviceamenities[2]?.title,
+        },
+      ],
+    },
+    {
+      title: data[2]?.title,
+      icon: <GiKnifeFork className="text-2xl text-RoyalAmethyst-700" />,
+      content: [
+        {
+          id: data[2]?.serviceamenities[0]?.id,
+          icons: FaHeadset,
+          name: data[2]?.serviceamenities[0]?.title,
+        },
+        {
+          id: data[2]?.serviceamenities[1]?.id,
+          icons: MdOutlineMicrowave,
+          name: data[2]?.serviceamenities[1]?.title,
+        },
+        {
+          id: data[2]?.serviceamenities[2]?.id,
+          icons: FaSwimmingPool,
+          name: data[2]?.serviceamenities[2]?.title,
+        },
+        {
+          id: data[2]?.serviceamenities[3]?.id,
+          icons: FaDumbbell,
+          name: data[2]?.serviceamenities[3]?.title,
+        },
+        {
+          id: data[2]?.serviceamenities[4]?.id,
+          icons: MdOutlineBathtub,
+          name: data[2]?.serviceamenities[4]?.title,
+        },
+        {
+          id: data[2]?.serviceamenities[5]?.id,
+          icons: PiCigarette,
+          name: data[2]?.serviceamenities[5]?.title,
+        },
+        {
+          id: data[2]?.serviceamenities[6]?.id,
+          icons: FaSpa,
+          name: data[2]?.serviceamenities[6]?.title,
+        },
+      ],
+    },
+    {
+      title: data[3]?.title,
+      icon: <TbHeadset className="text-2xl text-RoyalAmethyst-700" />,
+      content: [
+        {
+          id: data[3]?.serviceamenities[0]?.id,
+          icons: TbAirConditioning,
+          name: data[3]?.serviceamenities[0]?.title,
+        },
+        {
+          id: data[3]?.serviceamenities[1]?.id,
+          icons: FaUserTie,
+          name: data[3]?.serviceamenities[1]?.title,
+        },
+        {
+          id: data[3]?.serviceamenities[2]?.id,
+          icons: MdDeck,
+          name: data[3]?.serviceamenities[2]?.title,
+        },
+        {
+          id: data[3]?.serviceamenities[3]?.id,
+          icons: MdCleaningServices,
+          name: data[3]?.serviceamenities[3]?.title,
+        },
+        {
+          id: data[3]?.serviceamenities[4]?.id,
+          icons: BsCurrencyExchange,
+          name: data[3]?.serviceamenities[4]?.title,
+        },
+        {
+          id: data[3]?.serviceamenities[5]?.id,
+          icons: MdRouter,
+          name: data[3]?.serviceamenities[5]?.title,
+        },
+      ],
+    },
+  ];
+
+  const [switchStates, setSwitchStates] = useState<Record<string, boolean>>({});
+
+  const toggleSwitch = (id: string) => {
     setSwitchStates((prevState) => ({
       ...prevState,
       [id]: !prevState[id],
     }));
   };
+
+  const addFacilities = async () => {
+    try {
+      // Iterasi melalui entries dari switchStates
+      for (const [id, status] of Object.entries(switchStates)) {
+        const data = {
+          serviceAmenitiesId: id,
+          status,
+          hotelId, // Asumsikan hotelId sudah tersedia
+        };
+
+        console.log("Mengirim data:", data);
+
+        const req = await facilitieRepository.api.create(data);
+      }
+      console.log("Semua fasilitas berhasil ditambahkan!");
+    } catch (error) {
+      console.error("Error saat menambah fasilitas:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (hotelId) {
+      addFacilities();
+    }
+  }, [hotelId]);
 
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">

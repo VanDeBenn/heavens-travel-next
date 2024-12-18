@@ -1,8 +1,14 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Montserrat } from "next/font/google";
 import { GB, ID, MY } from "country-flag-icons/react/3x2";
-import { FaWifi, FaHeadset, FaSwimmingPool, FaShower, FaDumbbell } from "react-icons/fa";
+import {
+  FaWifi,
+  FaHeadset,
+  FaSwimmingPool,
+  FaShower,
+  FaDumbbell,
+} from "react-icons/fa";
 import { IoMdWifi } from "react-icons/io";
 import { MdOutlineCellWifi, MdCurrencyExchange } from "react-icons/md";
 import { PiOvenFill, PiCigaretteSlashDuotone } from "react-icons/pi";
@@ -11,38 +17,121 @@ import { AiOutlineReconciliation } from "react-icons/ai";
 import { GiHighGrass, GiBroom } from "react-icons/gi";
 import { LuMonitorDot } from "react-icons/lu";
 
-// Array dummy untuk data
-const servicesAmenitiesData = {
-  languages: [
-    { icon: <GB title="United Kingdom" style={{ width: "19px", height: "19px" }} />, text: "English" },
-    { icon: <ID title="Indonesia" style={{ width: "19px", height: "19px" }} />, text: "Indonesian" },
-    { icon: <MY title="Malaysia" style={{ width: "19px", height: "19px" }} />, text: "Malay" },
-  ],
-  internet: [
-    { icon: <FaWifi className="text-lg text-RoyalAmethyst-700" />, text: "Internet" },
-    { icon: <IoMdWifi className="text-lg text-RoyalAmethyst-700" />, text: "Free Wi-Fi in all rooms" },
-    { icon: <MdOutlineCellWifi className="text-lg text-RoyalAmethyst-700" />, text: "Wi-Fi in public areas" },
-  ],
-  facilities: [
-    { icon: <FaHeadset className="text-lg text-RoyalAmethyst-700" />, text: "Receptionist 24h" },
-    { icon: <PiOvenFill className="text-lg text-RoyalAmethyst-700" />, text: "Kitchen" },
-    { icon: <FaSwimmingPool className="text-lg text-RoyalAmethyst-700" />, text: "Swimming Pool" },
-    { icon: <FaShower className="text-lg text-RoyalAmethyst-700" />, text: "Shower" },
-    { icon: <FaDumbbell className="text-lg text-RoyalAmethyst-700" />, text: "Gym" },
-    { icon: <PiCigaretteSlashDuotone className="text-lg text-RoyalAmethyst-700" />, text: "Smoking Room" },
-    { icon: <TbBed className="text-lg text-RoyalAmethyst-700" />, text: "SPA Room" },
-  ],
-  servicesConveniences: [
-    { icon: <TbAirConditioning className="text-lg text-RoyalAmethyst-700" />, text: "Air Conditioning in public area" },
-    { icon: <AiOutlineReconciliation className="text-lg text-RoyalAmethyst-700" />, text: "Concierge" },
-    { icon: <GiHighGrass className="text-lg text-RoyalAmethyst-700" />, text: "Terrace" },
-    { icon: <MdCurrencyExchange className="text-lg text-RoyalAmethyst-700" />, text: "Currency exchange" },
-    { icon: <GiBroom className="text-lg text-RoyalAmethyst-700" />, text: "Daily housekeeping" },
-    { icon: <LuMonitorDot className="text-lg text-RoyalAmethyst-700" />, text: "Internet service" },
-  ],
-};
+interface ComponentProps {
+  data: any;
+}
 
-export default function ServicesAmenities() {
+export default function ServicesAmenities({ data }: ComponentProps) {
+  if (!data) {
+    return;
+  }
+  const [nameServices, setNameServices] = useState<[]>();
+
+  const facilities = data?.facility.filter(
+    (facility: any) => facility?.status === true
+  );
+
+  const facility = facilities.map((item: any) => item.serviceAmenities.title);
+  console.log(facility); // ['English', 'Indonesia (Bahasa)']
+  console.log(facility.filter((item: any) => item === "English")); // ['English']
+
+  const servicesAmenitiesData = {
+    languages: [
+      {
+        icon: (
+          <GB
+            title="United Kingdom"
+            style={{ width: "19px", height: "19px" }}
+          />
+        ),
+        text: "English",
+      },
+      {
+        icon: (
+          <ID title="Indonesia" style={{ width: "19px", height: "19px" }} />
+        ),
+        text: "Indonesian",
+      },
+      {
+        icon: <MY title="Malaysia" style={{ width: "19px", height: "19px" }} />,
+        text: "Malay",
+      },
+    ],
+    internet: [
+      {
+        icon: <FaWifi className="text-lg text-RoyalAmethyst-700" />,
+        text: "Internet",
+      },
+      {
+        icon: <IoMdWifi className="text-lg text-RoyalAmethyst-700" />,
+        text: "Free Wi-Fi in all rooms",
+      },
+      {
+        icon: <MdOutlineCellWifi className="text-lg text-RoyalAmethyst-700" />,
+        text: "Wi-Fi in public areas",
+      },
+    ],
+    facilities: [
+      {
+        icon: <FaHeadset className="text-lg text-RoyalAmethyst-700" />,
+        text: "Receptionist 24h",
+      },
+      {
+        icon: <PiOvenFill className="text-lg text-RoyalAmethyst-700" />,
+        text: "Kitchen",
+      },
+      {
+        icon: <FaSwimmingPool className="text-lg text-RoyalAmethyst-700" />,
+        text: "Swimming Pool",
+      },
+      {
+        icon: <FaShower className="text-lg text-RoyalAmethyst-700" />,
+        text: "Shower",
+      },
+      {
+        icon: <FaDumbbell className="text-lg text-RoyalAmethyst-700" />,
+        text: "Gym",
+      },
+      {
+        icon: (
+          <PiCigaretteSlashDuotone className="text-lg text-RoyalAmethyst-700" />
+        ),
+        text: "Smoking Room",
+      },
+      {
+        icon: <TbBed className="text-lg text-RoyalAmethyst-700" />,
+        text: "SPA Room",
+      },
+    ],
+    servicesConveniences: [
+      {
+        icon: <TbAirConditioning className="text-lg text-RoyalAmethyst-700" />,
+        text: "Air Conditioning in public area",
+      },
+      {
+        icon: (
+          <AiOutlineReconciliation className="text-lg text-RoyalAmethyst-700" />
+        ),
+        text: "Concierge",
+      },
+      {
+        icon: <GiHighGrass className="text-lg text-RoyalAmethyst-700" />,
+        text: "Terrace",
+      },
+      {
+        icon: <MdCurrencyExchange className="text-lg text-RoyalAmethyst-700" />,
+        text: "Currency exchange",
+      },
+      {
+        icon: <GiBroom className="text-lg text-RoyalAmethyst-700" />,
+        text: "Daily housekeeping",
+      },
+      {
+        icon: <LuMonitorDot className="text-lg text-RoyalAmethyst-700" />,
+        text: "Internet service",
+      },
+    ],
+  };
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border ">
       <div className={`${mediumMontserrat.className} p-6`}>
@@ -59,7 +148,9 @@ export default function ServicesAmenities() {
                 {servicesAmenitiesData.languages.map((item, index) => (
                   <div key={index} className="flex items-center ">
                     {item.icon}
-                    <span className="pl-2 text-xs sm:text-sm text-black">{item.text}</span>
+                    <span className="pl-2 text-xs sm:text-sm text-black">
+                      {item.text}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -70,7 +161,9 @@ export default function ServicesAmenities() {
                   {servicesAmenitiesData.internet.map((item, index) => (
                     <div key={index} className="flex items-center ">
                       {item.icon}
-                      <span className="pl-2 text-xs sm:text-sm text-black">{item.text}</span>
+                      <span className="pl-2 text-xs sm:text-sm text-black">
+                        {item.text}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -83,21 +176,29 @@ export default function ServicesAmenities() {
                 {servicesAmenitiesData.facilities.map((item, index) => (
                   <div key={index} className="flex items-center ">
                     {item.icon}
-                    <span className="pl-2 text-xs sm:text-sm text-black">{item.text}</span>
+                    <span className="pl-2 text-xs sm:text-sm text-black">
+                      {item.text}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
 
             <div>
-              <span className="font-semibold text-sm">Service and conveniences</span>
+              <span className="font-semibold text-sm">
+                Service and conveniences
+              </span>
               <div className="flex flex-col gap-2 pt-2">
-                {servicesAmenitiesData.servicesConveniences.map((item, index) => (
-                  <div key={index} className="flex items-center ">
-                    {item.icon}
-                    <span className="pl-2 text-xs sm:text-sm text-black">{item.text}</span>
-                  </div>
-                ))}
+                {servicesAmenitiesData.servicesConveniences.map(
+                  (item, index) => (
+                    <div key={index} className="flex items-center ">
+                      {item.icon}
+                      <span className="pl-2 text-xs sm:text-sm text-black">
+                        {item.text}
+                      </span>
+                    </div>
+                  )
+                )}
               </div>
             </div>
           </div>
@@ -107,7 +208,6 @@ export default function ServicesAmenities() {
   );
 }
 
-// Mengatur font Montserrat
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["600"],

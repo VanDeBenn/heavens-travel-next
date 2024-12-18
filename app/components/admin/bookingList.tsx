@@ -36,8 +36,8 @@ export default function BookingList({ data }: ComponentProps) {
       // Pastikan data adalah array
       const generatedData: DataType[] = data.map((item: any) => ({
         key: item.id,
-        bookingId: item.id,
         customer: item?.user?.fullName || "Unknown Customer", // Jika user kosong
+        bookingId: item?.user?.email,
         total: item?.payment?.amount ? item.payment.amount.toString() : "0", // Jika payment kosong
         quantity: item?.bookingdetails ? item.bookingdetails.length : "0",
         fulfillmentStatus: item?.payment?.status || "PENDING",
@@ -78,7 +78,7 @@ export default function BookingList({ data }: ComponentProps) {
   // Define the columns with the correct type ColumnsType<DataType>
   const columns: ColumnsType<DataType> = [
     {
-      title: "Booking ID",
+      title: "email",
       dataIndex: "bookingId",
       key: "bookingId",
       align: "center",

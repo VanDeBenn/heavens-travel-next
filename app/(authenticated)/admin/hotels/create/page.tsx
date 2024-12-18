@@ -15,6 +15,7 @@ import { Button } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { hotelRepository } from "#/repository/hotels";
+import { categoriServiceAmenitiRepository } from "#/repository/categori-service-amenities";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
@@ -39,6 +40,7 @@ interface LocationInfo {
 
 export default function page() {
   const router = useRouter();
+  const [servicesData, setServicesData] = useState<any>();
   const [hotelId, setHotelId] = useState<string>("");
   const [submitForms, setSubmitForms] = useState(false);
   const [basicInfoHotel, setBasicInfoHotel] = useState<BasicInfo>({
@@ -106,6 +108,16 @@ export default function page() {
     }
   }, [submitForms]);
 
+  const getAllServices = async () => {
+    const res =
+      await categoriServiceAmenitiRepository.api.getCategoriServiceAmenities();
+    setServicesData(res.data);
+  };
+
+  useEffect(() => {
+    getAllServices();
+  }, []);
+
   return (
     <>
       <div
@@ -130,7 +142,7 @@ export default function page() {
         />
         <PhotoHotel hotelId={hotelId} />
 
-        <FacilityInfoHotel />
+        <FacilityInfoHotel data={servicesData} hotelId={hotelId} />
         <NearbyLocationHotel />
 
         <PoliciesHotel hotelId={hotelId} />

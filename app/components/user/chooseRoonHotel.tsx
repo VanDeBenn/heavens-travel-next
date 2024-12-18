@@ -71,7 +71,6 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
       setEndDate(null);
     }
   };
-  console.log(`${startDate} - ${endDate}`);
 
   const handleAddToCart = async (roomHotelId: string) => {
     try {
@@ -299,7 +298,7 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
                     }}
                     className="border-solid border-RoyalAmethyst-700 border rounded-xl text-center text-RoyalAmethyst-700 text-sm cursor-pointer  p-3"
                   >
-                   Add cart 
+                    Add cart
                   </div>
                   <div
                     onClick={() => {

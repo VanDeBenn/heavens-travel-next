@@ -21,9 +21,9 @@ const Register = () => {
 
   useEffect(() => {
     if (isRegistered) {
-      router.push("/profile");
+      router.push("/login");
     }
-  }, [isRegistered, router]);
+  }, [isRegistered]);
 
   type RegisterForm = {
     fullName: string;

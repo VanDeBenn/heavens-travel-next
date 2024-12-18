@@ -31,7 +31,6 @@ export default function Page() {
     }
   };
 
-  //   // console.log(hotelData);
   if (!hotelData) {
     return;
   }
@@ -44,7 +43,7 @@ export default function Page() {
           data={hotelData}
         />
         <DescriptionHotel data={hotelData} />
-        <ServicesAmenities />
+        <ServicesAmenities data={hotelData} />
         <AboutNearbyLocation />
         <div ref={chooseRoomRef}>
           <ChooseRoonHotel data={hotelData} id={hotelId} />
