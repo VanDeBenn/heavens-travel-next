@@ -119,7 +119,7 @@ export default function page() {
   }, []);
 
   return (
-    <>
+    <div>
       <div
         className={`${mediumMontserrat.className} flex gap-2 items-center text-sm text-black`}
       >
@@ -143,7 +143,8 @@ export default function page() {
         <PhotoHotel hotelId={hotelId} />
 
         <FacilityInfoHotel data={servicesData} hotelId={hotelId} />
-        <NearbyLocationHotel />
+
+        <NearbyLocationHotel hotelId={hotelId} />
 
         <PoliciesHotel hotelId={hotelId} />
 
@@ -164,7 +165,7 @@ export default function page() {
           Done
         </Button>
       </div>
-    </>
+    </div>
     // <div>
     //   <NextStepHotel />
     // </div>

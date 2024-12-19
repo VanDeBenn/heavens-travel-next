@@ -1,84 +1,160 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Montserrat } from "next/font/google";
-import { Switch as AntSwitch, Input, Form, Modal, Button } from "antd";
+import { Switch as AntSwitch, Input, Form, Modal, Button, message } from "antd";
 import { Disclosure, Transition } from "@headlessui/react";
 import { RiArrowDownSLine, RiBus2Line, RiStore2Line } from "react-icons/ri";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { CiHospital1 } from "react-icons/ci";
+import { nearbyLocationRepository } from "#/repository/nearbyLocations";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
   weight: ["500"],
 });
 
-import { CiHospital1 } from "react-icons/ci";
+interface LocationItem {
+  id: number;
+  location: string;
+  distance: string;
+}
 
-const sections = [
+interface SectionData {
+  [key: string]: LocationItem[];
+}
+
+const initialSections = [
   {
+    id: "publicTransport",
     title: "Public Transportation",
     icon: <RiBus2Line className="text-2xl text-RoyalAmethyst-700" />,
-    content: [{ id: 1, locationTransport: "", distance: "" }],
+    content: [{ id: 1, location: "", distance: "" }],
     dropdownLabel: "Location Transport",
   },
   {
+    id: "hospital",
     title: "Hospital or Clinic",
     icon: <CiHospital1 className="text-2xl text-RoyalAmethyst-700" />,
-    content: [{ id: 2 }],
+    content: [{ id: 2, location: "", distance: "" }],
     dropdownLabel: "Location Hospital/Clinic",
   },
   {
+    id: "convenience",
     title: "Convenience Store",
     icon: <RiStore2Line className="text-2xl text-RoyalAmethyst-700" />,
-    content: [{ id: 3, locationTransport: "", distance: "" }],
+    content: [{ id: 3, location: "", distance: "" }],
     dropdownLabel: "Location Store",
   },
 ];
 
-export default function NearbyLocationHotel() {
-  const [switchStates, setSwitchStates] = useState<Record<number, boolean>>({});
+interface ComponentProps {
+  hotelId: any;
+}
+
+export default function NearbyLocationHotel({ hotelId }: ComponentProps) {
+  const [sections, setSections] = useState(initialSections);
   const [modalVisible, setModalVisible] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
-  const [form] = Form.useForm();
+  const [itemToDelete, setItemToDelete] = useState<{
+    sectionIndex: number;
+    itemId: number;
+  } | null>(null);
+  const [formData, setFormData] = useState<SectionData>({
+    publicTransport: [],
+    hospital: [],
+    convenience: [],
+  });
 
-  const toggleSwitch = (id: number) => {
-    setSwitchStates((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
-  };
-
-  const handleDelete = (id: number) => {
-    setItemToDelete(id);
+  const handleDelete = (sectionIndex: number, id: number) => {
+    setItemToDelete({ sectionIndex, itemId: id });
     setModalVisible(true);
   };
 
   const confirmDelete = () => {
-    if (itemToDelete !== null) {
-      // Find section and remove the item with itemToDelete
-      sections.forEach((section) => {
-        section.content = section.content.filter(
-          (item) => item.id !== itemToDelete
-        );
-      });
+    if (itemToDelete) {
+      const newSections = [...sections];
+      newSections[itemToDelete.sectionIndex].content = newSections[
+        itemToDelete.sectionIndex
+      ].content.filter((item) => item.id !== itemToDelete.itemId);
+      setSections(newSections);
       setModalVisible(false);
     }
   };
 
-  const cancelDelete = () => {
-    setModalVisible(false);
-  };
-
   const handleAdd = (sectionIndex: number) => {
+    const newSections = [...sections];
     const newId =
-      Math.max(...sections[sectionIndex].content.map((item) => item.id)) + 1;
-    sections[sectionIndex].content.push({
+      Math.max(...newSections[sectionIndex].content.map((item) => item.id), 0) +
+      1;
+    newSections[sectionIndex].content.push({
       id: newId,
-      locationTransport: "",
+      location: "",
       distance: "",
     });
-
-    setSwitchStates({ ...switchStates });
+    setSections(newSections);
   };
+
+  const handleInputChange = (
+    sectionIndex: number,
+    itemId: number,
+    field: "location" | "distance",
+    value: string
+  ) => {
+    const newSections = [...sections];
+    const itemIndex = newSections[sectionIndex].content.findIndex(
+      (item) => item.id === itemId
+    );
+    if (itemIndex !== -1) {
+      newSections[sectionIndex].content[itemIndex][field] = value;
+      setSections(newSections);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      for (const section of sections) {
+        for (const item of section.content) {
+          if (!item.location || !item.distance) continue;
+
+          let categoriesNearbyLocationId;
+
+          switch (section.id) {
+            case "publicTransport":
+              categoriesNearbyLocationId =
+                "c004f1de-c280-4527-9702-ddb51181d652";
+              break;
+            case "hospital":
+              categoriesNearbyLocationId =
+                "5320cdb0-7f45-4ca4-bb3f-919bfb572976";
+              break;
+            case "convenience":
+              categoriesNearbyLocationId =
+                "06ffef57-2bd7-4a43-9b17-8867f09afa4c";
+              break;
+          }
+
+          const data = {
+            location: item.location,
+            distance: item.distance,
+            categoriesNearbyLocationId,
+            hotelId,
+          };
+
+          console.log(data);
+        }
+      }
+
+      message.success("All nearby locations have been saved successfully");
+    } catch (error) {
+      console.error("Error saving nearby locations:", error);
+      message.error("Failed to save some nearby locations");
+    }
+  };
+
+  useEffect(() => {
+    if (hotelId) {
+      handleSubmit();
+    }
+  }, [hotelId]);
 
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border p-9">
@@ -90,22 +166,6 @@ export default function NearbyLocationHotel() {
         </span>
       </div>
 
-      {/* Form for Location */}
-      <div className="h-px bg-gray-300"></div>
-      <div className="mt-4">
-        <Form layout="vertical" className="space-y-4">
-          <Form.Item
-            label="Location"
-            name="location"
-            rules={[{ required: true, message: "Please input the location!" }]}
-          >
-            <Input
-              className="w-full border-gray-300 rounded-lg py-2 px-4 focus:ring-RoyalAmethyst-700 focus:border-RoyalAmethyst-700"
-              placeholder="Enter the location"
-            />
-          </Form.Item>
-        </Form>
-      </div>
       <div className="h-px bg-gray-300"></div>
       <div className="flex flex-col gap-5 pt-5">
         {sections.map((section, index) => (
@@ -129,7 +189,10 @@ export default function NearbyLocationHotel() {
                         <div className="flex items-center gap-3">
                           <div
                             className={`${mediumMontserrat.className} px-5 py-2 border-solid border border-gray-300 rounded-xl cursor-pointer transition-all duration-300 text-black hover:text-RoyalAmethyst-700 hover:border-RoyalAmethyst-700 text-sm font-semibold`}
-                            onClick={() => handleAdd(index)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleAdd(index);
+                            }}
                           >
                             + Add
                           </div>
@@ -162,50 +225,47 @@ export default function NearbyLocationHotel() {
                           <div
                             className={`${mediumMontserrat.className} flex items-center gap-4 w-full`}
                           >
-                            <Form layout="vertical" className="w-full">
-                              <Form.Item
-                                label={section.dropdownLabel} // Use dynamic label
-                                name="locationTransport"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Please input the location!",
-                                  },
-                                ]}
-                              >
-                                <Input
-                                  className="w-full border-gray-300 rounded-lg py-2 px-4 focus:ring-RoyalAmethyst-700 focus:border-RoyalAmethyst-700"
-                                  placeholder={`Enter the ${section.dropdownLabel}`}
-                                />
-                              </Form.Item>
-                            </Form>
-                            <Form layout="vertical" className="">
-                              <Form.Item
-                                label="Distance"
-                                name="distance"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Please input the distance!",
-                                  },
-                                ]}
-                              >
-                                <Input
-                                  className="w-full border-gray-300 rounded-lg py-2 px-4 focus:ring-RoyalAmethyst-700 focus:border-RoyalAmethyst-700"
-                                  placeholder="Enter the distance"
-                                />
-                              </Form.Item>
-                            </Form>
+                            <div className="w-full">
+                              <label className="block text-sm font-medium text-gray-700">
+                                {section.dropdownLabel}
+                              </label>
+                              <Input
+                                className="mt-1 w-full border-gray-300 rounded-lg py-2 px-4 focus:ring-RoyalAmethyst-700 focus:border-RoyalAmethyst-700"
+                                placeholder={`Enter the ${section.dropdownLabel}`}
+                                value={item.location}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    index,
+                                    item.id,
+                                    "location",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                            <div className="w-full">
+                              <label className="block text-sm font-medium text-gray-700">
+                                Distance
+                              </label>
+                              <Input
+                                className="mt-1 w-full border-gray-300 rounded-lg py-2 px-4 focus:ring-RoyalAmethyst-700 focus:border-RoyalAmethyst-700"
+                                placeholder="Enter the distance"
+                                value={item.distance}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    index,
+                                    item.id,
+                                    "distance",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
                           </div>
-
                           <div className="flex items-center gap-3">
-                            <AntSwitch
-                              checked={switchStates[item.id] || false}
-                              onChange={() => toggleSwitch(item.id)}
-                            />
                             <FaRegTrashAlt
                               className="text-xl text-InfernoEcho-600 cursor-pointer"
-                              onClick={() => handleDelete(item.id)}
+                              onClick={() => handleDelete(index, item.id)}
                             />
                           </div>
                         </div>
@@ -219,14 +279,13 @@ export default function NearbyLocationHotel() {
         ))}
       </div>
 
-      {/* Modal for Delete Confirmation */}
       <Modal
         title="Delete Confirmation"
-        visible={modalVisible}
+        open={modalVisible}
         onOk={confirmDelete}
-        onCancel={cancelDelete}
+        onCancel={() => setModalVisible(false)}
         footer={[
-          <Button key="cancel" onClick={cancelDelete}>
+          <Button key="cancel" onClick={() => setModalVisible(false)}>
             Cancel
           </Button>,
           <Button key="continue" type="primary" onClick={confirmDelete}>
