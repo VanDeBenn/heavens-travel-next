@@ -239,7 +239,7 @@ export default function BookingDetail({ data }: ComponentProps) {
         <div className={`${mediumMontserrat.className} pt-6 px-9`}>
           <span className="text-lg font-semibold">Order</span>
         </div>
-     
+
         <div className="grid grid-cols-1 px-8 py-6 gap-6 w-full ">
           {/* {filteredBookingItems.map((item, index) => {
             const totalCost = item.HotelPricePerAdult
@@ -437,11 +437,11 @@ export default function BookingDetail({ data }: ComponentProps) {
               Help
             </div>
           </Link>
-          {/* <Link href={`/profile/bookings/detail/${data.id}/review`}>
+          <Link href={`/profile/bookings/detail/${data.id}/refund`}>
             <div className="w-max cursor-pointer px-6 py-2 rounded-xl bg-RoyalAmethyst-700 font-semibold text-sm text-white">
-              Review
+              Refund
             </div>
-          </Link> */}
+          </Link>
         </div>
       </div>
       <Modal

@@ -33,14 +33,15 @@ import Image from "next/image";
 import { BookingItem, initialBookingItems } from "./myBooking";
 import Link from "next/link";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
-// Step item type
+import { RefundRepository } from "#/repository/refund";
+import { useForm } from "antd/es/form/Form";
+
 interface StepItem {
   date: string;
   time: string;
   description: string;
 }
 
-// Interface untuk informasi nomor invoice, tanggal pemesanan, dan path gambar QR Code
 interface NoInvoiceInfo {
   invoiceNumber: string;
   orderDate: string;
@@ -57,58 +58,57 @@ interface paymentDetailGuest {
   priceDesti: string;
 }
 
-export default function BookingRefund() {
+interface ComponentProps {
+  data: any;
+  bookingId: any;
+}
+
+export default function BookingRefund({ data, bookingId }: ComponentProps) {
+  if (!data) {
+    return;
+  }
+  console.log(data);
+  const [form] = useForm();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false); // State untuk modal QR code
-  const [qrImage, setQrImage] = useState<string>(""); // State untuk gambar QR code
-  const currentStep = 2; // Contoh langkah saat ini
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [qrImage, setQrImage] = useState<string>("");
+  const currentStep = 2;
 
   const handleDropdownToggle = () => {
     if (!isDropdownOpen) {
       setIsDropdownOpen(true);
-      setTimeout(() => setIsDropdownVisible(true), 100); // Delay sedikit untuk trigger animasi
+      setTimeout(() => setIsDropdownVisible(true), 100);
     } else {
       setIsDropdownVisible(false);
-      setTimeout(() => setIsDropdownOpen(false), 300); // Waktu harus sesuai dengan durasi animasi
+      setTimeout(() => setIsDropdownOpen(false), 300);
     }
   };
 
-  // Fungsi untuk membuka modal QR code
   const handleOpenQrCode = (imagePath: string) => {
     setQrImage(imagePath);
     setIsModalVisible(true);
   };
 
-  // Fungsi untuk menutup modal QR code
   const handleCloseQrCode = () => {
     setIsModalVisible(false);
   };
 
-  const [bookingItems, setBookingItems] = useState(initialBookingItems);
-
-  // Filter hotel dan destinasi untuk menampilkan hanya 1 hotel dan 1 destinasi
-  const filteredBookingItems = [
-    ...bookingItems.filter((item) => item.category === "Hotel").slice(0, 1),
-    ...bookingItems
-      .filter((item) => item.category === "Destination")
-      .slice(0, 1),
-  ];
-
-  const handleDelete = (indexToDelete: number) => {
-    Modal.confirm({
-      title: "Are you sure?",
-      content: "Do you want to remove this item from your cart?",
-      okText: "Remove",
-      cancelText: "Cancel",
-      onOk: () => {
-        const updatedItems = filteredBookingItems.filter(
-          (_, index) => index !== indexToDelete
-        );
-        setBookingItems(updatedItems);
-      },
-    });
+  const handleFinish = async (values: any) => {
+    try {
+      const data = {
+        nameofBank: values?.nameofBank,
+        bankAccountNumber: values?.bankAccountNumber,
+        accountHolder: values?.accountHolder,
+        refundReason: values?.refundReason,
+        bookingId: bookingId,
+      };
+      const req = await RefundRepository.api.create(data);
+      console.log(req);
+    } catch (error) {
+      console.error("Refund failed:", error);
+    }
   };
 
   return (
@@ -127,14 +127,14 @@ export default function BookingRefund() {
             <div className="flex justify-between items-center">
               <span className="text-base text-gray-500  ">No.Invoice</span>
               <span className="text-base text-RoyalAmethyst-700 font-semibold">
-                {invoice.invoiceNumber}
+                {data?.payment?.externalId}
               </span>
             </div>
 
             <div className="flex justify-between items-center">
               <span className="text-base text-gray-500  ">Data of Order</span>
               <span className="text-base text-gray-500  ">
-                {invoice.orderDate} - {invoice.time}
+                {new Date(data?.payment?.createdAt).toLocaleDateString()}
               </span>
             </div>
           </div>
@@ -147,38 +147,41 @@ export default function BookingRefund() {
         </div>
 
         <div className="grid grid-cols-1 px-8 py-6 gap-6 w-full ">
-          {filteredBookingItems.map((item, index) => {
-            const totalCost = item.HotelPricePerAdult
-              ? Number(item.guests.match(/\d+/)?.[0]) * item.HotelPricePerAdult
-              : 0;
-            const adultsCount =
-              Number(item.guests.match(/(\d+)\s*adult/)?.[1]) || 0;
-            const childrenCount =
-              Number(item.guests.match(/(\d+)\s*child/)?.[1]) || 0;
+          {data?.bookingdetails.map((item: any) => {
+            const { cart } = item;
+            const { destination, roomHotel } = cart;
+
+            // const totalCost = item.HotelPricePerAdult
+            //   ? Number(item.guests.match(/\d+/)?.[0]) * item.HotelPricePerAdult
+            //   : 0;
+            // const adultsCount =
+            //   Number(item.guests.match(/(\d+)\s*adult/)?.[1]) || 0;
+            // const childrenCount =
+            //   Number(item.guests.match(/(\d+)\s*child/)?.[1]) || 0;
 
             return (
               <div
-                key={index}
+                key={item?.id}
                 className="p-3 border border-solid border-[#DBDBDB] rounded-xl w-full"
               >
                 <div className="flex justify-between items-center">
                   <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                    {item.category === "Hotel" ? (
+                    {roomHotel ? (
                       <RiHome3Line size={18} color="#ffff" />
                     ) : (
                       <RiGlassesLine size={18} color="#ffff" />
                     )}
                     <span className="text-xs font-semibold text-white">
-                      {item.category}
+                      {roomHotel ? "Hotel" : "Destination"}
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 py-3">
-                  <Link href={item.link}>
+                  <Link href={""}>
                     <Image
-                      src={item.image}
-                      alt={item.name}
+                      src={""}
+                      alt={destination?.name || roomHotel?.roomType}
                       width={100}
                       height={100}
                       className="rounded-xl w-44"
@@ -188,55 +191,55 @@ export default function BookingRefund() {
                     className={`${mediumMontserrat.className} flex flex-col gap-1 w-full`}
                   >
                     <Link
-                      href={item.link}
+                      href={""}
                       className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
                     >
-                      {item.name}
+                      {destination?.name || roomHotel?.hotel?.name}
                     </Link>
                     <div className="flex items-center gap-1">
                       <RiCalendarLine className="text-lg text-black" />
                       <span className="text-xs text-black">
-                        {item.category === "Hotel"
-                          ? item.HotelSchedule
-                          : item.DestinationSchedule}
+                        {new Date(cart?.startDate).toLocaleDateString()} -
+                        {new Date(cart?.endDate).toLocaleDateString()}
                       </span>
                     </div>
                     <div className="flex gap-1 items-center">
                       <RiTeamLine className="text-lg text-black" />
                       <span className="text-xs text-black">
-                        Guests: {item.guests}
+                        {destination
+                          ? `Guests: ${cart?.quantityAdult} Adult - ${cart?.quantityChildren} Children`
+                          : `Rooms: ${cart?.quantityRoom}`}
                       </span>
                     </div>
 
                     <div className="flex justify-between w-full">
                       <div className="flex items-center gap-1 w-full">
                         <span className="text-sm font-semibold text-[#4F28D9]">
-                          {item.category === "Hotel" && item.HotelRoomType}
-                          {item.category === "Destination" &&
-                            item.DestinationType}
+                          {roomHotel
+                            ? roomHotel?.roomType
+                            : `${destination?.name} Tour`}
                         </span>
                       </div>
 
                       <div className="flex justify-end w-full gap-1 items-end">
-                        {item.HotelPricePerAdult && (
+                        {roomHotel?.price && (
                           <div className="text-sm text-black">
-                            {item.guests.match(/\d+/)?.[0]} x
-                            {formatCurrency(item.HotelPricePerAdult)}
+                            {/* {item.guests.match(/\d+/)?.[0]} */}
+                            {cart?.quantityRoom} x{" "}
+                            {formatCurrency(roomHotel?.price)}
                           </div>
                         )}
 
-                        {item.DestinationPriceAdults && adultsCount > 0 && (
+                        {destination?.priceAdult && cart?.quantityAdult > 0 && (
                           <div className="text-sm text-black">
-                            {adultsCount} x
-                            {formatCurrency(item.DestinationPriceAdults)}
-                            {childrenCount > 0 &&
-                              item.DestinationPriceChildren && (
+                            {cart?.quantityAdult} x{" "}
+                            {formatCurrency(destination?.priceAdult)}
+                            {cart?.quantityChildren > 0 &&
+                              destination?.priceChildren && (
                                 <>
                                   {" - "}
-                                  {childrenCount} x
-                                  {formatCurrency(
-                                    item.DestinationPriceChildren
-                                  )}
+                                  {cart?.quantityChildren} x{" "}
+                                  {formatCurrency(destination?.priceChildren)}
                                 </>
                               )}
                           </div>
@@ -253,15 +256,13 @@ export default function BookingRefund() {
                   >
                     <span className="font-semibold text-xs">Total Price</span>
                     <span className="text-sm font-semibold text-InfernoEcho-600">
-                      {item.category === "Hotel" &&
+                      {roomHotel &&
+                        formatCurrency(cart?.quantityRoom * roomHotel?.price)}
+                      {destination &&
                         formatCurrency(
-                          (Number(item.guests.match(/\d+/)?.[0]) || 1) *
-                            (item.HotelPricePerAdult || 0)
-                        )}
-                      {item.category === "Destination" &&
-                        formatCurrency(
-                          adultsCount * (item.DestinationPriceAdults || 0) +
-                            childrenCount * (item.DestinationPriceChildren || 0)
+                          cart?.quantityAdult * (destination?.priceAdult || 0) +
+                            cart?.quantityChildren *
+                              (destination?.priceChildren || 0)
                         )}
                     </span>
                   </div>
@@ -278,26 +279,26 @@ export default function BookingRefund() {
       >
         <span className="font-semibold text-base">Detailed Guest</span>
         <div className={`p-3 border border-solid border-[#DBDBDB] rounded-xl`}>
-          {InfoDetailGuest.map((InfoDetail, index) => (
-            <div key={index} className="flex flex-col gap-2">
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500">Full Name</span>
-                <span className="text-base text-black">
-                  {InfoDetail.fullName}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500">Email</span>
-                <span className="text-base text-black">{InfoDetail.email}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500">Phone Number</span>
-                <span className="text-base text-black">
-                  {InfoDetail.numberPhone}
-                </span>
-              </div>
+          {/* {InfoDetailGuest.map((InfoDetail, index) => ( */}
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <span className="text-base text-gray-500">Full Name</span>
+              <span className="text-base text-black">{data?.customerName}</span>
             </div>
-          ))}
+            <div className="flex justify-between items-center">
+              <span className="text-base text-gray-500">Email</span>
+              <span className="text-base text-black">
+                {data?.customerEmail}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-base text-gray-500">Phone Number</span>
+              <span className="text-base text-black">
+                {data?.customerPhoneNumber}
+              </span>
+            </div>
+          </div>
+          {/* ))} */}
         </div>
       </div>
       <div className="h-2 bg-gray-200"></div>{" "}
@@ -312,13 +313,18 @@ export default function BookingRefund() {
         </span>
 
         <div className="flex flex-col ">
-          <Form layout="vertical" autoComplete="off">
+          <Form
+            form={form}
+            name="refund"
+            layout="vertical"
+            onFinish={handleFinish}
+            autoComplete="off"
+          >
             <Row gutter={24}>
-              {/* Name of Bank */}
               <Col span={8}>
                 <Form.Item
                   label="Name of Bank"
-                  name="NameOfBank"
+                  name="nameofBank"
                   rules={[
                     {
                       required: true,
@@ -330,19 +336,18 @@ export default function BookingRefund() {
                 </Form.Item>
               </Col>
 
-              {/* Bank Acccount Number */}
               <Col span={8}>
                 <Form.Item
-                  label="Bank Acccount Number"
-                  name="BankAcccountNumber"
+                  label="Bank Account Number"
+                  name="bankAccountNumber"
                   rules={[
                     {
                       required: true,
-                      message: "Please enter your Bank Acccount Number!",
+                      message: "Please enter your Bank Account Number!",
                     },
                     {
                       pattern: new RegExp(/^[0-9]+$/),
-                      message: "Please enter a valid Bank Acccount Number!",
+                      message: "Please enter a valid Bank Account Number!",
                     },
                   ]}
                 >
@@ -350,18 +355,14 @@ export default function BookingRefund() {
                 </Form.Item>
               </Col>
 
-              {/* Account Holder */}
               <Col span={8}>
                 <Form.Item
                   label="Account Holder"
-                  name="AccountHolder"
+                  name="accountHolder"
                   rules={[
                     {
                       required: true,
                       message: "Please enter your Account Holder!",
-                    },
-                    {
-                      message: "Please enter a valid Account Holder!",
                     },
                   ]}
                 >
@@ -369,14 +370,12 @@ export default function BookingRefund() {
                 </Form.Item>
               </Col>
             </Row>
-          </Form>
-          <Form layout="vertical" autoComplete="off">
+
             <Row gutter={24}>
-              {/* Refund Reason */}
-              <Col span={24} className="w-full">
+              <Col span={24}>
                 <Form.Item
                   label="Refund Reason"
-                  name="RefundReason"
+                  name="refundReason"
                   rules={[
                     {
                       required: true,
@@ -384,14 +383,18 @@ export default function BookingRefund() {
                     },
                   ]}
                 >
-                  <Input.TextArea
-                    placeholder="Enter your Reason"
-                    rows={3}
-                    className="w-full"
-                  />
+                  <Input.TextArea placeholder="Enter your Reason" rows={3} />
                 </Form.Item>
               </Col>
             </Row>
+
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ display: "none" }}
+            >
+              Submit
+            </Button>
           </Form>
         </div>
         {/* end form */}
@@ -440,32 +443,52 @@ export default function BookingRefund() {
       >
         <span className="font-semibold text-base">Refund Detail</span>
         <div className={`p-3 `}>
-          {PayDetailGuest.map((pay, index) => (
-            <div key={index} className="flex flex-col gap-2">
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500">
-                  Mandarin Oriental (2 room)
-                </span>
-                <span className="text-base text-black">{pay.priceHotel}</span>
+          {data?.bookingdetails.map((item: any) => {
+            const { cart } = item;
+            const { destination, roomHotel } = cart;
+            return (
+              <div key={item.id} className="flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-base text-gray-500">
+                    {destination?.name || roomHotel?.hotel?.name} (
+                    {destination
+                      ? `${cart?.quantityAdult} Adult, ${cart?.quantityChildren} Children`
+                      : `${cart?.quantityRoom} room`}
+                    )
+                  </span>
+                  <span className="text-base text-black">
+                    {formatCurrency(
+                      cart?.quantityAdult * destination?.priceAdult +
+                        cart?.quantityChildren * destination?.priceChildren ||
+                        cart?.quantityRoom * roomHotel?.price
+                    )}
+                  </span>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-base text-gray-500">Ubud Palace</span>
-
-                <span className="text-base text-black">{pay.priceDesti}</span>
-              </div>
-              <span className="text-base text-gray-500">
-                Amounts are subject to change according to refund policies and
-                other additional fees.
-              </span>
-            </div>
-          ))}
+            );
+          })}
+          <span className="text-base text-gray-500">
+            Amounts are subject to change according to refund policies and other
+            additional fees.
+          </span>
         </div>
         <div className="flex justify-between items-center">
           <span className="font-semibold text-base text-black">
             Total Refund
           </span>
           <span className="font-semibold text-base text-InfernoEcho-600">
-            Rp2.000.000
+            {formatCurrency(
+              data?.bookingdetails.reduce((acc: number, item: any) => {
+                const { cart } = item;
+                return (
+                  acc +
+                  (cart?.quantityAdult * (cart?.destination?.priceAdult || 0) +
+                    cart?.quantityChildren *
+                      (cart?.destination?.priceChildren || 0) +
+                    cart?.quantityRoom * (cart?.roomHotel?.price || 0))
+                );
+              }, 0)
+            )}
           </span>
         </div>
       </div>
@@ -473,19 +496,28 @@ export default function BookingRefund() {
       <div
         className={`${mediumMontserrat.className} py-8 px-9 flex justify-between items-center`}
       >
-        <div className="w-max cursor-pointer px-6 py-2 border border-solid rounded-xl border-RoyalAmethyst-700 font-semibold text-sm text-RoyalAmethyst-700">
+        <Link
+          href={`/profile/bookings/detail/${bookingId}`}
+          className="w-max cursor-pointer px-6 py-2 border border-solid rounded-xl border-RoyalAmethyst-700 font-semibold text-sm text-RoyalAmethyst-700"
+        >
           Return
-        </div>
+        </Link>
         <div className="flex gap-4 items-center">
-          <div className="w-max cursor-pointer px-6 py-2 border border-solid rounded-xl border-RoyalAmethyst-700 font-semibold text-sm text-RoyalAmethyst-700">
+          <Link
+            href={`/profile/heavens-care?books=${bookingId}`}
+            className="w-max cursor-pointer px-6 py-2 border border-solid rounded-xl border-RoyalAmethyst-700 font-semibold text-sm text-RoyalAmethyst-700"
+          >
             Help
-          </div>
-          <div className="w-max cursor-pointer px-6 py-2 rounded-xl bg-RoyalAmethyst-700 font-semibold text-sm text-white">
+          </Link>
+          <button
+            onClick={form.submit}
+            className="w-max cursor-pointer px-6 py-2 rounded-xl bg-RoyalAmethyst-700 font-semibold text-sm text-white"
+          >
             Refund
-          </div>
+          </button>
         </div>
       </div>
-      <Modal  
+      <Modal
         visible={isModalVisible}
         onCancel={handleCloseQrCode}
         footer={null}
@@ -506,12 +538,6 @@ export default function BookingRefund() {
   );
 }
 
-// interface detailGuest {
-//   fullName: string;
-//   email: string;
-//   numberPhone: number;
-// }
-
 export const InfoDetailGuest: detailGuest[] = [
   {
     fullName: "Douwer Jhonen",
@@ -526,7 +552,6 @@ export const PayDetailGuest: paymentDetailGuest[] = [
   },
 ];
 
-// Data untuk informasi nomor invoice, tanggal pemesanan, dan path gambar QR Code
 export const invoiceInfo: NoInvoiceInfo[] = [
   {
     invoiceNumber: "INV-HT2024-09X834-YZ7",
@@ -536,7 +561,6 @@ export const invoiceInfo: NoInvoiceInfo[] = [
   },
 ];
 
-// Dummy data untuk langkah-langkah (step) dengan waktu
 export const steps: StepItem[] = [
   {
     date: "2023-09-10",
