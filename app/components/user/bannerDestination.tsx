@@ -90,22 +90,15 @@ export default function BannerDestination() {
   );
   const router = useRouter();
 
-  const popularLocations = [
-    "Bali",
-    "Jakarta",
-    "Yogyakarta",
-    "Bandung",
-    "Lombok",
-  ];
-
   const handleSearch = () => {
-    if (selectedLocation) {
-      router.push(`/destination/list/${selectedLocation.toLowerCase()}`);
+    if (searchQuery) {
+      router.push(`/destination/list/${searchQuery.toLowerCase()}`);
     } else {
       alert("Please select a location.");
     }
   };
 
+  console.log(searchQuery);
   return (
     <div className="flex flex-col">
       <div>
@@ -152,13 +145,13 @@ export default function BannerDestination() {
               <div className="flex items-center gap-3">
                 {/* Input Search */}
                 <Input
-                  placeholder="Search destination"
+                  placeholder="Search Location"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                   className="w-full border rounded-lg"
                 />
-                <Select
+                {/* <Select
                   placeholder="Location"
                   value={selectedLocation}
                   onChange={(value) => setSelectedLocation(value)}
@@ -170,7 +163,7 @@ export default function BannerDestination() {
                       {location}
                     </Option>
                   ))}
-                </Select>
+                </Select> */}
                 <Button
                   type="primary"
                   onClick={handleSearch}
