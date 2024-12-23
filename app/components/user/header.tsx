@@ -7,6 +7,20 @@ import { usePathname } from "next/navigation";
 import { FaCartShopping } from "react-icons/fa6";
 import { RiMoonClearFill } from "react-icons/ri";
 import { FaUserCircle } from "react-icons/fa";
+import { Montserrat } from "next/font/google";
+
+export const largeMontserrat = Montserrat({
+  subsets: ["latin"],
+  weight: "600",
+});
+export const mediumMontserrat = Montserrat({
+  subsets: ["latin"],
+  weight: "500",
+});
+export const smallMontserrat = Montserrat({
+  subsets: ["latin"],
+  weight: "400",
+});
 
 export default function HeaderComponent() {
   const pathname = usePathname();
@@ -33,7 +47,9 @@ export default function HeaderComponent() {
         </Link>
 
         {/* Menu Items */}
-        <div className="flex space-x-6 items-center">
+        <div
+          className={`${mediumMontserrat.className} flex space-x-6 items-center`}
+        >
           {menuItems.map((item) => (
             <div key={item.href} className="">
               <Link

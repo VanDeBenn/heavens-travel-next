@@ -24,7 +24,7 @@ export default function BannerHotel() {
   const [selectedLocation, setSelectedLocation] = useState<string | undefined>(
     undefined
   );
-  const [dates, setDates] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(null); // State for date range
+  const [dates, setDates] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(null); 
 
   const popularLocations = [
     "Bali",
