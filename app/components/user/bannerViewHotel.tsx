@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Montserrat } from "next/font/google";
 import {
   RiStarFill,
@@ -94,9 +94,8 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
   if (!data) {
     return;
   }
-  const [copyText, setCopyText] = useState(
-    "https://htrip.com/hotel/detail/673c0710-15f8-c0ddf3df7be9"
-  );
+  const [copyText, setCopyText] = useState<string>("");
+
   const [isCopied, setIsCopied] = useState(false);
 
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -104,6 +103,11 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
 
   const shareUrl = "https://htrip.com/hotel/detail/673c0710-15f8-c0ddf3df7be9"; // URL yang akan dibagikan
   const title = hotelDetails[0].title;
+
+  useEffect(() => {
+    // Set copyText dengan URL halaman saat ini
+    setCopyText(window.location.href);
+  }, []); // Hanya dijalankan sekali setelah render pertama
 
   const handleShareClick = () => {
     setIsModalVisible(true);
@@ -143,7 +147,7 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
         <div className="flex justify-between items-center">
           <span className="text-xs">
             {`${data?.address}, ${data?.city?.name}, ${data?.city?.province?.name}, ${data?.city?.province?.country?.name}`}{" "}
-            -
+            -{" "}
             <Link
               href={hotelDetails[0].mapLink}
               className="text-RoyalAmethyst-700 no-underline"
@@ -206,32 +210,16 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
           {/* Additional Images */}
           <div className="grid grid-cols-2 gap-2 w-3/6">
             <Image.PreviewGroup>
-              {/* {hotelDetails[0].images.slice(1, 5).map((image, index) => ( */}
               <Image
-                // key={index}
                 src={`http://localhost:3222/photo-hotels/${data?.photohotels[0]?.pathPhoto}`}
                 alt={"alt"}
                 className="rounded-xl w-full h-auto"
               />
               <Image
-                // key={index}
-                src={`http://localhost:3222/photo-hotels/${data?.photohotels[1]?.pathPhoto}`}
+                src={`http://localhost:3222/photo-hotels/${data?.photohotels[1].pathPhoto}`}
                 alt={"alt"}
                 className="rounded-xl w-full h-auto"
               />
-              <Image
-                // key={index}
-                src={`http://localhost:3222/photo-hotels/${data?.photohotels[1]?.pathPhoto}`}
-                alt={"alt"}
-                className="rounded-xl w-full h-auto"
-              />
-              <Image
-                // key={index}
-                src={`http://localhost:3222/photo-hotels/${data?.photohotels[0]?.pathPhoto}`}
-                alt={"alt"}
-                className="rounded-xl w-full h-auto"
-              />
-              {/* ))} */}
             </Image.PreviewGroup>
           </div>
         </div>
@@ -245,7 +233,7 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
         footer={null}
         centered
       >
-        <div className="flex flex-col ">
+        <div className="flex flex-col">
           <div className="flex gap-4 r">
             <FacebookShareButton url={copyText}>
               <RiFacebookFill className="text-[#4267B2] text-3xl" />
@@ -268,7 +256,7 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
               type="text"
               value={copyText}
               readOnly
-              className="  bg-white  border-2 border-solid border-gray-400 rounded-lg p-2 w-full"
+              className="bg-white border-2 border-solid border-gray-400 rounded-lg p-2 w-full"
             />
             <div
               onClick={handleCopyToClipboard}

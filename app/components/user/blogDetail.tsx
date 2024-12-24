@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useRef, useEffect } from "react";
 import {
   CalendarOutlined,
@@ -29,16 +28,10 @@ interface ComponentsProps {
 
 export default function BlogDetail({ data }: ComponentsProps) {
   const [showShareButtons, setShowShareButtons] = useState(false);
+  const [copyText, setCopyText] = useState(
+    "http://localhost:3000" // Ganti dengan URL yang sesuai
+  );
   const inputRef = useRef(null); // Ref untuk input teks
-
-  // const getAllBlog = async () => {
-  //   const res = await blogRepository.api.getBlogs();
-  //   // // console.log(res)
-  // };
-
-  // useEffect(() => {
-  //   getAllBlog();
-  // });
 
   const handleShareClick = () => {
     setShowShareButtons(true);
@@ -58,9 +51,10 @@ export default function BlogDetail({ data }: ComponentsProps) {
     }
   };
 
-  if (!data) {
-    return <Loading />;
-  }
+  useEffect(() => {
+    setCopyText(window.location.href); // Set teks URL menjadi URL yang sedang dibuka saat komponen di-mount
+  }, []);
+
   return (
     <div className="relative">
       {/* Modal for Share Buttons */}
@@ -75,7 +69,7 @@ export default function BlogDetail({ data }: ComponentsProps) {
           <div className="flex items-center w-full">
             <Input
               ref={inputRef}
-              value={"/images/illustration/hawaii-beach.jpg"} // Mengambil link dari data API
+              value={copyText} // Teks URL yang sedang dibuka
               readOnly
               className="mr-2"
             />
@@ -85,32 +79,19 @@ export default function BlogDetail({ data }: ComponentsProps) {
             />
           </div>
           <div className="flex gap-3">
-            <FacebookShareButton url={"/images/illustration/hawaii-beach.jpg"}>
+            <FacebookShareButton url={copyText}>
               <FacebookIcon size={40} round />
             </FacebookShareButton>
-            <TwitterShareButton
-              url={"/images/illustration/hawaii-beach.jpg"}
-              title={data?.title}
-            >
+            <TwitterShareButton url={copyText} title={data?.title}>
               <TwitterIcon size={40} round />
             </TwitterShareButton>
-            <WhatsappShareButton
-              url={"/images/illustration/hawaii-beach.jpg"}
-              title={data?.title}
-            >
+            <WhatsappShareButton url={copyText} title={data?.title}>
               <WhatsappIcon size={40} round />
             </WhatsappShareButton>
-            <TelegramShareButton
-              url={"/images/illustration/hawaii-beach.jpg"}
-              title={data?.title}
-            >
+            <TelegramShareButton url={copyText} title={data?.title}>
               <TelegramIcon size={40} round />
             </TelegramShareButton>
-            <FacebookMessengerShareButton
-              url={"/images/illustration/hawaii-beach.jpg"}
-              title={data?.title}
-              appId={""}
-            >
+            <FacebookMessengerShareButton url={copyText} title={data?.title} appId="">
               <FacebookMessengerIcon size={40} round />
             </FacebookMessengerShareButton>
           </div>

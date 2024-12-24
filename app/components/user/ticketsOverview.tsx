@@ -66,16 +66,17 @@ export default function TicketsOverview({ data }: dataDestination) {
       return;
     }
 
-    const data = {
+    const dataToAdd = {
       userId,
       quantityAdult: numberOfTicket,
       quantityChildren: numberOfDesti,
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
+      destinationId: data.id, // Tambahkan destinationId dari data
     };
 
     try {
-      await cartRepository.api.addToCart(data);
+      await cartRepository.api.addToCart(dataToAdd);
       alert("Added to cart!");
     } catch (error) {
       console.error("Failed to add to cart", error);
@@ -95,15 +96,16 @@ export default function TicketsOverview({ data }: dataDestination) {
       return;
     }
 
-    const data = {
+    const dataToBook = {
       userId,
       quantityRoom: numberOfTicket + numberOfDesti, // Total rooms based on number of tickets
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
+      destinationId: data.id, // Tambahkan destinationId untuk booking
     };
 
     try {
-      await bookingRepository.api.create(data);
+      await bookingRepository.api.create(dataToBook);
       alert("Booking Successful!");
     } catch (error) {
       console.error("Failed to book now", error);
