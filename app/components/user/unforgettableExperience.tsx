@@ -73,7 +73,12 @@ export default function UnforgettableExperience() {
       destination?.city?.province?.name === selectedCity
   );
 
-  const citiesList = ["Bali", "Bekasi", "Bandung", "Daerah Khusus Jakarta"]; // Define the cities explicitly
+  const citiesList = [
+    "Bali",
+    "Jawa Tengah",
+    "Jawa Timur",
+    "Daerah Khusus Jakarta",
+  ]; // Define the cities explicitly
 
   return (
     <div className="flex flex-col gap-2">
@@ -117,9 +122,12 @@ export default function UnforgettableExperience() {
           filteredHotels.slice(0, 4).map((card: any) => (
             <div
               key={card?.id}
-              className="no-underline border border-gray-300 border-solid rounded-xl flex flex-col gap-3 bg-white"
+              className="h-full no-underline border border-gray-300 border-solid rounded-xl flex flex-col gap-3 bg-white"
             >
-              <Link href={""} className="flex flex-col items-center">
+              <Link
+                href={`destination/detail/${card?.id}`}
+                className="flex flex-col items-center"
+              >
                 <Image
                   src={`http://localhost:3222/photo-destinations/${card?.photodestinations[0]?.pathPhoto}`}
                   alt={card?.name}
@@ -129,11 +137,11 @@ export default function UnforgettableExperience() {
                 />
               </Link>
               <div
-                className={`${mediumMontserrat.className} px-4 pb-2 flex flex-col gap-2`}
+                className={`${mediumMontserrat.className} h-full px-4 pb-2 flex flex-col gap-2`}
               >
                 <div className="flex justify-between gap-1">
                   <Link
-                    href={""}
+                    href={`destination/detail/${card?.id}`}
                     className="font-semibold text-black text-base no-underline hover:text-RoyalAmethyst-700 transition-all duration-300"
                   >
                     {card?.name}
@@ -152,24 +160,29 @@ export default function UnforgettableExperience() {
                 </div>
                 <div className="flex items-center gap-1">
                   <RiMapPin2Fill className="text-lg text-gray-400" />
-                  <span className="text-sm text-gray-400">{card?.address}</span>
+                  <span className="text-sm text-gray-400">
+                    {card?.city?.name}
+                  </span>
                 </div>
                 <Link
-                  href={""}
+                  href={`destination/detail/${card?.id}`}
                   className="text-black text-base font-semibold no-underline leading-6"
                 >
-                  {card?.description}
+                  {`${card?.description.slice(0, 50)}...`}
                 </Link>
-                <div className="flex justify-end">
-                  <div className="flex gap-2 items-center">
-                    <span className="text-gray-400 text-sm align-text-bottom">
+                <div className="h-full flex justify-end">
+                  <div className="flex gap-2 items-end">
+                    <span className="text-gray-400 text-sm align-text-bottom ">
                       Start from
                     </span>
                     <Link
-                      href={""}
+                      href={`destination/detail/${card?.id}`}
                       className="text-InfernoEcho-600 text-lg font-semibold no-underline"
                     >
-                      {card?.priceChildren}
+                      Rp
+                      {(card?.priceChildren)
+                        .toLocaleString("id-ID")
+                        .replace(",", ".")}
                     </Link>
                   </div>
                 </div>

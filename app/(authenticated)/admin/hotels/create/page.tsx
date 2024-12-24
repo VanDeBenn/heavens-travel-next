@@ -148,7 +148,7 @@ export default function page() {
 
         <PoliciesHotel hotelId={hotelId} />
 
-        <SomeHelpfulFactsHotel />
+        {/* <SomeHelpfulFactsHotel /> */}
       </div>
       <div className="flex justify-end mt-5">
         <Button

@@ -72,7 +72,7 @@ const HolidayData = [
   },
   {
     id: 2,
-    text: "Nusa Tenggara Barat",
+    text: "Jawa Timur",
     imgSrc: "/images/illustration/road-bridge.jpg",
     link: "/kota/nusatenggarabarat",
   },

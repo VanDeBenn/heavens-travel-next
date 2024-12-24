@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 export default function page() {
   const router = useRouter();
   useEffect(() => {
-    router.push("/destination");
+    router.push("/hotel");
   });
   return <div></div>;
 }

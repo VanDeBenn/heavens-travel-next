@@ -8,7 +8,7 @@ import {
   CalendarOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import { useRouter } from "next/navigation"; // Untuk navigasi
+import { useRouter } from "next/navigation";
 import { useCookies } from "next-client-cookies";
 import { TokenUtil } from "#/utils/token";
 
@@ -26,18 +26,16 @@ const NavProfile: React.FC = () => {
   function logout() {
     TokenUtil.clearAccessToken();
     TokenUtil.clearRefreshToken();
-    TokenUtil.clearResetToken();
     TokenUtil.persistToken();
-    // router.push("/login");
+    localStorage.clear();
+    router.push("/login");
   }
 
   const handleMenuClick = (key: string) => {
     if (key === "logout") {
-      // Logika untuk logout
-      // // console.log("Logging out...");
     } else {
       setSelectedKey(key);
-      router.push(`/${key}`); // Navigasi ke halaman sesuai menu key
+      router.push(`/${key}`);
     }
   };
 

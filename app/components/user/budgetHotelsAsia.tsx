@@ -109,18 +109,20 @@ export default function BudgetHotelsAsia() {
                   href={`/hotel/detail/${card.id}`}
                   className="text-black text-base font-semibold no-underline leading-6"
                 >
-                  {card.description}
+                  {`${card.description.slice(0, 50)}...`}
                 </Link>
                 <div className="flex justify-end">
                   <div className="flex gap-2 items-center">
-                    <span className="text-gray-400 text-sm align-text-bottom">
+                    <span className="text-gray-400 text-sm align-text-bottom ">
                       Start from
                     </span>
                     <Link
                       href={`/hotel/detail/${card.id}`}
                       className="text-InfernoEcho-600 text-lg font-semibold no-underline"
                     >
-                      {/* {card.price} */}
+                      Rp
+                      {card?.price?.toLocaleString("id-ID").replace(",", ".") ||
+                        0}
                     </Link>
                   </div>
                 </div>

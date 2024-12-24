@@ -18,6 +18,7 @@ module.exports = {
       "imgs.search.brave.com",
       "source.unsplash.com",
       "search.brave.com",
+      "img.freepik.com",
     ],
   },
 };
