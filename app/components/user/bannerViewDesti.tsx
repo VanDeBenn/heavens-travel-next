@@ -62,7 +62,7 @@ export default function BannerViewDesti({
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="w-full relative">

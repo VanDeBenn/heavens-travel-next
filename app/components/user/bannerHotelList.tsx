@@ -68,7 +68,9 @@ export default function BannerHotelList({ data, location }: ComponentProps) {
       cityName === `Kota ${location} Selatan` ||
       cityName === `Kota ${location} Barat` ||
       cityName === `Kabupaten ${location}` ||
-      provinceName === location;
+      provinceName === location ||
+      provinceName === `Daerah Khusus ${location}` ||
+      provinceName === `Daerah Istimewa ${location}`;
 
     // Filter berdasarkan pencarian
     const isSearchQueryMatch = (hotel.name?.toLowerCase() || "").includes(
@@ -204,9 +206,9 @@ export default function BannerHotelList({ data, location }: ComponentProps) {
                         className="text-InfernoEcho-600 text-lg font-semibold no-underline"
                       >
                         Rp
-                        {/* {card.priceChildren
-                          .toLocaleString("id-ID")
-                          .replace(",", ".")} */}
+                        {card?.priceChildren
+                          ?.toLocaleString("id-ID")
+                          .replace(",", ".") || 0}
                       </Link>
                     </div>
                   </div>

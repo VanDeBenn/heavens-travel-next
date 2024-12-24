@@ -1,11 +1,12 @@
 "use client";
-import { Button, DatePicker } from "antd";
+import { Button, DatePicker, message } from "antd";
 import { Montserrat } from "next/font/google";
 import { Dayjs } from "dayjs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { bookingRepository } from "#/repository/bookings";
 import { cartRepository } from "#/repository/carts";
+import { useRouter } from "next/navigation";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
@@ -21,12 +22,15 @@ export default function TicketsOverview({ data }: dataDestination) {
     return null;
   }
 
-  const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs()); // Default hari ini
+  const router = useRouter();
+  const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
-  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs()); // Samakan endDate dengan startDate
-  const [numberOfTicket, setNumberOfTicket] = useState(0); // Adult ticket count
-  const [numberOfDesti, setNumberOfDesti] = useState(0); // Children ticket count
+  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
+  const [numberOfTicket, setNumberOfTicket] = useState(0);
+  const [numberOfDesti, setNumberOfDesti] = useState(0);
+  const [bookingId, setBookingId] = useState<any>();
+  const [dataBooking, setDataBooking] = useState<any>();
 
   const daysOfWeek = Array(7)
     .fill(0)
@@ -36,8 +40,8 @@ export default function TicketsOverview({ data }: dataDestination) {
     if (date) {
       setSelectedDate(date.startOf("week"));
       setActiveIndex(0);
-      setStartDate(date); // Set startDate
-      setEndDate(date); // Set endDate sama dengan startDate
+      setStartDate(date);
+      setEndDate(date);
     }
   };
 
@@ -57,29 +61,38 @@ export default function TicketsOverview({ data }: dataDestination) {
     const userId = localStorage.getItem("_id");
 
     if (!userId) {
-      alert("Please login to continue.");
+      message.info("Please login to continue.");
       return;
     }
 
     if (!startDate || !endDate) {
-      alert("Please select a start and end date.");
+      message.info("Please select a start and end date.");
       return;
     }
 
-    const dataToAdd = {
+    const dataToCart = {
       userId,
       quantityAdult: numberOfTicket,
       quantityChildren: numberOfDesti,
       startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
-      destinationId: data.id, // Tambahkan destinationId dari data
+      endDate: startDate.toISOString(),
+      destinationId: data?.id,
     };
 
     try {
-      await cartRepository.api.addToCart(dataToAdd);
-      alert("Added to cart!");
+      if (dataToCart.quantityAdult === 0 && dataToCart.quantityChildren === 0) {
+        message.warning(
+          "Please select at least one ticket (adult or children)."
+        );
+        return;
+      }
+      const req = await cartRepository.api.addToCart(dataToCart);
+      if (req) {
+        message.success("Added to cart!");
+        router.push("/cart");
+      }
     } catch (error) {
-      console.error("Failed to add to cart", error);
+      message.error("Failed to add to cart");
     }
   };
 
@@ -87,30 +100,50 @@ export default function TicketsOverview({ data }: dataDestination) {
     const userId = localStorage.getItem("_id");
 
     if (!userId) {
-      alert("Please login to continue.");
+      message.info("Please login to continue.");
       return;
     }
 
     if (!startDate || !endDate) {
-      alert("Please select a start and end date.");
+      message.info("Please select a start and end date.");
       return;
     }
 
-    const dataToBook = {
+    const dataBookNow = {
       userId,
-      quantityRoom: numberOfTicket + numberOfDesti, // Total rooms based on number of tickets
+      quantityAdult: numberOfTicket,
+      quantityChildren: numberOfDesti,
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
-      destinationId: data.id, // Tambahkan destinationId untuk booking
+      destinationId: data?.id,
     };
 
     try {
-      await bookingRepository.api.create(dataToBook);
-      alert("Booking Successful!");
+      if (
+        dataBookNow.quantityAdult === 0 &&
+        dataBookNow.quantityChildren === 0
+      ) {
+        message.warning(
+          "Please select at least one ticket (adult or children)."
+        );
+        return;
+      }
+
+      const req = await bookingRepository.api.create(dataBookNow);
+      setDataBooking(req.body.data);
     } catch (error) {
-      console.error("Failed to book now", error);
+      message.error("Failed to book now. Please try again later.");
     }
   };
+
+  useEffect(() => {
+    if (dataBooking) {
+      setBookingId(dataBooking.id);
+      localStorage.setItem("_booking", dataBooking.id);
+      message.success("Booking Successful!");
+      router.push("/booking");
+    }
+  }, [dataBooking]);
 
   return (
     <div className={`${mediumMontserrat.className} flex flex-col gap-3`}>
@@ -140,11 +173,15 @@ export default function TicketsOverview({ data }: dataDestination) {
               onClick={() => {
                 setActiveIndex(index);
                 setStartDate(date);
-                setEndDate(date); // Set endDate sama dengan startDate
+                setEndDate(date);
               }}
             >
-              <span className="text-sm font-semibold">{date.format("ddd")},</span>
-              <span className="text-sm font-semibold">{date.format("DD MMM")}</span>
+              <span className="text-sm font-semibold">
+                {date.format("ddd")},
+              </span>
+              <span className="text-sm font-semibold">
+                {date.format("DD MMM")}
+              </span>
             </div>
           ))}
         </div>
@@ -162,7 +199,7 @@ export default function TicketsOverview({ data }: dataDestination) {
 
           <div className="flex gap-3 items-center">
             <span className="text-lg font-semibold text-InfernoEcho-600">
-              Rp{data.priceAdult}
+              Rp{data.priceAdult.toLocaleString("id-ID").replace(",", ".")}
             </span>
 
             {/* Input Ticket */}
@@ -190,7 +227,7 @@ export default function TicketsOverview({ data }: dataDestination) {
 
           <div className="flex gap-3 items-center">
             <span className="text-lg font-semibold text-InfernoEcho-600">
-              Rp{data.priceChildren}
+              Rp{data.priceChildren.toLocaleString("id-ID").replace(",", ".")}
             </span>
 
             {/* Input Children */}

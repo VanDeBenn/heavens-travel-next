@@ -199,27 +199,28 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
           {/* Main Image */}
           <div className="w-3/6 rounded-xl">
             <Image.PreviewGroup>
-              <Image
-                src={`http://localhost:3222/photo-hotels/${data?.photohotels[0]?.pathPhoto}`}
-                alt={hotelDetails[0].images[0].alt}
-                className="rounded-xl w-full h-auto"
-              />
+              {data?.photohotels?.[0] && (
+                <Image
+                  src={`http://localhost:3222/photo-hotels/${data.photohotels[0].pathPhoto}`}
+                  alt={hotelDetails[0]?.images?.[0]?.alt || "Main Image"}
+                  className="rounded-xl w-full h-full object-cover"
+                />
+              )}
             </Image.PreviewGroup>
           </div>
 
           {/* Additional Images */}
           <div className="grid grid-cols-2 gap-2 w-3/6">
             <Image.PreviewGroup>
-              <Image
-                src={`http://localhost:3222/photo-hotels/${data?.photohotels[0]?.pathPhoto}`}
-                alt={"alt"}
-                className="rounded-xl w-full h-auto"
-              />
-              <Image
-                src={`http://localhost:3222/photo-hotels/${data?.photohotels[1].pathPhoto}`}
-                alt={"alt"}
-                className="rounded-xl w-full h-auto"
-              />
+              {data?.photohotels?.slice(1)?.map((photo: any, index: number) => (
+                <Image
+                  key={index}
+                  src={`http://localhost:3222/photo-hotels/${photo.pathPhoto}`}
+                  alt={`Additional Image ${index + 1}`}
+                  height={185}
+                  className="rounded-xl w-full h-full object-cover"
+                />
+              ))}
             </Image.PreviewGroup>
           </div>
         </div>

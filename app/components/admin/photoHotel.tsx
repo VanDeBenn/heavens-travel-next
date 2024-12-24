@@ -59,8 +59,8 @@ export default function PhotoHotel({ hotelId }: PhotoDestinationProps) {
   };
 
   const handleBeforeUpload = (file: RcFile) => {
-    if (fileList.length >= 4) {
-      message.error("You can only upload up to 4 photos.");
+    if (fileList.length >= 5) {
+      message.error("You can only upload up to 5 photos.");
       return false;
     }
 

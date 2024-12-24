@@ -12,7 +12,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
-import { Button, Modal } from "antd";
+import { Button, Modal, Empty } from "antd";
 import { usersRepository } from "#/repository/users";
 import { cartRepository } from "#/repository/carts";
 import { bookingRepository } from "#/repository/bookings";
@@ -186,129 +186,145 @@ export default function MyCart() {
           <div className="h-px bg-gray-300"></div>
 
           <div className="grid grid-cols-1 px-8 py-6 gap-6 w-full">
-            {dataCart.map((item: any, index: number) => {
-              const {
-                id,
-                roomHotel,
-                destination,
-                startDate,
-                endDate,
-                quantityRoom,
-                quantityAdult,
-                quantityChildren,
-              } = item;
-              const isSelected = selectedItems[index];
+            {dataCart.length === 0 ? (
+              <Empty
+                description="Your cart is empty."
+                className="flex justify-center items-center py-6"
+              />
+            ) : (
+              dataCart.map((item: any, index: number) => {
+                const {
+                  id,
+                  roomHotel,
+                  destination,
+                  startDate,
+                  endDate,
+                  quantityRoom,
+                  quantityAdult,
+                  quantityChildren,
+                } = item;
+                const isSelected = selectedItems[index];
 
-              const totalPrice = destination
-                ? quantityAdult * destination?.priceAdult +
-                  quantityChildren * destination?.priceChildren
-                : quantityRoom * roomHotel?.price;
+                const totalPrice = destination
+                  ? quantityAdult * destination?.priceAdult +
+                    quantityChildren * destination?.priceChildren
+                  : quantityRoom * roomHotel?.price;
 
-              return (
-                <div
-                  key={id}
-                  className="p-3 border border-solid border-[#DBDBDB] rounded-xl w-full"
-                >
-                  <div className="flex justify-between items-center">
-                    <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                      {roomHotel ? (
-                        <RiHome3Line size={18} color="#ffff" />
-                      ) : (
-                        <RiGlassesLine size={18} color="#ffff" />
-                      )}
-                      <span className="text-xs font-semibold text-white">
-                        {roomHotel ? "Hotel" : "Destination"}
-                      </span>
+                return (
+                  <div
+                    key={id}
+                    className="p-3 border border-solid border-[#DBDBDB] rounded-xl w-full"
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                        {roomHotel ? (
+                          <RiHome3Line size={18} color="#ffff" />
+                        ) : (
+                          <RiGlassesLine size={18} color="#ffff" />
+                        )}
+                        <span className="text-xs font-semibold text-white">
+                          {roomHotel ? "Hotel" : "Destination"}
+                        </span>
+                      </div>
+
+                      <RiDeleteBin6Line
+                        size={24}
+                        color="#DC143C"
+                        className="cursor-pointer"
+                        onClick={() => hanndleDelete(id)}
+                      />
                     </div>
 
-                    <RiDeleteBin6Line
-                      size={24}
-                      color="#DC143C"
-                      className="cursor-pointer"
-                      onClick={() => hanndleDelete(id)}
-                    />
-                  </div>
+                    <div className="flex items-center gap-2 py-3">
+                      <Image
+                        src={
+                          "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                        }
+                        alt={destination?.name || roomHotel?.roomType}
+                        width={100}
+                        height={100}
+                        className="rounded-xl w-44"
+                      />
 
-                  <div className="flex items-center gap-2 py-3">
-                    <Image
-                      src={
-                        "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
-                      }
-                      alt={destination?.name || roomHotel?.roomType}
-                      width={100}
-                      height={100}
-                      className="rounded-xl w-44"
-                    />
+                      <div className="flex flex-col gap-1 w-full">
+                        <div className="font-semibold">
+                          {destination?.name || roomHotel?.roomType}
+                        </div>
 
-                    <div className="flex flex-col gap-1 w-full">
-                      <div className="font-semibold">
-                        {destination?.name || roomHotel?.roomType}
-                      </div>
-
-                      <div className="flex items-center gap-1">
-                        <RiCalendarLine className="text-lg text-black" />
-                        <span className="text-xs text-gray-400">
-                          {new Date(startDate).toLocaleDateString()} -{" "}
-                          {new Date(endDate).toLocaleDateString()}
-                        </span>
-                      </div>
-
-                      <div className="flex gap-1">
-                        <RiTeamLine size={16} color="#6b7280" />
-                        <span className="text-xs text-gray-500">
-                          Guests: {quantityAdult} Adult, {quantityChildren}
-                          Children
-                          {roomHotel ? `Room: ${quantityRoom}` : ""}
-                        </span>
-                      </div>
-
-                      <div className="flex justify-between w-full">
-                        <div
-                          className="flex gap-1 cursor-pointer"
-                          onClick={() => handleCheckboxChange(index, id)}
-                        >
-                          {isSelected ? (
-                            <RiCheckboxFill className="text-RoyalAmethyst-700 text-lg" />
-                          ) : (
-                            <RiCheckboxBlankLine className="text-gray-400 text-lg" />
-                          )}
-                          <span
-                            className={`text-sm font-semibold ${
-                              isSelected
-                                ? "text-RoyalAmethyst-700"
-                                : "text-gray-400"
-                            }`}
-                          >
-                            {destination?.name || roomHotel?.roomType}
+                        <div className="flex items-center gap-1">
+                          <RiCalendarLine className="text-lg text-black" />
+                          <span className="text-xs text-gray-400">
+                            {new Date(startDate).toLocaleDateString()} -{" "}
+                            {new Date(endDate).toLocaleDateString()}
                           </span>
                         </div>
 
-                        <div className="flex items-end gap-1">
-                          {quantityAdult || quantityRoom} x Rp
-                          {destination?.priceAdult || roomHotel?.price} -{" "}
-                          {quantityChildren} x Rp
-                          {destination?.priceChildren}
+                        <div className="flex gap-1">
+                          <RiTeamLine size={16} color="#6b7280" />
+                          <span className="text-xs text-gray-500">
+                            Guests: {quantityAdult} Adult, {quantityChildren}{" "}
+                            Children
+                            {roomHotel ? `Room: ${quantityRoom}` : ""}
+                          </span>
+                        </div>
+
+                        <div className="flex justify-between w-full">
+                          <div
+                            className="flex gap-1 cursor-pointer"
+                            onClick={() => handleCheckboxChange(index, id)}
+                          >
+                            {isSelected ? (
+                              <RiCheckboxFill className="text-RoyalAmethyst-700 text-lg" />
+                            ) : (
+                              <RiCheckboxBlankLine className="text-gray-400 text-lg" />
+                            )}
+                            <span
+                              className={`text-sm font-semibold ${
+                                isSelected
+                                  ? "text-RoyalAmethyst-700"
+                                  : "text-gray-400"
+                              }`}
+                            >
+                              {destination?.name || roomHotel?.roomType}
+                            </span>
+                          </div>
+
+                          <div className="flex items-end gap-1">
+                            {quantityAdult || quantityRoom} x Rp
+                            {destination?.priceAdult
+                              .toLocaleString("id-ID")
+                              .replace(",", ".") ||
+                              roomHotel?.price
+                                .toLocaleString("id-ID")
+                                .replace(",", ".")}{" "}
+                            - {quantityChildren} x Rp
+                            {destination?.priceChildren
+                              .toLocaleString("id-ID")
+                              .replace(",", ".")}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="h-px bg-gray-300"></div>
+                    <div className="h-px bg-gray-300"></div>
 
-                  <div className="pt-5 pb-3 flex justify-end w-full gap-2">
-                    <div className="flex flex-col gap-1">
-                      <span className="font-semibold text-xs">Total Price</span>
-                      <span
-                        className={`text-sm font-semibold ${
-                          isSelected ? "text-[#DC143C]" : "text-gray-400"
-                        }`}
-                      >
-                        {formatCurrency(totalPrice)}
-                      </span>
+                    <div className="pt-5 pb-3 flex justify-end w-full gap-2">
+                      <div className="flex flex-col gap-1">
+                        <span className="font-semibold text-xs">
+                          Total Price
+                        </span>
+                        <span
+                          className={`text-sm font-semibold ${
+                            isSelected ? "text-[#DC143C]" : "text-gray-400"
+                          }`}
+                        >
+                          {formatCurrency(totalPrice)}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
 
