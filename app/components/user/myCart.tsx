@@ -56,21 +56,20 @@ export default function MyCart() {
     }
   };
 
-const getTotalPrice = () => {
-  return dataCart.reduce((total, item, index) => {
-    if (selectedItems[index]) {
-      if (item.destination) {
-        total +=
-          item.quantityAdult * item.destination.priceAdult +
-          item.quantityChildren * item.destination.priceChildren;
-      } else if (item.roomHotel) {
-        total += item.quantityRoom * item.roomHotel.price;
+  const getTotalPrice = () => {
+    return dataCart.reduce((total, item, index) => {
+      if (selectedItems[index]) {
+        if (item.destination) {
+          total +=
+            item.quantityAdult * item.destination.priceAdult +
+            item.quantityChildren * item.destination.priceChildren;
+        } else if (item.roomHotel) {
+          total += item.quantityRoom * item.roomHotel.price;
+        }
       }
-    }
-    return total;
-  }, 0);
-};
-
+      return total;
+    }, 0);
+  };
 
   useEffect(() => {
     fetchCart();
@@ -313,35 +312,41 @@ const getTotalPrice = () => {
           </div>
         </div>
 
+        {/* adadadadadadaadad */}
+
         <div className="w-1/3 bg-white rounded-xl h-full sticky top-4">
           <div className={`${mediumMontserrat.className} py-6 px-9`}>
             <span className="text-lg font-semibold">Price Details</span>
           </div>
           <div className="h-px bg-gray-300"></div>
-
-          <div className="flex justify-between items-center py-6 px-9">
-            <span className="text-gray-500">Total</span>
-            <span className="font-semibold text-lg text-gray-900">
-              {formatCurrency(getTotalPrice())}
-            </span>
-          </div>
-
-          <Button
-            onClick={() => {
-              // handleCreateBookingDetail();
-              handleAddBooking();
-
-              if (selectedItemsId.length > 0) {
-                setTimeout(() => {
-                  router.push("/booking");
-                }, 3000);
-              }
-            }}
+          <div
+            className={`${mediumMontserrat.className} py-6 px-9 flex flex-col gap-4`}
           >
-            <div className="bg-RoyalAmethyst-700 text-center text-white text-sm rounded-xl cursor-pointer py-3 px-9 mx-9 mb-3">
-              <span>Booking Now</span>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-500">Total</span>
+              <span className="font-semibold text-lg text-gray-900">
+                {formatCurrency(getTotalPrice())}
+              </span>
             </div>
-          </Button>
+
+            <div
+              className="bg-RoyalAmethyst-700 text-center rounded-xl cursor-pointer py-3 px-9"
+              onClick={() => {
+                // handleCreateBookingDetail();
+                handleAddBooking();
+
+                if (selectedItemsId.length > 0) {
+                  setTimeout(() => {
+                    router.push("/booking");
+                  }, 3000);
+                }
+              }}
+            >
+              <span className="font-semibold text-white text-sm">
+                Booking Now
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
