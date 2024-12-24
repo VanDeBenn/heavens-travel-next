@@ -37,12 +37,13 @@ export default function MyBooking({ data }: ComponentsProps) {
   if (!data) {
     return <Loading />;
   }
-  // console.log("data /booking:", data);
+
   const [bookingItems, setBookingItems] =
     useState<BookingItem[]>(initialBookingItems);
 
   const formatCurrency = (amount: number) => `Rp${amount.toLocaleString()}`;
 
+  console.log(data);
   return (
     <div className={`bg-white rounded-xl`}>
       {/* title */}
@@ -52,7 +53,8 @@ export default function MyBooking({ data }: ComponentsProps) {
       {/* grid */}
       <div className="px-8 py-6 grid grid-cols-1 gap-6">
         {data.map((booking: any, index: number) => {
-          // Dropdown menu
+          const { roomhotel, destination, payment, bookingdetails } = booking;
+
           const menu = (
             <Menu
               items={[
@@ -70,49 +72,59 @@ export default function MyBooking({ data }: ComponentsProps) {
               ]}
             />
           );
+
+          const bookingTitle =
+            destination?.name ||
+            roomhotel?.hotel?.name ||
+            (payment?.externalId
+              ? `${payment.externalId.slice(0, 7)}...${payment.externalId.slice(
+                  -3
+                )} (${
+                  bookingdetails?.filter(
+                    (detail: any) => detail.cart?.destination
+                  ).length
+                } destination, ${bookingdetails
+                  ?.filter((detail: any) => detail.cart?.roomHotel)
+                  .reduce(
+                    (total: number, item: any) =>
+                      total + (item.cart?.quantityRoom || 0),
+                    0
+                  )} room)`
+              : "Unknown");
+
           return (
             <div
               key={booking.id}
               className="p-3 border border-solid border-[#DBDBDB] rounded-xl"
             >
               <div className="flex justify-between items-center">
-                {/* Title and Icon */}
                 <div className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                  {/* {booking.bookingdetails[0]?.cart?.destination ? (
-                    <RiHome3Line size={18} color="#ffff" />
-                  ) : (
-                    <RiGlassesLine size={18} color="#ffff" />
-                  )} */}
                   <FiBookOpen size={18} color="#ffff" />
                   <span className="text-xs font-semibold text-white">
-                    {/* {booking.bookingdetails[0]?.cart?.destination
-                      ? "Destination"
-                      : "Hotel"} */}
                     Booking #{index + 1}
                   </span>
                 </div>
                 <div className="flex items-center">
                   <div
                     className={`border-2 border-solid border-[#DBDBDB] ${
-                      booking.payment?.status === "PENDING"
+                      payment?.status === "PENDING"
                         ? "bg-[#FFD600] border-[#FFD600]"
                         : "bg-[#cbbef4] border-[#DBDBDB]"
                     } rounded-xl py-1 px-5 w-max mr-2`}
                   >
                     <span
                       className={`text-xs font-semibold ${
-                        booking.payment?.status === "PENDING"
+                        payment?.status === "PENDING"
                           ? "text-InfernoEcho-600"
                           : "text-RoyalAmethyst-700"
                       }`}
                     >
-                      {booking.payment?.status === "PENDING"
+                      {payment?.status === "PENDING"
                         ? "Waiting for Payment"
                         : "Done"}
                     </span>
                   </div>
 
-                  {/* Three dots dropdown */}
                   <Dropdown overlay={menu} trigger={["click"]}>
                     <RiMore2Fill
                       size={25}
@@ -125,19 +137,6 @@ export default function MyBooking({ data }: ComponentsProps) {
 
               <div className="py-3 flex items-center gap-2">
                 <Link href={`bookings/detail/${booking.id}`}>
-                  {/* <Image
-                    src={
-                      booking.bookingdetails[0]?.cart?.destination
-                        ?.pathLocation || ""
-                    }
-                    alt={
-                      booking.bookingdetails[0]?.cart?.destination?.name ||
-                      "Destination"
-                    }
-                    width={100}
-                    height={100}
-                    className="rounded-xl w-44"
-                  /> */}
                   <Image
                     src={
                       "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
@@ -153,60 +152,36 @@ export default function MyBooking({ data }: ComponentsProps) {
                     href={`bookings/detail/${booking.id}`}
                     className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                   >
-                    {booking.bookingdetails[0]?.cart?.destination?.name ||
-                      booking?.payment?.externalId?.slice(0, 10)}
-                    ...{booking?.payment?.externalId?.slice(-3)}
+                    {bookingTitle}
                   </Link>
                   <div className="flex items-center gap-1">
                     <RiCalendarLine size={16} color="#6b7280 " />
                     <span className="text-xs text-gray-500">
-                      {booking.bookingdetails[0]?.cart?.startDate
+                      {bookingdetails[0]?.cart?.startDate
                         ? `${new Date(
-                            booking.bookingdetails[0].cart.startDate
+                            bookingdetails[0].cart.startDate
                           ).toLocaleDateString()} - ${new Date(
-                            booking.bookingdetails[0].cart.endDate
+                            bookingdetails[0].cart.endDate
                           ).toLocaleDateString()}`
                         : "No Schedule"}
                     </span>
                   </div>
 
                   <div className="flex justify-between">
-                    {/* <div className="flex gap-1">
+                    <div className="flex gap-1">
                       <RiTeamLine size={16} color="#6b7280" />
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 flex">
                         Guests:{" "}
-                        {`${
-                          booking.bookingdetails[0]?.cart?.quantityAdult || 0
-                        } Adult - ${
-                          booking.bookingdetails[0]?.cart?.quantityChildren || 0
-                        } Children`}
+                        <div className="flex-col">
+                          <div>
+                            {`${
+                              bookingdetails[0]?.cart?.quantityAdult || 0
+                            } Adult - ${
+                              bookingdetails[0]?.cart?.quantityChildren || 0
+                            } Children`}
+                          </div>
+                        </div>
                       </span>
-                    </div> */}
-
-                    <div className="flex flex-col items-center gap-1">
-                      {booking.bookingdetails[0]?.cart?.destination
-                        ?.priceAdult && (
-                        <span className="text-sm text-gray-500">
-                          {booking.bookingdetails[0]?.cart?.quantityAdult || 0}{" "}
-                          x{" "}
-                          {formatCurrency(
-                            booking.bookingdetails[0]?.cart?.destination
-                              ?.priceAdult
-                          )}
-                        </span>
-                      )}
-                      {booking.bookingdetails[0]?.cart?.destination
-                        ?.priceChildren && (
-                        <span className="text-sm text-gray-500">
-                          {booking.bookingdetails[0]?.cart?.quantityChildren ||
-                            0}{" "}
-                          x{" "}
-                          {formatCurrency(
-                            booking.bookingdetails[0]?.cart?.destination
-                              ?.priceChildren
-                          )}
-                        </span>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -220,14 +195,6 @@ export default function MyBooking({ data }: ComponentsProps) {
                 >
                   See booking details
                 </Link>
-                {/* {booking.payment?.status !== "PENDING" && (
-                  <Link
-                    href={`/profile/bookings/detail/${booking.id}`}
-                    className="border bg-RoyalAmethyst-700 border-solid border-[#DBDBDB] rounded-xl py-2 px-5 w-max flex items-center gap-1 text-xs text-white no-underline font-semibold"
-                  >
-                    Review
-                  </Link>
-                )} */}
               </div>
             </div>
           );
@@ -237,35 +204,33 @@ export default function MyBooking({ data }: ComponentsProps) {
   );
 }
 
-// Interface for BookingItem
 export interface BookingItem {
   category: "Hotel" | "Destination";
   name: string;
-  HotelSchedule?: string; // Opsional
-  DestinationSchedule?: string; // Opsional
+  HotelSchedule?: string;
+  DestinationSchedule?: string;
   description: string;
   image: string;
   rating: number;
   link: string;
   guests: string;
-  DestinationType?: string; // Properti baru untuk tipe destinasi
+  DestinationType?: string;
   HotelRoomType?: string;
   HotelPricePerAdult?: number;
   DestinationPriceAdults?: number;
   DestinationPriceChildren?: number;
   HotelTotalReviews?: number;
   DestinationTotalReviews?: number;
-  HotelLocation?: string; // Lokasi hotel
-  DestinationLocation?: string; // Lokasi destinasi
+  HotelLocation?: string;
+  DestinationLocation?: string;
   status?: "Done" | "waiting for payment";
 }
 
-// Data array booking dan destination
 export const initialBookingItems: BookingItem[] = [
   {
     category: "Hotel",
     name: "Mandarin Oriental",
-    HotelSchedule: "5 Nov 2024 - 8 Nov 2024", // Properti HotelSchedule untuk kategori Hotel
+    HotelSchedule: "5 Nov 2024 - 8 Nov 2024",
     description:
       "Modern luxury and comfort with excellent service at Mandarin Oriental Jakarta.",
     image: "/images/illustration/rainbow-appearing-sky.jpg",
@@ -275,30 +240,30 @@ export const initialBookingItems: BookingItem[] = [
     HotelRoomType: "Deluxe King Room",
     HotelPricePerAdult: 600999,
     HotelTotalReviews: 120,
-    HotelLocation: "Jakarta, Indonesia", // Lokasi hotel
+    HotelLocation: "Jakarta, Indonesia",
     status: "Done",
   },
   {
     category: "Destination",
     name: "Ubud Palace",
-    DestinationSchedule: "1 Oct 2024 - 2 Oct 2024", // Properti DestinationSchedule untuk kategori Destination
+    DestinationSchedule: "1 Oct 2024 - 2 Oct 2024",
     description:
       "Explore Ubud Palace, a historical and cultural landmark showcasing Bali’s traditional architecture and rich heritage.",
     image: "/images/illustration/rainbow-appearing-sky.jpg",
     rating: 4,
     link: "/",
     guests: "1 adult, 2 children",
-    DestinationType: "Ubud Palace Tour", // Tipe destinasi dengan akhiran 'Tour'
+    DestinationType: "Ubud Palace Tour",
     DestinationPriceAdults: 200000,
     DestinationPriceChildren: 100000,
     DestinationTotalReviews: 85,
-    DestinationLocation: "Bali, Indonesia", // Lokasi destinasi
+    DestinationLocation: "Bali, Indonesia",
     status: "Done",
   },
   {
     category: "Hotel",
     name: "Atlasong Hotel",
-    HotelSchedule: "12 Oct 2024 - 15 Oct 2024", // Properti HotelSchedule untuk kategori Hotel
+    HotelSchedule: "12 Oct 2024 - 15 Oct 2024",
     description:
       "Luxury stay with stunning ocean views, offering top-notch service and unforgettable.",
     image: "/images/illustration/rainbow-appearing-sky.jpg",
@@ -308,13 +273,13 @@ export const initialBookingItems: BookingItem[] = [
     HotelRoomType: "Deluxe Double Room F",
     HotelPricePerAdult: 500999,
     HotelTotalReviews: 95,
-    HotelLocation: "Bali, Indonesia", // Lokasi hotel
+    HotelLocation: "Bali, Indonesia",
     status: "waiting for payment",
   },
   {
     category: "Hotel",
     name: "Sansoeong Hotel",
-    HotelSchedule: "12 Oct 2024 - 15 Oct 2024", // Properti HotelSchedule untuk kategori Hotel
+    HotelSchedule: "12 Oct 2024 - 15 Oct 2024",
     description:
       "Luxury stay with stunning ocean views, offering top-notch service and unforgettable.",
     image: "/images/illustration/rainbow-appearing-sky.jpg",
@@ -324,13 +289,13 @@ export const initialBookingItems: BookingItem[] = [
     HotelRoomType: "Deluxe Double Room F",
     HotelPricePerAdult: 500999,
     HotelTotalReviews: 77,
-    HotelLocation: "Surabaya, Indonesia", // Lokasi hotel
+    HotelLocation: "Surabaya, Indonesia",
     status: "waiting for payment",
   },
   {
     category: "Hotel",
     name: "Jiungo Tyuning Hotel",
-    HotelSchedule: "5 Nov 2024 - 8 Nov 2024", // Properti HotelSchedule untuk kategori Hotel
+    HotelSchedule: "5 Nov 2024 - 8 Nov 2024",
     description:
       "Modern luxury and comfort with excellent service at Mandarin Oriental Jakarta.",
     image: "/images/illustration/rainbow-appearing-sky.jpg",
@@ -340,7 +305,7 @@ export const initialBookingItems: BookingItem[] = [
     HotelRoomType: "Deluxe King Room",
     HotelPricePerAdult: 600999,
     HotelTotalReviews: 120,
-    HotelLocation: "Jakarta, Indonesia", // Lokasi hotel
+    HotelLocation: "Jakarta, Indonesia",
     status: "Done",
   },
 ];

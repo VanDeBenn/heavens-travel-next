@@ -5,6 +5,7 @@ import { RiSearchLine } from "react-icons/ri";
 import { Input, Select, Button, DatePicker } from "antd";
 import { useState } from "react";
 import dayjs from "dayjs"; // Import dayjs for date manipulation
+import { useRouter } from "next/navigation";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -20,24 +21,20 @@ const JuleeNormal = Julee({
 });
 
 export default function BannerHotel() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<string | undefined>(
     undefined
   );
-  const [dates, setDates] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(null); 
+  const [dates, setDates] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(null); // State for date range
 
-  const popularLocations = [
-    "Bali",
-    "Jakarta",
-    "Yogyakarta",
-    "Bandung",
-    "Lombok",
-  ];
-
+  console.log(searchQuery);
   const handleSearch = () => {
-    // console.log("Search Query:", searchQuery);
-    // console.log("Selected Location:", selectedLocation);
-    // console.log("Selected Dates:", dates);
+    if (searchQuery) {
+      router.push(`/hotel/list/${searchQuery.toLowerCase()}`);
+    } else {
+      alert("Please select a location.");
+    }
   };
 
   return (
@@ -87,21 +84,21 @@ export default function BannerHotel() {
               <div className="flex items-center gap-3">
                 {/* Input Search */}
                 <Input
-                  placeholder="Search hotel"
+                  placeholder="Search Location"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full px-3 border-solid border-gray-200 border rounded-lg text-sm"
                 />
-                {/* Schedule */}
+                {/* Schedule
                 <RangePicker
                   format="DD MMM, YYYY"
                   onChange={(dates) =>
                     setDates(dates as [dayjs.Dayjs, dayjs.Dayjs] | null)
                   }
                   className="border-solid border-gray-200 border rounded-lg w-[350px]"
-                />
+                /> */}
                 {/* Location Dropdown */}
-                <Select
+                {/* <Select
                   placeholder="Location"
                   value={selectedLocation}
                   onChange={(value) => setSelectedLocation(value)}
@@ -118,7 +115,7 @@ export default function BannerHotel() {
                       {location}
                     </Option>
                   ))}
-                </Select>
+                </Select> */}
 
                 {/* Button Enter Search */}
                 <Button

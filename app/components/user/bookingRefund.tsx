@@ -151,14 +151,6 @@ export default function BookingRefund({ data, bookingId }: ComponentProps) {
             const { cart } = item;
             const { destination, roomHotel } = cart;
 
-            // const totalCost = item.HotelPricePerAdult
-            //   ? Number(item.guests.match(/\d+/)?.[0]) * item.HotelPricePerAdult
-            //   : 0;
-            // const adultsCount =
-            //   Number(item.guests.match(/(\d+)\s*adult/)?.[1]) || 0;
-            // const childrenCount =
-            //   Number(item.guests.match(/(\d+)\s*child/)?.[1]) || 0;
-
             return (
               <div
                 key={item?.id}
@@ -472,6 +464,26 @@ export default function BookingRefund({ data, bookingId }: ComponentProps) {
             additional fees.
           </span>
         </div>
+
+        {/* Perhitungan Total Refund dan Fee */}
+        <div className="flex justify-between items-center">
+          <span className="font-semibold text-base text-black">Fee</span>
+          <span className="text-base text-gray-500">
+            {formatCurrency(
+              data?.bookingdetails.reduce((acc: number, item: any) => {
+                const { cart } = item;
+                const totalItemPrice =
+                  cart?.quantityAdult * (cart?.destination?.priceAdult || 0) +
+                  cart?.quantityChildren *
+                    (cart?.destination?.priceChildren || 0) +
+                  cart?.quantityRoom * (cart?.roomHotel?.price || 0);
+                const fee = totalItemPrice * 0.05;
+                return acc + fee;
+              }, 0)
+            )}
+          </span>
+        </div>
+
         <div className="flex justify-between items-center">
           <span className="font-semibold text-base text-black">
             Total Refund
@@ -480,13 +492,13 @@ export default function BookingRefund({ data, bookingId }: ComponentProps) {
             {formatCurrency(
               data?.bookingdetails.reduce((acc: number, item: any) => {
                 const { cart } = item;
-                return (
-                  acc +
-                  (cart?.quantityAdult * (cart?.destination?.priceAdult || 0) +
-                    cart?.quantityChildren *
-                      (cart?.destination?.priceChildren || 0) +
-                    cart?.quantityRoom * (cart?.roomHotel?.price || 0))
-                );
+                const totalItemPrice =
+                  cart?.quantityAdult * (cart?.destination?.priceAdult || 0) +
+                  cart?.quantityChildren *
+                    (cart?.destination?.priceChildren || 0) +
+                  cart?.quantityRoom * (cart?.roomHotel?.price || 0);
+                const fee = totalItemPrice * 0.05;
+                return acc + totalItemPrice - fee;
               }, 0)
             )}
           </span>

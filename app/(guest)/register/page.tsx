@@ -178,8 +178,8 @@ const Register = () => {
               icon={<GoogleOutlined />}
               shape="circle"
             />
-            <Button icon={<FacebookOutlined />} shape="circle" />
-            <Button icon={<AppleOutlined />} shape="circle" />
+            {/* <Button icon={<FacebookOutlined />} shape="circle" />
+            <Button icon={<AppleOutlined />} shape="circle" /> */}
           </Space>
         </Card>
       </div>

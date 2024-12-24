@@ -422,7 +422,7 @@
 //                     </Link>
 //                     <div className="flex justify-end">
 //                       <div className="flex gap-2 items-center">
-//                         <span className="text-gray-400 text-sm align-text-bottom">
+//                         <span className="text-gray-400 text-sm align-text-bottom ">
 //                           Start from
 //                         </span>
 //                         <Link
@@ -449,9 +449,8 @@
 //       </div>
 //     </div>
 //   );
-// } 
+// }
 
- 
 // "use client";
 
 // import { Julee } from "next/font/google";
@@ -727,9 +726,9 @@
 //     setCurrentPage(page);
 //   };
 
-  // const handleSearch = () => {
-  //   setCurrentPage(1);
-  // };
+// const handleSearch = () => {
+//   setCurrentPage(1);
+// };
 
 //   return (
 //     <div>

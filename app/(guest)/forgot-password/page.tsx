@@ -135,12 +135,12 @@ const ForgotPassword: React.FC = () => {
               </Button>
             </Form.Item>
           </Form>
-          <Divider>Or continue with</Divider>
+          {/* <Divider>Or continue with</Divider>
           <Space size="large" className="flex justify-center my-4">
             <Button icon={<GoogleOutlined />} shape="circle" />
             <Button icon={<FacebookOutlined />} shape="circle" />
             <Button icon={<AppleOutlined />} shape="circle" />
-          </Space>
+          </Space> */}
         </Card>
       </div>
     </div>

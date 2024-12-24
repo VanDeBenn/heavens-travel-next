@@ -29,7 +29,6 @@ const Login = () => {
     if (TokenUtil.accessToken && TokenUtil.refreshToken) {
       router.push("/profile");
     } else {
-      // router.push("/login");
     }
   } catch (error) {}
 
@@ -63,9 +62,7 @@ const Login = () => {
     }
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    // // console.log("Failed:", errorInfo);
-  };
+  const onFinishFailed = (errorInfo: any) => {};
 
   const handleForgotPassword = () => {
     router.push("/forgot-password");
@@ -116,7 +113,6 @@ const Login = () => {
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value) {
-                      // Jika input kosong, jangan memunculkan validator cuk
                       return Promise.resolve();
                     }
 
@@ -173,8 +169,8 @@ const Login = () => {
               icon={<GoogleOutlined />}
               shape="circle"
             />
-            <Button icon={<FacebookOutlined />} shape="circle" />
-            <Button icon={<AppleOutlined />} shape="circle" />
+            {/* <Button icon={<FacebookOutlined />} shape="circle" />
+            <Button icon={<AppleOutlined />} shape="circle" /> */}
           </Space>
           <div className="text-center mt-4">
             <Text type="secondary">Don’t have an account? </Text>

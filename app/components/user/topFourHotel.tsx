@@ -54,7 +54,7 @@ const mediumMontserrat = Montserrat({
 
 export default function TopFourHotel({ data }: { data: dataDestination }) {
   if (!data || !data.city.hotels || data.city.hotels.length === 0) {
-    return <Loading />;
+    return;
   }
 
   return (
@@ -74,7 +74,7 @@ export default function TopFourHotel({ data }: { data: dataDestination }) {
       <div className="grid grid-cols-4 gap-4">
         {data.city.hotels
           .sort((a, b) => b.rating - a.rating)
-          .slice(0, 4) 
+          .slice(0, 4)
           .map((hotel) => (
             <div
               key={hotel.id}
@@ -142,18 +142,19 @@ export default function TopFourHotel({ data }: { data: dataDestination }) {
                 </div>
                 <Link
                   href={`/hotel/detail/${hotel.id}`}
-                  className="text-black text-base font-semibold no-underline leading-6">
+                  className="text-black text-base font-semibold no-underline leading-6"
+                >
                   {hotel?.description
-                      ? hotel.description
-                          .replace(/[.,]/g, "")
-                          .split(" ")
-                          .slice(0, 12)
-                          .join(" ")
-                      : "No description available"}
+                    ? hotel.description
+                        .replace(/[.,]/g, "")
+                        .split(" ")
+                        .slice(0, 12)
+                        .join(" ")
+                    : "No description available"}
                 </Link>
                 <div className="flex justify-end">
                   <div className="flex gap-2 items-center">
-                    <span className="text-gray-400 text-sm align-text-bottom">
+                    <span className="text-gray-400 text-sm align-text-bottom ">
                       Start from
                     </span>
                     <Link

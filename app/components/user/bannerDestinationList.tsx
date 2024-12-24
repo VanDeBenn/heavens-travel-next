@@ -198,7 +198,7 @@ export default function BannerDestinationList({
                   </Link>
                   <div className="h-full relative bottom-0 right-0 flex justify-end">
                     <div className="flex gap-2 items-end">
-                      <span className="text-gray-400 text-sm align-text-bottom">
+                      <span className="text-gray-400 text-sm align-text-bottom ">
                         Start from
                       </span>
                       <Link

@@ -179,12 +179,18 @@ export default function PopularHotelsIn() {
     (hotel: any) =>
       hotel?.city?.name === selectedCity ||
       hotel?.city?.name === `Kota ${selectedCity}` ||
+      hotel?.city?.name === `Kota ${selectedCity} Utara` ||
+      hotel?.city?.name === `Kota ${selectedCity} Timur` ||
+      hotel?.city?.name === `Kota ${selectedCity} Selatan` ||
+      hotel?.city?.name === `Kota ${selectedCity} Barat` ||
       hotel?.city?.name === `Kabupaten ${selectedCity}` ||
-      hotel?.city?.province?.name === selectedCity
+      hotel?.city?.province?.name === selectedCity ||
+      hotel?.city?.province?.name === `Daerah Khusus ${selectedCity}`
   );
 
-  const citiesList = ["Bali", "Bekasi", "Bandung", "Jakarta"]; // Define the cities explicitly
+  const citiesList = ["Bali", "Jawa Tengah", "Jawa Timur", "Jakarta"]; // Define the cities explicitly
 
+  console.log(filteredHotels);
   return (
     <div className="flex flex-col gap-4">
       {/* Header */}
@@ -268,18 +274,21 @@ export default function PopularHotelsIn() {
                   href={`/hotel/detail/${hotel.id}`}
                   className="text-black text-base font-semibold no-underline leading-6"
                 >
-                  {hotel.description}
+                  {`${hotel.description.slice(0, 50)}...`}
                 </Link>
                 <div className="flex justify-end">
                   <div className="flex gap-2 items-center">
-                    <span className="text-gray-400 text-sm align-text-bottom">
+                    <span className="text-gray-400 text-sm align-text-bottom ">
                       Start from
                     </span>
                     <Link
                       href={`/hotel/detail/${hotel.id}`}
                       className="text-InfernoEcho-600 text-lg font-semibold no-underline"
                     >
-                      {hotel.price}
+                      Rp
+                      {hotel?.price
+                        ?.toLocaleString("id-ID")
+                        .replace(",", ".") || 0}
                     </Link>
                   </div>
                 </div>

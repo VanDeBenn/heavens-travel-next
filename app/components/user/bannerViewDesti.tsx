@@ -29,11 +29,14 @@ interface dataDestination {
   scrollToChooseRoom: () => void;
 }
 
-interface dataPhotodestinations{
+interface dataPhotodestinations {
   pathPhoto: string;
 }
 
-export default function BannerViewDesti({ data, scrollToChooseRoom }: dataDestination) {
+export default function BannerViewDesti({
+  data,
+  scrollToChooseRoom,
+}: dataDestination) {
   if (!data) {
     return <Loading />;
   }
@@ -64,15 +67,17 @@ export default function BannerViewDesti({ data, scrollToChooseRoom }: dataDestin
   return (
     <div className="w-full relative">
       <Carousel autoplay dots className="rounded-xl overflow-hidden h-[500px]">
-        {data.photodestinations.map((data) => (
-          <div key={data.pathPhoto}>
+        {data?.photodestinations.map((data) => (
+          <div key={data.pathPhoto} className="w-full h-full">
             <Image
-              src={`http://192.168.195.16:3222/photo-destinations/${data}`}
+              src={`http://localhost:3222/photo-destinations/${data?.pathPhoto}`}
               alt={`Slide ${data.pathPhoto + 1}`}
               preview={{
-                src: `http://192.168.195.16:3222/photo-destinations/${data}`,
+                src: `http://localhost:3222/photo-destinations/${data?.pathPhoto}`,
               }}
-              className="w-full object-cover"
+              width={1240}
+              height={500}
+              className="object-cover"
             />
           </div>
         ))}
