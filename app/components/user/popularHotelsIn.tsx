@@ -179,11 +179,15 @@ export default function PopularHotelsIn() {
     (hotel: any) =>
       hotel?.city?.name === selectedCity ||
       hotel?.city?.name === `Kota ${selectedCity}` ||
+      hotel?.city?.name === `Kota ${selectedCity} Utara` ||
+      hotel?.city?.name === `Kota ${selectedCity} Timur` ||
+      hotel?.city?.name === `Kota ${selectedCity} Selatan` ||
+      hotel?.city?.name === `Kota ${selectedCity} Barat` ||
       hotel?.city?.name === `Kabupaten ${selectedCity}` ||
       hotel?.city?.province?.name === selectedCity
   );
 
-  const citiesList = ["Bali", "Bekasi", "Bandung", "Jakarta"]; // Define the cities explicitly
+  const citiesList = ["Bali", "Wonosobo", "Banjarnegara", "Jakarta"]; // Define the cities explicitly
 
   return (
     <div className="flex flex-col gap-4">
