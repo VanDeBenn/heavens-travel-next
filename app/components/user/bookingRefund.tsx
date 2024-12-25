@@ -67,7 +67,7 @@ export default function BookingRefund({ data, bookingId }: ComponentProps) {
   if (!data) {
     return;
   }
-  console.log(data);
+  console.log("data: ", data);
   const [form] = useForm();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -172,7 +172,19 @@ export default function BookingRefund({ data, bookingId }: ComponentProps) {
                 <div className="flex items-center gap-2 py-3">
                   <Link href={""}>
                     <Image
-                      src={""}
+                      src={
+                        destination?.photodestinations[0]?.pathPhoto
+                          ? `http://localhost:3222/photo-destinations/${destination.photodestinations[0].pathPhoto}`
+                          : roomHotel?.photoroomhotels[0]?.pathPhoto
+                          ? `http://localhost:3222/photo-room-hotels/${roomHotel.photoroomhotels[0].pathPhoto}`
+                          : item[0]?.cart?.destination?.photodestinations[0]
+                              ?.pathPhoto
+                          ? `http://localhost:3222/photo-destinations/${item[0].cart.destination.photodestinations[0].pathPhoto}`
+                          : item[0]?.cart?.roomHotel?.photoroomhotels[0]
+                              ?.pathPhoto
+                          ? `http://localhost:3222/photo-room-hotels/${item[0].cart.roomHotel.photoroomhotels[0].pathPhoto}`
+                          : ""
+                      }
                       alt={destination?.name || roomHotel?.roomType}
                       width={100}
                       height={100}
@@ -200,7 +212,7 @@ export default function BookingRefund({ data, bookingId }: ComponentProps) {
                       <span className="text-xs text-black">
                         {destination
                           ? `Guests: ${cart?.quantityAdult} Adult - ${cart?.quantityChildren} Children`
-                          : `Rooms: ${cart?.quantityRoom}`}
+                          : `Rooms: ${cart?.quantityRoom} `}
                       </span>
                     </div>
 
@@ -208,7 +220,7 @@ export default function BookingRefund({ data, bookingId }: ComponentProps) {
                       <div className="flex items-center gap-1 w-full">
                         <span className="text-sm font-semibold text-[#4F28D9]">
                           {roomHotel
-                            ? roomHotel?.roomType
+                            ? `${roomHotel?.roomType} Room`
                             : `${destination?.name} Tour`}
                         </span>
                       </div>

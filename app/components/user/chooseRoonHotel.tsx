@@ -1,6 +1,6 @@
 "use client";
 import { Montserrat } from "next/font/google";
-import { Select, InputNumber, Button } from "antd";
+import { Select, InputNumber, Button, message } from "antd";
 import { GrSchedule } from "react-icons/gr";
 import React, { useState } from "react";
 import Image from "next/image";
@@ -29,6 +29,7 @@ import { cartRepository } from "#/repository/carts";
 import { DatePicker, Space } from "antd";
 import dayjs from "dayjs";
 import { bookingRepository } from "#/repository/bookings";
+import { useRouter } from "next/navigation";
 
 const { RangePicker } = DatePicker;
 
@@ -46,6 +47,7 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
   if (!data) {
     return;
   }
+  const router = useRouter();
   const [adults, setAdults] = useState(0); // Start value for adults
   const [children, setChildren] = useState(0); // Start value for children
   const [numberOfRooms, setNumberOfRooms] = useState(1); // Start value f  of rooms
@@ -81,7 +83,12 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
         startDate: startDate,
         endDate: endDate,
       };
-      await cartRepository?.api?.addToCart(data);
+      const req = await cartRepository?.api?.addToCart(data);
+
+      if (req) {
+        router.push("/cart");
+        message.success("Added to Cart Successfully");
+      }
     } catch (error) {
       console?.error("Failed to add to cart", error);
     }

@@ -139,7 +139,17 @@ export default function MyBooking({ data }: ComponentsProps) {
                 <Link href={`bookings/detail/${booking.id}`}>
                   <Image
                     src={
-                      "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                      destination?.photodestinations[0]?.pathPhoto
+                        ? `http://localhost:3222/photo-destinations/${destination.photodestinations[0].pathPhoto}`
+                        : roomhotel?.photoroomhotels[0]?.pathPhoto
+                        ? `http://localhost:3222/photo-room-hotels/${roomhotel.photoroomhotels[0].pathPhoto}`
+                        : bookingdetails[0]?.cart?.destination
+                            ?.photodestinations[0]?.pathPhoto
+                        ? `http://localhost:3222/photo-destinations/${bookingdetails[0].cart.destination.photodestinations[0].pathPhoto}`
+                        : bookingdetails[0]?.cart?.roomHotel?.photoroomhotels[0]
+                            ?.pathPhoto
+                        ? `http://localhost:3222/photo-room-hotels/${bookingdetails[0].cart.roomHotel.photoroomhotels[0].pathPhoto}`
+                        : ""
                     }
                     alt={""}
                     width={100}

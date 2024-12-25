@@ -18,7 +18,7 @@ import DoneOrder from "./doneOrder";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import { bookingRepository } from "#/repository/bookings";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const largeMontserrat = Montserrat({ subsets: ["latin"], weight: ["600"] });
 const mediumMontserrat = Montserrat({ subsets: ["latin"], weight: ["500"] });
@@ -28,6 +28,7 @@ const { Step } = Steps;
 
 export default function NextStep() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
@@ -37,27 +38,29 @@ export default function NextStep() {
   const [submitForms, setSubmitForms] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<any>();
 
-  const redirectXendit = localStorage.getItem("_xendit");
+  const status = searchParams?.get("status");
   const bookingId = localStorage.getItem("_booking");
+  const redirectXendit = localStorage.getItem("_xendit");
 
-  const getBooking = async () => {
-    try {
-      const res = await bookingRepository.api.getBooking(bookingId || "");
-      setDataBooking(res.data);
-      setDataBookingDetail(res.data.bookingdetails || []);
-      setDataUser(res.data.user || null);
-    } catch (error) {
-      console.error("Error fetching booking data:", error);
-      message.error("Failed to fetch booking data.");
-    }
-  };
-
+  // get booking
   useEffect(() => {
-    if (bookingId) {
-      getBooking();
-    }
+    const fetchBooking = async () => {
+      if (!bookingId) return;
+      try {
+        const res = await bookingRepository.api.getBooking(bookingId);
+        setDataBooking(res.data);
+        setDataBookingDetail(res.data.bookingdetails || []);
+        setDataUser(res.data.user || null);
+      } catch (error) {
+        console.error("Error fetching booking data:", error);
+        message.error("Failed to fetch booking data.");
+      }
+    };
+
+    fetchBooking();
   }, [bookingId]);
 
+  // action
   const next = () => {
     setLoading(true);
     setSubmitForms(true);
@@ -85,14 +88,14 @@ export default function NextStep() {
     router.push("/profile/bookings");
   };
 
+  // ?
   useEffect(() => {
-    if (!paymentStatus) {
+    if (!paymentStatus && dataBooking?.payment?.invoiceId) {
       const getPaymentStatus = async () => {
         try {
           const res = await bookingRepository.api.getInvoice(
-            dataBooking?.payment?.invoiceId
+            dataBooking.payment.invoiceId
           );
-          // console.log(res);
           setPaymentStatus(res?.data?.status);
         } catch (error) {
           console.error("Error fetching payment status:", error);
@@ -101,22 +104,28 @@ export default function NextStep() {
 
       getPaymentStatus();
     }
-  }, [dataBooking?.payment?.invoiceId]);
-
-  // console.log(paymentStatus);
-  useEffect(() => {
-    if (paymentStatus === "PAID") {
-      localStorage.setItem("_xendit", "success");
-    }
-  }, [paymentStatus]);
+  }, [paymentStatus, dataBooking?.payment?.invoiceId]);
 
   useEffect(() => {
-    if (redirectXendit === "success") {
+    if (status === "success") {
       setCurrent(3);
-      localStorage.removeItem("_xendit");
     }
-  }, [redirectXendit]);
+  }, [status]);
 
+  // useEffect(() => {
+  //   if (paymentStatus === "PAID") {
+  //     localStorage.setItem("_xendit", "success");
+  //   }
+  // }, [paymentStatus]);
+
+  // useEffect(() => {
+  //   if (redirectXendit === "success") {
+  //     setCurrent(3);
+  //     localStorage.removeItem("_xendit");
+  //   }
+  // }, [redirectXendit]);
+
+  // steps
   const steps = [
     {
       content: <YourBooking dataBookingDetail={dataBookingDetail} />,
@@ -181,6 +190,7 @@ export default function NextStep() {
     },
   ];
 
+  // price destination
   const totalDestinationPrice = dataBookingDetail.reduce(
     (total: number, item: any) => {
       const cart = item.cart || {};
@@ -192,6 +202,7 @@ export default function NextStep() {
     0
   );
 
+  // price hotel
   const totalRoomPrice = dataBookingDetail.reduce(
     (total: number, item: any) => {
       const cart = item.cart || {};
@@ -201,6 +212,7 @@ export default function NextStep() {
     0
   );
 
+  // total price
   const totalPrice = totalDestinationPrice + totalRoomPrice;
 
   return (
@@ -291,7 +303,10 @@ export default function NextStep() {
                                   {cart?.quantityAdult} adults
                                 </span>
                                 <span className="text-sm font-semibold">
-                                  Rp{cart?.destination?.priceAdult}
+                                  Rp
+                                  {cart?.destination?.priceAdult
+                                    ?.toLocaleString("id-ID")
+                                    .replace(",", ".")}
                                 </span>
                               </div>
                               <div className="flex justify-between items-center">
@@ -299,7 +314,10 @@ export default function NextStep() {
                                   {cart?.quantityChildren} child
                                 </span>
                                 <span className="text-sm font-semibold">
-                                  Rp{cart?.destination?.priceChildren}
+                                  Rp
+                                  {cart?.destination?.priceChildren
+                                    ?.toLocaleString("id-ID")
+                                    .replace(",", ".")}
                                 </span>
                               </div>
                             </div>

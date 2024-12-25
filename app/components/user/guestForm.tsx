@@ -1,11 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react"; // Import useState
-import { Form, Input, Row, Col, Button } from "antd";
+import React, { useEffect, useState } from "react";
+import { Form, Input, Row, Col, Button, message } from "antd";
 import { Montserrat } from "next/font/google";
 import { RiCircleLine, RiCircleFill } from "react-icons/ri";
-import { usersRepository } from "#/repository/users";
-import { bookingRepository } from "#/repository/bookings";
 import { useRouter } from "next/navigation";
+import { bookingRepository } from "#/repository/bookings";
 
 const mediumMontserrat = Montserrat({
   subsets: ["latin"],
@@ -19,85 +18,100 @@ interface ComponentsProps {
 
 export default function GuestForm({ dataUser, submit }: ComponentsProps) {
   const router = useRouter();
-  const [form] = Form.useForm();
+  const [customerForm] = Form.useForm();
+  const [guestForm] = Form.useForm();
   const [isBookingForAnotherPerson, setIsBookingForAnotherPerson] =
-    useState(false); // State to track selected option
+    useState(false);
+
   const bookingId = localStorage.getItem("_booking");
   const userId = localStorage.getItem("_id");
   const xendit = localStorage.getItem("_xendit");
 
   useEffect(() => {
-    if (dataUser) {
-      form.setFieldsValue({
-        customerName: dataUser?.fullName,
-        customerEmail: dataUser?.email,
-        customerPhoneNumber: dataUser?.phoneNumber || "08",
+    if (!isBookingForAnotherPerson && dataUser) {
+      customerForm.setFieldsValue({
+        customerName: dataUser.fullName,
+        customerEmail: dataUser.email,
+        customerPhoneNumber: dataUser.phoneNumber || "08",
       });
+    } else {
+      customerForm.resetFields();
     }
+  }, [dataUser, customerForm, isBookingForAnotherPerson]);
+
+  useEffect(() => {
     if (submit) {
-      form.submit();
-      onFinish;
+      if (isBookingForAnotherPerson) {
+        guestForm.submit();
+      } else {
+        customerForm.submit();
+      }
       if (!xendit) {
         handleCheckout();
       }
     }
-  }, [dataUser, form, submit]);
+  }, [submit, xendit, isBookingForAnotherPerson, customerForm, guestForm]);
 
-  const onFinish = async (values: any) => {
-    try {
-      const data = {
-        customerName: values.customerName,
-        customerEmail: values.customerEmail,
-        customerPhoneNumber: values.customerPhoneNumber,
-        guestName: values.guestName,
-        guestEmail: values.guestEmail,
-        guestPhoneNumber: values.guestPhoneNumber,
-      };
-
-      const req = await bookingRepository.api.updateBooking(
-        bookingId || "",
-        data
-      );
-    } catch (error) {}
+  const handleOptionChange = (isAnotherPerson: boolean) => {
+    setIsBookingForAnotherPerson(isAnotherPerson);
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    // // console.log("Failed:", errorInfo);
+  const handleFormSubmit = async (values: any, isGuest: boolean) => {
+    try {
+      const data = isGuest
+        ? {
+            guestName: values.guestName,
+            guestEmail: values.guestEmail,
+            guestPhoneNumber: values.guestPhoneNumber,
+          }
+        : {
+            customerName: values.customerName,
+            customerEmail: values.customerEmail,
+            customerPhoneNumber: values.customerPhoneNumber,
+          };
+
+      console.log(`${isGuest ? "Guest" : "Customer"} form submitted:`, data);
+
+      await bookingRepository.api.updateBooking(bookingId || "", data);
+    } catch (error) {
+      console.error(
+        `Error submitting ${isGuest ? "guest" : "customer"} form:`,
+        error
+      );
+    }
   };
 
   const handleCheckout = async () => {
     try {
       const data = {
-        bookingId: bookingId,
-        userId: userId,
+        bookingId,
+        userId,
       };
+
       const req = await bookingRepository.api.checkout(data);
-      // // console.log(req);
       localStorage.setItem("_xendit", req.body.redirect);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error during checkout:", error);
+    }
   };
 
   return (
     <div className="flex flex-col gap-5">
-      <div
-        className={`bg-white rounded-xl border-solid border-gray-200 border`}
-      >
+      <div className="bg-white rounded-xl border-solid border-gray-200 border">
         <div className={`${mediumMontserrat.className} py-6 px-9`}>
           <span className="text-lg font-semibold">Guest Detailed</span>
         </div>
         <div className="h-px bg-gray-300"></div>
-        {/* form */}
         <div className="px-9 py-5">
           <Form
-            form={form}
+            form={customerForm}
+            disabled={isBookingForAnotherPerson}
             name="guest_form"
             layout="vertical"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+            onFinish={(values) => handleFormSubmit(values, false)}
             autoComplete="off"
           >
             <Row gutter={24}>
-              {/* Full Name */}
               <Col span={8}>
                 <Form.Item
                   label="Full Name"
@@ -109,8 +123,6 @@ export default function GuestForm({ dataUser, submit }: ComponentsProps) {
                   <Input placeholder="Enter your full name" />
                 </Form.Item>
               </Col>
-
-              {/* Email */}
               <Col span={8}>
                 <Form.Item
                   label="Email"
@@ -123,8 +135,6 @@ export default function GuestForm({ dataUser, submit }: ComponentsProps) {
                   <Input placeholder="Enter your email" />
                 </Form.Item>
               </Col>
-
-              {/* Phone Number */}
               <Col span={8}>
                 <Form.Item
                   label="Phone Number"
@@ -135,7 +145,7 @@ export default function GuestForm({ dataUser, submit }: ComponentsProps) {
                       message: "Please enter your phone number!",
                     },
                     {
-                      pattern: new RegExp(/^[0-9]+$/),
+                      pattern: /^[0-9]+$/,
                       message: "Please enter a valid phone number!",
                     },
                   ]}
@@ -146,13 +156,12 @@ export default function GuestForm({ dataUser, submit }: ComponentsProps) {
             </Row>
           </Form>
         </div>
-        {/* end form */}
       </div>
       <div className="flex flex-col gap-5">
         <div className="flex gap-12">
           <div
             className={`${mediumMontserrat.className} flex items-center gap-2 cursor-pointer`}
-            onClick={() => setIsBookingForAnotherPerson(false)} // Set state for "I am the guest"
+            onClick={() => handleOptionChange(false)}
           >
             {isBookingForAnotherPerson ? (
               <RiCircleLine className="text-lg" />
@@ -163,7 +172,7 @@ export default function GuestForm({ dataUser, submit }: ComponentsProps) {
           </div>
           <div
             className={`${mediumMontserrat.className} flex items-center gap-2 cursor-pointer`}
-            onClick={() => setIsBookingForAnotherPerson(true)} // Set state for "I am booking for another person"
+            onClick={() => handleOptionChange(true)}
           >
             {isBookingForAnotherPerson ? (
               <RiCircleFill className="text-RoyalAmethyst-700 text-lg" />
@@ -173,20 +182,16 @@ export default function GuestForm({ dataUser, submit }: ComponentsProps) {
             <span className="text-base">I am booking for another person</span>
           </div>
         </div>
-
-        {/* Conditional Form for Booking for Another Person */}
         {isBookingForAnotherPerson && (
           <div className="px-9 py-5 bg-white rounded-xl">
             <Form
-              form={form}
-              name="guest_form_another_person"
+              form={guestForm}
+              name="guest_form"
               layout="vertical"
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
+              onFinish={(values) => handleFormSubmit(values, true)}
               autoComplete="off"
             >
               <Row gutter={24}>
-                {/* Full Name */}
                 <Col span={8}>
                   <Form.Item
                     label="Full Name"
@@ -194,29 +199,28 @@ export default function GuestForm({ dataUser, submit }: ComponentsProps) {
                     rules={[
                       {
                         required: true,
-                        message: "Please enter your full name!",
+                        message: "Please enter the guest's full name!",
                       },
                     ]}
                   >
-                    <Input placeholder="Enter your full name" />
+                    <Input placeholder="Enter the guest's full name" />
                   </Form.Item>
                 </Col>
-
-                {/* Email */}
                 <Col span={8}>
                   <Form.Item
                     label="Email"
                     name="guestEmail"
                     rules={[
-                      { required: true, message: "Please enter your email!" },
+                      {
+                        required: true,
+                        message: "Please enter the guest's email!",
+                      },
                       { type: "email", message: "Please enter a valid email!" },
                     ]}
                   >
-                    <Input placeholder="Enter your email" />
+                    <Input placeholder="Enter the guest's email" />
                   </Form.Item>
                 </Col>
-
-                {/* Phone Number */}
                 <Col span={8}>
                   <Form.Item
                     label="Phone Number"
@@ -224,32 +228,21 @@ export default function GuestForm({ dataUser, submit }: ComponentsProps) {
                     rules={[
                       {
                         required: true,
-                        message: "Please enter your phone number!",
+                        message: "Please enter the guest's phone number!",
                       },
                       {
-                        pattern: new RegExp(/^[0-9]+$/),
+                        pattern: /^[0-9]+$/,
                         message: "Please enter a valid phone number!",
                       },
                     ]}
                   >
-                    <Input placeholder="Enter your phone number" />
+                    <Input placeholder="Enter the guest's phone number" />
                   </Form.Item>
                 </Col>
               </Row>
-              <Form.Item className="flex justify-end">
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  style={{ display: "none" }}
-                  className="w-max mt-6"
-                >
-                  submit
-                </Button>
-              </Form.Item>
             </Form>
           </div>
         )}
-        {/* end form */}
       </div>
     </div>
   );

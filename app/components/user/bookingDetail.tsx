@@ -214,19 +214,22 @@ export default function BookingDetail({ data }: ComponentProps) {
             <div className="flex justify-between items-center">
               <span className="text-base text-gray-500">Full Name</span>
               <span className="text-base text-black">
-                {/* {InfoDetail.fullName} */} {data?.customerName}
+                {/* {InfoDetail.fullName} */}{" "}
+                {data?.customerName || data?.guestName}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-base text-gray-500">Email</span>
               <span className="text-base text-black">
-                {/* {InfoDetail.email} */} {data?.customerEmail}
+                {/* {InfoDetail.email} */}{" "}
+                {data?.customerEmail || data?.guestEmail}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-base text-gray-500">Phone Number</span>
               <span className="text-base text-black">
-                {/* {InfoDetail.numberPhone} */} {data?.customerPhoneNumber}
+                {/* {InfoDetail.numberPhone} */}{" "}
+                {data?.customerPhoneNumber || data?.guestPhoneNumber}
               </span>
             </div>
           </div>
@@ -252,6 +255,7 @@ export default function BookingDetail({ data }: ComponentProps) {
           {data?.bookingdetails.map((item: any) => {
             const { cart } = item;
             const { destination, roomHotel } = cart;
+            console.log(cart);
             return (
               <div
                 key={item.id}
@@ -268,8 +272,13 @@ export default function BookingDetail({ data }: ComponentProps) {
                       {roomHotel ? "Hotel" : "Destination"}
                     </span>
                   </div>
-                  <Link href={`/profile/bookings/detail/${item.id}/review`}>
-                    <SlOptionsVertical />
+                  <Link
+                    className="no-underline"
+                    href={`/profile/bookings/detail/${item.id}/review`}
+                  >
+                    <div className="border border-[#4F28D9] border-solid no-underline rounded-xl py-1 px-3 w-max flex items-center gap-1">
+                      Review
+                    </div>
                   </Link>
                 </div>
 
@@ -277,9 +286,11 @@ export default function BookingDetail({ data }: ComponentProps) {
                   <Link href={""}>
                     <Image
                       src={
-                        "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                        destination
+                          ? `http://localhost:3222/photo-destinations/${destination.photodestinations[0]?.pathPhoto}`
+                          : `http://localhost:3222/photo-room-hotels/${roomHotel.photoroomhotels[0].pathPhoto}`
                       }
-                      alt={roomHotel?.name || destination?.name}
+                      alt={roomHotel?.hotel?.name || destination?.name}
                       width={100}
                       height={100}
                       className="rounded-xl w-44"
@@ -292,7 +303,7 @@ export default function BookingDetail({ data }: ComponentProps) {
                       href={""}
                       className="font-semibold no-underline text-black hover:text-[#4F28D9] duration-300 transition-all"
                     >
-                      {roomHotel?.name || destination?.name}
+                      {roomHotel?.hotel?.name || destination?.name}
                     </Link>
                     <div className="flex items-center gap-1">
                       <RiCalendarLine className="text-lg text-black" />
@@ -304,8 +315,9 @@ export default function BookingDetail({ data }: ComponentProps) {
                     <div className="flex gap-1 items-center">
                       <RiTeamLine className="text-lg text-black" />
                       <span className="text-xs text-black">
-                        Guests: {cart.quantityAdult} adults,{" "}
-                        {cart.quantityChildren} children
+                        {destination
+                          ? `Guests: ${cart?.quantityAdult} Adult - ${cart?.quantityChildren} Children`
+                          : `Rooms: ${cart?.quantityRoom}`}
                       </span>
                     </div>
 
@@ -313,36 +325,33 @@ export default function BookingDetail({ data }: ComponentProps) {
                       <div className="flex items-center gap-1 w-full">
                         <span className="text-sm font-semibold text-[#4F28D9]">
                           {/* {roomHotel && item.HotelRoomType} */}
-                          {destination && destination.name} Tour
+                          {destination
+                            ? `${destination?.name} Tour`
+                            : `${roomHotel?.roomType} Room`}
                         </span>
                       </div>
 
                       <div className="flex justify-end w-full gap-1 items-end">
-                        {/* {item.HotelPricePerAdult && ( */}
-                        <div className="text-sm text-black">
-                          {/* {item.guests.match(/\d+/)?.[0]} */}
-                          Rp{cart?.quantityAdult * destination?.priceAdult} - Rp
-                          {cart?.quantityChildren * destination?.priceChildren}
-                          {/* {formatCurrency(item.HotelPricePerAdult)} */}
-                        </div>
-                        {/* )} */}
-
-                        {/* {item.DestinationPriceAdults && adultsCount > 0 && (
+                        {roomHotel?.price && (
                           <div className="text-sm text-black">
-                            {adultsCount} x
-                            {formatCurrency(item.DestinationPriceAdults)}
-                            {childrenCount > 0 &&
-                              item.DestinationPriceChildren && (
+                            {cart?.quantityRoom} Room x{" "}
+                            {formatCurrency(roomHotel?.price)}
+                          </div>
+                        )}
+
+                        {destination?.priceAdult && cart?.quantityAdult > 0 && (
+                          <div className="text-sm text-black">
+                            {cart?.quantityAdult} {"Adult"} x{" "}
+                            {formatCurrency(destination?.priceAdult)} <br />
+                            {cart?.quantityChildren > 0 &&
+                              destination?.priceChildren && (
                                 <>
-                                  {" - "}
-                                  {childrenCount} x
-                                  {formatCurrency(
-                                    item.DestinationPriceChildren
-                                  )}
+                                  {cart?.quantityChildren} {"Children"} x{" "}
+                                  {formatCurrency(destination?.priceChildren)}
                                 </>
                               )}
                           </div>
-                        )} */}
+                        )}
                       </div>
                     </div>
                   </div>
@@ -355,19 +364,17 @@ export default function BookingDetail({ data }: ComponentProps) {
                   >
                     <span className="font-semibold text-xs">Total Price</span>
                     <span className="text-sm font-semibold text-InfernoEcho-600">
-                      Rp
-                      {cart?.quantityAdult * destination?.priceAdult +
-                        cart?.quantityChildren * destination?.priceChildren}
-                      {/* {roomHotel &&
-                        formatCurrency(
-                          (Number(item.guests.match(/\d+/)?.[0]) || 1) *
-                            (item.HotelPricePerAdult || 0)
-                        )}
                       {destination &&
                         formatCurrency(
-                          adultsCount * (item.DestinationPriceAdults || 0) +
-                            childrenCount * (item.DestinationPriceChildren || 0)
-                        )} */}
+                          (cart?.quantityAdult || 0) *
+                            (destination?.priceAdult || 0) +
+                            (cart?.quantityChildren || 0) *
+                              (destination?.priceChildren || 0)
+                        )}
+                      {roomHotel &&
+                        formatCurrency(
+                          (cart?.quantityRoom || 0) * (roomHotel?.price || 0)
+                        )}
                     </span>
                   </div>
                 </div>
@@ -382,43 +389,60 @@ export default function BookingDetail({ data }: ComponentProps) {
         className={`${mediumMontserrat.className} py-6 px-9 flex flex-col gap-6`}
       >
         <span className="font-semibold text-base">Payment Details</span>
-        <div className={`px-3 `}>
-          {/* {PayDetailGuest.map((pay, index) => ( */}
+        <div className={`px-3`}>
           <div className="flex flex-col gap-2">
             {data?.bookingdetails?.map((item: any) => {
               const { cart } = item;
               const { destination, roomHotel } = cart;
+
+              const subtotal =
+                cart?.quantityAdult * destination?.priceAdult +
+                  cart?.quantityChildren * destination?.priceChildren ||
+                cart?.quantityRoom * roomHotel?.price;
+
               return (
                 <div
                   key={item.id}
                   className="flex justify-between items-center"
                 >
                   <span className="text-base text-gray-500">
-                    {/* Mandarin Oriental */}
-                    {destination?.name}
-                    {/* <span>(2 room)</span> */}
+                    {destination?.name || roomHotel?.hotel?.name}
                   </span>
                   <span className="text-base text-black">
-                    Rp
-                    {cart?.quantityAdult * destination?.priceAdult +
-                      cart?.quantityChildren * destination?.priceChildren}
+                    Rp{subtotal.toLocaleString("id-ID").replace(",", ".")}
                   </span>
                 </div>
               );
             })}
+
             <div className="flex justify-between items-center">
               <span className="text-base text-gray-500">Booking Fees</span>
               <span className="text-base text-black">Free</span>
             </div>
           </div>
-          {/* ))} */}
         </div>
+
         <div className="flex justify-between items-center">
           <span className="font-semibold text-base text-black">
             Total Price
           </span>
           <span className="font-semibold text-base text-InfernoEcho-600">
-            Rp{data?.payment?.amount}
+            Rp
+            {data?.bookingdetails
+              ?.reduce((total: number, item: any) => {
+                const { cart } = item;
+                const { destination, roomHotel } = cart;
+
+                // Hitung subtotal untuk setiap item
+                const subtotal =
+                  cart?.quantityAdult * destination?.priceAdult +
+                    cart?.quantityChildren * destination?.priceChildren ||
+                  cart?.quantityRoom * roomHotel?.price;
+
+                return total + subtotal;
+              }, 0)
+              .toLocaleString("id-ID")
+              .replace(",", ".")}
           </span>
         </div>
       </div>
@@ -464,65 +488,6 @@ export default function BookingDetail({ data }: ComponentProps) {
     </div>
   );
 }
-
-// interface detailGuest {
-//   fullName: string;
-//   email: string;
-//   numberPhone: number;
-// }
-
-export const InfoDetailGuest: detailGuest[] = [
-  {
-    fullName: "Douwer Jhonen", // Nomor Invoice
-    email: "ucussayursore@gmail.com", // Tanggal Pemesanan
-    numberPhone: "08123456789",
-  },
-];
-export const PayDetailGuest: paymentDetailGuest[] = [
-  {
-    price: "Rp1.200.000", // Nomor Invoice
-    fee: "Rp25.000", // Tanggal Pemesanan
-  },
-];
-
-// Data untuk informasi nomor invoice, tanggal pemesanan, dan path gambar QR Code
-export const invoiceInfo: NoInvoiceInfo[] = [
-  {
-    invoiceNumber: "INV-HT2024-09X834-YZ7", // Nomor Invoice
-    orderDate: "2023-09-10", // Tanggal Pemesanan
-    qrCodeImage: "/images/payment/QR-codes.png",
-    time: "16:30 WIB", // Path Gambar QR Code
-  },
-];
-
-// Dummy data untuk langkah-langkah (step) dengan waktu
-export const steps: StepItem[] = [
-  {
-    date: "2023-09-10",
-    time: "14:34 WIB",
-    description: "Order completed",
-  },
-  {
-    date: "2023-09-11",
-    time: "10:21 WIB",
-    description: "Voucher issued",
-  },
-  {
-    date: "2023-09-12",
-    time: "09:15 WIB",
-    description: "Payment confirmed",
-  },
-  {
-    date: "2023-09-13",
-    time: "13:45 WIB",
-    description: "Waiting for payment",
-  },
-  {
-    date: "2023-09-14",
-    time: "16:30 WIB",
-    description: "Booking order created",
-  },
-];
 
 const formatCurrency = (amount: number) =>
   `Rp${amount.toLocaleString("id-ID").replace(",", ".")}`;

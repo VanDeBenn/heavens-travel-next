@@ -62,7 +62,7 @@ export default function PaymentMethod({
       },
     });
   };
-  //  // // console.log(dataBooking);
+  console.log(dataBooking);
   const guestDetails = [
     {
       label: "Full Name",
@@ -163,7 +163,7 @@ export default function PaymentMethod({
                     )}
                     <span className="text-xs font-semibold text-white">
                       {/* {roomHotel?. ? "Hotel" : "Destination"} */}
-                      {roomHotel?.roomType || destination?.name}
+                      {roomHotel ? "Hotel" : "Destination"}
                     </span>
                   </div>
                   {/* <div className="flex items-center">
@@ -180,7 +180,9 @@ export default function PaymentMethod({
                   <Link href={""}>
                     <Image
                       src={
-                        "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                        destination
+                          ? `http://localhost:3222/photo-destinations/${destination.photodestinations[0]?.pathPhoto}`
+                          : `http://localhost:3222/photo-room-hotels/${roomHotel.photoroomhotels[0].pathPhoto}`
                       }
                       alt={roomHotel?.roomType || destination?.name}
                       width={100}
@@ -195,7 +197,7 @@ export default function PaymentMethod({
                       href={""}
                       className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                     >
-                      {roomHotel?.roomType || destination?.name}
+                      {roomHotel?.hotel?.name || destination?.name}
                     </Link>
                     <div className="flex items-center gap-1">
                       <RiCalendarLine className="text-lg text-black" />
@@ -210,10 +212,9 @@ export default function PaymentMethod({
                     <div className="flex gap-1 items-center">
                       <RiTeamLine className="text-lg text-black" />
                       <span className="text-xs text-black">
-                        Guests:{" "}
                         {destination
-                          ? `${cart?.quantityAdult} Adult, ${cart?.quantityChildren} Children`
-                          : `${roomHotel?.adult} Adult, ${roomHotel?.children} Children`}
+                          ? `Guests: ${cart?.quantityAdult} Adult - ${cart?.quantityChildren} Children`
+                          : `Rooms: ${cart?.quantityRoom}`}
                       </span>
                     </div>
 
@@ -222,26 +223,26 @@ export default function PaymentMethod({
                         <span className="text-sm font-semibold text-RoyalAmethyst-700">
                           {destination
                             ? `${destination?.name} Tour`
-                            : `${roomHotel?.roomType} Tour`}
+                            : `${roomHotel?.roomType} Room`}
                         </span>
                       </div>
 
                       <div className="flex justify-end w-full gap-1 items-end">
                         {roomHotel?.price && (
                           <div className="text-sm text-black">
-                            {cart?.quantityRoom} Room x
+                            {cart?.quantityRoom} Room x{" "}
                             {formatCurrency(roomHotel?.price)}
                           </div>
                         )}
 
                         {destination?.priceAdult && cart?.quantityAdult > 0 && (
                           <div className="text-sm text-black">
-                            {cart?.quantityAdult} {"Adult"} x
+                            {cart?.quantityAdult} {"Adult"} x{" "}
                             {formatCurrency(destination?.priceAdult)} <br />
                             {cart?.quantityChildren > 0 &&
                               destination?.priceChildren && (
                                 <>
-                                  {cart?.quantityChildren} {"Children"} x
+                                  {cart?.quantityChildren} {"Children"} x{" "}
                                   {formatCurrency(destination?.priceChildren)}
                                 </>
                               )}

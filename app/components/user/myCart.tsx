@@ -45,7 +45,8 @@ export default function MyCart() {
       const dataCart = carts.filter(
         (cart: any) =>
           !cart.bookingDetail?.booking?.payment?.status ||
-          cart.bookingDetail?.booking?.payment?.status !== "PENDING"
+          cart.bookingDetail?.booking?.payment?.status !== "PENDING" ||
+          cart.bookingDetail?.booking?.payment?.status !== "SETTLED"
       );
       console.log("Filtered cart items:", dataCart);
 
@@ -76,7 +77,9 @@ export default function MyCart() {
   }, []);
 
   // if (!dataCart.length) {
+
   //   return <div>Loading...</div>;
+
   // }
 
   const hanndleDelete = async (id: string) => {
@@ -121,12 +124,14 @@ export default function MyCart() {
           userId: localStorage.getItem("_id"),
         };
         const req = await bookingRepository.api.create(data);
+
         // console.log("booking id:", req);
         const bookingId = req.body.data.id;
         localStorage.setItem("_booking", bookingId);
       }
       const bookingId = localStorage.getItem("_booking");
       handleSelectedCarts(bookingId);
+
       // handleCreateBookingDetail(bookingId)
     } catch (error) {}
   };
@@ -144,8 +149,11 @@ export default function MyCart() {
       }
 
       // {
+
       //   "bookingId": "be1c08c2-e778-4f24-854d-f701e261e0e5",
+
       //     "selectedCartIds": ["6bf4eda8-a8da-4c11-af75-3c501b305739"]
+
       // }
     } catch (error) {
       console.error("Error creating booking details:", error);
@@ -168,8 +176,11 @@ export default function MyCart() {
   console.log(selectedItemsId);
 
   // bookingDetailId.push(id);
+
   // const bookingDetailId = [];
+
   // setBookingDetailId(bookingDetailId);
+
   // localStorage.setItem('_details', bookingDetailId)
 
   if (!dataCart) {
@@ -238,7 +249,9 @@ export default function MyCart() {
                     <div className="flex items-center gap-2 py-3">
                       <Image
                         src={
-                          "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                          destination
+                            ? `http://localhost:3222/photo-destinations/${destination?.photodestinations[0]?.pathPhoto}`
+                            : `http://localhost:3222/photo-room-hotels/${roomHotel?.photoroomhotels[0]?.pathPhoto}`
                         }
                         alt={destination?.name || roomHotel?.roomType}
                         width={100}
@@ -248,7 +261,7 @@ export default function MyCart() {
 
                       <div className="flex flex-col gap-1 w-full">
                         <div className="font-semibold">
-                          {destination?.name || roomHotel?.roomType}
+                          {destination?.name || roomHotel?.hotel?.name}
                         </div>
 
                         <div className="flex items-center gap-1">
@@ -262,9 +275,9 @@ export default function MyCart() {
                         <div className="flex gap-1">
                           <RiTeamLine size={16} color="#6b7280" />
                           <span className="text-xs text-gray-500">
-                            Guests: {quantityAdult} Adult, {quantityChildren}{" "}
-                            Children
-                            {roomHotel ? `Room: ${quantityRoom}` : ""}
+                            {destination
+                              ? `Guests: ${quantityAdult} Adult - ${quantityChildren} Children`
+                              : `Rooms: ${quantityRoom}`}
                           </span>
                         </div>
 
@@ -285,22 +298,26 @@ export default function MyCart() {
                                   : "text-gray-400"
                               }`}
                             >
-                              {destination?.name || roomHotel?.roomType}
+                              {destination
+                                ? `${destination?.name} Tour`
+                                : `${roomHotel?.roomType} Room`}
                             </span>
                           </div>
 
                           <div className="flex items-end gap-1">
-                            {quantityAdult || quantityRoom} x Rp
-                            {destination?.priceAdult
-                              .toLocaleString("id-ID")
-                              .replace(",", ".") ||
-                              roomHotel?.price
-                                .toLocaleString("id-ID")
-                                .replace(",", ".")}{" "}
-                            - {quantityChildren} x Rp
-                            {destination?.priceChildren
+                            {destination
+                              ? `${quantityAdult} x Rp
+                            ${destination?.priceAdult
                               .toLocaleString("id-ID")
                               .replace(",", ".")}
+                            - ${quantityChildren} x Rp
+                            ${destination?.priceChildren
+                              .toLocaleString("id-ID")
+                              .replace(",", ".")}`
+                              : `${quantityRoom}
+                              x Rp${roomHotel?.price
+                                .toLocaleString("id-ID")
+                                .replace(",", ".")}`}
                           </div>
                         </div>
                       </div>
@@ -327,8 +344,6 @@ export default function MyCart() {
             )}
           </div>
         </div>
-
-        {/* adadadadadadaadad */}
 
         <div className="w-1/3 bg-white rounded-xl h-full sticky top-4">
           <div className={`${mediumMontserrat.className} py-6 px-9`}>

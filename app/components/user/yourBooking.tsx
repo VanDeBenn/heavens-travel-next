@@ -127,13 +127,13 @@ export default function YourBooking({ dataBookingDetail }: ComponentsProps) {
                         {roomHotel ? "Hotel" : "Destination"}
                       </span>
                     </div>
-                    <div className="flex items-center">
+                    {/* <div className="flex items-center">
                       <RiDeleteBin6Line
                         size={24}
                         color="#DC143C"
                         className="cursor-pointer"
                       />
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="flex items-center gap-2 py-3">
@@ -157,7 +157,7 @@ export default function YourBooking({ dataBookingDetail }: ComponentsProps) {
                         href={""}
                         className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                       >
-                        {roomHotel?.roomType || destination?.name}
+                        {roomHotel?.hotel?.name || destination?.name}
                       </Link>
                       <div className="flex items-center gap-1">
                         <RiCalendarLine className="text-lg text-black" />
@@ -169,10 +169,9 @@ export default function YourBooking({ dataBookingDetail }: ComponentsProps) {
                       <div className="flex gap-1 items-center">
                         <RiTeamLine className="text-lg text-black" />
                         <span className="text-xs text-black">
-                          Guests:{" "}
                           {destination
-                            ? `${cart?.quantityAdult} Adult, ${cart?.quantityChildren} Children`
-                            : `${roomHotel?.adult} Adult, ${roomHotel?.children} Children`}
+                            ? `Guests: ${cart?.quantityAdult} Adult - ${cart?.quantityChildren} Children`
+                            : `Rooms: ${cart?.quantityRoom}`}
                         </span>
                       </div>
 
@@ -181,14 +180,14 @@ export default function YourBooking({ dataBookingDetail }: ComponentsProps) {
                           <span className="text-sm font-semibold text-RoyalAmethyst-700">
                             {destination
                               ? `${destination.name} Tour`
-                              : `${roomHotel.roomType} Tour`}
+                              : `${roomHotel.roomType} Room`}
                           </span>
                         </div>
 
                         <div className="flex justify-end w-full gap-1 items-end">
                           {roomHotel?.price && (
                             <div className="text-sm text-black">
-                              {cart?.quantityRoom} Room x
+                              {cart?.quantityRoom} Room x{" "}
                               {formatCurrency(roomHotel?.price)}
                             </div>
                           )}
@@ -196,12 +195,12 @@ export default function YourBooking({ dataBookingDetail }: ComponentsProps) {
                           {destination?.priceAdult &&
                             cart?.quantityAdult > 0 && (
                               <div className="text-sm text-black">
-                                {cart?.quantityAdult} {"Adult"} x
+                                {cart?.quantityAdult} {"Adult"} x{" "}
                                 {formatCurrency(destination?.priceAdult)} <br />
                                 {cart?.quantityChildren > 0 &&
                                   destination?.priceChildren && (
                                     <>
-                                      {cart?.quantityChildren} {"Children"} x
+                                      {cart?.quantityChildren} {"Children"} x{" "}
                                       {formatCurrency(
                                         destination?.priceChildren
                                       )}
