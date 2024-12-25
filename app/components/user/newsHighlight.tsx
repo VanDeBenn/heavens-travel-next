@@ -29,6 +29,13 @@ const shuffleArray = (array: any[]) => {
     .map(({ sortKey, ...rest }) => rest);
 };
 
+// Fungsi untuk membatasi teks menjadi maksimal 20 kata
+const truncateText = (text: string, maxWords: number) => {
+  const words = text.split(" ");
+  if (words.length <= maxWords) return text;
+  return words.slice(0, maxWords).join(" ");
+};
+
 export default function NewsHighlight({ data }: { data: dataBlog[] }) {
   if (!data || data.length === 0) {
     return <Loading />;
@@ -50,7 +57,7 @@ export default function NewsHighlight({ data }: { data: dataBlog[] }) {
           <div key={item.id} className="flex gap-2 items-center">
             <Link href={`/blog/list/detail/${item.id}`} className="w-full no-underline">
               <Image
-                src={"/images/illustration/hawaii-beach.jpg"}
+                src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
                 alt={item.title}
                 width={800} // Ukuran gambar lebih besar
                 height={400} // Ukuran gambar lebih besar
@@ -72,7 +79,7 @@ export default function NewsHighlight({ data }: { data: dataBlog[] }) {
               </span>
               <Link href={`/blog/list/detail/${item.id}`} className="no-underline">
                 <span className="text-base text-gray-800">
-                  {item.description}
+                  {truncateText(item.description, 45)}
                 </span>
               </Link>
             </div>
@@ -88,7 +95,7 @@ export default function NewsHighlight({ data }: { data: dataBlog[] }) {
               <Link href={`/blog/list/detail/${item.id}`}>
                 <div className="relative w-full h-[400px]">
                   <Image
-                    src={"/images/illustration/hawaii-beach.jpg"}
+                    src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
                     alt={item.title}
                     layout="fill"
                     objectFit="cover"

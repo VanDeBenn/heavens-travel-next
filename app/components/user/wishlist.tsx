@@ -5,7 +5,7 @@ import {
   RiBookmarkFill,
   RiMapPinLine,
 } from "react-icons/ri";
-import { Rate, Modal, Button } from "antd";
+import { Rate, Modal, Button, Empty } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { wishlistRepository } from "#/repository/wishlists";
@@ -56,6 +56,7 @@ export default function Wishlist({ data }: ComponentsProps) {
       <div className="h-px bg-gray-300"></div>
 
       <div className="px-8 py-6 grid grid-cols-2 gap-6">
+
         {wishlistData.map(({ hotel, destination, id }: any) => (
           <div
             key={id}

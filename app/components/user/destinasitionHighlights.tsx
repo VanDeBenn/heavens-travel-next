@@ -28,7 +28,7 @@ const formatDate = (dateString: string) => {
   });
 };
 
-export default function DestinationHighlights({ data }: any) {
+export default function   DestinationHighlights({ data }: any) {
   if (!data) {
     return <Loading />;
   }
@@ -61,7 +61,7 @@ export default function DestinationHighlights({ data }: any) {
               <Link href={`/blog/list/detail/${item.id}`}>
                 <div className="relative w-full h-[400px]">
                   <Image
-                    src={"/images/illustration/hawaii.jpg"} // Replace with item.pathPhoto jika path dinamis
+                    src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`} // Replace with item.pathPhoto jika path dinamis
                     alt={item.title}
                     layout="fill"
                     objectFit="cover"

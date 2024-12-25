@@ -32,7 +32,7 @@ export default function ServicesAmenities({ data }: ComponentProps) {
   );
 
   const facility = facilities.map((item: any) => item.serviceAmenities.title);
-  console.log(facility); // ['English', 'Indonesia (Bahasa)']
+  console.log(facility); // ['English', 'Indonesia (Bahasa)']
   console.log(facility.filter((item: any) => item === "English")); // ['English']
 
   const servicesAmenitiesData = {

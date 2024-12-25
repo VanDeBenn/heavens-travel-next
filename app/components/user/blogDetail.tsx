@@ -1,3 +1,4 @@
+  "use client";
 import React, { useState, useRef, useEffect } from "react";
 import {
   CalendarOutlined,
@@ -54,6 +55,15 @@ export default function BlogDetail({ data }: ComponentsProps) {
   useEffect(() => {
     setCopyText(window.location.href); // Set teks URL menjadi URL yang sedang dibuka saat komponen di-mount
   }, []);
+
+  // Fungsi untuk memformat deskripsi agar rapi
+  const formatDescription = (description: string) => {
+    if (!description) return "";
+    // Pisahkan deskripsi berdasarkan baris kosong sebagai pemisah paragraf
+    const paragraphs = description.split(/\n+/).map((para) => para.trim());
+    // Gabungkan paragraf dengan jarak antar paragraf
+    return paragraphs.map((para, index) => <p key={index} className="mb-4">{para}</p>);
+  };
 
   return (
     <div className="relative">
@@ -137,12 +147,12 @@ export default function BlogDetail({ data }: ComponentsProps) {
                 />
               </div>
             </div>
-            <div className="text-gray-700 my-4">
-              <p className="mb-4 font-medium">{data?.description}</p>
-            </div>
             <div className="flex items-center text-gray-500">
               <CalendarOutlined size={26} className="mr-2" />
               <span>{new Date(data?.createdAt).toLocaleDateString()}</span>
+            </div>
+            <div className="text-gray-700 my-4">
+              {formatDescription(data?.description || "")}
             </div>
           </div>
         </div>

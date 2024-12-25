@@ -14,7 +14,7 @@ export default function page({ params }: { params: { id: string } }) {
     const res = await blogRepository.api.getBlog(params.id);
     // console.log("ini res", res);
     setDataBlog(res.data);
-    setx(res.data.hotel.name);
+    setx(res?.data?.hotel?.name);
   };
 
   useEffect(() => {

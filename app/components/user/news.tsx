@@ -54,7 +54,7 @@ export default function News({ data }: any) {
                   <Link href={`blog/list/detail/${item.id}`}>
                     <div className="relative w-full h-[400px]">
                       <Image
-                        src={"/images/illustration/hawaii-beach.jpg"}
+                        src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
                         alt={item.title}
                         layout="fill"
                         objectFit="cover"

@@ -21,6 +21,13 @@ const shuffleArray = (array: any[]) => {
     .map(({ sortKey, ...rest }) => rest);
 };
 
+// Fungsi untuk membatasi teks menjadi maksimal 20 kata
+const truncateText = (text: string, maxWords: number) => {
+  const words = text.split(" ");
+  if (words.length <= maxWords) return text;
+  return words.slice(0, maxWords).join(" ");
+};
+
 export default function HighlightBlog({ data }: { data: dataBlog[] }) {
   if (!data || data.length === 0) {
     return <Loading />;
@@ -80,19 +87,19 @@ export default function HighlightBlog({ data }: { data: dataBlog[] }) {
           className="keen-slider__slide relative flex items-center justify-center rounded-lg overflow-hidden"
         >
           <Link href={`/blog/list/detail/${item.id}`}>
-          <Image
-            src={"/images/illustration/hawaii-beach.jpg"}
-            alt={item.title}
-            layout="fill"
-            objectFit="cover"
-            className="absolute inset-0"
-          />
-           </Link>
+            <Image
+              src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
+              alt={item.title}
+              layout="fill"
+              objectFit="cover"
+              className="absolute inset-0"
+            />
+          </Link>
 
           {/* Overlay dan teks pada slider */}
           <div className="absolute bottom-4 left-4 max-w-[40%] text-white p-4">
             <h2 className="text-2xl font-bold mb-2">{item.title}</h2>
-            <p className="text-lg">{item.description}</p>
+            <p className="text-lg">{truncateText(item.description, 20)}</p>
           </div>
         </div>
       ))}

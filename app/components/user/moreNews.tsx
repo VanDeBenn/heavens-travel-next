@@ -57,13 +57,12 @@ export default function moreNews({ data }: {
             >
               <Link href={`/blog/list/detail/${item.id}`} className="w-full ">
                 <Image
-                  src={"/images/illustration/hawaii-beach.jpg"}
+                  src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
                   alt={item.title}
                   width={800}
                   height={400}
                   objectFit="cover"
-                  className="w-full h-40 
-rounded-xl"
+                  className="w-full h-40 rounded-xl"
                 />
               </Link>
               <div className="w-full flex flex-col">
@@ -77,9 +76,6 @@ rounded-xl"
                 <span className="text-sm text-gray-600 pb-3">
                 {`${formatDate(item.createdAt)}`}
               </span>
-                <span className="text-sm text-gray-600">
-                  {item.description}
-                </span>
               </div>
             </div>
           ))}
