@@ -33,8 +33,7 @@ const shuffleArray = (array: any[]) => {
     .map(({ sortKey, ...rest }) => rest);
 };
 
-export default function moreNews({ data }: {
-  data: dataBlog[] }) {
+export default function moreNews({ data }: { data: dataBlog[] }) {
   if (!data || data.length === 0) {
     return <Loading />;
   }
@@ -50,14 +49,14 @@ export default function moreNews({ data }: {
 
       <div>
         <div className=" grid grid-cols-2 gap-5">
-          {shuffledData.slice(0, 8).map((item:dataBlog) => (
+          {shuffledData.slice(0, 8).map((item: dataBlog) => (
             <div
               key={item.id}
               className="flex gap-4 p-4 items-center bg-white rounded-xl "
             >
               <Link href={`/blog/list/detail/${item.id}`} className="w-full ">
                 <Image
-                  src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
+                  src={`http://localhost:3222/blogs/image/${item.pathPhoto}`}
                   alt={item.title}
                   width={800}
                   height={400}
@@ -74,8 +73,8 @@ export default function moreNews({ data }: {
                 </Link>
 
                 <span className="text-sm text-gray-600 pb-3">
-                {`${formatDate(item.createdAt)}`}
-              </span>
+                  {`${formatDate(item.createdAt)}`}
+                </span>
               </div>
             </div>
           ))}

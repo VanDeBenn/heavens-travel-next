@@ -48,37 +48,40 @@ export default function News({ data }: any) {
             <span className="text-xl font-semibold">News</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mt-4">
-            {data.sort(() => 0.5 - Math.random()).slice(0, 8).map((item: dataBlog) => (
-              <div key={item.id}>
-                <div className="relative bg-white border border-gray-200 rounded-xl">
-                  <Link href={`blog/list/detail/${item.id}`}>
-                    <div className="relative w-full h-[400px]">
-                      <Image
-                        src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
-                        alt={item.title}
-                        layout="fill"
-                        objectFit="cover"
-                        className="absolute inset-0 rounded-xl"
-                      />
-                    </div>
-                  </Link>
+            {data
+              .sort(() => 0.5 - Math.random())
+              .slice(0, 8)
+              .map((item: dataBlog) => (
+                <div key={item.id}>
+                  <div className="relative bg-white border border-gray-200 rounded-xl">
+                    <Link href={`blog/list/detail/${item.id}`}>
+                      <div className="relative w-full h-[400px]">
+                        <Image
+                          src={`http://localhost:3222/blogs/image/${item.pathPhoto}`}
+                          alt={item.title}
+                          layout="fill"
+                          objectFit="cover"
+                          className="absolute inset-0 rounded-xl"
+                        />
+                      </div>
+                    </Link>
 
-                  <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
-                    <div className="flex flex-col">
-                      <Link
-                        href={`blog/list/detail/${item.id}`}
-                        className="text-base font-semibold mb-1 leading-4 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
-                      >
-                        {item.title}
-                      </Link>
-                      <span className="text-xs text-gray-600">
-                      {`${formatDate(item.createdAt)}`}
-                      </span>
+                    <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
+                      <div className="flex flex-col">
+                        <Link
+                          href={`blog/list/detail/${item.id}`}
+                          className="text-base font-semibold mb-1 leading-4 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
+                        >
+                          {item.title}
+                        </Link>
+                        <span className="text-xs text-gray-600">
+                          {`${formatDate(item.createdAt)}`}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
 
           {/* See More Button Section */}

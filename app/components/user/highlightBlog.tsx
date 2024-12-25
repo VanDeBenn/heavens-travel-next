@@ -88,7 +88,7 @@ export default function HighlightBlog({ data }: { data: dataBlog[] }) {
         >
           <Link href={`/blog/list/detail/${item.id}`}>
             <Image
-              src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
+              src={`http://localhost:3222/blogs/image/${item.pathPhoto}`}
               alt={item.title}
               layout="fill"
               objectFit="cover"

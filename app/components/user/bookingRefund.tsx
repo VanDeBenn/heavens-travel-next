@@ -287,18 +287,20 @@ export default function BookingRefund({ data, bookingId }: ComponentProps) {
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center">
               <span className="text-base text-gray-500">Full Name</span>
-              <span className="text-base text-black">{data?.customerName}</span>
+              <span className="text-base text-black">
+                {data?.customerName || data?.guestName}
+              </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-base text-gray-500">Email</span>
               <span className="text-base text-black">
-                {data?.customerEmail}
+                {data?.customerEmail || data?.guestEmail}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-base text-gray-500">Phone Number</span>
               <span className="text-base text-black">
-                {data?.customerPhoneNumber}
+                {data?.customerPhoneNumber || data?.guestPhoneNumber}
               </span>
             </div>
           </div>

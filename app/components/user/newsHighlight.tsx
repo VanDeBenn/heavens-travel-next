@@ -55,9 +55,12 @@ export default function NewsHighlight({ data }: { data: dataBlog[] }) {
       <div className="bg-white rounded-xl">
         {shuffledData.slice(0, 1).map((item: dataBlog) => (
           <div key={item.id} className="flex gap-2 items-center">
-            <Link href={`/blog/list/detail/${item.id}`} className="w-full no-underline">
+            <Link
+              href={`/blog/list/detail/${item.id}`}
+              className="w-full no-underline"
+            >
               <Image
-                src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
+                src={`http://localhost:3222/blogs/image/${item.pathPhoto}`}
                 alt={item.title}
                 width={800} // Ukuran gambar lebih besar
                 height={400} // Ukuran gambar lebih besar
@@ -77,7 +80,10 @@ export default function NewsHighlight({ data }: { data: dataBlog[] }) {
               <span className="text-sm text-gray-600 pb-3">
                 {`${formatDate(item.createdAt)}`}
               </span>
-              <Link href={`/blog/list/detail/${item.id}`} className="no-underline">
+              <Link
+                href={`/blog/list/detail/${item.id}`}
+                className="no-underline"
+              >
                 <span className="text-base text-gray-800">
                   {truncateText(item.description, 45)}
                 </span>
@@ -95,7 +101,7 @@ export default function NewsHighlight({ data }: { data: dataBlog[] }) {
               <Link href={`/blog/list/detail/${item.id}`}>
                 <div className="relative w-full h-[400px]">
                   <Image
-                    src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
+                    src={`http://localhost:3222/blogs/image/${item.pathPhoto}`}
                     alt={item.title}
                     layout="fill"
                     objectFit="cover"

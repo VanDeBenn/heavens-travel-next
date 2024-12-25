@@ -55,7 +55,7 @@ export default function HotelHighlights({ data }: any) {
               <Link href={`/blog/list/detail/${item.id}`}>
                 <div className="relative w-full h-[400px]">
                   <Image
-                    src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`} // Ganti dengan item.pathPhoto jika path dinamis
+                    src={`http://localhost:3222/blogs/image/${item.pathPhoto}`} // Ganti dengan item.pathPhoto jika path dinamis
                     alt={item.title}
                     layout="fill"
                     objectFit="cover"

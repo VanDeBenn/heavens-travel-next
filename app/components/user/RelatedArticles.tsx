@@ -82,7 +82,7 @@ export default function RelatedArticles({
               <div className="p-3 flex flex-col gap-2">
                 <Link href={`/blog/list/detail/${item.id}`}>
                   <Image
-                    src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
+                    src={`http://localhost:3222/blogs/image/${item.pathPhoto}`}
                     alt={item.title}
                     width={300}
                     height={300}

@@ -68,14 +68,14 @@ export default function PopularNews({ data }: { data: dataBlog[] }) {
                   className="rounded-lg h-60"
                 >
                   <Image
-                    src={`http://localhost:3222/photo-hotels/${item.pathPhoto}`}
+                    src={`http://localhost:3222/blogs/image/${item.pathPhoto}`}
                     alt={item.title}
                     width={300}
                     height={300}
                     className="w-full h-28 rounded-lg"
                   />
                 </Link>
-            
+
                 <div className="pt-3 flex flex-col">
                   <Link
                     href={`/blog/list/detail/${item.id}`}
