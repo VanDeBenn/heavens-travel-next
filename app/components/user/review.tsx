@@ -60,6 +60,8 @@ export default function Review() {
         comment: values.comment,
         userId: user,
         bookingDetailId: bookingDetailId,
+        destinationId: destination?.id,
+        hotelId: roomHotel?.hotel?.id,
       };
 
       // console.log("Submitted Data:", dataBasicInfo);
@@ -106,7 +108,7 @@ export default function Review() {
   };
 
   const handleBeforeUpload = (file: RcFile) => {
-    if (fileList.length >= 4) {
+    if (fileList.length >= 3) {
       message.error("You can only upload up to 4 photos.");
       return false;
     }
@@ -164,6 +166,7 @@ export default function Review() {
     return false; // Prevent auto-upload
   };
 
+  console.log(bookingDetailData);
   return (
     <div className="bg-white rounded-xl">
       <div className="py-6 px-9">
@@ -233,7 +236,9 @@ export default function Review() {
                 <Link href={""}>
                   <Image
                     src={
-                      "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                      destination
+                        ? `http://localhost:3222/photo-destinations/${destination?.photodestinations[0]?.pathPhoto}`
+                        : `http://localhost:3222/photo-room-hotels/${roomHotel?.photoroomhotels[0]?.pathPhoto}`
                     }
                     alt={destination?.name || roomHotel?.name}
                     width={100}
@@ -249,21 +254,21 @@ export default function Review() {
                     href={""}
                     className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                   >
-                    {destination?.name || roomHotel?.name}
+                    {destination?.name || roomHotel?.hotel?.name}
                   </Link>
 
                   {roomHotel ? (
                     <div className="flex items-center gap-1">
                       <RiMapPin2Line size={16} color="#6b7280 " />
                       <span className="text-xs text-gray-500">
-                        {roomHotel?.address}
+                        {roomHotel?.hotel?.city?.name}
                       </span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-1">
                       <RiMapPin2Line size={16} color="#6b7280 " />
                       <span className="text-xs text-gray-500">
-                        {destination?.address}
+                        {destination?.city?.name}
                       </span>
                     </div>
                   )}
@@ -316,8 +321,9 @@ export default function Review() {
                   <div className="flex gap-1">
                     <RiTeamLine size={16} color="black" />
                     <span className="text-xs text-black">
-                      Guests:{" "}
-                      {`${bookingDetailData?.cart?.quantityAdult} Adult - ${bookingDetailData?.cart?.quantityChildren} Children`}
+                      {destination
+                        ? `Guests: ${bookingDetailData?.cart?.quantityAdult} Adult - ${bookingDetailData?.cart?.quantityChildren} Children`
+                        : `Rooms: ${bookingDetailData?.cart?.quantityRoom}`}
                     </span>
                   </div>
                 </div>

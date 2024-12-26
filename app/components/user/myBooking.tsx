@@ -181,14 +181,10 @@ export default function MyBooking({ data }: ComponentsProps) {
                     <div className="flex gap-1">
                       <RiTeamLine size={16} color="#6b7280" />
                       <span className="text-xs text-gray-500 flex">
-                        Guests:{" "}
+                        Guest:{" "}
                         <div className="flex-col">
                           <div>
-                            {`${
-                              bookingdetails[0]?.cart?.quantityAdult || 0
-                            } Adult - ${
-                              bookingdetails[0]?.cart?.quantityChildren || 0
-                            } Children`}
+                            {booking?.customerName || booking?.guestName}
                           </div>
                         </div>
                       </span>

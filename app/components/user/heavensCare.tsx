@@ -178,7 +178,7 @@ export default function HeavensCare({
     // console.log(item?.cart?.destination?.name);
   });
 
-  // console.log(data);
+  console.log(data);
   return (
     <div className="bg-white rounded-xl">
       {/* Header section dengan judul 'Heavens Care' */}
@@ -261,7 +261,7 @@ export default function HeavensCare({
                     {destination?.name || roomHotel?.name}
                   </Link>
 
-                  {roomHotel === "Hotel" ? (
+                  {roomHotel ? (
                     <div className="flex items-center gap-1">
                       <RiMapPin2Line size={16} color="#6b7280 " />
                       <span className="text-xs text-gray-500">
@@ -277,7 +277,7 @@ export default function HeavensCare({
                     </div>
                   )}
 
-                  {roomHotel === "Hotel" ? (
+                  {roomHotel ? (
                     <div className="flex items-center gap-1">
                       <LuFeather size={16} color="#6b7280 " />
                       <span className="text-xs text-gray-500">
@@ -298,7 +298,7 @@ export default function HeavensCare({
               <div
                 className={`${mediumMontserrat.className} flex flex-col gap-1`}
               >
-                {roomHotel === "Hotel" && (
+                {roomHotel && (
                   // && item.HotelRoomType
                   <span className="text-sm font-semibold text-[#4F28D9]">
                     {/* {item.HotelRoomType} */}
@@ -309,7 +309,7 @@ export default function HeavensCare({
                 <div className="flex items-center gap-1">
                   <RiCalendarLine size={16} color="black " />
                   <span className="text-xs text-black">
-                    {roomHotel === "Hotel"
+                    {roomHotel
                       ? `${new Date(
                           data?.cart?.startDate
                         ).toLocaleDateString()} - ${new Date(
@@ -337,6 +337,7 @@ export default function HeavensCare({
               </div>
             </div>
           ) : (
+            // booking
             data?.bookingdetails?.map((item: any) => (
               <div
                 className={`p-3 border border-solid border-[#DBDBDB] rounded-xl`}
@@ -344,15 +345,13 @@ export default function HeavensCare({
                 {/* Bagian atas: kategori dan status */}
                 <div className="flex justify-between items-center">
                   <div className="border bg-[#4F28D9] border-solid border-[#DBDBDB] rounded-xl py-1 px-3 w-max flex items-center gap-1">
-                    {roomHotel || item?.cart?.roomHotel ? (
+                    {item?.cart?.roomHotel ? (
                       <RiHome3Line size={18} color="#ffff" />
                     ) : (
                       <RiGlassesLine size={18} color="#ffff" />
                     )}
                     <span className="text-xs font-semibold text-white">
-                      {roomHotel || item?.cart?.roomHotel
-                        ? "Hotel"
-                        : "Destination"}
+                      {item?.cart?.roomHotel ? "Hotel" : "Destination"}
                     </span>
                   </div>
 
@@ -361,19 +360,19 @@ export default function HeavensCare({
                   >
                     <div
                       className={`border-2 border-solid border-[#DBDBDB] ${
-                        payment?.status || item?.payment?.status === "PENDING"
+                        item?.payment?.status === "PENDING"
                           ? "bg-[#FFD600] border-[#FFD600]"
                           : "bg-[#cbbef4] border-[#DBDBDB]"
                       } rounded-xl py-1 px-5 w-max mr-2`}
                     >
                       <span
                         className={`text-xs font-semibold ${
-                          payment?.status || item?.payment?.status === "PENDING"
+                          item?.payment?.status === "PENDING"
                             ? "text-[#DC143C]"
                             : "text-[#4F28D9]"
                         }`}
                       >
-                        {payment?.status || item?.payment?.status === "PENDING"
+                        {item?.payment?.status === "PENDING"
                           ? "Waiting for Payment"
                           : "Done"}
                       </span>
@@ -390,7 +389,9 @@ export default function HeavensCare({
                   >
                     <Image
                       src={
-                        "https://imgs.search.brave.com/hoIxdncmtwEaAIJzTZljZdl4LAfd52BAD3Bo_qMxTjs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pay5p/bWFnZWtpdC5pby90/dmxrL2Jsb2cvMjAy/MS8wMi9IdXRhbi1C/YW1idS1QZW5nbGlw/dXJhbi1zaHV0dGVy/c3RvY2tfMTAxMzEz/MTAwNi5qcGc_dHI9/ZHByLTEuNSxoLTQ4/MCxxLTQwLHctMTAy/NA"
+                        item?.cart?.destination
+                          ? `http://localhost:3222/photo-destinations/${item?.cart?.destination?.photodestinations[0]?.pathPhoto}`
+                          : `http://localhost:3222/photo-room-hotels/${item?.cart?.roomHotel?.photoroomhotels[0]?.pathPhoto}`
                       }
                       alt={destination?.name || roomHotel?.name}
                       width={100}
@@ -411,27 +412,28 @@ export default function HeavensCare({
                       {destination?.name ||
                         roomHotel?.name ||
                         item?.cart?.destination?.name ||
-                        item?.cart?.roomHotel?.name}
+                        item?.cart?.roomHotel?.hotel?.name}
                     </Link>
 
-                    {roomHotel || item?.cart?.roomHotel === "Hotel" ? (
+                    {item?.cart?.roomHotel ? (
                       <div className="flex items-center gap-1">
                         <RiMapPin2Line size={16} color="#6b7280 " />
                         <span className="text-xs text-gray-500">
-                          {roomHotel?.address || item?.cart?.roomHotel?.address}
+                          {roomHotel?.hotel?.city?.name ||
+                            item?.cart?.roomHotel?.hotel?.city?.name}
                         </span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-1">
                         <RiMapPin2Line size={16} color="#6b7280 " />
                         <span className="text-xs text-gray-500">
-                          {destination?.address ||
-                            item?.cart?.destination?.address}
+                          {destination?.city?.name ||
+                            item?.cart?.destination?.city?.name}
                         </span>
                       </div>
                     )}
 
-                    {roomHotel || item?.cart?.roomHotel === "Hotel" ? (
+                    {item?.cart?.roomHotel ? (
                       <div className="flex items-center gap-1">
                         <LuFeather size={16} color="#6b7280 " />
                         <span className="text-xs text-gray-500">
@@ -452,20 +454,18 @@ export default function HeavensCare({
                 <div
                   className={`${mediumMontserrat.className} flex flex-col gap-1`}
                 >
-                  {roomHotel ||
-                    (item?.cart?.roomHotel === "Hotel" && (
-                      // && item.HotelRoomType
-                      <span className="text-sm font-semibold text-[#4F28D9]">
-                        {/* {item.HotelRoomType} */}
-                        Room Type
-                      </span>
-                    ))}
+                  {item?.cart?.roomHotel && (
+                    // && item.HotelRoomType
+                    <span className="text-sm font-semibold text-[#4F28D9]">
+                      {/* {item.HotelRoomType} */}
+                      {roomHotel?.roomType}
+                    </span>
+                  )}
 
                   <div className="flex items-center gap-1">
                     <RiCalendarLine size={16} color="black " />
                     <span className="text-xs text-black">
-                      {roomHotel === "Hotel" ||
-                      item?.cart?.roomHotel === "Hotel"
+                      {roomHotel || item?.cart?.roomHotel
                         ? `${new Date(
                             item?.cart?.startDate
                           ).toLocaleDateString()} - ${new Date(
@@ -485,13 +485,9 @@ export default function HeavensCare({
                     <div className="flex gap-1">
                       <RiTeamLine size={16} color="black" />
                       <span className="text-xs text-black">
-                        Guests:{" "}
-                        {`${
-                          data?.cart?.quantityAdult || item?.cart?.quantityAdult
-                        } Adult - ${
-                          data?.cart?.quantityChildren ||
-                          item?.cart?.quantityChildren
-                        } Children`}
+                        {item?.cart?.destination
+                          ? `Guests: ${item?.cart?.quantityAdult} Adult - ${item?.cart?.quantityChildren} Children`
+                          : `Rooms: ${item?.cart?.quantityRoom}`}
                       </span>
                     </div>
                   </div>
@@ -500,6 +496,7 @@ export default function HeavensCare({
             ))
           )}
         </div>
+
         {/* Form Title */}
         <Form
           form={form}

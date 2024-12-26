@@ -63,11 +63,17 @@ export default function GuestForm({ dataUser, submit }: ComponentsProps) {
             guestName: values.guestName,
             guestEmail: values.guestEmail,
             guestPhoneNumber: values.guestPhoneNumber,
+            customerName: null,
+            customerEmail: null,
+            customerPhoneNumber: null,
           }
         : {
             customerName: values.customerName,
             customerEmail: values.customerEmail,
             customerPhoneNumber: values.customerPhoneNumber,
+            guestName: null,
+            guestEmail: null,
+            guestPhoneNumber: null,
           };
 
       console.log(`${isGuest ? "Guest" : "Customer"} form submitted:`, data);

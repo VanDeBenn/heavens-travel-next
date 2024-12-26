@@ -34,6 +34,7 @@ export default function NextStep() {
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [dataBookingDetail, setDataBookingDetail] = useState<any[]>([]);
   const [dataBooking, setDataBooking] = useState<any>({});
+  console.log("dataBooking: ", dataBooking);
   const [dataUser, setDataUser] = useState<any>(null);
   const [submitForms, setSubmitForms] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<any>();
@@ -128,7 +129,12 @@ export default function NextStep() {
   // steps
   const steps = [
     {
-      content: <YourBooking dataBookingDetail={dataBookingDetail} />,
+      content: (
+        <YourBooking
+          dataBookingDetail={dataBookingDetail}
+          dataBooking={dataBooking}
+        />
+      ),
       icon:
         loading && current === 0 ? (
           <Spin size="small" />
@@ -213,7 +219,11 @@ export default function NextStep() {
   );
 
   // total price
-  const totalPrice = totalDestinationPrice + totalRoomPrice;
+  const totalPrice =
+    totalDestinationPrice + totalRoomPrice ||
+    dataBooking?.quantityAdult * dataBooking?.destination?.priceAdult +
+      dataBooking?.quantityChildren * dataBooking?.destination?.priceChildren ||
+    dataBooking?.quantityRoom * dataBooking?.roomhotel?.price;
 
   return (
     <div className="w-full">
@@ -247,7 +257,7 @@ export default function NextStep() {
                   className={`${mediumMontserrat.className} flex justify-between items-center`}
                 >
                   <span className="text-base font-semibold">
-                    {dataBookingDetail.length} item
+                    {dataBookingDetail.length || 1} item
                   </span>
                   <span className="text-base font-semibold text-InfernoEcho-600">
                     Rp{totalPrice.toLocaleString("id-ID")}
@@ -264,80 +274,191 @@ export default function NextStep() {
                     </span>
                   </div>
 
-                  {dataBookingDetail
-                    .filter((item: any) => item?.cart?.destination)
-                    .map(({ cart }: any, item: any) => {
-                      return (
+                  {dataBookingDetail?.length > 0 ? (
+                    dataBookingDetail
+                      .filter((item: any) => item?.cart?.destination)
+                      .map(({ cart }: any, item: any) => {
+                        return (
+                          <>
+                            <div
+                              className={`${mediumMontserrat.className} flex gap-1 items-center pt-2`}
+                            >
+                              <span className="text-black text-base font-semibold">
+                                {cart?.destination?.name}
+                              </span>
+                              <span className="text-sm">
+                                ({cart?.destination?.city?.name},{" "}
+                                {
+                                  cart?.destination?.city?.province?.country
+                                    ?.name
+                                }
+                                )
+                              </span>
+                            </div>
+                            <div
+                              className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
+                            >
+                              <RiCalendarLine className="text-lg text-black" />
+                              <span className="text-xs text-black">
+                                {new Date(cart?.startDate).toLocaleDateString()}{" "}
+                                -{new Date(cart?.endDate).toLocaleDateString()}
+                              </span>
+                            </div>
+                            <div
+                              className={`${mediumMontserrat.className} flex gap-1 pt-1`}
+                            >
+                              <RiTeamLine className="text-black text-lg" />
+                              <div className=" flex flex-col gap-1 w-full">
+                                <span className="  text-sm font-semibold">
+                                  Guest :
+                                </span>
+                                <div className="flex justify-between items-center">
+                                  <span className="text-xs font-semibold">
+                                    {cart?.quantityAdult} adults
+                                  </span>
+                                  <span className="text-sm font-semibold">
+                                    Rp
+                                    {cart?.destination?.priceAdult
+                                      ?.toLocaleString("id-ID")
+                                      .replace(",", ".")}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                  <span className="text-xs font-semibold">
+                                    {cart?.quantityChildren} child
+                                  </span>
+                                  <span className="text-sm font-semibold">
+                                    Rp
+                                    {cart?.destination?.priceChildren
+                                      ?.toLocaleString("id-ID")
+                                      .replace(",", ".")}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              className={`${mediumMontserrat.className} flex items-center justify-between pt-1`}
+                            >
+                              <span className="text-sm font-semibold">
+                                Total Destination Price
+                              </span>
+                              <span className="text-sm font-semibold text-InfernoEcho-600">
+                                {(cart?.quantityAdult *
+                                  cart?.destination?.priceAdult || 0) +
+                                  (cart?.quantityChildren *
+                                    cart?.destination?.priceChildren || 0)}
+                              </span>
+                            </div>
+                          </>
+                        );
+                      })
+                  ) : (
+                    <>
+                      {dataBooking?.destination && (
                         <>
                           <div
                             className={`${mediumMontserrat.className} flex gap-1 items-center pt-2`}
                           >
                             <span className="text-black text-base font-semibold">
-                              {cart?.destination?.name}
+                              {dataBooking?.destination?.name}
                             </span>
                             <span className="text-sm">
-                              ({cart?.destination?.city?.name},{" "}
-                              {cart?.destination?.city?.province?.country?.name}
-                              )
+                              {dataBooking?.destination?.city?.name &&
+                                dataBooking?.destination?.city?.province
+                                  ?.country?.name &&
+                                `${dataBooking?.destination?.city?.name}, ${dataBooking?.destination?.city?.province?.country?.name}`}
                             </span>
                           </div>
                           <div
                             className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
                           >
-                            <RiCalendarLine className="text-lg text-black" />
+                            {dataBooking?.destination && (
+                              <RiCalendarLine className="text-lg text-black" />
+                            )}
                             <span className="text-xs text-black">
-                              {new Date(cart?.startDate).toLocaleDateString()} -
-                              {new Date(cart?.endDate).toLocaleDateString()}
+                              {dataBooking?.destination &&
+                                `${new Date(
+                                  dataBooking.startDate
+                                ).toLocaleDateString()} - ${new Date(
+                                  dataBooking.endDate
+                                ).toLocaleDateString()}`}
                             </span>
                           </div>
                           <div
                             className={`${mediumMontserrat.className} flex gap-1 pt-1`}
                           >
-                            <RiTeamLine className="text-black text-lg" />
-                            <div className=" flex flex-col gap-1 w-full">
-                              <span className="  text-sm font-semibold">
-                                Guest :
-                              </span>
-                              <div className="flex justify-between items-center">
-                                <span className="text-xs font-semibold">
-                                  {cart?.quantityAdult} adults
-                                </span>
-                                <span className="text-sm font-semibold">
-                                  Rp
-                                  {cart?.destination?.priceAdult
-                                    ?.toLocaleString("id-ID")
-                                    .replace(",", ".")}
-                                </span>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                <span className="text-xs font-semibold">
-                                  {cart?.quantityChildren} child
-                                </span>
-                                <span className="text-sm font-semibold">
-                                  Rp
-                                  {cart?.destination?.priceChildren
-                                    ?.toLocaleString("id-ID")
-                                    .replace(",", ".")}
-                                </span>
-                              </div>
+                            {dataBooking?.destination && (
+                              <RiTeamLine className="text-black text-lg" />
+                            )}
+                            <div className="flex flex-col gap-1 w-full">
+                              {dataBooking?.destination && (
+                                <div>
+                                  <span className="text-sm font-semibold">
+                                    Guest :
+                                  </span>
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-xs font-semibold">
+                                      {dataBooking?.quantityAdult} adults
+                                    </span>
+                                    <span className="text-sm font-semibold">
+                                      Rp
+                                      {dataBooking?.destination?.priceAdult
+                                        ?.toLocaleString("id-ID", {
+                                          minimumFractionDigits: 0,
+                                        })
+                                        .replace(/,/g, ".")}
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+
+                              {dataBooking?.destination && (
+                                <div className="flex justify-between items-center">
+                                  <span className="text-xs font-semibold">
+                                    {dataBooking?.destination &&
+                                      `${dataBooking?.quantityChildren} child`}
+                                  </span>
+                                  <span className="text-sm font-semibold">
+                                    Rp
+                                    {dataBooking?.destination?.priceChildren
+                                      ?.toLocaleString("id-ID", {
+                                        minimumFractionDigits: 0,
+                                      })
+                                      .replace(/,/g, ".")}
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div
                             className={`${mediumMontserrat.className} flex items-center justify-between pt-1`}
                           >
-                            <span className="text-sm font-semibold">
-                              Total Destination Price
-                            </span>
-                            <span className="text-sm font-semibold text-InfernoEcho-600">
-                              {(cart?.quantityAdult *
-                                cart?.destination?.priceAdult || 0) +
-                                (cart?.quantityChildren *
-                                  cart?.destination?.priceChildren || 0)}
-                            </span>
+                            {dataBooking?.destination && (
+                              <>
+                                <span className="text-sm font-semibold">
+                                  Total Destination Price
+                                </span>
+                                <span className="text-sm font-semibold text-InfernoEcho-600">
+                                  {(
+                                    (dataBooking?.quantityAdult || 0) *
+                                      (dataBooking?.destination?.priceAdult ||
+                                        0) +
+                                    (dataBooking?.quantityChildren || 0) *
+                                      (dataBooking?.destination
+                                        ?.priceChildren || 0)
+                                  )
+                                    .toLocaleString("id-ID", {
+                                      minimumFractionDigits: 0,
+                                    })
+                                    .replace(/,/g, ".")}
+                                </span>
+                              </>
+                            )}
                           </div>
                         </>
-                      );
-                    })}
+                      )}
+                    </>
+                  )}
                 </div>
                 <div>
                   <div
@@ -349,46 +470,99 @@ export default function NextStep() {
                     </span>
                   </div>
 
-                  {dataBookingDetail
-                    .filter((item: any) => item?.cart?.roomHotel)
-                    .map(({ cart }: any, item: any) => {
-                      return (
-                        <>
-                          <div
-                            className={`${mediumMontserrat.className} flex gap-1 items-center pt-2`}
-                          >
-                            <span className="text-black text-base font-semibold">
-                              {cart?.roomHotel?.hotel?.name}
-                            </span>
-                            <span className="text-sm">
-                              ({cart?.roomHotel?.hotel?.city?.name},{" "}
-                              {
-                                cart?.roomHotel?.hotel?.city?.province?.country
-                                  ?.name
-                              }
-                              )
-                            </span>
-                          </div>
-                          <div
-                            className={`${mediumMontserrat.className} flex gap-1 items-center pt-1 justify-between`}
-                          >
-                            <span className="text-black text-sm font-semibold">
-                              {cart?.roomHotel?.roomType}
-                            </span>
-                            <span className="text-sm font-semibold">
-                              X{cart?.quantityRoom}
-                            </span>
-                          </div>
-                          <div
-                            className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
-                          >
-                            <RiCalendarLine className="text-lg text-black" />
-                            <div className="flex gap-1 w-full justify-between">
-                              <span className="text-xs text-black font-semibold">
-                                {new Date(cart?.startDate).toLocaleDateString()}{" "}
-                                - {new Date(cart?.endDate).toLocaleDateString()}
+                  {dataBookingDetail?.length > 0 ? (
+                    dataBookingDetail
+                      .filter((item: any) => item?.cart?.roomHotel)
+                      .map(({ cart }: any, item: any) => {
+                        return (
+                          <>
+                            <div
+                              className={`${mediumMontserrat.className} flex gap-1 items-center pt-2`}
+                            >
+                              <span className="text-black text-base font-semibold">
+                                {cart?.roomHotel?.hotel?.name}
                               </span>
+                              <span className="text-sm">
+                                ({cart?.roomHotel?.hotel?.city?.name},{" "}
+                                {
+                                  cart?.roomHotel?.hotel?.city?.province
+                                    ?.country?.name
+                                }
+                                )
+                              </span>
+                            </div>
+                            <div
+                              className={`${mediumMontserrat.className} flex gap-1 items-center pt-1 justify-between`}
+                            >
+                              <span className="text-black text-sm font-semibold">
+                                {cart?.roomHotel?.roomType}
+                              </span>
+                              <span className="text-sm font-semibold">
+                                X{cart?.quantityRoom}
+                              </span>
+                            </div>
+                            <div
+                              className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
+                            >
+                              <RiCalendarLine className="text-lg text-black" />
+                              <div className="flex gap-1 w-full justify-between">
+                                <span className="text-xs text-black font-semibold">
+                                  {new Date(
+                                    cart?.startDate
+                                  ).toLocaleDateString()}{" "}
+                                  -{" "}
+                                  {new Date(cart?.endDate).toLocaleDateString()}
+                                </span>
+                                <span className="text-xs">
+                                  {(() => {
+                                    const start = new Date(
+                                      cart?.startDate
+                                    ).getTime();
+                                    const end = new Date(
+                                      cart?.endDate
+                                    ).getTime();
+                                    const days = Math.ceil(
+                                      (end - start) / (1000 * 60 * 60 * 24)
+                                    );
+                                    return `(${days} day${
+                                      days > 1 ? "s" : ""
+                                    }, ${days - 1} night${
+                                      days - 1 > 1 ? "s" : ""
+                                    })`;
+                                  })()}
+                                </span>
+                              </div>
+                            </div>
+                            <div
+                              className={`${mediumMontserrat.className} flex gap-1 pt-1 items-center`}
+                            >
+                              <RiTeamLine className="text-black text-lg" />
+                              <div className=" flex gap-1 w-full justify-between  items-center">
+                                <span className="text-xs font-semibold">
+                                  {/* Room: {cart?.quantityRoom} */}
+                                  Guest : {cart?.roomHotel?.adult} adults,{" "}
+                                  {cart?.roomHotel?.children} child
+                                </span>
+
+                                <span className="text-sm font-semibold text-InfernoEcho-600">
+                                  Rp{cart?.roomHotel?.price}
+                                </span>
+                              </div>
+                            </div>
+                            <div
+                              className={`${mediumMontserrat.className} flex items-center justify-between pt-1`}
+                            >
+                              <span className="text-sm font-semibold">
+                                Total Room Price
+                              </span>
+                              <span className="text-sm font-semibold text-InfernoEcho-600">
+                                {/* Rp2.555.000 */}
+                                Rp{cart?.quantityRoom * cart?.roomHotel?.price}
+                              </span>
+                            </div>
+                            <div className={`${mediumMontserrat.className}  `}>
                               <span className="text-xs">
+                                {cart?.quantityRoom} room (
                                 {(() => {
                                   const start = new Date(
                                     cart?.startDate
@@ -401,57 +575,134 @@ export default function NextStep() {
                                     days - 1
                                   } night${days - 1 > 1 ? "s" : ""})`;
                                 })()}
+                                )
                               </span>
                             </div>
-                          </div>
-                          <div
-                            className={`${mediumMontserrat.className} flex gap-1 pt-1 items-center`}
-                          >
-                            <RiTeamLine className="text-black text-lg" />
-                            <div className=" flex gap-1 w-full justify-between  items-center">
-                              <span className="text-xs font-semibold">
-                                {/* Room: {cart?.quantityRoom} */}
-                                Guest : {cart?.roomHotel?.adult} adults,{" "}
-                                {cart?.roomHotel?.children} child
+                          </>
+                        );
+                      })
+                  ) : (
+                    <>
+                      {dataBooking?.roomHotel ||
+                        (dataBooking?.roomhotel && (
+                          <>
+                            <div
+                              className={`${mediumMontserrat.className} flex gap-1 items-center pt-2`}
+                            >
+                              <span className="text-black text-base font-semibold">
+                                {dataBooking?.roomhotel?.hotel?.name}
                               </span>
+                              <span className="text-sm">
+                                ({dataBooking?.roomhotel?.hotel?.city?.name},{" "}
+                                {
+                                  dataBooking?.roomhotel?.hotel?.city?.province
+                                    ?.country?.name
+                                }
+                                )
+                              </span>
+                            </div>
+                            <div
+                              className={`${mediumMontserrat.className} flex gap-1 items-center pt-1 justify-between`}
+                            >
+                              <span className="text-black text-sm font-semibold">
+                                {dataBooking?.roomhotel?.roomType}
+                              </span>
+                              <span className="text-sm font-semibold">
+                                X{dataBooking?.quantityRoom}
+                              </span>
+                            </div>
+                            <div
+                              className={`${mediumMontserrat.className} flex items-center gap-1 pt-1`}
+                            >
+                              <RiCalendarLine className="text-lg text-black" />
+                              <div className="flex gap-1 w-full justify-between">
+                                <span className="text-xs text-black font-semibold">
+                                  {new Date(
+                                    dataBooking?.startDate
+                                  ).toLocaleDateString()}{" "}
+                                  -{" "}
+                                  {new Date(
+                                    dataBooking?.endDate
+                                  ).toLocaleDateString()}
+                                </span>
+                                <span className="text-xs">
+                                  {(() => {
+                                    const start = new Date(
+                                      dataBooking?.startDate
+                                    ).getTime();
+                                    const end = new Date(
+                                      dataBooking?.endDate
+                                    ).getTime();
+                                    const days = Math.ceil(
+                                      (end - start) / (1000 * 60 * 60 * 24)
+                                    );
+                                    return `(${days} day${
+                                      days > 1 ? "s" : ""
+                                    }, ${days - 1} night${
+                                      days - 1 > 1 ? "s" : ""
+                                    })`;
+                                  })()}
+                                </span>
+                              </div>
+                            </div>
+                            <div
+                              className={`${mediumMontserrat.className} flex gap-1 pt-1 items-center`}
+                            >
+                              <RiTeamLine className="text-black text-lg" />
+                              <div className=" flex gap-1 w-full justify-between  items-center">
+                                <span className="text-xs font-semibold">
+                                  {/* Room: {dataBooking?.quantityRoom} */}
+                                  Room : {dataBooking?.quantityRoom}
+                                </span>
 
+                                <span className="text-sm font-semibold text-InfernoEcho-600">
+                                  Rp
+                                  {dataBooking?.roomhotel?.price
+                                    .toLocaleString("id-ID")
+                                    .replace(",", ".")}
+                                </span>
+                              </div>
+                            </div>
+                            <div
+                              className={`${mediumMontserrat.className} flex items-center justify-between pt-1`}
+                            >
+                              <span className="text-sm font-semibold">
+                                Total Room Price
+                              </span>
                               <span className="text-sm font-semibold text-InfernoEcho-600">
-                                {cart?.roomHotel?.price}
+                                {/* Rp2.555.000 */}
+                                Rp
+                                {(
+                                  dataBooking?.quantityRoom *
+                                  dataBooking?.roomhotel?.price
+                                )
+                                  .toLocaleString("id-ID")
+                                  .replace(",", ".")}
                               </span>
                             </div>
-                          </div>
-                          <div
-                            className={`${mediumMontserrat.className} flex items-center justify-between pt-1`}
-                          >
-                            <span className="text-sm font-semibold">
-                              Total Room Price
-                            </span>
-                            <span className="text-sm font-semibold text-InfernoEcho-600">
-                              {/* Rp2.555.000 */}
-                              {cart?.quantityRoom * cart?.roomHotel?.price}
-                            </span>
-                          </div>
-                          <div className={`${mediumMontserrat.className}  `}>
-                            <span className="text-xs">
-                              {cart?.quantityRoom} room (
-                              {(() => {
-                                const start = new Date(
-                                  cart?.startDate
-                                ).getTime();
-                                const end = new Date(cart?.endDate).getTime();
-                                const days = Math.ceil(
-                                  (end - start) / (1000 * 60 * 60 * 24)
-                                );
-                                return `(${days} day${days > 1 ? "s" : ""}, ${
-                                  days - 1
-                                } night${days - 1 > 1 ? "s" : ""})`;
-                              })()}
-                              )
-                            </span>
-                          </div>
-                        </>
-                      );
-                    })}
+                            <div className={`${mediumMontserrat.className}  `}>
+                              <span className="text-xs">
+                                {dataBooking?.quantityRoom} room
+                                {(() => {
+                                  const start = new Date(
+                                    dataBooking?.startDate
+                                  ).getTime();
+                                  const end = new Date(
+                                    dataBooking?.endDate
+                                  ).getTime();
+                                  const days = Math.ceil(
+                                    (end - start) / (1000 * 60 * 60 * 24)
+                                  );
+                                  return `(${days} day${days > 1 ? "s" : ""}, ${
+                                    days - 1
+                                  } night${days - 1 > 1 ? "s" : ""})`;
+                                })()}
+                              </span>
+                            </div>
+                          </>
+                        ))}
+                    </>
+                  )}
                 </div>
               </div>
             </div>
