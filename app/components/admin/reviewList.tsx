@@ -104,6 +104,8 @@ export default function ReviewList({ data }: ComponentProps) {
     return stars;
   };
 
+  console.log("data: ", data);
+
   return (
     <div className="flex flex-col gap-5">
       <div className="bg-white rounded-xl border-solid border-gray-200 border">
@@ -113,7 +115,7 @@ export default function ReviewList({ data }: ComponentProps) {
           <div className="grid grid-cols-2 gap-4">
             {data
               .slice((currentPage - 1) * pageSize, currentPage * pageSize)
-              .map((item: DataType) => (
+              .map((item: any) => (
                 <div key={item?.id} className="no-underline">
                   <div className="border-solid border-gray-200 border rounded-xl">
                     <div className="flex flex-col gap-2 p-3">
@@ -125,13 +127,15 @@ export default function ReviewList({ data }: ComponentProps) {
                       </Link>
                       <p className="text-base text-black">{item?.comment}</p>
                       <div className="flex justify-end gap-3">
-                        <Image
-                          src={"/images/illustration/hawaii.jpg"}
-                          height={200}
-                          width={300}
-                          alt="review-image"
-                          className="rounded-xl w-36 h-24"
-                        />
+                        {item?.photoreviews.map((photo: any) => (
+                          <Image
+                            src={`http://localhost:3222/photo-reviews/${photo?.pathPhoto}`}
+                            height={200}
+                            width={300}
+                            alt="review-image"
+                            className="rounded-xl w-36 h-24"
+                          />
+                        ))}
                       </div>
 
                       <div className="flex justify-between items-center text-black">
@@ -141,7 +145,7 @@ export default function ReviewList({ data }: ComponentProps) {
                             Booking #{item?.bookingdetail?.id}
                           </span>
                         </div>
-                        <div className="flex items-center gap-2">
+                        {/* <div className="flex items-center gap-2">
                           <div
                             className="cursor-pointer"
                             onClick={() => handleApprove(item)}
@@ -154,7 +158,7 @@ export default function ReviewList({ data }: ComponentProps) {
                           >
                             <FiXCircle className="text-2xl text-InfernoEcho-600" />
                           </div>
-                        </div>
+                        </div> */}
                       </div>
 
                       <div className="h-px bg-gray-300"></div>

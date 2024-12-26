@@ -74,7 +74,7 @@ export default function WhatInterestsYou() {
             return (
               <div key={item.id}>
                 <Link
-                  href={`/hotel/search/${formattedName.toLowerCase()}`}
+                  href={`/hotel/list/${formattedName.toLowerCase()}`}
                   className="text-black text-sm no-underline"
                 >
                   {selectedOption === "hotel"
@@ -93,113 +93,113 @@ export default function WhatInterestsYou() {
 const InterestData = [
   {
     title: "Jayapura",
-    link: "/hotel/search/Jayapura",
+    link: "/hotel/list/Jayapura",
   },
   {
     title: "Bali",
-    link: "/hotel/search/Bali",
+    link: "/hotel/list/Bali",
   },
   {
     title: "Yogyakarta",
-    link: "/hotel/search/Yogyakarta",
+    link: "/hotel/list/Yogyakarta",
   },
   {
     title: "Jakarta",
-    link: "/hotel/search/Jakarta",
+    link: "/hotel/list/Jakarta",
   },
   {
     title: "Surabaya",
-    link: "/hotel/search/Surabaya",
+    link: "/hotel/list/Surabaya",
   },
   {
     title: "Bandung",
-    link: "/hotel/search/Bandung",
+    link: "/hotel/list/Bandung",
   },
   {
     title: "Medan",
-    link: "/hotel/search/Medan",
+    link: "/hotel/list/Medan",
   },
   {
     title: "Makassar",
-    link: "/hotel/search/Makassar",
+    link: "/hotel/list/Makassar",
   },
   {
     title: "Semarang",
-    link: "/hotel/search/Semarang",
+    link: "/hotel/list/Semarang",
   },
   {
     title: "Palembang",
-    link: "/hotel/search/Palembang",
+    link: "/hotel/list/Palembang",
   },
   {
     title: "Batam",
-    link: "/hotel/search/Batam",
+    link: "/hotel/list/Batam",
   },
   {
     title: "Malang",
-    link: "/hotel/search/Malang",
+    link: "/hotel/list/Malang",
   },
   {
     title: "Lombok",
-    link: "/hotel/search/Lombok",
+    link: "/hotel/list/Lombok",
   },
   {
     title: "Nusa Dua",
-    link: "/hotel/search/Nusa-Dua",
+    link: "/hotel/list/Nusa-Dua",
   },
   {
     title: "Canggu",
-    link: "/hotel/search/Canggu",
+    link: "/hotel/list/Canggu",
   },
   {
     title: "Pekanbaru",
-    link: "/hotel/search/Pekanbaru",
+    link: "/hotel/list/Pekanbaru",
   },
   {
     title: "Banjarmasin",
-    link: "/hotel/search/Banjarmasin",
+    link: "/hotel/list/Banjarmasin",
   },
 ];
 
 const TrendingPlaces = [
   {
     title: "Bali",
-    link: "/destination/search/Bali",
+    link: "/destination/list/Bali",
   },
   {
     title: "Yogyakarta",
-    link: "/destination/search/Yogyakarta",
+    link: "/destination/list/Yogyakarta",
   },
   {
     title: "Jakarta",
-    link: "/destination/search/Jakarta",
+    link: "/destination/list/Jakarta",
   },
   {
     title: "Surabaya",
-    link: "/destination/search/Surabaya",
+    link: "/destination/list/Surabaya",
   },
   {
     title: "Bandung",
-    link: "/destination/search/Bandung",
+    link: "/destination/list/Bandung",
   },
   {
     title: "Medan",
-    link: "/destination/search/Medan",
+    link: "/destination/list/Medan",
   },
   {
     title: "Makassar",
-    link: "/destination/search/Makassar",
+    link: "/destination/list/Makassar",
   },
   {
     title: "Semarang",
-    link: "/destination/search/Semarang",
+    link: "/destination/list/Semarang",
   },
   {
     title: "Palembang",
-    link: "/destination/search/Palembang",
+    link: "/destination/list/Palembang",
   },
   {
     title: "Batam",
-    link: "/destination/search/Batam",
+    link: "/destination/list/Batam",
   },
 ];

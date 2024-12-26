@@ -117,9 +117,13 @@ const reviewsData: GuestReviewData[] = [
 // Calculate average rating and total reviews
 const totalReviews = reviewsData.length;
 const averageRating =
-  reviewsData.reduce((acc, review) => acc + review.rating, 0) / totalReviews;
+  reviewsData.reduce((acc, review) => acc + review?.rating, 0) / totalReviews;
 
-export default function GuestReview() {
+interface ComponentProps {
+  data: any;
+}
+
+export default function GuestReview({ data }: ComponentProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     slides: {
@@ -133,6 +137,7 @@ export default function GuestReview() {
     },
   });
 
+  // console.log(data?.reviews);
   return (
     <div className={`${mediumMontserrat.className} flex flex-col gap-3`}>
       <div className="flex flex-col gap-5 p-5 bg-white rounded-xl border border-gray-200 border-solid">
@@ -171,12 +176,12 @@ export default function GuestReview() {
         {/* Slider Section */}
         <div className="relative">
           <div ref={sliderRef} className="keen-slider">
-            {reviewsData.map((review, index) => (
+            {data?.reviews.map((review: any) => (
               <div
-                key={index}
+                key={review?.id}
                 className="keen-slider__slide flex flex-col items-center justify-center bg-[#F5F7FA] border-solid border-gray-200 border rounded-xl p-5"
               >
-                <div className="flex gap-3">
+                <div className="w-full flex gap-3">
                   <FaUserCircle className="text-3xl" />
                   <div className="flex w-full">
                     <div className="flex flex-col gap-2 w-full">
@@ -184,13 +189,13 @@ export default function GuestReview() {
                         <div className="flex justify-between w-full">
                           <div className="flex items-center gap-1">
                             <span className="font-semibold text-black text-base">
-                              {review.name}
+                              {review?.user?.fullName}
                             </span>
-                            {review.countryFlag}
+                            {/* {review?.countryFlag} */}
                           </div>
                           <div className="flex gap-1">
                             {[...Array(5)].map((_, idx) =>
-                              idx < review.rating ? (
+                              idx < review?.rating ? (
                                 <RiStarFill
                                   key={idx}
                                   className="text-[#FFD700]"
@@ -206,17 +211,17 @@ export default function GuestReview() {
                         </div>
 
                         <span className="text-sm text-gray-500">
-                          {review.date}
+                          {new Date(review?.createdAt).toLocaleDateString()}
                         </span>
                       </div>
 
                       <div className="flex justify-end">
-                        <div className="flex gap-3 items-center">
-                          {review.images.map((image, idx) => (
+                        <div className="flex gap-3 items-end">
+                          {review?.photoreviews.map((item: any) => (
                             <Image
-                              key={idx}
-                              src={image}
-                              alt={`Review Image ${idx}`}
+                              key={item?.id}
+                              src={`http://localhost:3222/photo-reviews/${item?.pathPhoto}`}
+                              alt={`Review Image ${item?.id}`}
                               height={200}
                               width={300}
                               className="rounded-xl w-16 h-12"
@@ -225,7 +230,7 @@ export default function GuestReview() {
                         </div>
                       </div>
                       <span className="text-black text-sm">
-                        {review.review}
+                        {review?.comment}
                       </span>
                     </div>
                   </div>

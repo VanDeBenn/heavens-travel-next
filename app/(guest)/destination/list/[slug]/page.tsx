@@ -17,10 +17,20 @@ export default function page({ params }: { params: { slug: string } }) {
   }
 
   const pathSegments = pathname.split("/");
-  const location = pathSegments[3];
+  const location = pathSegments[3].toLowerCase().replace(/-/g, " ");
 
-  const Location = location.charAt(0).toUpperCase() + location.slice(1);
-  console.log(Location); // Output: Jakarta
+  const capitalizeWords = (text: any) => {
+    return text
+      .split(" ")
+      .map(
+        (word: any) =>
+          word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      )
+      .join(" ");
+  };
+
+  const Location = capitalizeWords(location);
+  console.log(Location);
 
   const getAllDestinations = async () => {
     const res = await destinationRepository.api.getDestinations();

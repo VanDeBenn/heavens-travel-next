@@ -73,7 +73,7 @@ export default function ReadAndDiscover() {
                 <Link href={""}>
                   <div className="relative w-full h-[440px]">
                     <Image
-                      src={`http://localhost:3222/photo-blogs/${card?.pathPhoto}`}
+                      src={`http://localhost:3222/blogs/image/${card?.pathPhoto}`}
                       alt={card.title}
                       // width={300}
                       // height={300}

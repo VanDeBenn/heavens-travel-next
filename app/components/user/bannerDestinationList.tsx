@@ -66,12 +66,10 @@ export default function BannerDestinationList({
     const isLocationMatch =
       cityName === location ||
       cityName === `Kota ${location}` ||
-      cityName === `Kota ${location} Utara` ||
-      cityName === `Kota ${location} Timur` ||
-      cityName === `Kota ${location} Selatan` ||
-      cityName === `Kota ${location} Barat` ||
       cityName === `Kabupaten ${location}` ||
-      provinceName === location;
+      provinceName === location ||
+      provinceName === `Daerah Khusus ${location}` ||
+      provinceName === `Daerah Istimewa ${location}`;
 
     // Filter berdasarkan pencarian
     const isSearchQueryMatch = (destination.name?.toLowerCase() || "").includes(

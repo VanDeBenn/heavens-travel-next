@@ -47,6 +47,7 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
   if (!data) {
     return;
   }
+  const { Option } = Select;
   const router = useRouter();
   const [adults, setAdults] = useState(0); // Start value for adults
   const [children, setChildren] = useState(0); // Start value for children
@@ -57,6 +58,7 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
   const [kingBeds, setKingBeds] = useState(0); // Start value for king beds
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [selectedRoomType, setSelectedRoomType] = useState("");
 
   const handleRoomChange = (value: number) => {
     if (value >= 1) {
@@ -152,6 +154,31 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
     ],
   };
 
+  const roomTypes = [
+    "Superior",
+    "Superior Twin",
+    "Superior King",
+    "Superior Queen",
+    "Deluxe",
+    "Deluxe Twin",
+    "Deluxe King",
+    "Deluxe Queen",
+  ];
+
+  const handleSelectChange = (value: any) => {
+    const index = parseInt(value) - 1;
+    setSelectedRoomType(roomTypes[index]);
+    console.log("Selected Room Type:", roomTypes[index]);
+  };
+
+  const filteredRooms =
+    selectedRoomType === ""
+      ? data?.roomhotels
+      : data?.roomhotels?.filter(
+          (item: any) => item.roomType === selectedRoomType
+        );
+
+  console.log(filteredRooms);
   return (
     <div className={`${mediumMontserrat?.className} flex flex-col gap-4`}>
       <div className="p-6 border-solid border-gray-200 border rounded-xl bg-white ">
@@ -162,14 +189,28 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
         <div className="flex items-center gap-5 pt-3">
           <div className="flex items-center gap-2 border-solid border-gray-300 border rounded-xl p-3">
             <IoBedOutline className="text-xl" />
-            <span className="text-sm font-semibold">Superior</span>
-            <span className="text-sm font-semibold">1</span>
+            <span className="text-sm font-semibold w-full">
+              <Select
+                placeholder="Select Room Type"
+                className="w-full"
+                onChange={handleSelectChange}
+              >
+                {roomTypes.map((roomType, index) => (
+                  <Option
+                    key={index + 1}
+                    value={(index + 1).toString().padStart(2, "0")}
+                  >
+                    {roomType}
+                  </Option>
+                ))}
+              </Select>
+            </span>
+            {/* <span className="text-sm font-semibold">1</span> */}
           </div>
-          <div className="flex items-center gap-2 border-solid border-gray-300 border rounded-xl p-3">
+          {/* <div className="flex items-center gap-2 border-solid border-gray-300 border rounded-xl p-3">
             <MdOutlineKingBed className="text-xl" />
             <span className="text-sm font-semibold">King Bed</span>
-            <span className="text-sm font-semibold">2</span>
-          </div>
+          </div> */}
           <div className="flex items-center gap-2 border-solid border-gray-300 border rounded-xl p-3">
             <RiCalendarScheduleLine className="text-xl" />
             <Space direction="vertical" size={12}>
@@ -179,7 +220,7 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
         </div>
       </div>
 
-      {data?.roomhotels?.map((item: any) => (
+      {filteredRooms?.map((item: any) => (
         <div
           key={item?.id}
           className="p-6 border-solid border-gray-200 border rounded-xl bg-white flex items-start gap-4 w-full h-60"
@@ -243,7 +284,7 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
           <div className="p-3 border-solid border-gray-200 border rounded-xl flex flex-col justify-between h-full gap-1 w-1/4">
             <span className="text-base font-semibold">Sleeps</span>
             <Image
-              src={"/images/illustration/icon people?.png"}
+              src={"/images/illustration/icon people.png"}
               alt="ho"
               height={300}
               width={400}
@@ -272,7 +313,7 @@ export default function ChooseRoonHotel({ data, id }: ComponentProps) {
                     Subject to Cashback Terms
                   </span>
                   <span className="text-InfernoEcho-600 text-xl font-semibold">
-                    Rp{item?.price}
+                    Rp{item?.price.toLocaleString("id-ID").replace(",", ".")}
                   </span>{" "}
                   <span className="text-gray-400 text-xs">
                     Per night before taxes and fees

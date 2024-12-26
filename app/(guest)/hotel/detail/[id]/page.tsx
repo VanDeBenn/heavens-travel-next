@@ -49,9 +49,9 @@ export default function Page() {
           <ChooseRoonHotel data={hotelData} id={hotelId} />
         </div>
         <PropertyPoliciesHotel data={hotelData} />
-        <SomeHelpfulFacts />
+        {/* <SomeHelpfulFacts /> */}
         <RecommendedDestiNearby data={hotelData} />
-        <GuestReview />
+        <GuestReview data={hotelData} />
         <SimpleInfo />
       </div>
       <Footer />

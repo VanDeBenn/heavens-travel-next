@@ -68,7 +68,12 @@ export default function TopHotel() {
       hotel?.city?.province?.name === selectedCity
   );
 
-  const citiesList = ["Bali", "Bekasi", "Bandung", "Daerah Khusus Jakarta"]; // Define the cities explicitly
+  const citiesList = [
+    "Bali",
+    "Jawa Tengah",
+    "Jawa TImur",
+    "Daerah Khusus Jakarta",
+  ]; // Define the cities explicitly
 
   return (
     <div className="flex flex-col gap-2">

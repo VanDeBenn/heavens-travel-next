@@ -63,10 +63,6 @@ export default function BannerHotelList({ data, location }: ComponentProps) {
     const isLocationMatch =
       cityName === location ||
       cityName === `Kota ${location}` ||
-      cityName === `Kota ${location} Utara` ||
-      cityName === `Kota ${location} Timur` ||
-      cityName === `Kota ${location} Selatan` ||
-      cityName === `Kota ${location} Barat` ||
       cityName === `Kabupaten ${location}` ||
       provinceName === location ||
       provinceName === `Daerah Khusus ${location}` ||

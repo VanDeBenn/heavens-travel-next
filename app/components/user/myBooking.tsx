@@ -41,9 +41,9 @@ export default function MyBooking({ data }: ComponentsProps) {
   const [bookingItems, setBookingItems] =
     useState<BookingItem[]>(initialBookingItems);
 
-  const formatCurrency = (amount: number) => `Rp${amount.toLocaleString()}`;
+  const formatCurrency = (amount: number) => `Rp${amount?.toLocaleString()}`;
 
-  console.log(data);
+  console?.log("data: ", data);
   return (
     <div className={`bg-white rounded-xl`}>
       {/* title */}
@@ -52,7 +52,7 @@ export default function MyBooking({ data }: ComponentsProps) {
 
       {/* grid */}
       <div className="px-8 py-6 grid grid-cols-1 gap-6">
-        {data.map((booking: any, index: number) => {
+        {data?.map((booking: any, index: number) => {
           const { roomhotel, destination, payment, bookingdetails } = booking;
 
           const menu = (
@@ -77,24 +77,25 @@ export default function MyBooking({ data }: ComponentsProps) {
             destination?.name ||
             roomhotel?.hotel?.name ||
             (payment?.externalId
-              ? `${payment.externalId.slice(0, 7)}...${payment.externalId.slice(
-                  -3
-                )} (${
+              ? `${payment?.externalId?.slice(
+                  0,
+                  7
+                )}...${payment?.externalId?.slice(-3)} (${
                   bookingdetails?.filter(
-                    (detail: any) => detail.cart?.destination
-                  ).length
+                    (detail: any) => detail?.cart?.destination
+                  )?.length
                 } destination, ${bookingdetails
-                  ?.filter((detail: any) => detail.cart?.roomHotel)
-                  .reduce(
+                  ?.filter((detail: any) => detail?.cart?.roomHotel)
+                  ?.reduce(
                     (total: number, item: any) =>
-                      total + (item.cart?.quantityRoom || 0),
+                      total + (item?.cart?.quantityRoom || 0),
                     0
                   )} room)`
               : "Unknown");
 
           return (
             <div
-              key={booking.id}
+              key={booking?.id}
               className="p-3 border border-solid border-[#DBDBDB] rounded-xl"
             >
               <div className="flex justify-between items-center">
@@ -136,19 +137,21 @@ export default function MyBooking({ data }: ComponentsProps) {
               </div>
 
               <div className="py-3 flex items-center gap-2">
-                <Link href={`bookings/detail/${booking.id}`}>
+                <Link href={`bookings/detail/${booking?.id}`}>
                   <Image
                     src={
                       destination?.photodestinations[0]?.pathPhoto
-                        ? `http://localhost:3222/photo-destinations/${destination.photodestinations[0].pathPhoto}`
+                        ? `http://localhost:3222/photo-destinations/${destination?.photodestinations[0]?.pathPhoto}`
                         : roomhotel?.photoroomhotels[0]?.pathPhoto
-                        ? `http://localhost:3222/photo-room-hotels/${roomhotel.photoroomhotels[0].pathPhoto}`
+                        ? `http://localhost:3222/photo-room-hotels/${roomhotel?.photoroomhotels[0]?.pathPhoto}`
                         : bookingdetails[0]?.cart?.destination
                             ?.photodestinations[0]?.pathPhoto
-                        ? `http://localhost:3222/photo-destinations/${bookingdetails[0].cart.destination.photodestinations[0].pathPhoto}`
+                        ? `http://localhost:3222/photo-destinations/${bookingdetails[0]?.cart?.destination?.photodestinations[0]?.pathPhoto}`
                         : bookingdetails[0]?.cart?.roomHotel?.photoroomhotels[0]
                             ?.pathPhoto
-                        ? `http://localhost:3222/photo-room-hotels/${bookingdetails[0].cart.roomHotel.photoroomhotels[0].pathPhoto}`
+                        ? `http://localhost:3222/photo-room-hotels/${bookingdetails[0]?.cart?.roomHotel?.photoroomhotels[0]?.pathPhoto}`
+                        : `http://localhost:3222/photo-destinations/${data?.destination?.photodestinations[0]?.pathPhoto}`
+                        ? `http://localhost:3222/photo-room-hotels/${data?.roomhotel?.photoroomhotels[0]?.pathPhoto}`
                         : ""
                     }
                     alt={""}
@@ -159,7 +162,7 @@ export default function MyBooking({ data }: ComponentsProps) {
                 </Link>
                 <div className="flex flex-col gap-1 w-full">
                   <Link
-                    href={`bookings/detail/${booking.id}`}
+                    href={`bookings/detail/${booking?.id}`}
                     className="font-semibold no-underline text-black hover:text-RoyalAmethyst-700 duration-300 transition-all"
                   >
                     {bookingTitle}
@@ -169,10 +172,10 @@ export default function MyBooking({ data }: ComponentsProps) {
                     <span className="text-xs text-gray-500">
                       {bookingdetails[0]?.cart?.startDate
                         ? `${new Date(
-                            bookingdetails[0].cart.startDate
-                          ).toLocaleDateString()} - ${new Date(
-                            bookingdetails[0].cart.endDate
-                          ).toLocaleDateString()}`
+                            bookingdetails[0]?.cart?.startDate
+                          )?.toLocaleDateString()} - ${new Date(
+                            bookingdetails[0]?.cart?.endDate
+                          )?.toLocaleDateString()}`
                         : "No Schedule"}
                     </span>
                   </div>
@@ -196,7 +199,7 @@ export default function MyBooking({ data }: ComponentsProps) {
               <div className="h-px bg-gray-300"></div>
               <div className="pt-5 pb-3 flex justify-end w-full gap-2">
                 <Link
-                  href={`bookings/detail/${booking.id}`}
+                  href={`bookings/detail/${booking?.id}`}
                   className="border border-solid border-RoyalAmethyst-700 rounded-xl py-2 px-5 w-max flex items-center gap-1 text-xs text-RoyalAmethyst-700 no-underline font-semibold"
                 >
                   See booking details
@@ -238,8 +241,8 @@ export const initialBookingItems: BookingItem[] = [
     name: "Mandarin Oriental",
     HotelSchedule: "5 Nov 2024 - 8 Nov 2024",
     description:
-      "Modern luxury and comfort with excellent service at Mandarin Oriental Jakarta.",
-    image: "/images/illustration/rainbow-appearing-sky.jpg",
+      "Modern luxury and comfort with excellent service at Mandarin Oriental Jakarta?.",
+    image: "/images/illustration/rainbow-appearing-sky?.jpg",
     rating: 3,
     link: "/",
     guests: "2 adults",
@@ -254,8 +257,8 @@ export const initialBookingItems: BookingItem[] = [
     name: "Ubud Palace",
     DestinationSchedule: "1 Oct 2024 - 2 Oct 2024",
     description:
-      "Explore Ubud Palace, a historical and cultural landmark showcasing Bali’s traditional architecture and rich heritage.",
-    image: "/images/illustration/rainbow-appearing-sky.jpg",
+      "Explore Ubud Palace, a historical and cultural landmark showcasing Bali’s traditional architecture and rich heritage?.",
+    image: "/images/illustration/rainbow-appearing-sky?.jpg",
     rating: 4,
     link: "/",
     guests: "1 adult, 2 children",
@@ -271,8 +274,8 @@ export const initialBookingItems: BookingItem[] = [
     name: "Atlasong Hotel",
     HotelSchedule: "12 Oct 2024 - 15 Oct 2024",
     description:
-      "Luxury stay with stunning ocean views, offering top-notch service and unforgettable.",
-    image: "/images/illustration/rainbow-appearing-sky.jpg",
+      "Luxury stay with stunning ocean views, offering top-notch service and unforgettable?.",
+    image: "/images/illustration/rainbow-appearing-sky?.jpg",
     rating: 5,
     link: "/",
     guests: "2 adults, 3 children",
@@ -287,8 +290,8 @@ export const initialBookingItems: BookingItem[] = [
     name: "Sansoeong Hotel",
     HotelSchedule: "12 Oct 2024 - 15 Oct 2024",
     description:
-      "Luxury stay with stunning ocean views, offering top-notch service and unforgettable.",
-    image: "/images/illustration/rainbow-appearing-sky.jpg",
+      "Luxury stay with stunning ocean views, offering top-notch service and unforgettable?.",
+    image: "/images/illustration/rainbow-appearing-sky?.jpg",
     rating: 5,
     link: "/",
     guests: "3 adults",
@@ -303,8 +306,8 @@ export const initialBookingItems: BookingItem[] = [
     name: "Jiungo Tyuning Hotel",
     HotelSchedule: "5 Nov 2024 - 8 Nov 2024",
     description:
-      "Modern luxury and comfort with excellent service at Mandarin Oriental Jakarta.",
-    image: "/images/illustration/rainbow-appearing-sky.jpg",
+      "Modern luxury and comfort with excellent service at Mandarin Oriental Jakarta?.",
+    image: "/images/illustration/rainbow-appearing-sky?.jpg",
     rating: 3,
     link: "/",
     guests: "2 adults, 3 children",

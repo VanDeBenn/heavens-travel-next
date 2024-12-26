@@ -21,7 +21,7 @@ export default function HolidayIntroduction() {
             >
               <LiaBinocularsSolid className="text-3xl text-RoyalAmethyst-700" />
               <span className="text-xl font-semibold">
-                Enjoy yourself on holiday in Asia and beyond
+                Enjoy yourself on holiday in Indonesia and beyond
               </span>
             </div>
           </div>
@@ -68,48 +68,48 @@ const HolidayData = [
     id: 1,
     text: "Bali",
     imgSrc: "/images/illustration/bali-indonesia.jpg",
-    link: "/kota/bali",
+    link: "/destination/list/bali",
   },
   {
     id: 2,
-    text: "Jawa Timur",
+    text: "Jawa Tengah",
     imgSrc: "/images/illustration/road-bridge.jpg",
-    link: "/kota/nusatenggarabarat",
+    link: "/destination/list/jawa-tengah",
   },
   {
     id: 3,
-    text: "Sumatra Utara",
+    text: "Sumatera Utara",
     imgSrc: "/images/illustration/beautiful-church.jpg",
-    link: "/kota/sumatrautara",
+    link: "/destination/list/sumatera-utara",
   },
   {
     id: 4,
     text: "Jawa Timur",
     imgSrc: "/images/illustration/nightlife-city-sparkles-light-streets.jpg",
-    link: "/kota/jawatimur",
+    link: "/destination/list/jawa-timur",
   },
   {
     id: 5,
     text: "Jakarta",
     imgSrc: "/images/illustration/city-with-forest-front.jpg",
-    link: "/kota/jakarta",
+    link: "/destination/list/jakarta",
   },
   {
     id: 6,
     text: "Jogja",
     imgSrc: "/images/illustration/religion-historic.jpg",
-    link: "/kota/jogja",
+    link: "/destination/list/jogja",
   },
   {
     id: 7,
     text: "Papua Barat Daya",
     imgSrc: "/images/illustration/high-angle.jpg",
-    link: "/kota/papuabaratdaya",
+    link: "/destination/list/papua-barat-daya",
   },
   {
     id: 8,
     text: "Sulawesi Selatan",
     imgSrc: "/images/illustration/mountainous-landscape-with-fog.jpg",
-    link: "/kota/sulawesiselatan",
+    link: "/destination/list/sulawesi-selatan",
   },
 ];
