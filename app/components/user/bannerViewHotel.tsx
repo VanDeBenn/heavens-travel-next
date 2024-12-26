@@ -13,7 +13,7 @@ import {
   RiTelegramFill,
 } from "react-icons/ri";
 import Link from "next/link";
-import { Image, Modal, Button } from "antd"; // Import Modal dan Button dari Ant Design
+import { Image, Modal, Button, message } from "antd"; // Import Modal dan Button dari Ant Design
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -28,6 +28,7 @@ import {
   RiMailFill,
   RiFileCopyLine,
 } from "react-icons/ri";
+import { wishlistRepository } from "#/repository/wishlists";
 
 const largeMontserrat = Montserrat({
   subsets: ["latin"],
@@ -104,6 +105,8 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
   const shareUrl = "https://htrip.com/hotel/detail/673c0710-15f8-c0ddf3df7be9"; // URL yang akan dibagikan
   const title = hotelDetails[0].title;
 
+  const user = localStorage.getItem("_id");
+
   useEffect(() => {
     // Set copyText dengan URL halaman saat ini
     setCopyText(window.location.href);
@@ -124,6 +127,33 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
     setTimeout(() => setIsCopied(false), 3000); // Reset status setelah 3 detik
   };
 
+  const handleWishlist = async () => {
+    const payload = {
+      userId: user,
+      hotelId: data?.id,
+      destinationId: null,
+    };
+    const remove = {
+      hotelName: data?.name,
+      userId: user,
+    };
+    if (isBookmarked) {
+      const req = await wishlistRepository.api.remove(remove);
+      if (req) {
+        message.success("Wishlist Added Successfully");
+      }
+      console.log("REMOVE");
+    } else {
+      const req = await wishlistRepository.api.create(payload);
+      if (req) {
+        message.success("Wishlist Remove Successfully");
+      }
+      console.log("ADD");
+    }
+  };
+
+  console.log(isBookmarked);
+  // console.log("data", data);
   return (
     <div className="bg-white rounded-xl border-solid border-gray-200 border">
       <div className={`${mediumMontserrat.className} p-6`}>
@@ -186,7 +216,10 @@ const BannerViewHotel = ({ data, scrollToChooseRoom }: ComponentProps) => {
             {/* Bookmark Icon */}
             <div
               className={`h-10 w-10 rounded-full cursor-pointer flex items-center justify-center bg-black/60`}
-              onClick={() => setIsBookmarked(!isBookmarked)}
+              onClick={() => {
+                setIsBookmarked(!isBookmarked);
+                handleWishlist();
+              }}
             >
               {isBookmarked ? (
                 <RiBookmarkFill className="text-RoyalAmethyst-700 text-lg" />
