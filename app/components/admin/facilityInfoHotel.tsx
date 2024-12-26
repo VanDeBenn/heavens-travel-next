@@ -44,7 +44,7 @@ export default function FacilityInfoHotel({ data, hotelId }: ComponentProps) {
     return;
   }
 
-  console.log(data);
+  // console.log("data:", data);
   const sections = [
     {
       title: data[0]?.title,

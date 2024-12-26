@@ -139,7 +139,9 @@ export default function NearbyLocationHotel({ hotelId }: ComponentProps) {
             hotelId,
           };
 
-          console.log(data);
+          console.log("near: ", data);
+
+          const req = await nearbyLocationRepository.api.create(data);
         }
       }
 
