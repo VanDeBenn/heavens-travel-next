@@ -121,7 +121,7 @@ export default function BudgetHotelsAsia() {
                       className="text-InfernoEcho-600 text-lg font-semibold no-underline"
                     >
                       Rp
-                      {card?.price?.toLocaleString("id-ID").replace(",", ".") ||
+                      {card?.roomhotels[0]?.price?.toLocaleString("id-ID").replace(",", ".") ||
                         0}
                     </Link>
                   </div>

@@ -65,21 +65,21 @@ const HolidayData = [
   },
   {
     id: 2,
-    text: "Bekasi",
+    text: "Jawa Tengah",
     imgSrc: "/images/illustration/road-bridge.jpg",
-    link: "/destination/list/bekasi",
+    link: "/destination/list/jawa-tengah",
   },
   {
     id: 3,
-    text: "Banten",
-    imgSrc: "/images/illustration/beautiful-church.jpg",
-    link: "/destination/list/banten",
+    text: "Jakarta",
+    imgSrc: "/images/illustration/city-with-forest-front.jpg",
+    link: "/destination/list/jakarta",
   },
   {
     id: 4,
-    text: "Balikpapan",
+    text: "Jawa Timur",
     imgSrc: "/images/illustration/nightlife-city-sparkles-light-streets.jpg",
-    link: "/destination/list/balikpapan",
+    link: "/destination/list/jawa-timur",
   },
   {
     id: 5,

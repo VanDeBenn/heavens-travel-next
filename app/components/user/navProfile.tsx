@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Menu } from "antd";
+import { Menu, Modal } from "antd";
 import {
   UserOutlined,
   HeartOutlined,
@@ -20,6 +20,7 @@ const menuItems = [
 
 const NavProfile: React.FC = () => {
   const [selectedKey, setSelectedKey] = useState<string>("profile");
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
   const cookie = useCookies();
 
@@ -33,10 +34,20 @@ const NavProfile: React.FC = () => {
 
   const handleMenuClick = (key: string) => {
     if (key === "logout") {
+      setIsModalVisible(true); // Show the modal when logout is clicked
     } else {
       setSelectedKey(key);
       router.push(`/${key}`);
     }
+  };
+
+  const handleOk = () => {
+    logout(); // Proceed with logout if confirmed
+    setIsModalVisible(false); // Close the modal
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false); // Close the modal if canceled
   };
 
   return (
@@ -70,12 +81,25 @@ const NavProfile: React.FC = () => {
 
         <div
           className="flex justify-center items-center gap-2 cursor-pointer mt-auto text-InfernoEcho-600"
-          onClick={logout}
+          onClick={() => setIsModalVisible(true)} // Show the modal when logout is clicked
         >
           <LogoutOutlined style={{ color: "#DC143C", fontSize: 26 }} />
           <span className="text-base">Log out</span>
         </div>
       </div>
+
+      {/* Modal for confirmation */}
+      <Modal
+        title="Are you sure?"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="Continue"
+        cancelText="Cancel"
+        className="text-black"
+      >
+        <p>Do you really want to log out?</p>
+      </Modal>
     </div>
   );
 };

@@ -397,20 +397,22 @@ export default function Review() {
             </div>
           </div>
 
-          <div className="pt-12 flex justify-between w-full">
+          <div
+            className={`${mediumMontserrat.className}  pt-12 flex justify-between w-full `}
+          >
             <Link
               href={"/profile"}
               className="border border-solid border-RoyalAmethyst-700 rounded-xl py-2 px-5 text-RoyalAmethyst-700 font-semibold"
             >
               Return
             </Link>
-            <Button
+            <div
               type="primary"
               htmlType="submit"
-              className="border bg-RoyalAmethyst-700 text-white rounded-xl py-2 px-5 font-semibold"
+              className="border bg-RoyalAmethyst-700 text-white rounded-xl py-2 px-5 cursor-pointer"
             >
               Submit your review
-            </Button>
+            </div>
           </div>
         </Form>
       </div>

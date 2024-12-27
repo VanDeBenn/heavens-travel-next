@@ -116,7 +116,7 @@ export default function NewsFrom({ data }: { data: dataDestination }) {
                 <Link href={`/blog/list/detail/${item.id}`}>
                   <div className="relative w-full h-[440px]">
                     <Image
-                      src={"/images/illustration/hawaii-beach.jpg"}
+                      src={`http://localhost:3222/blogs/image/${item.pathPhoto}`}
                       alt={item.title}
                       // width={300}
                       // height={300}
@@ -130,7 +130,7 @@ export default function NewsFrom({ data }: { data: dataDestination }) {
                 <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
                   <div className="flex flex-col">
                     <Link
-                      href={""}
+                      href={`/blog/list/detail/${item.id}`}
                       className="text-base font-semibold mb-1 leading-5 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
                     >
                       {item.title}

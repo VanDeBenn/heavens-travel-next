@@ -72,7 +72,7 @@ function page({ params }: { params: { id: string } }) {
         />
         <DescriptionDesti data={dataDestination} />
         <TicketsOverview data={dataDestination} />
-        <GuestReviewDesti />
+        <GuestReviewDesti data={dataDestination}/>
         <NewsFrom data={dataDestination} />
         <InstagrammableHotels data={dataDestination} />
         <TopFourHotel data={dataDestination} />

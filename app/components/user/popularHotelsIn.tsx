@@ -188,7 +188,7 @@ export default function PopularHotelsIn() {
       hotel?.city?.province?.name === `Daerah Khusus ${selectedCity}`
   );
 
-  const citiesList = ["Bali", "Jawa Tengah", "Jawa Timur", "Jakarta"]; // Define the cities explicitly
+  const citiesList = ["Jakarta", "Jawa Tengah", "Jawa Timur", "Bali"]; // Define the cities explicitly
 
   console.log(filteredHotels);
   return (
@@ -237,7 +237,7 @@ export default function PopularHotelsIn() {
                 className="flex flex-col items-center"
               >
                 <Image
-                  src={`http://localhost:3222/photo-hotels/${hotel.image}`}
+                  src={`http://localhost:3222/photo-hotels/${hotel?.photohotels[0]?.pathPhoto}`}
                   alt={hotel.name}
                   className="h-52 w-full rounded-t-xl"
                   height={300}
@@ -286,7 +286,7 @@ export default function PopularHotelsIn() {
                       className="text-InfernoEcho-600 text-lg font-semibold no-underline"
                     >
                       Rp
-                      {hotel?.price
+                      {hotel?.roomhotels[0]?.price
                         ?.toLocaleString("id-ID")
                         .replace(",", ".") || 0}
                     </Link>

@@ -66,7 +66,7 @@ export default function HotelHighlights({ data }: any) {
               <div className="absolute bottom-2 left-2 right-2 bg-white bg-opacity-90 p-3 rounded-md border-solid border-gray-200 border">
                 <div className="flex flex-col">
                   <Link
-                    href={""}
+                    href={`/blog/list/detail/${item.id}`}
                     className="text-base font-semibold mb-1 leading-4 text-black hover:text-RoyalAmethyst-700 transition-all duration-300 no-underline"
                   >
                     {item.title}
